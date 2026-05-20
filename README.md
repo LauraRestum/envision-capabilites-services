@@ -41,10 +41,6 @@ neutral wherever the work spans both campuses.
   Manufacturing and Prototyping document (2026), including the merged
   AbilityOne + Texas WorkQuest + Commercial catalog index.
 
-Known reconciliation note: the BSC modal map renders 10 states; the
-Dallas reference document cites "16 BSCs across 14 states". The deck
-preserves the 10-state visual until the map data is updated.
-
 ## Deploy on Vercel
 
 This is a zero-config static deployment.
