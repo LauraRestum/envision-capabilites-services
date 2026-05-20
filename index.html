@@ -206,17 +206,20 @@
 
   /* ---------- Campus slide redesign: three-act structure ---------- */
   /* Tightened to fit the presentation viewport without scrolling. */
+  .campus-slide{padding-top:clamp(24px,3.5vh,48px);padding-bottom:clamp(24px,3.5vh,48px)}
   .campus-slide .subhead{margin-bottom:6px}
+  .campus-slide h2.sec-h{margin-bottom:12px}
+  .campus-slide .eyebrow{margin-bottom:14px}
 
   /* Act 1: Combined totals band */
   .combined-band{
     display:grid;grid-template-columns:repeat(4,1fr);
     gap:1px;background:var(--rule-light);
     border:1px solid var(--rule-light);border-radius:6px;
-    overflow:hidden;margin-top:20px;
+    overflow:hidden;margin-top:14px;
   }
   .combined-band .cb-cell{
-    background:var(--bg-light);padding:14px 16px;position:relative;
+    background:var(--bg-light);padding:12px 16px;position:relative;
   }
   .combined-band .cb-cell::before{
     content:"";position:absolute;top:0;left:0;height:3px;width:28px;
@@ -235,7 +238,7 @@
   /* Act 2: Campus cards */
   .campus-grid{
     display:grid;grid-template-columns:1fr 1fr;
-    gap:18px;margin-top:20px;
+    gap:16px;margin-top:14px;
   }
   .campus-card{
     border:1px solid var(--rule-light);border-radius:8px;
@@ -243,7 +246,7 @@
     display:flex;flex-direction:column;
   }
   .campus-photo{
-    position:relative;aspect-ratio:21/9;overflow:hidden;background:var(--bg-tint);
+    position:relative;aspect-ratio:5/2;overflow:hidden;background:var(--bg-tint);
   }
   .campus-photo img{
     width:100%;height:100%;object-fit:cover;display:block;
@@ -258,10 +261,10 @@
     display:inline-block;width:6px;height:6px;border-radius:50%;
     margin-right:6px;vertical-align:middle;transform:translateY(-1px);
   }
-  .campus-body{padding:16px 20px 16px;flex:1;display:flex;flex-direction:column}
+  .campus-body{padding:14px 18px 14px;flex:1;display:flex;flex-direction:column}
   .campus-head{
     display:flex;justify-content:space-between;align-items:baseline;
-    border-bottom:1px solid var(--rule-light);padding-bottom:10px;margin-bottom:12px;
+    border-bottom:1px solid var(--rule-light);padding-bottom:8px;margin-bottom:10px;
   }
   .campus-name{
     font-weight:800;font-size:1.1rem;letter-spacing:-0.015em;color:var(--navy);
@@ -276,7 +279,7 @@
     padding:5px 10px;border:1px solid var(--rule-light);border-radius:999px;
   }
   .campus-stats{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px;
   }
   .campus-stat .num{
     font-weight:800;font-size:1.3rem;color:var(--navy);
@@ -287,17 +290,17 @@
     color:var(--text-soft);margin-top:6px;
   }
   .campus-addr{
-    margin-top:auto;padding-top:10px;border-top:1px solid var(--rule-light);
-    font-size:12px;line-height:1.55;color:var(--text-soft);
+    margin-top:auto;padding-top:8px;border-top:1px solid var(--rule-light);
+    font-size:12px;line-height:1.5;color:var(--text-soft);
   }
   .campus-addr strong{color:var(--navy);font-weight:700;display:block;margin-bottom:2px;font-size:12.5px}
 
   /* Act 3: Federal infrastructure band */
   .fed-band{
-    margin-top:20px;background:var(--navy);color:#fff;
+    margin-top:14px;background:var(--navy);color:#fff;
     border-radius:8px;overflow:hidden;
-    padding:20px clamp(20px,2.5vw,32px);
-    display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;
+    padding:16px clamp(18px,2.2vw,28px);
+    display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;
   }
   .fed-band-label{
     font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
@@ -1143,7 +1146,7 @@
 
             <article class="campus-card">
               <div class="campus-photo">
-                <img src="images/Envision-wichita-highangle-buildingphoto.png" alt="High-angle exterior of Envision Wichita Campus" loading="lazy">
+                <img src="images/envision-building-sideangle.png" alt="Side-angle exterior of Envision Wichita Campus entrance with Envision Industries signage" loading="lazy">
                 <div class="campus-photo-tag"><span class="accent-dot" style="background:#003087"></span>Envision, Wichita Campus</div>
               </div>
               <div class="campus-body">
