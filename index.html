@@ -592,6 +592,82 @@
     font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--text-muted);
     border:1px solid var(--border-mid);padding:6px 12px;border-radius:999px;
   }
+
+  /* ---------- Location chips (subtle per-campus tagging) ---------- */
+  .loc-chip{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--sans);font-size:10px;font-weight:700;
+    letter-spacing:.12em;text-transform:uppercase;
+    padding:4px 9px;border-radius:999px;
+    border:1px solid currentColor;background:transparent;
+    line-height:1;white-space:nowrap;
+  }
+  .loc-chip::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:currentColor;
+  }
+  /* Light-surface variants (used on tiles and light slides) */
+  .tile .loc-chip,
+  .slide:not(.mission-slide) .loc-chip{opacity:.72}
+  .loc-chip--wichita{color:#003087}
+  .loc-chip--dallas{color:#78BE21}
+  .loc-chip--both{color:#6b7a96}
+  /* Dark-surface variants (used inside modals) */
+  .modal .loc-chip,
+  .m-summary .loc-chip{opacity:.88}
+  .modal .loc-chip--wichita{color:#7fa3ff}
+  .modal .loc-chip--dallas{color:#a8e457}
+  .modal .loc-chip--both{color:rgba(240,244,255,0.55)}
+  .tile .loc-chip{position:absolute;top:14px;right:14px}
+
+  /* ---------- Catalog disclosure (collapsible inside modals) ---------- */
+  .m-catalog{
+    border:1px solid var(--border-dark);border-radius:4px;
+    background:rgba(255,255,255,0.02);margin-top:14px;overflow:hidden;
+  }
+  .m-catalog + .m-catalog{margin-top:10px}
+  .m-catalog > summary{
+    list-style:none;cursor:pointer;padding:16px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-light);
+  }
+  .m-catalog > summary::-webkit-details-marker{display:none}
+  .m-catalog > summary .cat-meta{
+    font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:none;
+    color:var(--text-faint);
+  }
+  .m-catalog > summary .cat-toggle{
+    font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--green);
+    display:flex;align-items:center;gap:6px;
+  }
+  .m-catalog > summary .cat-toggle svg{
+    width:11px;height:11px;transition:transform .2s ease;
+  }
+  .m-catalog[open] > summary .cat-toggle svg{transform:rotate(90deg)}
+  .m-catalog[open] > summary{border-bottom:1px solid var(--border-dark)}
+  .m-cat-body{padding:0 4px 4px}
+  .m-cat-table{
+    width:100%;border-collapse:collapse;font-size:12.5px;color:var(--text-muted);
+  }
+  .m-cat-table th{
+    text-align:left;font-weight:700;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--text-faint);
+    padding:14px 16px 10px;border-bottom:1px solid var(--border-dark);
+    background:rgba(0,0,0,0.2);position:sticky;top:0;
+  }
+  .m-cat-table td{
+    padding:10px 16px;border-bottom:1px solid var(--border-dark);
+    line-height:1.5;vertical-align:top;
+  }
+  .m-cat-table tr:last-child td{border-bottom:0}
+  .m-cat-table tr:hover td{background:rgba(255,255,255,0.02)}
+  .m-cat-scroll{max-height:360px;overflow:auto}
+  .m-cat-foot{
+    padding:12px 20px;font-size:11.5px;color:var(--text-faint);line-height:1.55;
+    border-top:1px solid var(--border-dark);background:rgba(0,0,0,0.15);
+  }
+  .m-cat-foot strong{color:var(--text-muted);font-weight:600}
+
   .m-imgbreak{position:relative;width:100%;height:320px;overflow:hidden}
   .m-imgbreak .image-bg{position:absolute;inset:0}
   .m-topbanner{
@@ -827,28 +903,37 @@
       </section>
 
       <!--
-        SLIDE 2: ABOUT THE CAMPUS
-
-        Location-neutral template. When per-campus data is wired in, duplicate
-        this section once for Wichita and once for Dallas. Each duplicate
-        should set its own data-location attribute ("wichita" | "dallas"),
-        eyebrow ("Wichita Campus" / "Dallas Campus"), and stat values.
-        Address strip is intentionally removed for the holistic view; add it
-        back inside each per-campus duplicate.
+        SLIDE 2: ABOUT THE CAMPUSES
+        Holistic Envision-system stats. Per-campus chips appear on each card
+        where the stat is single-site; "Both" or no chip indicates an
+        Envision-wide number.
       -->
       <section class="slide" data-name="Campus" data-location="all">
         <div class="wrap">
           <div class="eyebrow">The Campuses</div>
           <h2 class="sec-h">Envision, by the numbers.</h2>
-          <p class="subhead">Two manufacturing campuses. One mission. Multiple production lines plus a full commercial print operation, services, and federal procurement infrastructure under one organization.</p>
+          <p class="subhead">Two manufacturing campuses. One mission. 90+ years of continuous U.S. manufacturing, the largest combined workforce of people who are blind or low vision in American industry, and federal procurement infrastructure under one organization.</p>
           <div class="stat-grid">
-            <div class="stat-card"><div class="num">2</div><div class="lab">U.S. campuses</div><div class="ctx">Wichita, Kansas and Dallas, Texas — each running production, services, and federal channel work.</div></div>
+            <div class="stat-card">
+              <div class="num">410K sq ft</div>
+              <div class="lab">Combined facility</div>
+              <div class="ctx"><span class="loc-chip loc-chip--dallas">Dallas 235K</span> &nbsp; <span class="loc-chip loc-chip--wichita">Wichita 175K</span><br><br>Climate-controlled industrial space across two campuses.</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">762</div>
+              <div class="lab">Employees</div>
+              <div class="ctx"><span class="loc-chip loc-chip--dallas">Dallas 447</span> &nbsp; <span class="loc-chip loc-chip--wichita">Wichita 315</span><br><br>Manufacturing, services, and administrative roles across both campuses.</div>
+            </div>
             <div class="stat-card"><div class="num">88%</div><div class="lab">BVI Direct Labor</div><div class="ctx">Envision's combined Direct Labor performed by team members who are blind or low vision. Substantially exceeds AbilityOne's 75% threshold.</div></div>
             <div class="stat-card"><div class="num">4M+</div><div class="lab">Employment hours</div><div class="ctx">Provided to people who are blind or low vision since 1980. The reason our retention runs above industry average.</div></div>
-            <div class="stat-card"><div class="num">ISO 9001:2015</div><div class="lab">Certified</div><div class="ctx">Intertek, ANAB-accredited. Scope covers manufacturing, assembly, and fulfillment for government, military, and commercial applications.</div></div>
             <div class="stat-card"><div class="num">$198M</div><div class="lab">Federal contract capacity</div><div class="ctx">Across two active 5-year DLA Prime Vendor contracts. ABOBSC TLS ($150M) and H2F ($48M).</div></div>
-            <div class="stat-card"><div class="num">16</div><div class="lab">Base Supply Centers</div><div class="ctx">Envision-operated retail stores across 10 states serving Air Force, Army, Space Force, and Navy.</div></div>
+            <div class="stat-card"><div class="num">16</div><div class="lab">Base Supply Centers</div><div class="ctx">Envision-operated retail stores across the U.S. serving Air Force, Army, Space Force, and Navy.</div></div>
             <div class="stat-photo"><img src="images/ChatGPT%20Image%20May%2018,%202026%20at%2006_10_31%20PM.png" alt="Envision team member walking the manufacturing floor with her guide dog"></div>
+          </div>
+          <div class="addr-strip">
+            <span class="loc-chip loc-chip--wichita">Wichita</span> 2301 S. Water Street, Wichita, KS 67213 · (316) 522-3232
+            &nbsp;&middot;&nbsp;
+            <span class="loc-chip loc-chip--dallas">Dallas</span> 1801 Valley View Lane, Farmers Branch, TX 75234 · (214) 821-2375
           </div>
         </div>
       </section>
@@ -879,7 +964,7 @@
           </figure>
           <div class="eyebrow">Everything Envision Offers</div>
           <h2 class="sec-h">Every capability. Every service.</h2>
-          <p class="subhead">Five manufacturing capabilities and four supporting services, delivered across the Envision system. Click any tile to explore.</p>
+          <p class="subhead">Six manufacturing capabilities and six supporting services, delivered across the Envision system. Click any tile to explore.</p>
           <div class="zone">
             <div class="zone-label">Capabilities</div>
             <div class="toc-grid toc-cap" id="ovCap"></div>
@@ -899,7 +984,7 @@
           </figure>
           <div class="eyebrow">Capabilities</div>
           <h2 class="sec-h">Everything Envision <span class="accent">makes.</span></h2>
-          <p class="subhead">Five manufacturing capabilities operated across the Envision system. Each one shipped under contract today.</p>
+          <p class="subhead">Six manufacturing capabilities operated across the Envision system. Each one shipped under contract today.</p>
           <p class="hint">Tap any tile to explore in depth</p>
           <div class="tile-grid" id="capTiles"></div>
         </div>
@@ -913,18 +998,13 @@
           </figure>
           <div class="eyebrow">Services</div>
           <h2 class="sec-h">Everything Envision <span class="accent">delivers.</span></h2>
-          <p class="subhead">Four services that extend our manufacturing capability. Available as packaged offerings alongside any production program.</p>
+          <p class="subhead">Six services that extend our manufacturing capability. Available as packaged offerings alongside any production program.</p>
           <p class="hint">Tap any tile to explore in depth</p>
           <div class="tile-grid" id="svcTiles"></div>
         </div>
       </section>
 
-      <!--
-        SLIDE 7: CAPABILITIES IN ACTION
-        The State card is a per-location credential. When Wichita + Dallas data
-        is wired in, duplicate this card to surface both the Kansas State Use
-        Program (Wichita) and the Texas State Use / TIBH program (Dallas).
-      -->
+      <!-- SLIDE 7: CAPABILITIES IN ACTION -->
       <section class="slide" data-name="Proof">
         <div class="wrap">
           <div class="eyebrow">Proof</div>
@@ -934,27 +1014,39 @@
             <div class="proof-card">
               <div class="tag">Federal</div>
               <div class="t-h">DLA Prime Vendor Program</div>
-              <div class="t-d">Envision-manufactured product (can liners, hand trucks, VISI-BELT, commercial print) ships through DLA Prime Vendor channels to military installations nationwide. DLA stands for Defense Logistics Agency, the U.S. agency that handles supply for the military.</div>
-              <div class="t-m">Active under ABOBSC TLS and H2F contracts. CAGE codes 3BLJ3 and 2A178. Recurring volume.</div>
+              <div class="t-d">Envision-manufactured product (can liners, hand trucks, VISI-BELT, military apparel, commercial print) ships through DLA Prime Vendor channels to military installations nationwide. DLA stands for Defense Logistics Agency, the U.S. agency that handles supply for the military.</div>
+              <div class="t-m">Active under ABOBSC TLS and H2F contracts. CAGE codes 3BLJ3, 2A178, and 5A062 (Dallas). Recurring volume.</div>
             </div>
             <div class="proof-card" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
               <div class="tag">Distribution</div>
               <div class="t-h">Base Supply Center Network</div>
-              <div class="t-d">Envision-made product moves through 16 Envision-operated Base Supply Centers across 10 states, serving Air Force, Army, Space Force, and Navy.</div>
+              <div class="t-d">Envision-made product moves through 16 Envision-operated Base Supply Centers serving Air Force, Army, Space Force, and Navy across CONUS installations.</div>
               <div class="t-m">10 Air Force, 3 Army, 2 Space Force, 2 Navy.</div>
               <div class="bsc-cue">View network map <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            </div>
+            <div class="proof-card">
+              <div class="tag">Federal</div>
+              <div class="t-h">DCMA Alternate Release</div>
+              <div class="t-d">Authorized under the DCMA Alternate Release Program out of the Dallas Campus. Military apparel and qualifying shipments ship to federal customers without prior on-site government source inspection.</div>
+              <div class="t-m">Saves weeks of waiting on government audits. Reflects high confidence in Envision's quality system. <span class="loc-chip loc-chip--dallas">Dallas</span></div>
+            </div>
+            <div class="proof-card">
+              <div class="tag">State</div>
+              <div class="t-h">Kansas State Use Program</div>
+              <div class="t-d">The Wichita Campus is the verified Kansas State Use participant. State agencies can procure Wichita-manufactured product through the mandatory-source channel.</div>
+              <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--wichita">Wichita</span></div>
+            </div>
+            <div class="proof-card">
+              <div class="tag">State</div>
+              <div class="t-h">Texas WorkQuest (State Use)</div>
+              <div class="t-d">The Dallas Campus is an authorized WorkQuest (formerly TIBH Industries) participant under the State of Texas State Use Program. Texas agencies procure Dallas-manufactured product, including embossed Texas Seal portfolios and high-visibility safety apparel, through the mandatory-source channel.</div>
+              <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--dallas">Dallas</span></div>
             </div>
             <div class="proof-card">
               <div class="tag">Capability</div>
               <div class="t-h">Federal NSN Catalog Print</div>
               <div class="t-d">Envision commercial print operation with full federal NSN coverage including Braille embossing. Digital, offset, mailing, and finishing. NSN stands for National Stock Number, the federal procurement identifier required for items in the federal supply system.</div>
               <div class="t-m">Turnkey federal print partner. ISO 9001:2015.</div>
-            </div>
-            <div class="proof-card">
-              <div class="tag">State</div>
-              <div class="t-h">State Use Programs</div>
-              <div class="t-d">Envision is a verified State Use participant in the states our campuses operate in. State agencies can procure Envision-manufactured product through the mandatory-source channel.</div>
-              <div class="t-m">Active mandatory source. <!-- TODO: split into per-campus cards: Kansas State Use (Wichita) and Texas TIBH / State Use (Dallas). --></div>
             </div>
           </div>
         </div>
@@ -999,12 +1091,12 @@
           <p class="subhead">TAA, Berry, Buy American, ISO 9001:2015, and decades of continuous U.S. manufacturing. These are the qualifications federal and military buyers require. Partnering with Envision means the qualifications are already in place. The compliance work is done. The door is open.</p>
           <div class="cred-grid">
             <div class="cred">
-              <div class="c-h">ISO 9001:2015</div>
-              <div class="c-d">Certificate CERT-0145812. Intertek, ANAB-accredited. Initial cert 26 Jan 2021. Recent decision 18 Feb 2025. Valid until 25 Apr 2028. <strong>Scope: Manufacture, Assembly and Fulfillment Services for Government, Military, and Commercial Applications. QA Lab tensile testing on every production run.</strong></div>
+              <div class="c-h">ISO 9001:2015 <span class="loc-chip loc-chip--dallas">Dallas</span></div>
+              <div class="c-d">Certificate CERT-0145812. Intertek, ANAB-accredited. Registered facility: 1801 Valley View Lane, Farmers Branch, TX. Decision 18 Feb 2025. Valid until 25 Apr 2028. <strong>Scope: Manufacture, Assembly and Fulfillment Services for Government, Military, and Commercial Applications.</strong> QA Lab tensile and material testing on every production run across both campuses.</div>
             </div>
             <div class="cred">
               <div class="c-h">Berry Amendment</div>
-              <div class="c-d">Compliant. The Berry Amendment requires DoD to give preference to domestically sourced textiles and related end items. Envision's qualifying production meets the domestic sourcing requirement.</div>
+              <div class="c-d">Compliant. The Berry Amendment requires DoD to give preference to domestically sourced textiles and related end items. Envision's qualifying production — including ACU trousers, MOLLE pouches, and ETOOL carriers from Dallas — meets the domestic sourcing requirement.</div>
             </div>
             <div class="cred">
               <div class="c-h">TAA compliant</div>
@@ -1014,8 +1106,16 @@
               <div class="c-h">Buy American Act</div>
               <div class="c-d">Compliant. The Buy American Act sets domestic content thresholds for federal purchases. Envision's U.S. manufacturing satisfies the applicable domestic content tests.</div>
             </div>
+            <div class="cred">
+              <div class="c-h">DCMA Alternate Release <span class="loc-chip loc-chip--dallas">Dallas</span></div>
+              <div class="c-d">Authorized under the DCMA Alternate Release Program. Military apparel ships without prior government source inspection, reflecting high confidence in Envision's quality management system and saving weeks of audit time.</div>
+            </div>
+            <div class="cred">
+              <div class="c-h">AbilityOne &amp; State Use</div>
+              <div class="c-d">AbilityOne mandatory-source participant nationally. Kansas State Use participant out of <span class="loc-chip loc-chip--wichita">Wichita</span> and Texas WorkQuest (State Use) participant out of <span class="loc-chip loc-chip--dallas">Dallas</span>.</div>
+            </div>
           </div>
-          <div class="callout-box"><strong>DCMA Alternate Release Program</strong> authorization is held within the Envision system and available as an organization-wide capability. DCMA is the Defense Contract Management Agency. Alternate Release Program speeds up federal acceptance timelines on qualifying shipments.</div>
+          <div class="callout-box"><strong>Federal Operational Registrations.</strong> DUNS 007346745 · CAGE 5A062 (Dallas), 3BLJ3 and 2A178 (Wichita) · SAM Active.</div>
         </div>
       </section>
 
@@ -1281,11 +1381,12 @@
 
   var MODALS = {
     plastic:{
-      label:"Capabilities", eyebrow:"Capability", title:"Plastic & Film Manufacturing",
+      label:"Capabilities", eyebrow:"Capability", title:"Polymer & Film Manufacturing",
+      location:"Wichita",
       summary:"Domestic polyethylene film manufacturing across three product families. Can liners, medical and specialty bags, and plastic sheeting. HDPE and LLDPE in every density. Active recurring federal volume.",
       creds:["ISO 9001:2015","Berry / TAA","Federal NSN","HDPE","LLDPE"],
       overview:[
-        "Three product families produced by Envision: <strong>can liners</strong>, <strong>medical and specialty bags</strong>, <strong>plastic sheeting</strong>.",
+        "Three product families produced at the Wichita campus: <strong>can liners</strong>, <strong>medical and specialty bags</strong>, <strong>plastic sheeting</strong>.",
         "Every production run validated against gauge, strength, and material specs in our on-site <strong>Quality Lab</strong>. Tensile testing on every run.",
         "<strong>Max-Performance</strong> can liner family is the flagship and the construction that supplies the greatest share of direct labor hours for team members who are blind or low vision."
       ],
@@ -1302,15 +1403,81 @@
         {tag:"Medical-grade",title:"Medical & Specialty Bags",desc:"Color-coded isolation bags, BFCUK 8-piece kit, ZF seal-closure, VA belongings, TidyGirl.",specs:[["Compliance","OSHA"],["Spec","DOT 49 CFR"],["Spec","VA"],["Lines","5 families"]]},
         {tag:"Construction",title:"Plastic Sheeting",desc:"Water-resistant, flood-control polyethylene.",specs:[["Standard","ASTM-D4397-10"],["Fed CID","A-A-3174"],["Fed spec","L-P-378"],["Use","Construction / Ag"]]}
       ],
-      img:"Plastic & Film production line, authentic floor shot, forward-moving operator, never posed",
+      img:"Polymer & Film production line, authentic floor shot, forward-moving operator, never posed",
       imgSrc:"images/envision-manufacturing-floor-bag-machines.png"
     },
+    textile:{
+      label:"Capabilities", eyebrow:"Capability", title:"Textile & Apparel",
+      location:"Dallas",
+      summary:"Heavy sewing operations producing Berry-compliant military gear, ANSI-certified high-visibility safety apparel, and NFPA 70E flame- and arc-resistant garments. Gerber Paragon CNC cutting with up to 95% material yield.",
+      creds:["Berry / TAA","ANSI/ISEA 107","NFPA 70E","ASTM F1506","Gerber Paragon CNC"],
+      overview:[
+        "Automated <strong>computerized CNC cutting</strong> (Gerber Paragon) with digital pattern nesting achieves material yields of up to <strong>95%</strong> across Cordura, canvas, Kevlar, and synthetic blends.",
+        "<strong>Berry Amendment compliant</strong> military gear: ACU trousers, Entrenching Tool (ETOOL) carriers, MOLLE pouches, 9mm magazine pouches, weapon slings, and tactical harness systems.",
+        "ANSI/ISEA 107 Class I/II/III high-visibility vests, shirts, and trousers. Inclusive sizing from Small through 8X, men's and women's cuts.",
+        "<strong>FR vs AR specialization.</strong> Flame-Resistant garments (ASTM D6413) self-extinguish on flame contact. Arc-Resistant garments (ASTM F1506, NFPA 70E) carry a verified ATPV cal/cm² rating and protect against electrical arc-flash. All AR is FR; standard FR is not AR."
+      ],
+      statLabel:"The Numbers Behind the Build",
+      stats:[
+        {num:"95%",label:"Material yield",ctx:"Digital pattern nesting on Gerber Paragon CNC cutters with vacuum-sealed conveyor beds and laser alignment."},
+        {num:"S-8X",label:"Inclusive sizing",ctx:"Men's and women's cuts across the high-visibility safety apparel line."},
+        {num:"75",label:"Launderings",ctx:"Class III safety apparel certified to 75 home wash cycles without losing reflective performance."}
+      ],
+      calloutLabel:"Product Families",
+      callouts:[
+        {tag:"Military",title:"Army Combat Uniform (ACU) Trousers",desc:"Active multi-station sewing line. Reinforced flat-felled double stitching, tactical pocket placements, IR-reflectivity compliance.",specs:[["Compliance","Berry / TAA"],["Construction","Flat-felled"],["IR","Compliant"]]},
+        {tag:"Military",title:"MOLLE & ETOOL Pouches",desc:"Cordura nylon construction, rigid reinforcement panels, military quick-release buckles, MOLLE webbing for modular gear integration. Includes 9mm single mag pouches.",specs:[["Material","Cordura"],["Standard","MIL"],["Modular","MOLLE"]]},
+        {tag:"Safety",title:"High-Visibility Vests, Shirts & Trousers",desc:"ANSI/ISEA 107 Class I, II, and III. Fluorescent mesh layered with micro-prismatic retroreflective tape. Birdseye polyester mesh shirts in regular and tall lengths.",specs:[["Class","I / II / III"],["Sizing","S-8X"],["Cuts","Men's / Women's"]]},
+        {tag:"FR / AR",title:"Flame- & Arc-Resistant Apparel",desc:"NFPA 70E-rated AR garments for electrical workers and utility linemen. Treated cotton / polyester FR for flash-fire and welding spark protection.",specs:[["FR std","ASTM D6413"],["AR std","ASTM F1506"],["Rating","ATPV cal/cm²"],["Materials","Nomex, Kevlar, Modacrylic"]]}
+      ],
+      catalogs:[
+        {title:"Class II Mesh Safety Vests (Zipper, Universal Fit)", meta:"AbilityOne · representative SKUs", columns:["Part #","NSN","Closure","Reflective Spec"],rows:[
+          ["17-00-0216","8415-01-394-0216","Hook & Loop","Fluorescent Orange/Yellow"],
+          ["17-00-4873","8415-01-598-4873","Zipper","Orange / Lime-Yellow Stripes"],
+          ["17-00-4875","8415-01-598-4875","Zipper","Lime-Yellow / Silver Stripes"],
+          ["4664","8415-01-598-4877","Zipper","Lime-Yellow / Silver (Medium)"],
+          ["4665","8415-01-598-4880","Zipper","Lime-Yellow / Silver (Large)"],
+          ["4666","8415-01-598-4881","Zipper","Lime-Yellow / Silver (XL)"]
+        ], footnote:"AbilityOne direct range. Class I, II, and III universal-fit vests stocked with micro-prismatic retroreflective tape."},
+        {title:"Class III Safety Vests (Heavy Duty)", meta:"Texas WorkQuest · 8 sizes Small–8X", columns:["WorkQuest #","Size","WorkQuest #","Size"],rows:[
+          ["34592440001","Small","34592440006","3X-Large"],
+          ["34592440002","Medium","34592440007","4X-Large"],
+          ["34592440003","Large","34592440008","5X-Large"],
+          ["34592440004","X-Large","34592440009","6X-Large"],
+          ["34592440005","2X-Large","34592440010","7X-Large"],
+          ["—","—","34592440011","8X-Large"]
+        ], footnote:"Fluorescent red-orange main mesh, lime-yellow sleeve caps, segmented heat-transferred silver reflective piping. Rated for 75 home launderings."},
+        {title:"Class III Safety Shirts (Short Sleeve)", meta:"Texas WorkQuest · regular & tall lengths, Small–8X", columns:["Size","Regular","Tall"],rows:[
+          ["Small","34508800001","34508800001-1"],
+          ["Medium","34508800002","34508800002-1"],
+          ["Large","34508800003","34508800003-1"],
+          ["X-Large","34508800004","34508800004-1"],
+          ["2X-Large","34508800005","34508800005-1"],
+          ["3X-Large","34508800006","34508800006-1"],
+          ["4X-Large","34508800007","34508800007-1"],
+          ["5X-Large","34508800008","34508800008-1"]
+        ], footnote:"ANSI/ISEA 107-2015 Type R, Class III. Moisture-wicking birdseye polyester mesh. Long-sleeve and high-visibility trouser families also available in the same sizing matrix."},
+        {title:"Hard Hats & Accessories", meta:"Texas WorkQuest", columns:["WorkQuest #","Shell Style","Imprint","Color"],rows:[
+          ["34556560506","Cap","Plain / No Logo","White"],
+          ["34556561008","Cap","TXDOT / Custom","White"],
+          ["34556563002","Cap","TXDOT / Custom","Yellow"],
+          ["34556562056","Full-Brim","Plain / No Logo","White"],
+          ["34556562055","Full-Brim","TXDOT / Custom","White"],
+          ["34556563001","Full-Brim","TXDOT / Custom","Yellow"],
+          ["3455636","Full-Brim","Forestry/Safety Combo","White"],
+          ["34556314507-1","Neck Shade","Snap-on Universal","Fluor Orange/Yellow"]
+        ], footnote:"High-density polyethylene shells with chin straps and retroreflective micro-prismatic bands. One-time custom logo vector setup fee (3455656) where required."}
+      ],
+      img:"Cutting room or sewing line, Cordura roll and reflective trim, authentic Dallas floor",
+      imgSrc:"images/Envision-Workforce-employee-dallas-manufacoring.png"
+    },
     reflective:{
-      label:"Capabilities", eyebrow:"Capability", title:"Reflective Manufacturing",
+      label:"Capabilities", eyebrow:"Capability", title:"Reflective Safety Systems",
+      location:"Wichita",
       summary:"In-house reflective vinyl manufacturing. Coating, slitting, and finishing of high-visibility reflective products with reinforced webbing and quick-release hardware. Built for federal high-visibility safety applications.",
       creds:["Federal NSN","Berry / TAA","7 reflective colors","In-house"],
       overview:[
-        "All reflective <strong>coating, slitting, and finishing</strong> happens in-house at Envision. No outsourced sub-assembly.",
+        "All reflective <strong>coating, slitting, and finishing</strong> happens on the Wichita floor. No outsourced sub-assembly.",
         "<strong>VISI-BELT</strong> is the flagship reflective product. Carried in the federal SKILCRAFT catalog. Shipped through the <span class='bsc-link' data-bsc role='button' tabindex='0'>Base Supply Center network</span>.",
         "Assembled in our <strong>Pride kitting area</strong>."
       ],
@@ -1329,6 +1496,7 @@
     },
     metal:{
       label:"Capabilities", eyebrow:"Capability", title:"Metal Fabrication & Assembly",
+      location:"Wichita",
       summary:"Welded steel construction and load-rated assembly for heavy-duty fabricated products. Built and tested for federal logistics and material-handling applications.",
       creds:["Federal NSN","Berry / TAA","Welded steel","Load-rated 300-700 lb"],
       overview:[
@@ -1353,84 +1521,206 @@
       img:"Hand truck product shot in action context"
     },
     print:{
-      label:"Capabilities", eyebrow:"Capability", title:"Commercial Print Operations",
-      summary:"Digital and offset print with full federal NSN catalog coverage. Business cards, forms, stationery, pocket folders, and postcards with in-house Braille embossing and mailing services. Quick turnaround for top government agencies.",
-      creds:["ISO 9001:2015","Federal NSN","Digital","Offset","Braille capable"],
+      label:"Capabilities", eyebrow:"Capability", title:"Print, Bindery & Writing Instruments",
+      location:"Both",
+      summary:"Federal-grade commercial print with Braille embossing out of Wichita. Custom binders, portfolios, and presentation products out of Dallas. High-speed writing-instrument assembly (11 color formulas) including AbilityOne and Texas WorkQuest catalog SKUs.",
+      creds:["ISO 9001:2015","Federal NSN","Digital + Offset","Braille capable","11 ink colors"],
       overview:[
-        "Digital and offset print products cataloged under <strong>federal NSNs</strong>.",
-        "In-house <strong>Braille embossing</strong> (Grade 2 English Braille and Computer Braille).",
-        "<strong>3-day rush service</strong> available. Standard ground shipping included on business card pricing."
+        "<strong>Wichita commercial print.</strong> Digital and offset print cataloged under federal NSNs. In-house Grade 2 English and Computer Braille embossing. 3-day rush available.",
+        "<strong>Dallas binders &amp; portfolios.</strong> Vinyl, casebound, and premium linen presentation binders. 12 vinyl colors. 30 paper colors and 12 structural textures in the casebound line. USCG-specific hardcover binders and Texas State Use embossed Seal portfolios.",
+        "<strong>Dallas writing instruments.</strong> Automated fluid filling and marker assembly lines. 11 distinct color formulas across dry erase, highlighters, permanent markers, and UV security markers. Retractable, tube, and chisel/bullet/fine tips. AbilityOne and Texas WorkQuest catalog SKUs."
       ],
       statLabel:"The Numbers Behind the Build",
       stats:[
-        {num:"2",label:"Print methods",ctx:"Digital and offset, in-house."},
-        {num:"NSN",label:"Federal coverage",ctx:"Full federal NSN catalog including Braille-embossed products."},
-        {num:"3-day",label:"Rush available",ctx:"$25 surcharge. Standard turnaround on stock items."}
+        {num:"3-day",label:"Print rush",ctx:"$25 surcharge. Standard ground shipping included on business card pricing."},
+        {num:"35",label:"Binder case sizes",ctx:"Casebound matrix from 6×8 in. through 16×20 in. (D1–D35)."},
+        {num:"11",label:"Marker ink formulas",ctx:"Dry erase, highlighters, permanent markers, UV security markers."}
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Catalog",title:"Federal NSN Catalog Print",desc:"Business cards, forms, stationery, pocket folders, postcards.",specs:[["Methods","Digital / Offset"],["Coverage","Federal NSN"]]},
-        {tag:"Accessibility",title:"Braille Embossing",desc:"Grade 2 English Braille (contractions for natural reading), Computer Braille (letter-by-letter for emails). Up to 4 lines, 13 characters per line.",specs:[["Lines","Up to 4"],["Chars/line","13"],["Rate","$25/box flat"]]},
-        {tag:"Fulfillment",title:"Mailing Services",desc:"Print, finish, and mail. 3-day rush available with $25 surcharge.",specs:[["Rush","3-day"],["Surcharge","$25"]]}
+        {tag:"Print",title:"Federal NSN Catalog Print",desc:"Business cards, forms, stationery, pocket folders, postcards. Digital and offset.",specs:[["Methods","Digital / Offset"],["Coverage","Federal NSN"],["Origin","Wichita"]]},
+        {tag:"Accessibility",title:"Braille Embossing",desc:"Grade 2 English Braille (contractions for natural reading) and Computer Braille (letter-by-letter for emails). Up to 4 lines, 13 characters per line.",specs:[["Lines","Up to 4"],["Chars/line","13"],["Rate","$25/box flat"]]},
+        {tag:"Bindery",title:"Casebound Award & Retirement Binders",desc:"Hand-turned and machine-finished. 30 paper colors, 12 textures, contrasting moire-board liners, ribbon corner mounts. Service-branch foil seals (Army, Navy, Air Force, Marines, USCG, Space Force, DLA).",specs:[["Sizes","D1-D35 (35 case codes)"],["Liner","Silk moire board"],["Origin","Dallas"]]},
+        {tag:"Bindery",title:"Vinyl & Linen Presentation Folders",desc:"12 vinyl colors with metal corners, blind embossing, debossing, foil stamping. Premium linen line with silk ribbons and tissue overlays.",specs:[["Vinyl colors","12"],["Customization","Emboss / Deboss / Foil"]]},
+        {tag:"Writing",title:"Dry Erase, Highlighter & Permanent Markers",desc:"Retractable and tube-type bodies. Bullet, chisel, fine tips. Premium quick-drying low-odor non-toxic ink.",specs:[["Tip types","Bullet / Chisel / Fine"],["Formats","Retractable / Tube"],["Catalog","AbilityOne + WorkQuest"]]}
+      ],
+      catalogs:[
+        {title:"Casebound Binder Case Codes (D1–D35)", meta:"Dallas · sizes in inches", columns:["Code","Size","Code","Size","Code","Size"],rows:[
+          ["D1","6 × 8","D13","12 × 16","D25","4.25 × 6"],
+          ["D2","7 × 9","D14","12 × 18","D26","8 × 11"],
+          ["D3","8 × 10","D15","12.5 × 16","D27","9 × 11"],
+          ["D4","3.5 × 11","D16","13 × 15","D28","9 × 11.5"],
+          ["D5","11 × 14","D17","13 × 17","D29","9 × 12"],
+          ["D6","11 × 17","D18","14 × 17","D30","10.5 × 13.25"],
+          ["D7","11.5 × 14","D19","14 × 18","D31","10 × 13"],
+          ["D8","11.5 × 14.5","D20","15 × 20","D32","10 × 13.5"],
+          ["D9","11.5 × 15","D21","16 × 20","D33","11.5 × 15"],
+          ["D10","11.75 × 15","D22","5 × 7","D34","11 × 15"],
+          ["D11","12 × 14","D23","10 × 12","D35","11 × 16"],
+          ["D12","12 × 15","D24","4.25 × 6.5","—","—"]
+        ], footnote:"35 hand-turned case sizes across the casebound line. Available with custom ribbon corner mounts, padded covers, and metallic foil stamping."},
+        {title:"Service-Branch Presentation Binders (Portrait, Moire Lining)", meta:"Dallas · 9.125 × 11.625 in. padded covers", columns:["Part #","NSN","Cover Color","Foil Seal"],rows:[
+          ["13-00-2155","7510-01-714-1364","Blue","U.S. Navy (Gold)"],
+          ["13-00-2159","7510-01-714-5932","Blue","U.S. Air Force (Silver)"],
+          ["13-00-2158","7510-01-714-5934","Black","Defense Logistics Agency (Gold)"],
+          ["13-00-2156","7510-01-714-6627","Green","U.S. Army (Gold)"],
+          ["13-00-2157","7510-01-714-6629","Red","U.S. Marine Corps (Gold)"],
+          ["13-00-2164","7510-01-714-8885","Blue","U.S. Space Force (Silver)"],
+          ["13-00-7936CS","7510-01-156-7936","Dark Blue","USCG Commandant Letter (Gold)"],
+          ["13-00-2160","7510-01-714-3046","Blue","No Seal"],
+          ["13-00-2161","7510-01-714-3043","Green","No Seal"],
+          ["13-00-2162","7510-01-714-3329","Red","No Seal"],
+          ["13-00-2163","7510-01-714-3328","Black","No Seal"]
+        ], footnote:"Landscape and Deluxe ($11.5×14.5$) configurations available with matching foil seals; full line spans 30+ NSNs."},
+        {title:"Texas State Seal Award Portfolios", meta:"Dallas · Texas WorkQuest", columns:["WorkQuest #","Color Scheme","Size","Pack"],rows:[
+          ["08065421003","Dark Blue / Gold","8.5 × 11","MOQ 20"],
+          ["61509042000","Red / Gold","11.5 × 8.875","Case (20)"],
+          ["61509041804","Red / Silver","11.5 × 8.875","Case (20)"],
+          ["61509040806","Royal Blue / Gold","11.5 × 8.875","Case (20)"],
+          ["61509041002","Royal Blue / Silver","11.5 × 8.875","Case (20)"],
+          ["8065429006","Logo setup charge","—","Each (Ea)"]
+        ], footnote:"Heavy-duty vinyl portfolios embossed with the official State of Texas Seal for institutional state operations."},
+        {title:"Dry Erase Markers", meta:"Dallas · representative SKUs · AbilityOne + Commercial", columns:["Part #","NSN","Tip","Color","Designation"],rows:[
+          ["15-00-5655","7520-01-510-5655","Bullet","Black","AbilityOne"],
+          ["15-00-5657","7520-01-510-5657","Bullet","Green","AbilityOne"],
+          ["15-00-5660","7520-01-510-5660","Bullet","Red","AbilityOne"],
+          ["15-00-5662","7520-01-510-5662","Bullet","Blue","AbilityOne"],
+          ["15-00-3791","7520-01-294-3791","Chisel","Black","AbilityOne"],
+          ["15-00-4971","7520-01-557-4971","Chisel","Starter Kit (Blk/Blu/Grn/Red) + Eraser + Cleaner","AbilityOne"],
+          ["15-00-5769","7520-01-519-5769","Chisel","Retractable, 4-Pack Assorted","AbilityOne"],
+          ["15-00-6126","7520-01-365-6126","Fine/Chisel","Full System (4 Fine + 8 Chisel + Eraser + Cleaner + Tray)","AbilityOne"],
+          ["15-00-0089","6850-00-NIB-0089","—","Whiteboard Cleaner Spray, 8 oz.","Commercial"],
+          ["15-00-6213","7510-01-316-6213","—","Whiteboard Dry Eraser (Charcoal Gray)","AbilityOne"]
+        ], footnote:"Premium quick-drying, low-odor, non-toxic ink. Tube and retractable form factors. Full catalog includes highlighter and permanent-marker families with the same depth."},
+        {title:"Highlighters & Permanent Markers", meta:"Dallas · representative SKUs", columns:["Part #","NSN","Family","Color"],rows:[
+          ["15-00-4476","7520-00-904-4476","Highlighter (Chisel, Tube)","Yellow"],
+          ["15-00-1585","7520-01-159-1585","Highlighter (Chisel, Tube)","Blue"],
+          ["15-00-0682","7520-01-166-0682","Highlighter (Chisel, Tube)","Green"],
+          ["15-00-7598","7520-00-460-7598","Highlighter (Chisel, Tube)","Pink"],
+          ["15-00-8210","7520-01-554-8210","Highlighter (Retractable)","Yellow"],
+          ["15-00-1059","7520-00-973-1059","Permanent (Chisel)","Black"],
+          ["15-00-1060","7520-00-973-1060","Permanent (Chisel)","Blue"],
+          ["15-00-1061","7520-00-973-1061","Permanent (Chisel)","Green"],
+          ["15-00-9540","7520-01-554-9540","Permanent Retractable, 4-pack","Assorted (Blk/Blu/Grn/Red)"]
+        ], footnote:"Tube and retractable form factors. Industrial-strength, waterproof, quick-drying ink for porous and non-porous surfaces."}
       ],
       img:"Business card with Braille embossing detail, 1:1 macro",
       imgSrc:"images/printing-brailing.png"
     },
     fulfillment:{
-      label:"Capabilities", eyebrow:"Capability", title:"Fulfillment & Assembly",
-      summary:"Kitting, pick and pack, distribution, and value-add assembly. Custom bundled product programs for federal and commercial clients.",
-      creds:["Federal compliant","Pride kitting area","Custom assembly","Distribution"],
+      label:"Capabilities", eyebrow:"Capability", title:"Fulfillment, Kitting & Assembly",
+      location:"Both",
+      summary:"Kitting, pick and pack, distribution, and value-add assembly across both campuses. Pride kitting area at Wichita. MIL-STD-129 compliant packaging, 23 dock doors plus 8 rail-spur doors, climate-controlled storage at Dallas.",
+      creds:["Federal compliant","MIL-STD-129","RFID","Climate-controlled","23 + 8 dock doors"],
       overview:[
-        "Custom <strong>kitting</strong> and bundled product programs operated in-house.",
-        "<strong>BFCUK</strong> (Body Fluid Clean Up Kit) is one example: an 8-piece kit assembled to the OSHA bloodborne pathogens standard.",
-        "<strong>VISI-BELT assembly</strong> is one example of value-add work happening in the Pride kitting area.",
-        "Pick and pack fulfillment runs on the <strong>federal-compliant labor model</strong>."
+        "Custom <strong>kitting</strong> and bundled product programs. <strong>BFCUK</strong> (Body Fluid Clean Up Kit) is one example: an 8-piece kit assembled to the OSHA bloodborne pathogens standard.",
+        "<strong>VISI-BELT assembly</strong> is one example of value-add work happening in the Wichita Pride kitting area.",
+        "<strong>Dallas warehouse &amp; fulfillment.</strong> 23 dock doors plus 8 doors adjoining an active rail spur. Climate-controlled storage, cross-docking, MIL-STD-129 packaging and labeling, RFID tagging, OCONUS shipping, and worldwide 3PL integrations.",
+        "Real-time inventory tracking, active cycle counting, automated restocks, e-commerce integrations, and analytics reporting through an audited WMS. Pick and pack fulfillment runs on the <strong>federal-compliant labor model</strong>."
       ],
       statLabel:"The Numbers Behind the Build",
       stats:[
-        {num:"8 pieces",label:"BFCUK kit",ctx:"Assembled to OSHA bloodborne pathogens standard."},
-        {num:"In-house",label:"Value-add",ctx:"Pride kitting area assembly."},
-        {num:"Federal",label:"Labor model",ctx:"AbilityOne-compliant pick and pack fulfillment."}
+        {num:"23 + 8",label:"Dock + rail doors",ctx:"Dallas: 23 dock doors plus 8 doors adjoining an active rail spur."},
+        {num:"MIL-STD-129",label:"Compliant",ctx:"Military packaging and labeling. RFID tagging and OCONUS shipping."},
+        {num:"Federal",label:"Labor model",ctx:"AbilityOne-compliant pick and pack fulfillment across both campuses."}
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Service",title:"Custom kitting",desc:"Bundled product programs. BFCUK is one example (8-piece OSHA kit).",specs:[["Example","BFCUK"],["Pieces","8"]]},
-        {tag:"Service",title:"Pick and pack fulfillment",desc:"Federal-compliant labor model. Multi-channel order fulfillment.",specs:[["Model","AbilityOne"],["Channels","Multi"]]},
-        {tag:"Service",title:"Value-add assembly",desc:"In-house Pride kitting area. VISI-BELT assembly is one example.",specs:[["Location","In-house"],["Example","VISI-BELT"]]},
-        {tag:"Service",title:"Distribution",desc:"From Envision campuses, integrated with federal and commercial channels.",specs:[["Origin","Envision"],["Channels","Fed / Comm"]]}
+        {tag:"Service",title:"Custom kitting",desc:"Bundled product programs. BFCUK 8-piece OSHA kit, subscription boxes, promotional sets, multi-part repair kits.",specs:[["Example","BFCUK"],["Pieces","8"]]},
+        {tag:"Service",title:"Pick and pack fulfillment",desc:"Federal-compliant labor model. Multi-channel order fulfillment with WMS integration.",specs:[["Model","AbilityOne"],["Channels","Multi"]]},
+        {tag:"Service",title:"Value-add assembly",desc:"Mechanical and electronic sub-assembly with functional pre-shipment audits. VISI-BELT assembly is one example.",specs:[["QA","100% pre-shipment"],["Example","VISI-BELT"]]},
+        {tag:"Service",title:"Specialty packaging",desc:"Custom GS1-128 barcoding, tamper-evident heat-shrink, structural inserts, retail-ready blister packs, climate-controlled storage for sensitive materials.",specs:[["Std","GS1-128"],["Climate","Controlled"]]},
+        {tag:"Service",title:"Specialty product lines",desc:"Eyeglass cases, hoist slings (EET/EEF web slings rated 6,200 lb), reusable cloth face masks, certified commissary and hygiene products through AbilityOne and Texas WorkQuest.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]}
       ],
       img:"Fulfillment line or kit assembly, 4:3",
       imgSrc:"images/Envision-print-lableroll.png"
     },
     contact:{
       label:"Services", eyebrow:"Service", title:"Envision Contact Center",
-      summary:"Multi-channel customer service operations built for federal and enterprise scale. Phone, email, chat, and digital support. AbilityOne-compliant labor model.",
-      creds:["Federal-trained","AbilityOne-compliant","24/7 capable","Omnichannel"],
+      location:"Both",
+      summary:"Bilateral multi-channel customer service operations built for federal and enterprise scale. Phone, email, chat, and digital support out of Dallas (1801 Valley View Lane) and Wichita (610 N Main Street). AbilityOne-compliant labor model. Hybrid since February 2024.",
+      creds:["Federal-trained","AbilityOne-compliant","24/7 capable","Omnichannel","Hybrid since 2024"],
       overview:[
-        "Multi-channel customer service operations supporting <strong>federal and enterprise</strong> clients.",
+        "The <strong>Interface Call Center</strong> operates from two synchronized locations: 1801 Valley View Lane (Dallas) and 610 N Main Street (Wichita), backing each other up with technical-escalation and disaster-recovery infrastructure.",
         "Federal-trained agents operating on an <strong>AbilityOne-compliant labor model</strong>.",
-        "Enterprise scale with <strong>24/7 capability</strong> available.",
-        "Omnichannel digital support with ticketing integration."
+        "<strong>Hybrid since February 2024.</strong> Personnel rotate 3 days on-site, 2 days secure remote.",
+        "National sales and retention engine for local <strong>Better Business Bureau (BBB)</strong> chapters, managing sponsorship campaigns and business accreditation renewals.",
+        "Customer support, multi-tier technical support, order processing into ERP, sales and retention, lead generation, and patient/customer satisfaction surveys."
       ],
       statLabel:"The Numbers Behind the Service",
       stats:[
-        {num:"24/7",label:"Capability",ctx:"Available for enterprise-scale support contracts."},
-        {num:"Federal",label:"Agent training",ctx:"AbilityOne-compliant labor model."},
+        {num:"2",label:"Synchronized sites",ctx:"Dallas (1801 Valley View Ln.) and Wichita (610 N Main St.). Technical escalations and backup infrastructure share between sites."},
+        {num:"3 / 2",label:"Hybrid schedule",ctx:"Three days on-site, two days secure remote, since February 2024."},
         {num:"Omni",label:"Channel",ctx:"Phone, email, chat, and digital, integrated."}
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Service",title:"Federal call handling",desc:"Federal-trained agents on the AbilityOne-compliant labor model."},
-        {tag:"Service",title:"Enterprise customer service",desc:"24/7 capability available. Multi-tier escalation."},
-        {tag:"Service",title:"Digital channel support",desc:"Omnichannel coverage with ticketing integration."},
-        {tag:"Service",title:"Custom program scoping",desc:"Custom service programs scoped to client volume."}
+        {tag:"Service",title:"Customer & technical support",desc:"Phone, email, and live chat resolution with multi-tier remote technical escalation, software troubleshooting, and product setup."},
+        {tag:"Service",title:"Order processing & ERP integration",desc:"Inbound sales entry into client ERP systems, shipment tracking, account hygiene."},
+        {tag:"Service",title:"Sales, retention & BBB pipeline",desc:"Outbound retention, plan renewals, and account recovery. National sales engine for local BBB sponsorship and accreditation campaigns."},
+        {tag:"Service",title:"Lead generation & feedback",desc:"Outbound qualification, B2B market research, appointment scheduling, customer and patient satisfaction surveys."}
       ],
       img:"Contact center workstation, 4:3",
       imgSrc:"images/envision-call-center-employee-headset.png",
       imgPos:"center 26%"
     },
+    bpo:{
+      label:"Services", eyebrow:"Service", title:"Secure Document Services",
+      location:"Dallas",
+      summary:"High-security mailroom operations for federal agencies. IRS mailroom contracts at the Earle Cabell Federal Building (1100 Commerce St., Dallas) and the IRS Farmers Branch Complex (4050 Alpha Rd.). High-speed scan, OCR/ICR digitization, encrypted archive, and certified destruction.",
+      creds:["HIPAA","FACTA","IRS Pub 1075","OCR + ICR","Cryptographic audit"],
+      overview:[
+        "<strong>Mail ingest &amp; digitization.</strong> Receiving, sorting, and preparing physical mail. High-speed scanners capture tax records and financial files. Integrated smart lockers provide contact-free distribution for hybrid staff.",
+        "<strong>OCR &amp; ICR.</strong> Advanced optical and intelligent character recognition capture text from handwritten or typed documents. Data is tagged with metadata and integrated directly into the agency's databases.",
+        "<strong>Document management.</strong> Secure digital archiving with role-based access control, cryptographic audit trails, and automated compliance checks.",
+        "<strong>Certified destruction.</strong> Cross-cut shredders meeting HIPAA, FACTA, and IRS Pub 1075 requirements."
+      ],
+      statLabel:"The Numbers Behind the Service",
+      stats:[
+        {num:"2",label:"Federal mailrooms",ctx:"Earle Cabell Federal Building (Dallas) and IRS Farmers Branch Complex."},
+        {num:"OCR + ICR",label:"Digitization",ctx:"Optical and intelligent character recognition for typed and handwritten records."},
+        {num:"Pub 1075",label:"IRS compliant",ctx:"Plus HIPAA, FACTA. Cryptographic audit trail on every record."}
+      ],
+      calloutLabel:"Service Lines",
+      callouts:[
+        {tag:"Service",title:"IRS mailroom operations",desc:"Daily federal mail ingest, sortation, and contact-free distribution via integrated smart lockers."},
+        {tag:"Service",title:"OCR / ICR digitization",desc:"High-speed scanning of tax and financial files, intelligent character recognition for handwritten content, metadata tagging into agency databases."},
+        {tag:"Service",title:"Secure document management",desc:"Role-based access, encrypted archive, cryptographic audit trail, automated compliance checks."},
+        {tag:"Service",title:"Certified destruction",desc:"Cross-cut shredding meeting HIPAA, FACTA, and IRS Pub 1075. Chain-of-custody documentation on every batch."}
+      ],
+      img:"Federal mailroom scanning operation, 4:3",
+      imgSrc:"images/Envision-Day_01-0989.jpg",
+      imgPos:"center 22%"
+    },
+    design:{
+      label:"Services", eyebrow:"Service", title:"Design, Sourcing & Digital Asset Management",
+      location:"Dallas",
+      summary:"Custom product development from initial sketch to production-ready design. CAD modeling, digital pattern nesting, material specification, and physical sample prototyping. Domestic and international sourcing networks with material trace-ability. Secure digital asset management with custom web ordering portals.",
+      creds:["CAD modeling","Pattern nesting","Sample prototyping","DAM","DRM"],
+      overview:[
+        "<strong>Design services.</strong> Full CAD modeling, digital pattern nesting, material specification, and physical sample prototyping for textile, sewn-goods, and assembled-product programs.",
+        "<strong>Sourcing solutions.</strong> Established domestic and international procurement networks with material trace-ability, reliable supply chain, and ethical sourcing adherence.",
+        "<strong>Digital Asset Management (DAM).</strong> High-capacity secure storage with metadata management, automated and manual keywording, boolean and metadata-driven retrieval, automated version control, workflow management, embedded DRM, and system analytics.",
+        "<strong>Web-based ordering portals.</strong> Custom-branded portals with secure login gates, real-time inventory visibility, pre-negotiated pricing, budget tracking, and hierarchical approval routing for corporate and military procurement."
+      ],
+      statLabel:"The Numbers Behind the Service",
+      stats:[
+        {num:"CAD",label:"In-house",ctx:"Full CAD modeling, digital pattern nesting, and material specification on the Dallas floor."},
+        {num:"DRM",label:"Embedded",ctx:"Digital Rights Management to protect copyrights, manage software licenses, and enforce data privacy."},
+        {num:"Custom",label:"Web portals",ctx:"Branded ordering portals with budget tracking and hierarchical approvals."}
+      ],
+      calloutLabel:"Service Lines",
+      callouts:[
+        {tag:"Service",title:"Product design & prototyping",desc:"Initial sketch through production-ready CAD. Digital pattern nesting and physical sample prototyping."},
+        {tag:"Service",title:"Domestic & international sourcing",desc:"Trace-able procurement networks with ethical sourcing standards and reliable supply chain."},
+        {tag:"Service",title:"Digital Asset Management",desc:"Secure DAM with metadata, version control, workflow management, DRM, and detailed system analytics."},
+        {tag:"Service",title:"Custom web ordering portals",desc:"Branded portals: secure login, live inventory, pre-negotiated pricing, budget tracking, hierarchical approvals."}
+      ],
+      img:"Design / CAD workstation or prototype review, 4:3"
+    },
     accessibility:{
       label:"Services", eyebrow:"Service", title:"Accessibility Services",
+      location:"Wichita",
       summary:"ADA Title II consulting, WCAG-aligned audits, training, and user testing. Lived-experience expertise on every engagement.",
       creds:["ADA Title II","WCAG 2.1 AA","Lived experience","BVI testing pool"],
       overview:[
@@ -1458,18 +1748,19 @@
     },
     procurement:{
       label:"Services", eyebrow:"Service", title:"Federal Procurement Services",
+      location:"Both",
       summary:"A managed pathway into federal and military procurement. We handle the channel infrastructure, compliance credentials, and procurement intelligence so manufacturers can sell into government markets without building the federal machinery themselves.",
-      creds:["AbilityOne affiliated","DLA Prime Vendor","BSC network","NSN catalog","Berry / TAA"],
+      creds:["AbilityOne","DLA Prime Vendor","BSC network","NSN catalog","Berry / TAA"],
       overview:[
         "For manufacturers and OEMs who want to sell into federal and military markets but don't have the <strong>compliance stack</strong>, the channel relationships, or the time to build them.",
-        "Envision's 93-year manufacturing history, federal credentials, and active contract vehicles become the <strong>platform</strong>.",
-        "Partner products flow through the channels Envision already operates: <strong>AbilityOne mandatory source</strong>, DLA Prime Vendor contracts, the <span class='bsc-link' data-bsc role='button' tabindex='0'>Base Supply Center network</span>, and the federal NSN catalog."
+        "Envision's 90+ year manufacturing history, federal credentials, and active contract vehicles become the <strong>platform</strong>.",
+        "Partner products flow through the channels Envision already operates: <strong>AbilityOne mandatory source</strong>, DLA Prime Vendor contracts, the <span class='bsc-link' data-bsc role='button' tabindex='0'>Base Supply Center network</span>, the federal NSN catalog, and the Texas WorkQuest and Kansas State Use programs."
       ],
       statLabel:"The Numbers Behind the Service",
       stats:[
         {num:"$198M",label:"Contract capacity",ctx:"Across two active 5-year DLA Prime Vendor contracts."},
-        {num:"16",label:"BSC stores",ctx:"Envision-operated retail across 10 states."},
-        {num:"93 yrs",label:"Federal supply experience",ctx:"Active federal supplier since 1938."}
+        {num:"16",label:"BSC stores",ctx:"Envision-operated retail across the U.S."},
+        {num:"90+ yrs",label:"Federal supply experience",ctx:"Continuous American manufacturing across the Envision system."}
       ],
       calloutLabel:"Service Lines",
       callouts:[
@@ -1482,45 +1773,55 @@
     },
     quality:{
       label:"Services", eyebrow:"Service", title:"Quality Assurance & Compliance",
-      summary:"ISO 9001:2015 certified. Tensile testing on every production run in the on-site Quality Lab. Federal compliance credentials maintained across every capability.",
-      creds:["ISO 9001:2015","Berry","TAA","Buy American","DCMA Alternate Release (parent)"],
+      location:"Both",
+      summary:"ISO 9001:2015 certified at the Dallas Campus. Tensile testing on every production run in the on-site Quality Labs. Federal compliance credentials maintained across every capability. DCMA Alternate Release Program out of Dallas.",
+      creds:["ISO 9001:2015","Berry","TAA","Buy American","DCMA Alternate Release"],
       overview:[
-        "On-site <strong>Quality Lab</strong> testing. Tensile testing is run on every production run, not sampled.",
-        "Federal compliance credentials maintained for every capability: <strong>ISO 9001:2015</strong> (Intertek, ANAB-accredited), Berry Amendment, TAA, Buy American.",
-        "<strong>DCMA Alternate Release Program</strong> authorization held within the Envision system, available as an organization-wide capability.",
-        "All pricing considered fair and reasonable by DLA Troop Support."
+        "<strong>ISO 9001:2015</strong> registered at 1801 Valley View Lane, Farmers Branch, TX. Certificate CERT-0145812. Intertek, ANAB-accredited. Decision 18 Feb 2025. Valid until 25 Apr 2028.",
+        "<strong>On-site Quality Labs.</strong> Tensile testing on every production run. Material spec validation. Statistical quality control, SOPs, and CAPA programs.",
+        "<strong>DCMA Alternate Release Program</strong> authorization out of Dallas. Military apparel ships without prior government source inspection, saving weeks of audit time.",
+        "All federal-channel pricing considered fair and reasonable by DLA Troop Support."
       ],
       statLabel:"The Numbers Behind the Service",
       stats:[
-        {num:"2015",label:"ISO certified",ctx:"Continuously certified since 26 Jan 2021."},
+        {num:"CERT-0145812",label:"ISO certificate",ctx:"Intertek, ANAB-accredited. Registered Dallas facility."},
         {num:"Every",label:"Run tested",ctx:"QA Lab tensile testing on every production run."},
-        {num:"Apr 2028",label:"Valid until",ctx:"Current ISO certificate (CERT-0145812)."}
+        {num:"Apr 2028",label:"Valid until",ctx:"Next ISO recertification cycle."}
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Service",title:"On-site Quality Lab",desc:"Tensile testing on every production run. Material spec validation."},
+        {tag:"Service",title:"On-site Quality Labs",desc:"Tensile testing on every production run. Material spec validation."},
         {tag:"Service",title:"Federal compliance maintenance",desc:"ISO, Berry, TAA, Buy American across every capability."},
-        {tag:"Service",title:"DCMA Alternate Release Program",desc:"Authorization held within the Envision system. Speeds federal acceptance timelines."},
-        {tag:"Service",title:"DLA pricing pre-cleared",desc:"All pricing considered fair and reasonable by DLA Troop Support."}
+        {tag:"Service",title:"DCMA Alternate Release",desc:"Authorization held at Dallas Campus. Speeds federal acceptance timelines on military apparel and qualifying shipments."},
+        {tag:"Service",title:"DLA pricing pre-cleared",desc:"All federal-channel pricing considered fair and reasonable by DLA Troop Support."}
       ],
       img:"QA Lab tensile testing or production validation, 4:3"
     }
   };
 
+  // [key, title, short description, location]  ·  location: "Wichita" | "Dallas" | "Both"
   var CAP_ORDER = [
-    ["plastic","Plastic & Film Manufacturing","Can liners, medical and specialty bags, and plastic sheeting in HDPE and LLDPE."],
-    ["reflective","Reflective Manufacturing","Reflective vinyl products in-house, including the VISI-BELT system."],
-    ["metal","Metal Fabrication & Assembly","Welded steel hand trucks rated 300 to 700 lb capacity."],
-    ["print","Commercial Print Operations","Federal-quality print with Braille embossing, mailing, and full NSN catalog coverage."],
-    ["fulfillment","Fulfillment & Assembly","Kitting, pick and pack, distribution, and value-add assembly."]
+    ["plastic","Polymer & Film Manufacturing","Can liners, medical and specialty bags, and plastic sheeting in HDPE and LLDPE.","Wichita"],
+    ["textile","Textile & Apparel","Berry-compliant military gear, ANSI Class I/II/III safety apparel, and NFPA 70E flame- and arc-resistant garments.","Dallas"],
+    ["reflective","Reflective Safety Systems","Reflective vinyl products in-house, including the VISI-BELT system.","Wichita"],
+    ["metal","Metal Fabrication & Assembly","Welded steel hand trucks rated 300 to 700 lb capacity.","Wichita"],
+    ["print","Print, Bindery & Writing Instruments","Federal-quality print with Braille embossing, custom binders and presentation portfolios, and high-speed marker assembly.","Both"],
+    ["fulfillment","Fulfillment, Kitting & Assembly","Kitting, pick and pack, MIL-STD-129 packaging, climate-controlled storage, and value-add assembly.","Both"]
   ];
   var SVC_ORDER = [
-    ["contact","Envision Contact Center","Multi-channel customer service for federal and enterprise scale."],
-    ["accessibility","Accessibility Services","ADA Title II consulting, WCAG audits, and training with lived-experience expertise."],
-    ["procurement","Federal Procurement Services","A managed pathway into federal and military procurement. We handle the channel infrastructure, compliance credentials, and procurement intelligence so manufacturers can sell into government markets without building the federal machinery themselves."],
-    ["quality","Quality Assurance & Compliance","ISO 9001:2015 certified. Tensile testing on every production run. Federal compliance built into every product family."]
+    ["contact","Envision Contact Center","Bilateral multi-channel customer service for federal and enterprise scale. Synchronized Dallas + Wichita.","Both"],
+    ["bpo","Secure Document Services","High-security federal mailrooms, OCR/ICR digitization, encrypted archive, and certified destruction.","Dallas"],
+    ["design","Design, Sourcing & DAM","CAD design and prototyping, sourcing networks, secure Digital Asset Management, and custom web ordering portals.","Dallas"],
+    ["accessibility","Accessibility Services","ADA Title II consulting, WCAG audits, and training with lived-experience expertise.","Wichita"],
+    ["procurement","Federal Procurement Services","A managed pathway into federal and military procurement. We bring the channel infrastructure, compliance credentials, and procurement intelligence.","Both"],
+    ["quality","Quality Assurance & Compliance","ISO 9001:2015 certified at the Dallas Campus. Tensile testing on every production run. DCMA Alternate Release authorized.","Both"]
   ];
 
+  function locChipHTML(loc){
+    if (!loc) return "";
+    var cls = String(loc).toLowerCase();
+    return '<span class="loc-chip loc-chip--'+cls+'">'+loc+'</span>';
+  }
   function buildTiles(containerId, list){
     var c = document.getElementById(containerId);
     list.forEach(function(row){
@@ -1529,6 +1830,7 @@
       b.type = "button";
       b.setAttribute("data-modal", row[0]);
       b.innerHTML =
+        locChipHTML(row[3])+
         '<div class="t-h">'+row[1]+'</div>'+
         '<div class="t-d">'+row[2]+'</div>'+
         '<div class="t-go">Explore <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>';
@@ -1603,13 +1905,40 @@
       colorStrip = '<div class="m-colorstrip">'+d.colors.map(function(c){ return '<span>'+c+'</span>'; }).join("")+'</div>';
     }
 
+    var catalogsBlock = "";
+    if (d.catalogs && d.catalogs.length){
+      var catsHTML = d.catalogs.map(function(cat){
+        var head = '<thead><tr>'+cat.columns.map(function(col){ return '<th>'+col+'</th>'; }).join("")+'</tr></thead>';
+        var body = '<tbody>'+cat.rows.map(function(row){
+          return '<tr>'+row.map(function(cell){ return '<td>'+cell+'</td>'; }).join("")+'</tr>';
+        }).join("")+'</tbody>';
+        var meta = cat.meta ? '<span class="cat-meta">'+cat.meta+'</span>' : '';
+        var foot = cat.footnote ? '<div class="m-cat-foot">'+cat.footnote+'</div>' : '';
+        return '<details class="m-catalog">'+
+          '<summary>'+
+            '<span>'+cat.title+'&nbsp;&nbsp;'+meta+'</span>'+
+            '<span class="cat-toggle">View catalog '+
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'+
+            '</span>'+
+          '</summary>'+
+          '<div class="m-cat-body">'+
+            '<div class="m-cat-scroll"><table class="m-cat-table">'+head+body+'</table></div>'+
+            foot+
+          '</div>'+
+        '</details>';
+      }).join("");
+      catalogsBlock = '<div class="m-block"><div class="m-sec-label">Product Catalog</div>'+catsHTML+'</div>';
+    }
+
+    var locChip = d.location ? '&nbsp;'+locChipHTML(d.location) : '';
+
     modalInner.innerHTML =
       '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
         ' role="img" aria-label="'+d.img+'"></div></div>'+
       '<div class="m-summary">'+
         '<div class="m-sum-left">'+
-          '<div class="m-eyebrow">'+d.eyebrow+'</div>'+
+          '<div class="m-eyebrow">'+d.eyebrow+locChip+'</div>'+
           '<h2>'+d.title+'</h2>'+
           '<p class="m-one">'+d.summary+'</p>'+
         '</div>'+
@@ -1618,6 +1947,7 @@
       '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
       '<div class="m-block"><div class="m-sec-label">'+d.statLabel+'</div><div class="m-stats">'+stats+'</div></div>'+
       '<div class="m-block"><div class="m-sec-label">'+d.calloutLabel+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>'+
+      catalogsBlock+
       '<div class="m-cta">'+
         '<h3>Want to scope a '+d.title+' program?</h3>'+
         '<p>Send a line item, a use case, or a contract vehicle. We respond within one business day.</p>'+
