@@ -133,32 +133,33 @@
     justify-content:center;padding:clamp(36px,8vh,90px) var(--gut-x);overflow:hidden;
   }
   .hero .image-bg{
-    position:absolute;inset:0;z-index:0;overflow:hidden;
+    position:absolute;top:0;bottom:0;left:30%;right:0;z-index:0;overflow:hidden;
   }
   .hero .kb-frame{
     position:absolute;inset:0;
     background-size:cover;background-position:center center;
     opacity:0;will-change:transform,opacity;
-    transform-origin:75% 50%;
-    animation:kb-cycle 75s linear infinite;
+    transform-origin:50% 50%;
+    animation:kb-cycle 60s linear infinite;
   }
   .hero .kb-frame:nth-child(1){background-image:url("images/envision-building-sideangle.png");animation-delay:0s}
-  .hero .kb-frame:nth-child(2){background-image:url("images/envision-dallas-building-exterior.png");animation-delay:15s}
-  .hero .kb-frame:nth-child(3){background-image:url("images/envision-wichita-highangle-buildingphoto.png");animation-delay:30s}
-  .hero .kb-frame:nth-child(4){background-image:url("images/Envision-dallas-manufactoringfloor.png");animation-delay:45s}
-  .hero .kb-frame:nth-child(5){background-image:url("images/envision-manufacturing-floor-bag-machines.png");animation-delay:60s}
+  .hero .kb-frame:nth-child(2){background-image:url("images/envision-manufacturing-floor-bag-machines.png");animation-delay:10s}
+  .hero .kb-frame:nth-child(3){background-image:url("images/envision-dallas-building-exterior.png");animation-delay:20s}
+  .hero .kb-frame:nth-child(4){background-image:url("images/envision-dallas-warehouse-aisle.png");animation-delay:30s}
+  .hero .kb-frame:nth-child(5){background-image:url("images/Envision-wichita-highangle-buildingphoto.png");animation-delay:40s}
+  .hero .kb-frame:nth-child(6){background-image:url("images/Envision-dallas-manufactoringfloor.png");animation-delay:50s}
   @keyframes kb-cycle{
     0%   {opacity:0;transform:scale(1.04)}
-    2%   {opacity:1}
-    20%  {opacity:1;transform:scale(1.14)}
-    22%  {opacity:0;transform:scale(1.14)}
-    100% {opacity:0;transform:scale(1.14)}
+    3%   {opacity:1}
+    16%  {opacity:1;transform:scale(1.13)}
+    18%  {opacity:0;transform:scale(1.13)}
+    100% {opacity:0;transform:scale(1.13)}
   }
   @media (prefers-reduced-motion: reduce){
-    .hero .kb-frame{animation:kb-fade 75s steps(5,end) infinite;transform:none}
+    .hero .kb-frame{animation:kb-fade 60s steps(6,end) infinite;transform:none}
     @keyframes kb-fade{
-      0%,2%,20%{opacity:1}
-      0.01%,22%,100%{opacity:0}
+      0%,3%,16%{opacity:1}
+      0.01%,18%,100%{opacity:0}
     }
   }
   .hero .overlay{
@@ -1057,6 +1058,7 @@
         <div class="hero">
           <!-- IMAGE SLOT: Ken Burns rotation of campus exteriors and factory shots -->
           <div class="image-bg">
+            <div class="kb-frame"></div>
             <div class="kb-frame"></div>
             <div class="kb-frame"></div>
             <div class="kb-frame"></div>
