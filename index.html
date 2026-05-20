@@ -139,25 +139,26 @@
     position:absolute;inset:0;
     background-size:cover;background-position:center center;
     opacity:0;will-change:transform,opacity;
-    animation:kb-cycle 40s linear infinite;
+    transform-origin:75% 50%;
+    animation:kb-cycle 75s linear infinite;
   }
   .hero .kb-frame:nth-child(1){background-image:url("images/envision-building-sideangle.png");animation-delay:0s}
-  .hero .kb-frame:nth-child(2){background-image:url("images/envision-dallas-building-exterior.png");animation-delay:8s}
-  .hero .kb-frame:nth-child(3){background-image:url("images/envision-wichita-highangle-buildingphoto.png");animation-delay:16s}
-  .hero .kb-frame:nth-child(4){background-image:url("images/Envision-dallas-manufactoringfloor.png");animation-delay:24s}
-  .hero .kb-frame:nth-child(5){background-image:url("images/envision-manufacturing-floor-bag-machines.png");animation-delay:32s}
+  .hero .kb-frame:nth-child(2){background-image:url("images/envision-dallas-building-exterior.png");animation-delay:15s}
+  .hero .kb-frame:nth-child(3){background-image:url("images/envision-wichita-highangle-buildingphoto.png");animation-delay:30s}
+  .hero .kb-frame:nth-child(4){background-image:url("images/Envision-dallas-manufactoringfloor.png");animation-delay:45s}
+  .hero .kb-frame:nth-child(5){background-image:url("images/envision-manufacturing-floor-bag-machines.png");animation-delay:60s}
   @keyframes kb-cycle{
-    0%   {opacity:0;transform:scale(1.05) translate(2%,0)}
-    3%   {opacity:1}
-    20%  {opacity:1;transform:scale(1.18) translate(-2%,-1.5%)}
-    23%  {opacity:0;transform:scale(1.18) translate(-2%,-1.5%)}
-    100% {opacity:0;transform:scale(1.18) translate(-2%,-1.5%)}
+    0%   {opacity:0;transform:scale(1.04)}
+    2%   {opacity:1}
+    20%  {opacity:1;transform:scale(1.14)}
+    22%  {opacity:0;transform:scale(1.14)}
+    100% {opacity:0;transform:scale(1.14)}
   }
   @media (prefers-reduced-motion: reduce){
-    .hero .kb-frame{animation:kb-fade 40s steps(5,end) infinite;transform:none}
+    .hero .kb-frame{animation:kb-fade 75s steps(5,end) infinite;transform:none}
     @keyframes kb-fade{
-      0%,3%,20%{opacity:1}
-      0.01%,23%,100%{opacity:0}
+      0%,2%,20%{opacity:1}
+      0.01%,22%,100%{opacity:0}
     }
   }
   .hero .overlay{
