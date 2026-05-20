@@ -455,13 +455,20 @@
     box-shadow:0 0 0 3px rgba(120,190,33,0.16);
   }
   .ms-band{
-    flex:none;background:var(--navy);border-radius:6px;
-    display:flex;align-items:center;justify-content:center;
-    padding:clamp(16px,2.8vh,32px) clamp(24px,5vw,72px);
+    flex:none;border-radius:6px;overflow:hidden;
+    display:grid;grid-template-columns:minmax(150px,1fr) 2.4fr minmax(150px,1fr);
+    min-height:clamp(110px,15vh,170px);
   }
-  .ms-band p{
+  .ms-band__photo{background-size:cover;background-position:center}
+  .ms-band__quote{
+    background:var(--navy);
+    display:flex;align-items:center;justify-content:center;
+    padding:clamp(16px,2.8vh,32px) clamp(20px,3vw,48px);
+  }
+  .ms-band__quote p{
     color:#fff;font-style:italic;font-weight:300;text-align:center;
     font-size:clamp(0.95rem,1.5vw,1.32rem);line-height:1.5;max-width:62ch;
+    margin:0;
   }
   @media (max-width:1024px){
     .mission-slide{overflow-y:auto}
@@ -470,6 +477,8 @@
     .ms-stat:nth-child(3){border-left:0}
     .ms-pillars{grid-template-columns:1fr;gap:16px}
     .ms-desc{min-height:0}
+    .ms-band{grid-template-columns:1fr;min-height:0}
+    .ms-band__photo{height:160px}
   }
 
   /* ---------- CTA ---------- */
@@ -494,7 +503,11 @@
   .contact-block .nm{font-weight:800;font-size:19px;color:var(--text-dark)}
   .contact-block .ti{font-size:14px;font-weight:600;color:var(--text-soft);margin:4px 0 12px}
   .contact-block .ct{font-size:14px;font-weight:600;color:var(--navy);line-height:1.7}
-  .campus-footer{margin-top:30px;font-size:12.5px;line-height:1.7;color:var(--text-soft)}
+  .campus-footer{margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.6vw,32px);width:100%;max-width:760px;margin-left:auto;margin-right:auto}
+  .campus-card{display:flex;flex-direction:column;gap:10px}
+  .campus-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block}
+  .campus-card__addr{font-size:12.5px;line-height:1.6;color:var(--text-soft);text-align:center}
+  @media (max-width:768px){.campus-footer{grid-template-columns:1fr}}
 
   /* ---------- Modals ---------- */
   .modal-backdrop{
@@ -989,7 +1002,7 @@
       <section class="slide" data-name="Overview">
         <div class="wrap">
           <figure class="img-banner">
-            <img src="images/envision-warehouse-interior-panoramic.png" alt="Panoramic interior of an Envision manufacturing and warehouse floor" style="object-position:center 55%">
+            <img src="images/envision-dallas-warehouse-aisle.png" alt="Center-aisle view of the Envision Dallas warehouse, pallet racks stacked floor to ceiling on both sides" style="object-position:center 55%">
           </figure>
           <div class="eyebrow">Everything Envision Offers</div>
           <h2 class="sec-h">Every capability. Every service.</h2>
@@ -1009,7 +1022,7 @@
       <section class="slide" data-name="Capabilities">
         <div class="wrap">
           <figure class="img-banner">
-            <img src="images/envision-manufacturing-floor-bag-machines.png" alt="High-angle view of an Envision manufacturing floor with bag-making machines" style="object-position:center 42%">
+            <img src="images/Envision-dallas-manufactoringfloor.png" alt="Walkway view across the Envision Dallas manufacturing floor, yellow guardrails and assembly equipment on both sides" style="object-position:center 55%">
           </figure>
           <div class="eyebrow">Capabilities</div>
           <h2 class="sec-h">Everything Envision <span class="accent">makes.</span></h2>
@@ -1250,7 +1263,11 @@
           </div>
 
           <div class="ms-band">
-            <p>&ldquo;To improve the quality of life and provide inspiration for the blind or visually impaired through employment, outreach, rehabilitation, education and research.&rdquo;</p>
+            <div class="ms-band__photo" style="background-image:url('images/envision-child-development-center.png');background-position:70% center" role="img" aria-label="A child at the Envision Child Development Center playing on the soft-block floor"></div>
+            <div class="ms-band__quote">
+              <p>&ldquo;To improve the quality of life and provide inspiration for the blind or visually impaired through employment, outreach, rehabilitation, education and research.&rdquo;</p>
+            </div>
+            <div class="ms-band__photo" style="background-image:url('images/envision-white-cane-day-walk.jpg');background-position:center 40%" role="img" aria-label="Community members gathered behind a White Cane Day Walk banner at the Dallas Zoo"></div>
           </div>
         </div>
       </section>
@@ -1272,8 +1289,14 @@
             <div class="ct">[ email placeholder ] · [ phone placeholder ]</div>
           </div>
           <div class="campus-footer">
-            Wichita Campus · 2301 S. Water Street, Wichita, KS 67213 · (316) 522-3232<br>
-            Dallas Campus · 1801 Valley View Lane, Farmers Branch, TX 75234
+            <div class="campus-card">
+              <img src="images/Envision-wichita-highangle-buildingphoto.png" alt="Envision Wichita Campus exterior">
+              <div class="campus-card__addr">Wichita Campus · 2301 S. Water Street, Wichita, KS 67213 · (316) 522-3232</div>
+            </div>
+            <div class="campus-card">
+              <img src="images/envision-dallas-building-exterior.png" alt="Envision Dallas Campus exterior">
+              <div class="campus-card__addr">Dallas Campus · 1801 Valley View Lane, Farmers Branch, TX 75234</div>
+            </div>
           </div>
         </div>
       </section>
@@ -1521,7 +1544,8 @@
         {tag:"Flagship",title:"VISI-BELT Reflective System",desc:"Adjustable 31 to 55 inch belt with quick-release buckle, reflective vinyl with reinforced webbing.",specs:[["Length","31-55 in"],["Visibility","446 ft"],["Colors","7"],["Assembly","Pride kitting area"]]}
       ],
       colors:["White","Lime / Yellow","Blue","Red-Orange","Dark Green","Red","Fluorescent Green"],
-      img:"VISI-BELT worn in low-light setting, landscape action shot"
+      img:"VISI-BELT worn in low-light setting, landscape action shot",
+      imgSrc:"images/Visibelt-productshot-instore.png"
     },
     metal:{
       label:"Capabilities", eyebrow:"Capability", title:"Metal Fabrication & Assembly",
@@ -1634,7 +1658,7 @@
         ], footnote:"Tube and retractable form factors. Industrial-strength, waterproof, quick-drying ink for porous and non-porous surfaces."}
       ],
       img:"Business card with Braille embossing detail, 1:1 macro",
-      imgSrc:"images/printing-brailing.png"
+      imgSrc:"images/envision-dallas-writing-instruments-assembly.jpg"
     },
     fulfillment:{
       label:"Capabilities", eyebrow:"Capability", title:"Fulfillment, Kitting & Assembly",
@@ -1662,7 +1686,7 @@
         {tag:"Service",title:"Specialty product lines",desc:"Eyeglass cases, hoist slings (EET/EEF web slings rated 6,200 lb), reusable cloth face masks, certified commissary and hygiene products through AbilityOne and Texas WorkQuest.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]}
       ],
       img:"Fulfillment line or kit assembly, 4:3",
-      imgSrc:"images/Envision-print-lableroll.png"
+      imgSrc:"images/envision-dallas-warehouse-forklift.png"
     },
     contact:{
       label:"Services", eyebrow:"Service", title:"Envision Contact Center",
