@@ -133,10 +133,32 @@
     justify-content:center;padding:clamp(36px,8vh,90px) var(--gut-x);overflow:hidden;
   }
   .hero .image-bg{
-    position:absolute;inset:0;z-index:0;
-    background-image:url("images/envision-building-sideangle.png");
+    position:absolute;inset:0;z-index:0;overflow:hidden;
+  }
+  .hero .kb-frame{
+    position:absolute;inset:0;
     background-size:cover;background-position:center center;
-    transform:translateX(4%);
+    opacity:0;will-change:transform,opacity;
+    animation:kb-cycle 40s linear infinite;
+  }
+  .hero .kb-frame:nth-child(1){background-image:url("images/envision-building-sideangle.png");animation-delay:0s}
+  .hero .kb-frame:nth-child(2){background-image:url("images/envision-dallas-building-exterior.png");animation-delay:8s}
+  .hero .kb-frame:nth-child(3){background-image:url("images/envision-wichita-highangle-buildingphoto.png");animation-delay:16s}
+  .hero .kb-frame:nth-child(4){background-image:url("images/Envision-dallas-manufactoringfloor.png");animation-delay:24s}
+  .hero .kb-frame:nth-child(5){background-image:url("images/envision-manufacturing-floor-bag-machines.png");animation-delay:32s}
+  @keyframes kb-cycle{
+    0%   {opacity:0;transform:scale(1.05) translate(2%,0)}
+    3%   {opacity:1}
+    20%  {opacity:1;transform:scale(1.18) translate(-2%,-1.5%)}
+    23%  {opacity:0;transform:scale(1.18) translate(-2%,-1.5%)}
+    100% {opacity:0;transform:scale(1.18) translate(-2%,-1.5%)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero .kb-frame{animation:kb-fade 40s steps(5,end) infinite;transform:none}
+    @keyframes kb-fade{
+      0%,3%,20%{opacity:1}
+      0.01%,23%,100%{opacity:0}
+    }
   }
   .hero .overlay{
     position:absolute;inset:0;z-index:1;
@@ -883,8 +905,14 @@
       <!-- SLIDE 1: HERO -->
       <section class="slide hero-slide" data-name="Open">
         <div class="hero">
-          <!-- IMAGE SLOT: Envision campus exterior or production hero, 16:9 full-bleed, sits behind a soft navy gradient overlay -->
-          <div class="image-bg"></div>
+          <!-- IMAGE SLOT: Ken Burns rotation of campus exteriors and factory shots -->
+          <div class="image-bg">
+            <div class="kb-frame"></div>
+            <div class="kb-frame"></div>
+            <div class="kb-frame"></div>
+            <div class="kb-frame"></div>
+            <div class="kb-frame"></div>
+          </div>
           <!-- END IMAGE SLOT -->
           <div class="overlay"></div>
           <div class="hero-inner">
