@@ -315,6 +315,18 @@
     color:rgba(255,255,255,0.55);margin:6px 0 4px;
   }
   .fed-stat .ctx{font-size:11.5px;line-height:1.5;color:rgba(255,255,255,0.7)}
+  .fed-stat.is-clickable{
+    cursor:pointer;border-radius:5px;margin:-8px -10px;padding:8px 10px;
+    transition:background .18s,transform .18s;
+  }
+  .fed-stat.is-clickable:hover{background:rgba(120,190,33,0.10);transform:translateY(-1px)}
+  .fed-stat.is-clickable:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .fed-stat .fed-cta{
+    display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+    font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--green);
+  }
+  .fed-stat .fed-cta svg{width:11px;height:11px}
 
   @media (max-width:880px){
     .combined-band{grid-template-columns:repeat(2,1fr)}
@@ -1151,10 +1163,13 @@
                 <div class="lab">DLA Prime Vendor capacity</div>
                 <div class="ctx">Two active 5-year contracts. ABOBSC TLS ($150M) and H2F ($48M).</div>
               </div>
-              <div class="fed-stat">
+              <div class="fed-stat is-clickable" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
                 <div class="num">16</div>
                 <div class="lab">Base Supply Centers</div>
                 <div class="ctx">Envision-operated stores across 10 states. Air Force, Army, Space Force, Navy.</div>
+                <span class="fed-cta">View network map
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
               </div>
               <div class="fed-stat">
                 <div class="num">4M+</div>
