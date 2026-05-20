@@ -658,7 +658,8 @@
     background:var(--bg-dark);border-top:1px solid var(--green);
     transform:translateY(100%);
     transition:transform .45s cubic-bezier(0.4,0,0.2,1);
-    z-index:100;overflow-y:auto;color:var(--text-light);
+    z-index:100;overflow-y:auto;overflow-x:hidden;color:var(--text-light);
+    -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
   }
   .modal.is-open{transform:translateY(0)}
   .modal-topbar{
@@ -826,7 +827,7 @@
     text-align:left;font-weight:700;font-size:10px;letter-spacing:.12em;
     text-transform:uppercase;color:var(--text-faint);
     padding:14px 16px 10px;border-bottom:1px solid var(--border-dark);
-    background:rgba(0,0,0,0.2);position:sticky;top:0;
+    background:rgba(0,0,0,0.2);
   }
   .m-cat-table td{
     padding:10px 16px;border-bottom:1px solid var(--border-dark);
@@ -834,7 +835,8 @@
   }
   .m-cat-table tr:last-child td{border-bottom:0}
   .m-cat-table tr:hover td{background:rgba(255,255,255,0.02)}
-  .m-cat-scroll{max-height:360px;overflow:auto}
+  /* Let the modal own scroll. Nested scroll boxes break touch scrolling on mobile. */
+  .m-cat-scroll{width:100%;overflow-x:auto;overscroll-behavior:contain}
   .m-cat-foot{
     padding:12px 20px;font-size:11.5px;color:var(--text-faint);line-height:1.55;
     border-top:1px solid var(--border-dark);background:rgba(0,0,0,0.15);
@@ -1672,6 +1674,24 @@
         {tag:"Medical-grade",title:"Medical & Specialty Bags",desc:"Color-coded isolation bags, BFCUK 8-piece kit, ZF seal-closure, VA belongings, TidyGirl.",specs:[["Compliance","OSHA"],["Spec","DOT 49 CFR"],["Spec","VA"],["Lines","5 families"]]},
         {tag:"Construction",title:"Plastic Sheeting",desc:"Water-resistant, flood-control polyethylene.",specs:[["Standard","ASTM-D4397-10"],["Fed CID","A-A-3174"],["Fed spec","L-P-378"],["Use","Construction / Ag"]]}
       ],
+      catalogs:[
+        {title:"Can Liner Lines", meta:"Wichita · production families", columns:["Family","Material","Format","Notes"], rows:[
+          ["Max-Performance","LLDPE","Flat pack · 5 SKUs","Flagship line. Minimum 10% post-consumer recycled content."],
+          ["Pro-Performance","LLDPE","Flat / Coreless","Stretch and load strength. Federal NSN coverage."]
+        ], footnote:"Both can liner families validated against gauge, strength, and material specs in the on-site Quality Lab. Tensile testing on every production run."},
+        {title:"Medical & Specialty Bags", meta:"Wichita · 5 product lines", columns:["Line","Spec / Compliance","Notes"], rows:[
+          ["Color-coded isolation bags","OSHA bloodborne pathogen","Used in BFCUK 8-piece kit assemblies."],
+          ["ZF seal-closure","Tamper-evident","Federal logistics."],
+          ["VA belongings","VA standard","Patient property containment."],
+          ["TidyGirl","Hygienic disposal","Commercial and institutional."],
+          ["BFCUK kit components","OSHA","Assembled in the Pride kitting area."]
+        ], footnote:"All lines manufactured from 100% domestic HDPE / LLDPE film. No offshore production."},
+        {title:"Plastic Sheeting", meta:"Wichita · construction & flood control", columns:["Standard / Spec","Reference","Use Case"], rows:[
+          ["ASTM-D4397-10","Polyethylene film standard","Construction"],
+          ["Federal CID","A-A-3174","Federal procurement"],
+          ["Federal Spec","L-P-378","Federal procurement"]
+        ], footnote:"Water-resistant, flood-control polyethylene for construction and agricultural applications."}
+      ],
       img:"Polymer & Film production line, authentic floor shot, forward-moving operator, never posed",
       imgSrc:"images/envision-manufacturing-floor-bag-machines.png"
     },
@@ -1761,6 +1781,17 @@
         {tag:"Flagship",title:"VISI-BELT Reflective System",desc:"Adjustable 31 to 55 inch belt with quick-release buckle, reflective vinyl with reinforced webbing.",specs:[["Length","31-55 in"],["Visibility","446 ft"],["Colors","7"],["Assembly","Pride kitting area"]]}
       ],
       colors:["White","Lime / Yellow","Blue","Red-Orange","Dark Green","Red","Fluorescent Green"],
+      catalogs:[
+        {title:"VISI-BELT Color Variants", meta:"Wichita · 31–55 in. adjustable · SKILCRAFT", columns:["Color","Length","Visibility","Hardware"], rows:[
+          ["White","31–55 in.","446 ft","Quick-release buckle"],
+          ["Lime / Yellow","31–55 in.","446 ft","Quick-release buckle"],
+          ["Blue","31–55 in.","446 ft","Quick-release buckle"],
+          ["Red-Orange","31–55 in.","446 ft","Quick-release buckle"],
+          ["Dark Green","31–55 in.","446 ft","Quick-release buckle"],
+          ["Red","31–55 in.","446 ft","Quick-release buckle"],
+          ["Fluorescent Green","31–55 in.","446 ft","Quick-release buckle"]
+        ], footnote:"Reflective vinyl with reinforced webbing. Carried in the federal SKILCRAFT catalog and shipped through the Base Supply Center network. Assembled in the Pride kitting area."}
+      ],
       img:"VISI-BELT worn in low-light setting, landscape action shot",
       imgSrc:"images/Visibelt-productshot-instore.png"
     },
@@ -1787,6 +1818,15 @@
         {tag:"Configuration",title:"Economy",desc:"300 lb capacity. NSN cataloged for federal logistics.",specs:[["Capacity","300 lb"],["Catalog","NSN"]]},
         {tag:"Configuration",title:"D-Handle",desc:"600 lb capacity. NSN cataloged for federal logistics.",specs:[["Capacity","600 lb"],["Catalog","NSN"]]},
         {tag:"Configuration",title:"Convertible",desc:"700 lb vertical / 600 lb horizontal capacity. NSN cataloged for federal logistics.",specs:[["Vertical","700 lb"],["Horizontal","600 lb"],["Catalog","NSN"]]}
+      ],
+      catalogs:[
+        {title:"Hand Truck Configurations", meta:"Wichita · welded steel · NSN cataloged", columns:["Configuration","Capacity","Tires","Federal Catalog"], rows:[
+          ["Continuous Flow Handle","600 lb","Solid rubber","NSN"],
+          ["Twin Handle","600 lb","Solid rubber","NSN"],
+          ["Economy","300 lb","Solid rubber","NSN"],
+          ["D-Handle","600 lb","Solid rubber","NSN"],
+          ["Convertible","700 lb vert. / 600 lb horiz.","Solid rubber","NSN"]
+        ], footnote:"Welded steel frame construction across all five configurations. NSN-cataloged for federal logistics and material handling."}
       ],
       img:"Hand truck product shot in action context"
     },
@@ -1901,6 +1941,20 @@
         {tag:"Service",title:"Value-add assembly",desc:"Mechanical and electronic sub-assembly with functional pre-shipment audits. VISI-BELT assembly is one example.",specs:[["QA","100% pre-shipment"],["Example","VISI-BELT"]]},
         {tag:"Service",title:"Specialty packaging",desc:"Custom GS1-128 barcoding, tamper-evident heat-shrink, structural inserts, retail-ready blister packs, climate-controlled storage for sensitive materials.",specs:[["Std","GS1-128"],["Climate","Controlled"]]},
         {tag:"Service",title:"Specialty product lines",desc:"Eyeglass cases, hoist slings (EET/EEF web slings rated 6,200 lb), reusable cloth face masks, certified commissary and hygiene products through AbilityOne and Texas WorkQuest.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]}
+      ],
+      catalogs:[
+        {title:"Kit & Assembly Programs", meta:"Both campuses · representative builds", columns:["Program","Pieces / Spec","Location","Notes"], rows:[
+          ["BFCUK (Body Fluid Clean Up Kit)","8 pieces","Wichita","OSHA bloodborne pathogens standard."],
+          ["VISI-BELT assembly","31–55 in. adjustable","Wichita","Value-add assembly. Pride kitting area."],
+          ["Multi-part repair kits","Custom BOM","Both","Verified bill-of-materials accuracy at production volumes."],
+          ["Subscription & promotional sets","Custom","Both","Bundled product programs."]
+        ], footnote:"Functional pre-shipment audits on assembled product. Federal-compliant labor model on pick and pack fulfillment."},
+        {title:"Specialty Product Lines", meta:"Both campuses · AbilityOne + Texas WorkQuest", columns:["Product","Spec / Rating","Catalog"], rows:[
+          ["Eyeglass cases","Commercial","AbilityOne / WorkQuest"],
+          ["Hoist slings (EET / EEF web)","6,200 lb vertical","Federal"],
+          ["Reusable cloth face masks","Hygiene","Commissary"],
+          ["Commissary & hygiene products","Certified","AbilityOne / WorkQuest"]
+        ], footnote:"Specialty product lines flow through the same MIL-STD-129 packaging and labeling standards as core fulfillment programs."}
       ],
       img:"Fulfillment line or kit assembly, 4:3",
       imgSrc:"images/envision-dallas-warehouse-forklift.png"
