@@ -202,6 +202,142 @@
     gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);
     border-radius:6px;overflow:hidden;margin:34px 0;
   }
+
+  /* ---------- Campus slide redesign: three-act structure ---------- */
+  /* Tightened to fit the presentation viewport without scrolling. */
+  .campus-slide .subhead{margin-bottom:6px}
+
+  /* Act 1: Combined totals band */
+  .combined-band{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:1px;background:var(--rule-light);
+    border:1px solid var(--rule-light);border-radius:6px;
+    overflow:hidden;margin-top:20px;
+  }
+  .combined-band .cb-cell{
+    background:var(--bg-light);padding:14px 16px;position:relative;
+  }
+  .combined-band .cb-cell::before{
+    content:"";position:absolute;top:0;left:0;height:3px;width:28px;
+    background:var(--green);
+  }
+  .cb-num{
+    font-weight:800;font-size:clamp(1.4rem,2vw,1.85rem);color:var(--navy);
+    line-height:1;letter-spacing:-0.02em;margin-top:4px;
+  }
+  .cb-num .cb-unit{font-size:.58em;font-weight:700;margin-left:5px;color:var(--text-soft)}
+  .cb-lab{
+    font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-soft);
+  }
+
+  /* Act 2: Campus cards */
+  .campus-grid{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:18px;margin-top:20px;
+  }
+  .campus-card{
+    border:1px solid var(--rule-light);border-radius:8px;
+    overflow:hidden;background:var(--bg-light);
+    display:flex;flex-direction:column;
+  }
+  .campus-photo{
+    position:relative;aspect-ratio:21/9;overflow:hidden;background:var(--bg-tint);
+  }
+  .campus-photo img{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .campus-photo-tag{
+    position:absolute;top:12px;left:12px;background:#fff;color:var(--navy);
+    font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    padding:5px 9px;border-radius:3px;
+    box-shadow:0 1px 2px rgba(0,24,82,0.08);
+  }
+  .campus-photo-tag .accent-dot{
+    display:inline-block;width:6px;height:6px;border-radius:50%;
+    margin-right:6px;vertical-align:middle;transform:translateY(-1px);
+  }
+  .campus-body{padding:16px 20px 16px;flex:1;display:flex;flex-direction:column}
+  .campus-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px solid var(--rule-light);padding-bottom:10px;margin-bottom:12px;
+  }
+  .campus-name{
+    font-weight:800;font-size:1.1rem;letter-spacing:-0.015em;color:var(--navy);
+  }
+  .campus-name small{
+    display:block;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--text-soft);margin-top:3px;
+  }
+  .campus-id strong{
+    display:inline-block;color:var(--navy);
+    font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    padding:5px 10px;border:1px solid var(--rule-light);border-radius:999px;
+  }
+  .campus-stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;
+  }
+  .campus-stat .num{
+    font-weight:800;font-size:1.3rem;color:var(--navy);
+    line-height:1;letter-spacing:-0.02em;
+  }
+  .campus-stat .lab{
+    font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--text-soft);margin-top:6px;
+  }
+  .campus-addr{
+    margin-top:auto;padding-top:10px;border-top:1px solid var(--rule-light);
+    font-size:12px;line-height:1.55;color:var(--text-soft);
+  }
+  .campus-addr strong{color:var(--navy);font-weight:700;display:block;margin-bottom:2px;font-size:12.5px}
+
+  /* Act 3: Federal infrastructure band */
+  .fed-band{
+    margin-top:20px;background:var(--navy);color:#fff;
+    border-radius:8px;overflow:hidden;
+    padding:20px clamp(20px,2.5vw,32px);
+    display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;
+  }
+  .fed-band-label{
+    font-size:10.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--green);
+  }
+  .fed-band-head{
+    font-weight:800;font-size:1rem;line-height:1.3;color:#fff;
+    margin-top:6px;max-width:18ch;letter-spacing:-0.015em;
+  }
+  .fed-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .fed-stat .num{
+    font-weight:800;font-size:clamp(1.2rem,1.7vw,1.55rem);color:#fff;
+    line-height:1;letter-spacing:-0.02em;
+  }
+  .fed-stat .lab{
+    font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,0.55);margin:6px 0 4px;
+  }
+  .fed-stat .ctx{font-size:11.5px;line-height:1.5;color:rgba(255,255,255,0.7)}
+  .fed-stat.is-clickable{
+    cursor:pointer;border-radius:5px;margin:-8px -10px;padding:8px 10px;
+    transition:background .18s,transform .18s;
+  }
+  .fed-stat.is-clickable:hover{background:rgba(120,190,33,0.10);transform:translateY(-1px)}
+  .fed-stat.is-clickable:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .fed-stat .fed-cta{
+    display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+    font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--green);
+  }
+  .fed-stat .fed-cta svg{width:11px;height:11px}
+
+  @media (max-width:880px){
+    .combined-band{grid-template-columns:repeat(2,1fr)}
+    .campus-grid{grid-template-columns:1fr;gap:14px}
+    .fed-band{grid-template-columns:1fr;gap:18px}
+    .fed-stats{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:520px){
+    .fed-stats{grid-template-columns:1fr}
+  }
   .closing-line{
     margin-top:8px;font-size:clamp(1rem,1.3vw,1.15rem);font-weight:600;
     color:var(--navy);line-height:1.6;max-width:64ch;
@@ -950,32 +1086,111 @@
         where the stat is single-site; "Both" or no chip indicates an
         Envision-wide number.
       -->
-      <section class="slide" data-name="Campus" data-location="all">
+      <section class="slide campus-slide" data-name="Campus" data-location="all">
         <div class="wrap">
           <div class="eyebrow">The Campuses</div>
-          <h2 class="sec-h">Envision, by the numbers.</h2>
-          <p class="subhead">Two manufacturing campuses. One mission. 90+ years of continuous U.S. manufacturing, the largest combined workforce of people who are blind or low vision in American industry, and federal procurement infrastructure under one organization.</p>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <div class="num">410K sq ft</div>
-              <div class="lab">Combined facility</div>
-              <div class="ctx"><span class="loc-chip loc-chip--dallas">Dallas 235K</span> &nbsp; <span class="loc-chip loc-chip--wichita">Wichita 175K</span><br><br>Climate-controlled industrial space across two campuses.</div>
+          <h2 class="sec-h">Two manufacturing campuses. One operation.</h2>
+          <p class="subhead">410K square feet of climate-controlled industrial space across Wichita and Dallas. 90+ years of continuous U.S. manufacturing. One of the largest combined workforces of people who are blind or have low vision in American industry.</p>
+
+          <!-- Act 1: Combined totals -->
+          <div class="combined-band" aria-label="Combined Envision system totals">
+            <div class="cb-cell">
+              <div class="cb-lab">Combined facility</div>
+              <div class="cb-num">410K<span class="cb-unit">sq ft</span></div>
             </div>
-            <div class="stat-card">
-              <div class="num">762</div>
-              <div class="lab">Employees</div>
-              <div class="ctx"><span class="loc-chip loc-chip--dallas">Dallas 447</span> &nbsp; <span class="loc-chip loc-chip--wichita">Wichita 315</span><br><br>Manufacturing, services, and administrative roles across both campuses.</div>
+            <div class="cb-cell">
+              <div class="cb-lab">Total employees</div>
+              <div class="cb-num">762</div>
             </div>
-            <div class="stat-card"><div class="num">88%</div><div class="lab">BVI Direct Labor</div><div class="ctx">Envision's combined Direct Labor performed by team members who are blind or low vision. Substantially exceeds AbilityOne's 75% threshold.</div></div>
-            <div class="stat-card"><div class="num">4M+</div><div class="lab">Employment hours</div><div class="ctx">Provided to people who are blind or low vision since 1980. The reason our retention runs above industry average.</div></div>
-            <div class="stat-card"><div class="num">$198M</div><div class="lab">Federal contract capacity</div><div class="ctx">Across two active 5-year DLA Prime Vendor contracts. ABOBSC TLS ($150M) and H2F ($48M).</div></div>
-            <div class="stat-card"><div class="num">16</div><div class="lab">Base Supply Centers</div><div class="ctx">Envision-operated retail stores across 10 states serving Air Force, Army, Space Force, and Navy.</div></div>
-            <div class="stat-photo"><img src="images/ChatGPT%20Image%20May%2018,%202026%20at%2006_10_31%20PM.png" alt="Envision team member walking the manufacturing floor with her guide dog"></div>
+            <div class="cb-cell">
+              <div class="cb-lab">BVI Direct Labor</div>
+              <div class="cb-num">88<span class="cb-unit">%</span></div>
+            </div>
+            <div class="cb-cell">
+              <div class="cb-lab">U.S. manufacturing</div>
+              <div class="cb-num">90<span class="cb-unit">years</span></div>
+            </div>
           </div>
-          <div class="addr-strip">
-            <span class="loc-chip loc-chip--wichita">Wichita</span> 2301 S. Water Street, Wichita, KS 67213 · (316) 522-3232
-            &nbsp;&middot;&nbsp;
-            <span class="loc-chip loc-chip--dallas">Dallas</span> 1801 Valley View Lane, Farmers Branch, TX 75234 · (214) 821-2375
+
+          <!-- Act 2: Two campus cards -->
+          <div class="campus-grid">
+
+            <article class="campus-card">
+              <div class="campus-photo">
+                <img src="images/envision-dallas-building-exterior.png" alt="Exterior of Envision Dallas Campus" loading="lazy">
+                <div class="campus-photo-tag"><span class="accent-dot" style="background:#78BE21"></span>Envision, Dallas Campus</div>
+              </div>
+              <div class="campus-body">
+                <div class="campus-head">
+                  <div>
+                    <div class="campus-name">Dallas Campus<small>Farmers Branch, TX</small></div>
+                  </div>
+                  <div class="campus-id"><strong>Since 1931</strong></div>
+                </div>
+                <div class="campus-stats">
+                  <div class="campus-stat"><div class="num">235K</div><div class="lab">sq ft</div></div>
+                  <div class="campus-stat"><div class="num">447</div><div class="lab">Employees</div></div>
+                  <div class="campus-stat"><div class="num">23+8</div><div class="lab">Dock + rail doors</div></div>
+                </div>
+                <div class="campus-addr">
+                  <strong>1801 Valley View Lane, Farmers Branch, TX 75234</strong>
+                  (214) 821-2375
+                </div>
+              </div>
+            </article>
+
+            <article class="campus-card">
+              <div class="campus-photo">
+                <img src="images/Envision-wichita-highangle-buildingphoto.png" alt="High-angle exterior of Envision Wichita Campus" loading="lazy">
+                <div class="campus-photo-tag"><span class="accent-dot" style="background:#003087"></span>Envision, Wichita Campus</div>
+              </div>
+              <div class="campus-body">
+                <div class="campus-head">
+                  <div>
+                    <div class="campus-name">Wichita Campus<small>Wichita, KS</small></div>
+                  </div>
+                  <div class="campus-id"><strong>Since 1933</strong></div>
+                </div>
+                <div class="campus-stats">
+                  <div class="campus-stat"><div class="num">175K</div><div class="lab">sq ft</div></div>
+                  <div class="campus-stat"><div class="num">315</div><div class="lab">Employees</div></div>
+                  <div class="campus-stat"><div class="num">3</div><div class="lab">Product families</div></div>
+                </div>
+                <div class="campus-addr">
+                  <strong>2301 S. Water Street, Wichita, KS 67213</strong>
+                  (316) 522-3232
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Act 3: Federal infrastructure -->
+          <div class="fed-band">
+            <div>
+              <div class="fed-band-label">Federal Infrastructure</div>
+              <div class="fed-band-head">What runs across both campuses.</div>
+            </div>
+            <div class="fed-stats">
+              <div class="fed-stat">
+                <div class="num">$198M</div>
+                <div class="lab">DLA Prime Vendor capacity</div>
+                <div class="ctx">Two active 5-year contracts. ABOBSC TLS ($150M) and H2F ($48M).</div>
+              </div>
+              <div class="fed-stat is-clickable" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
+                <div class="num">16</div>
+                <div class="lab">Base Supply Centers</div>
+                <div class="ctx">Envision-operated stores across 10 states. Air Force, Army, Space Force, Navy.</div>
+                <span class="fed-cta">View network map
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </div>
+              <div class="fed-stat">
+                <div class="num">4M+</div>
+                <div class="lab">Employment hours since 1980</div>
+                <div class="ctx">Provided to people who are blind or have low vision. The reason retention runs above industry average.</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
