@@ -16,16 +16,30 @@ request is Google Fonts (loaded with `preconnect`).
 - Capability and service drawers with expandable cards
 - Base Supply Center network map modal
 
-## Status
+## Structure
 
-This deck started as a clone of the Wichita-only capabilities deck. Location-
-specific callouts (Wichita addresses, "since 1933", "93 years", Kansas-only
-state programs, etc.) have been generalized so the structure is ready to host
-both Wichita and Dallas content side-by-side.
+Capabilities (6 tiles) and Services (6 tiles) are organized as broader
+buckets, each with a deep-dive modal that includes narrative, stat cards,
+product callouts, and (where applicable) collapsible product catalogs:
 
-Search the source for `TODO` and the `data-location` attribute on the
-"Campus" slide to see where per-campus duplicates / location tagging will
-plug in once Dallas-specific content is added.
+- **Capabilities:** Polymer & Film, Textile & Apparel, Reflective Safety
+  Systems, Metal Fabrication, Print + Bindery + Writing Instruments,
+  Fulfillment + Kitting + Assembly.
+- **Services:** Envision Contact Center, Secure Document Services
+  (BPO / IRS mailrooms), Design + Sourcing + DAM, Accessibility Services,
+  Federal Procurement Services, Quality Assurance & Compliance.
+
+Each capability/service is tagged with a subtle location chip:
+`Wichita`, `Dallas`, or `Both`. Tiles, modal eyebrows, and select
+compliance/proof cards carry the chip. Body copy stays Envision-system
+neutral wherever the work spans both campuses.
+
+## Data sources
+
+- Wichita campus content: ported from the Wichita-only capabilities deck.
+- Dallas campus content: integrated from the Envision Dallas
+  Manufacturing and Prototyping document (2026), including the merged
+  AbilityOne + Texas WorkQuest + Commercial catalog index.
 
 ## Deploy on Vercel
 
