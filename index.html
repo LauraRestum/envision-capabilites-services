@@ -378,17 +378,23 @@
   .img-banner.pano-right img{transform:translateX(-50%)}
 
   /* ---------- 3,000-foot view ---------- */
-  .zone{margin-top:30px}
+  .zones-split{
+    display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:24px;align-items:start;
+  }
+  .zone{margin-top:0}
   .zone-label{
     font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
     color:var(--green);margin-bottom:14px;
   }
-  .toc-grid{display:grid;gap:12px}
-  .toc-cap{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
-  .toc-svc{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .toc-grid{display:grid;gap:10px}
+  .toc-cap{grid-template-columns:1fr}
+  .toc-svc{grid-template-columns:1fr}
+  @media (max-width:780px){
+    .zones-split{grid-template-columns:1fr;gap:20px}
+  }
   .toc-tile{
     position:relative;background:var(--bg-tint);border:1px solid var(--rule-light);
-    border-radius:4px;padding:18px 18px;font-weight:600;font-size:15px;
+    border-radius:4px;padding:14px 16px;font-weight:600;font-size:15px;
     color:var(--text-dark);font-family:var(--sans);text-align:left;cursor:pointer;
     overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:10px;
     transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;
@@ -1229,13 +1235,15 @@
           <div class="eyebrow">Everything Envision Offers</div>
           <h2 class="sec-h">Every capability. Every service.</h2>
           <p class="subhead">Six manufacturing capabilities and six supporting services, delivered across the Envision system. Click any tile to explore.</p>
-          <div class="zone">
-            <div class="zone-label">Capabilities</div>
-            <div class="toc-grid toc-cap" id="ovCap"></div>
-          </div>
-          <div class="zone">
-            <div class="zone-label">Services</div>
-            <div class="toc-grid toc-svc" id="ovSvc"></div>
+          <div class="zones-split">
+            <div class="zone">
+              <div class="zone-label">Capabilities</div>
+              <div class="toc-grid toc-cap" id="ovCap"></div>
+            </div>
+            <div class="zone">
+              <div class="zone-label">Services</div>
+              <div class="toc-grid toc-svc" id="ovSvc"></div>
+            </div>
           </div>
         </div>
       </section>
