@@ -433,7 +433,10 @@
   }
   .tile-grid{
     display:grid;gap:14px;margin-top:30px;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    grid-template-columns:repeat(3,1fr);
+  }
+  @media (max-width:780px){
+    .tile-grid{grid-template-columns:1fr}
   }
   .tile{
     position:relative;background:var(--bg-tint);border:1px solid var(--rule-light);
