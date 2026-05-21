@@ -171,9 +171,59 @@
   .hero .subhead{color:rgba(240,244,255,0.86);max-width:64ch;font-size:clamp(1.05rem,1.5vw,1.32rem)}
   .anchor-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
   .atag{
+    position:relative;
+    font-family:inherit;
     font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-    color:rgba(240,244,255,0.9);border:1px solid rgba(255,255,255,0.22);
+    color:rgba(240,244,255,0.9);background:transparent;
+    border:1px solid rgba(255,255,255,0.22);
     padding:7px 14px;border-radius:999px;
+    cursor:pointer;
+    transition:color .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  button.atag{appearance:none;-webkit-appearance:none;}
+  .atag:hover, .atag:focus-visible{
+    color:#cdeea0;
+    border-color:rgba(120,190,33,0.85);
+    background:rgba(120,190,33,0.10);
+    box-shadow:0 0 0 1px rgba(120,190,33,0.55), 0 0 14px 2px rgba(120,190,33,0.55), 0 0 28px 6px rgba(120,190,33,0.28);
+    outline:none;
+  }
+  .atag[data-tip]::after{
+    content:attr(data-tip);
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 12px);
+    transform:translateX(-50%) translateY(4px);
+    width:max-content;max-width:280px;
+    padding:10px 12px;
+    background:rgba(8,14,32,0.97);
+    color:rgba(240,244,255,0.95);
+    border:1px solid rgba(120,190,33,0.45);
+    border-radius:8px;
+    font-size:12px;font-weight:500;letter-spacing:.01em;text-transform:none;
+    line-height:1.45;
+    text-align:left;
+    box-shadow:0 8px 24px rgba(0,0,0,0.45);
+    opacity:0;pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease;
+    z-index:5;
+    white-space:normal;
+  }
+  .atag[data-tip]::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 6px);
+    transform:translateX(-50%) translateY(4px);
+    border:6px solid transparent;
+    border-top-color:rgba(8,14,32,0.97);
+    opacity:0;pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease;
+    z-index:5;
+  }
+  .atag:hover[data-tip]::after, .atag:focus-visible[data-tip]::after,
+  .atag:hover[data-tip]::before, .atag:focus-visible[data-tip]::before{
+    opacity:1;transform:translateX(-50%) translateY(0);
   }
 
   /* ---------- Stat cards ---------- */
@@ -1082,11 +1132,11 @@
             <h1 class="hero-h">American manufacturing. Built to scale.</h1>
             <p class="subhead">Envision manufactures, prints, packages, and fulfills for federal, commercial, and state buyers — and runs the services that wrap around every program.</p>
             <div class="anchor-tags">
-              <span class="atag">Manufacturing</span>
-              <span class="atag">Print</span>
-              <span class="atag">Packaging</span>
-              <span class="atag">Fulfillment</span>
-              <span class="atag">Quality &amp; Compliance</span>
+              <button type="button" class="atag" data-atag-jump="Capabilities" data-tip="Six manufacturing capabilities across Wichita and Dallas — film, textiles, reflective safety, metal, print, and fulfillment. Every line is American-made and shipping under contract today.">Manufacturing</button>
+              <button type="button" class="atag" data-atag-jump="Capabilities" data-tip="Federal-grade commercial print with in-house Braille embossing, custom binders and presentation portfolios, plus high-speed writing-instrument assembly.">Print</button>
+              <button type="button" class="atag" data-atag-jump="Capabilities" data-tip="MIL-STD-129 packaging, kitting, and pick-and-pack programs available as turnkey services alongside any production run.">Packaging</button>
+              <button type="button" class="atag" data-atag-jump="Capabilities" data-tip="Kitting, pick-and-pack, climate-controlled storage, and value-add assembly delivered across the Envision system.">Fulfillment</button>
+              <button type="button" class="atag" data-atag-jump="Compliance" data-tip="ISO 9001:2015 certified, TAA and Berry compliant, DCMA Alternate Release authorized — the federal qualifications are already in place.">Quality &amp; Compliance</button>
             </div>
           </div>
         </div>
@@ -2324,6 +2374,13 @@
   modalBackdrop.addEventListener("click", closeModal);
 
   document.getElementById("slides").addEventListener("click", function(e){
+    var aj = e.target.closest("[data-atag-jump]");
+    if (aj){
+      e.stopPropagation();
+      var target = slideIndexByName(aj.getAttribute("data-atag-jump"));
+      if (target >= 0 && target !== idx){ jump(target); }
+      return;
+    }
     var ov = e.target.closest("[data-ovjump]");
     if (ov){
       e.stopPropagation();
