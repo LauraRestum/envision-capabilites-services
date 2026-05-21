@@ -1089,9 +1089,31 @@
     .bsc-map-panel,.bsc-info-panel{flex:1 1 auto;max-width:100%}
     .bsc-shell{max-height:100%}
   }
+
+  /* ---------- Fullscreen wipe transition ---------- */
+  .fs-wipe{
+    position:fixed;inset:0;z-index:9999;pointer-events:none;
+    background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 45%,var(--green) 100%);
+    transform:scaleX(0);transform-origin:left center;
+    opacity:0;visibility:hidden;
+    transition:transform .45s cubic-bezier(.7,0,.3,1),opacity .2s linear;
+    will-change:transform,opacity;
+  }
+  .fs-wipe.active{visibility:visible;opacity:1}
+  .fs-wipe.cover{transform:scaleX(1)}
+  .fs-wipe.exit{transform-origin:right center;transform:scaleX(0)}
+
+  /* ---------- Presentation mode (fullscreen) ---------- */
+  :fullscreen .deck{height:100vh}
+  :-webkit-full-screen .deck{height:100vh}
+  body.presentation .topnav{height:58px}
+  body.presentation .slide{padding-top:clamp(28px,5vh,64px);padding-bottom:clamp(28px,5vh,64px)}
+  body.presentation .navlink{font-size:10.5px;padding:8px 9px}
+  body.presentation{cursor:default}
 </style>
 </head>
 <body>
+<div class="fs-wipe" id="fsWipe" aria-hidden="true"></div>
 <div class="deck">
 
   <!-- ===================== TOP NAV ===================== -->
@@ -2449,15 +2471,71 @@
   document.getElementById("nextBtn").addEventListener("click", function(){ linear(idx + 1); });
 
   var fsBtn = document.getElementById("fsBtn");
+  var fsWipe = document.getElementById("fsWipe");
+  var fsAnimating = false;
   fsBtn.addEventListener("click", toggleFs);
+  function requestFs(){
+    var el = document.documentElement;
+    var req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+    if (req) try { req.call(el); } catch(_) {}
+  }
+  function exitFs(){
+    var ex = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+    if (ex) try { ex.call(document); } catch(_) {}
+  }
+  function playWipe(){
+    if (fsAnimating) return;
+    fsAnimating = true;
+    fsWipe.classList.remove("exit","cover","active");
+    void fsWipe.offsetWidth;
+    fsWipe.classList.add("active");
+    requestAnimationFrame(function(){
+      fsWipe.classList.add("cover");
+    });
+    var covered = false;
+    function onCoverEnd(e){
+      if (e.propertyName !== "transform" || covered) return;
+      covered = true;
+      fsWipe.removeEventListener("transitionend", onCoverEnd);
+      setTimeout(function(){
+        fsWipe.classList.add("exit");
+        function onExitEnd(e2){
+          if (e2.propertyName !== "transform") return;
+          fsWipe.removeEventListener("transitionend", onExitEnd);
+          fsWipe.classList.remove("active","cover","exit");
+          fsAnimating = false;
+        }
+        fsWipe.addEventListener("transitionend", onExitEnd);
+      }, 120);
+    }
+    fsWipe.addEventListener("transitionend", onCoverEnd);
+    // Safety: never get stuck if transitionend doesn't fire
+    setTimeout(function(){
+      if (fsAnimating){
+        fsWipe.classList.remove("active","cover","exit");
+        fsAnimating = false;
+      }
+    }, 2000);
+  }
   function toggleFs(){
-    if (!document.fullscreenElement){
-      (document.documentElement.requestFullscreen || function(){})();
-    } else if (document.exitFullscreen){
-      document.exitFullscreen();
+    if (!document.fullscreenElement && !document.webkitFullscreenElement){
+      // Call requestFullscreen synchronously inside the user-gesture handler
+      // so the browser accepts it. The wipe overlay (high z-index) hides the
+      // viewport reflow while the browser transitions into fullscreen.
+      requestFs();
+      playWipe();
+    } else {
+      exitFs();
     }
   }
-  document.addEventListener("fullscreenchange", updateFsIcon);
+  document.addEventListener("fullscreenchange", function(){
+    document.body.classList.toggle("presentation", !!document.fullscreenElement);
+    updateFsIcon();
+  });
+  document.addEventListener("webkitfullscreenchange", function(){
+    document.body.classList.toggle("presentation", !!(document.fullscreenElement || document.webkitFullscreenElement));
+    updateFsIcon();
+  });
 
   document.addEventListener("keydown", function(e){
     if (modalOpen()){
