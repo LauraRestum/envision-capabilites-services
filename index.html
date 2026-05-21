@@ -768,9 +768,56 @@
   .m-sum-left{flex:1 1 480px;min-width:280px}
   .m-creds{flex:0 1 240px;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
   .m-cred{
+    position:relative;
     font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--text-muted);border:1px solid var(--border-mid);
+    color:var(--text-muted);background:transparent;border:1px solid var(--border-mid);
     padding:6px 11px;border-radius:999px;
+    transition:color .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .m-cred[data-tip]{cursor:help}
+  .m-cred[data-tip]:hover, .m-cred[data-tip]:focus-visible{
+    color:#cdeea0;
+    border-color:rgba(120,190,33,0.85);
+    background:rgba(120,190,33,0.10);
+    box-shadow:0 0 0 1px rgba(120,190,33,0.55), 0 0 14px 2px rgba(120,190,33,0.55), 0 0 28px 6px rgba(120,190,33,0.25);
+    outline:none;
+  }
+  .m-cred[data-tip]::after{
+    content:attr(data-tip);
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 12px);
+    transform:translateX(-50%) translateY(4px);
+    width:max-content;max-width:300px;
+    padding:10px 12px;
+    background:rgba(8,14,32,0.97);
+    color:rgba(240,244,255,0.95);
+    border:1px solid rgba(120,190,33,0.45);
+    border-radius:8px;
+    font-size:12px;font-weight:500;letter-spacing:.01em;text-transform:none;
+    line-height:1.45;
+    text-align:left;
+    box-shadow:0 8px 24px rgba(0,0,0,0.45);
+    opacity:0;pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease;
+    z-index:10;
+    white-space:normal;
+  }
+  .m-cred[data-tip]::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 6px);
+    transform:translateX(-50%) translateY(4px);
+    border:6px solid transparent;
+    border-top-color:rgba(8,14,32,0.97);
+    opacity:0;pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease;
+    z-index:10;
+  }
+  .m-cred[data-tip]:hover::after, .m-cred[data-tip]:focus-visible::after,
+  .m-cred[data-tip]:hover::before, .m-cred[data-tip]:focus-visible::before{
+    opacity:1;transform:translateX(-50%) translateY(0);
   }
   .m-block{padding:40px 0;border-bottom:1px solid var(--border-dark)}
   .m-block p{font-size:15px;line-height:1.75;color:var(--text-muted);max-width:68ch;margin-bottom:14px}
@@ -2264,12 +2311,75 @@
   var modalClose = document.getElementById("modalClose");
   var modalReturnFocus = null;
 
+  // Tooltip text for the credential pills shown at the top of each modal.
+  // Keys are matched case-insensitively against the displayed label.
+  var CRED_TIPS = {
+    "iso 9001:2015":"ISO 9001:2015 is the international standard for quality management systems. Envision's Dallas campus is certified by Intertek (ANAB-accredited) for manufacturing, assembly, and fulfillment.",
+    "berry / taa":"Berry Amendment requires DoD to source textiles and related items domestically. TAA (Trade Agreements Act) restricts federal purchases to U.S. or designated-country goods. Envision's federal products meet both.",
+    "berry":"The Berry Amendment requires the Department of Defense to give preference to domestically sourced textiles and related end items. Envision's qualifying production meets it.",
+    "taa":"The Trade Agreements Act restricts federal procurement to U.S.-made or designated-country goods. Envision's federal-channel products satisfy TAA country-of-origin requirements.",
+    "buy american":"The Buy American Act sets domestic content thresholds for federal purchases. Envision's U.S. manufacturing satisfies the applicable domestic content tests.",
+    "federal nsn":"NSN stands for National Stock Number — the federal procurement identifier required for items in the federal supply system. Envision products are cataloged under active NSNs.",
+    "nsn catalog":"Envision-manufactured products are listed in the federal NSN catalog under active National Stock Numbers, so federal buyers can order them through standard procurement systems.",
+    "hdpe":"High-Density Polyethylene. A stiffer, higher-tensile resin used for star-seal can liners that need to carry heavy or sharp loads without tearing.",
+    "lldpe":"Linear Low-Density Polyethylene. A flexible, puncture-resistant resin used for can liners and bags that need stretch and tear resistance.",
+    "ansi/isea 107":"American National Standard for high-visibility safety apparel. Defines Class I, II, and III garments by background and reflective material. Envision builds to the spec in-house.",
+    "nfpa 70e":"NFPA 70E is the U.S. standard for electrical safety in the workplace, covering arc-rated (AR) and flame-resistant (FR) clothing for arc-flash protection.",
+    "astm f1506":"ASTM F1506 is the performance spec for flame-resistant and arc-rated textiles used in electrical work. Envision's FR/AR apparel is built to meet it.",
+    "gerber paragon cnc":"Gerber Paragon is the industry-standard CNC fabric-cutting system. Envision uses it for high-accuracy, repeatable cuts on uniform and tactical apparel.",
+    "7 reflective colors":"Envision manufactures reflective vinyl in seven colors in-house, including the high-visibility lime, orange, and red used in the VISI-BELT system.",
+    "in-house":"Manufactured on Envision's own production lines — no external converter or contract sewer. Quality, lead time, and traceability stay under one roof.",
+    "welded steel":"Hand trucks built with welded steel frames — the joining method used for industrial-grade load ratings, not bolt-on assemblies.",
+    "load-rated 300-700 lb":"Each hand truck is engineered and tested for a specified load capacity between 300 and 700 pounds, matching federal and commercial duty cycles.",
+    "digital + offset":"Envision's print operation runs both digital (short-run, variable data) and offset (long-run, color-critical) presses, so jobs land on the right press for the run.",
+    "braille capable":"Grade 2 English and Computer Braille embossing performed in-house in Wichita, including federal-spec labels, signage, and printed pieces.",
+    "11 ink colors":"Envision's writing-instrument assembly line runs 11 ink color formulas, supporting AbilityOne and Texas WorkQuest catalog SKUs.",
+    "federal compliant":"Built to federal procurement standards — including packaging, labeling, and traceability requirements demanded by DoD and civilian agencies.",
+    "mil-std-129":"MIL-STD-129 is the military's standard for marking shipments and storage — bar codes, RFID, address blocks, and shipping labels in the exact format DoD requires.",
+    "rfid":"Radio-Frequency Identification tagging. Envision applies RFID at the carton or pallet level for shipments that need item-level traceability through the supply chain.",
+    "climate-controlled":"Storage and fulfillment space is climate-controlled — humidity and temperature held within range, so paper, textiles, and adhesives stay in spec.",
+    "23 + 8 dock doors":"The Dallas campus has 23 truck dock doors plus 8 rail dock doors, supporting high-volume truck and rail shipments from one site.",
+    "federal-trained":"Contact-center agents are trained on federal program rules, voice and channel etiquette, and the systems federal customers use.",
+    "abilityone-compliant":"Operates within the rules of the AbilityOne Program — the federal program that designates products and services as mandatory-source from approved nonprofit manufacturers employing people who are blind or have significant disabilities.",
+    "24/7 capable":"Coverage can scale to round-the-clock staffing for programs that require 24/7/365 customer service.",
+    "omnichannel":"Voice, email, chat, SMS, and case-management channels handled by the same trained agents on one platform.",
+    "hybrid since 2024":"Contact center has run a hybrid on-site / remote model since 2024, expanding the BVI talent pool while keeping federal security and supervision in place.",
+    "hipaa":"Health Insurance Portability and Accountability Act — federal rules for protecting health information. Envision's document services are operated to HIPAA standards.",
+    "facta":"Fair and Accurate Credit Transactions Act — requires secure handling and destruction of consumer financial data. Envision's destruction process is FACTA-compliant.",
+    "irs pub 1075":"IRS Publication 1075 sets the security controls required for handling Federal Tax Information. Envision's secure document services are built to those controls.",
+    "ocr + icr":"Optical Character Recognition plus Intelligent Character Recognition — converts scanned documents and handwriting into searchable, structured data.",
+    "cryptographic audit":"Destruction and digitization events are logged with cryptographic audit trails, so chain-of-custody can be verified end-to-end.",
+    "cad modeling":"Computer-Aided Design modeling. Envision's design team produces 3D models for prototyping, sourcing, and manufacture-ready specs.",
+    "pattern nesting":"Software-driven layout of garment patterns onto fabric to minimize waste — important for Berry-compliant textile production where every yard counts.",
+    "sample prototyping":"Rapid-turn sample and prototype production, so buyers can review and approve product before committing to a production run.",
+    "dam":"Digital Asset Management — secure, role-based storage of brand and product assets with versioning, rights, and distribution controls.",
+    "drm":"Digital Rights Management — controls who can access, download, or distribute protected files inside the asset library.",
+    "ada title ii":"Title II of the Americans with Disabilities Act covers state and local government services. Envision provides scoping, planning, and remediation for Title II compliance deadlines.",
+    "wcag 2.1 aa":"Web Content Accessibility Guidelines 2.1, conformance level AA — the standard most U.S. agencies and enterprises require for web and digital accessibility.",
+    "lived experience":"Audits, testing, and training are delivered by team members who are themselves blind or low-vision — accessibility expertise grounded in real daily use.",
+    "bvi testing pool":"A standing pool of Blind and Visually Impaired participants available for user testing with screen readers and assistive technology.",
+    "abilityone":"AbilityOne is the federal program that designates certain products and services as mandatory-source from approved nonprofit manufacturers employing people who are blind or have significant disabilities. Envision is a participating nonprofit.",
+    "dla prime vendor":"DLA Prime Vendor contracts are the Defense Logistics Agency's primary distribution vehicle for supplying military installations. Envision holds active Prime Vendor contracts.",
+    "bsc network":"Base Supply Centers — Envision-operated retail stores on military bases that stock office supplies, janitorial, safety apparel, and SKILCRAFT product lines for active-duty and federal buyers.",
+    "dcma alternate release":"DCMA Alternate Release Program authorization. Military apparel ships without prior government source inspection — reflecting high confidence in Envision's quality system and saving weeks of audit time."
+  };
+
+  function credPillHTML(label){
+    var tip = CRED_TIPS[String(label).toLowerCase()];
+    var attrs = 'class="m-cred"';
+    if (tip){
+      var safe = tip.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      attrs += ' data-tip="'+safe+'" tabindex="0"';
+    }
+    return '<span '+attrs+'>'+label+'</span>';
+  }
+
   function renderModal(key){
     var d = MODALS[key];
     if (!d) return;
     modalLabel.textContent = d.label;
 
-    var creds = d.creds.map(function(c){ return '<span class="m-cred">'+c+'</span>'; }).join("");
+    var creds = d.creds.map(credPillHTML).join("");
     var overview = d.overview.map(function(p){ return '<p>'+p+'</p>'; }).join("");
     var stats = d.stats.map(function(s){
       return '<div class="m-stat"><div class="num">'+s.num+'</div><div class="lab">'+s.label+'</div><div class="ctx">'+s.ctx+'</div></div>';
