@@ -594,28 +594,32 @@
     font-size:clamp(10px,0.82vw,12.5px);line-height:1.45;
     color:var(--text-soft);font-weight:500;margin-top:9px;
   }
-  /* Employment hero box */
+  /* Employment hero box — dominant full-width treatment */
   .ms-employment{
-    flex:none;display:flex;
+    flex:none;display:flex;flex-direction:column;
     background:var(--navy);border-radius:10px;overflow:hidden;
-    box-shadow:0 4px 16px rgba(0,24,82,0.12);
+    box-shadow:0 6px 24px rgba(0,24,82,0.18);
+  }
+  .ms-emp-top{
+    display:flex;
+    padding:clamp(22px,3.2vh,38px) clamp(24px,3vw,44px);
+    gap:clamp(18px,2.4vw,36px);
   }
   .ms-employment .ms-emp-icon{
-    flex:none;display:flex;align-items:center;justify-content:center;
-    padding:0 clamp(18px,2.4vw,36px);
+    flex:none;display:flex;align-items:flex-start;justify-content:center;
+    padding-top:4px;
   }
   .ms-employment .ms-emp-icon svg{
-    width:clamp(32px,3vw,48px);height:clamp(32px,3vw,48px);
+    width:clamp(38px,3.6vw,56px);height:clamp(38px,3.6vw,56px);
     stroke:#fff;fill:none;stroke-width:1.6;
     stroke-linecap:round;stroke-linejoin:round;
   }
   .ms-employment .ms-emp-content{
     flex:1;display:flex;flex-direction:column;
-    padding:clamp(18px,2.6vh,30px) clamp(18px,2vw,32px);
   }
   .ms-employment .ms-emp-title{
-    color:#fff;font-weight:700;text-transform:uppercase;
-    font-size:clamp(14px,1.3vw,18px);letter-spacing:.14em;
+    color:#fff;font-weight:800;text-transform:uppercase;
+    font-size:clamp(18px,1.8vw,26px);letter-spacing:.14em;
     margin-bottom:clamp(6px,1vh,10px);
   }
   .ms-employment .ms-emp-desc{
@@ -639,6 +643,35 @@
     content:'';position:absolute;left:0;top:0.32em;
     width:8px;height:8px;border-radius:50%;background:var(--green);
     box-shadow:0 0 0 3px rgba(120,190,33,0.25);
+  }
+  /* Workforce proof stats inside Employment hero */
+  .ms-emp-proof{
+    border-top:1px solid rgba(255,255,255,0.12);
+    padding:clamp(14px,2vh,22px) clamp(24px,3vw,44px);
+    display:flex;flex-direction:column;gap:clamp(10px,1.4vh,16px);
+  }
+  .ms-emp-proof-stats{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;background:rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;
+  }
+  .ms-emp-proof-stat{
+    background:rgba(255,255,255,0.05);
+    padding:clamp(10px,1.4vh,16px) clamp(12px,1.2vw,18px);
+  }
+  .ms-emp-proof-stat .num{
+    font-weight:800;font-size:clamp(1.1rem,1.6vw,1.5rem);color:var(--green);
+    line-height:1;letter-spacing:-0.02em;
+  }
+  .ms-emp-proof-stat .lab{
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,0.6);margin:5px 0 4px;
+  }
+  .ms-emp-proof-stat .ctx{
+    font-size:clamp(9.5px,0.72vw,11px);line-height:1.5;color:rgba(255,255,255,0.7);
+  }
+  .ms-emp-credential{
+    font-size:clamp(10.5px,0.85vw,12.5px);font-weight:600;
+    color:rgba(255,255,255,0.9);line-height:1.5;max-width:64ch;margin:0;
   }
 
   .ms-pillars{
@@ -675,25 +708,13 @@
   }
   .ms-body{
     display:flex;flex-direction:column;
-    padding:clamp(14px,2vh,20px) clamp(13px,1vw,18px);
+    padding:clamp(12px,1.6vh,18px) clamp(13px,1vw,18px);
   }
-  .ms-desc{
-    margin:0;
-    font-size:clamp(10.5px,0.83vw,12.5px);line-height:1.6;color:var(--text-mid);
-    min-height:12em;
-  }
-  .ms-desc strong{color:var(--text-dark);font-weight:700}
   .ms-bullets li strong{font-weight:700}
   .ms-bullets{
     list-style:none;display:flex;flex-direction:column;
     gap:clamp(6px,0.9vh,9px);
-    margin-top:clamp(14px,1.8vh,18px);
-    padding-top:clamp(12px,1.7vh,16px);
-    margin-bottom:0;
-  }
-  .ms-bullets::before{
-    content:'';display:block;height:1px;background:var(--rule-light);
-    margin-bottom:clamp(12px,1.7vh,16px);
+    margin:0;padding:0;
   }
   .ms-bullets li{
     position:relative;padding-left:19px;
@@ -706,49 +727,6 @@
     box-shadow:0 0 0 3px rgba(120,190,33,0.16);
   }
 
-  /* Workforce section merged into Mission */
-  .ms-workforce{
-    flex:none;border-radius:6px;overflow:hidden;
-    border:1px solid var(--rule-light);background:#fff;
-  }
-  .ms-workforce .ms-wf-banner{
-    width:100%;aspect-ratio:9/2;max-height:140px;overflow:hidden;background:var(--bg-tint);
-  }
-  .ms-workforce .ms-wf-banner img{width:100%;height:100%;object-fit:cover;display:block}
-  .ms-workforce .ms-wf-body{
-    padding:clamp(14px,2vh,22px) clamp(16px,2vw,28px);
-  }
-  .ms-workforce .ms-wf-eyebrow{
-    font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--green);margin-bottom:6px;
-  }
-  .ms-workforce .ms-wf-heading{
-    font-weight:800;font-size:clamp(1.1rem,1.6vw,1.4rem);letter-spacing:-0.02em;
-    line-height:1.15;color:var(--text-dark);margin-bottom:8px;
-  }
-  .ms-workforce .ms-wf-sub{
-    font-size:clamp(10.5px,0.85vw,12.5px);font-weight:400;line-height:1.6;
-    color:var(--text-mid);max-width:80ch;margin-bottom:clamp(10px,1.4vh,16px);
-  }
-  .ms-workforce .ms-wf-stats{
-    display:grid;grid-template-columns:repeat(3,1fr);
-    gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);
-    border-radius:6px;overflow:hidden;margin-bottom:clamp(8px,1.2vh,12px);
-  }
-  .ms-workforce .ms-wf-stat{background:var(--bg-light);padding:clamp(10px,1.4vh,16px) clamp(12px,1.2vw,18px)}
-  .ms-workforce .ms-wf-stat .num{
-    font-weight:800;font-size:clamp(1.2rem,1.8vw,1.6rem);color:var(--navy);
-    line-height:1;letter-spacing:-0.02em;
-  }
-  .ms-workforce .ms-wf-stat .lab{
-    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--text-soft);margin:6px 0 6px;
-  }
-  .ms-workforce .ms-wf-stat .ctx{font-size:clamp(10px,0.75vw,11.5px);line-height:1.55;color:var(--text-mid)}
-  .ms-workforce .ms-wf-closing{
-    font-size:clamp(10.5px,0.85vw,12.5px);font-weight:600;
-    color:var(--navy);line-height:1.5;max-width:64ch;margin:0;
-  }
   .ms-band{
     flex:1;min-height:0;border-radius:6px;overflow:hidden;
     display:grid;grid-template-columns:minmax(150px,1fr) 2.4fr minmax(150px,1fr);
@@ -770,11 +748,10 @@
     .mission-slide .mw{height:auto;min-height:100%}
     .ms-stats{grid-template-columns:repeat(2,1fr)}
     .ms-stat:nth-child(3){border-left:0}
-    .ms-employment{flex-direction:column}
-    .ms-employment .ms-emp-icon{padding:clamp(14px,2vh,20px) 0}
+    .ms-emp-top{flex-direction:column;align-items:center;text-align:center}
+    .ms-employment .ms-emp-icon{padding:0}
+    .ms-emp-proof-stats{grid-template-columns:1fr}
     .ms-pillars{grid-template-columns:repeat(2,1fr);gap:16px}
-    .ms-desc{min-height:0}
-    .ms-workforce .ms-wf-stats{grid-template-columns:1fr}
     .ms-band{grid-template-columns:1fr;min-height:0}
     .ms-band__photo{height:160px}
   }
@@ -1409,17 +1386,27 @@
           </div>
 
           <div class="ms-employment">
-            <div class="ms-emp-icon">
-              <svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <div class="ms-emp-top">
+              <div class="ms-emp-icon">
+                <svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div class="ms-emp-content">
+                <div class="ms-emp-title">Employment</div>
+                <p class="ms-emp-desc">Envision is one of the nation's largest employers of people who are blind or low vision. Career pathways span manufacturing, services, and professional roles, supported by job readiness and assistive technology training that help individuals build lasting careers.</p>
+                <ul class="ms-emp-bullets">
+                  <li>Envision Workforce Innovation</li>
+                  <li>Job readiness and career pathways</li>
+                  <li>Assistive technology training</li>
+                </ul>
+              </div>
             </div>
-            <div class="ms-emp-content">
-              <div class="ms-emp-title">Employment</div>
-              <p class="ms-emp-desc">Envision is one of the nation's largest employers of people who are blind or low vision. Career pathways span manufacturing, services, and professional roles, supported by job readiness and assistive technology training that help individuals build lasting careers.</p>
-              <ul class="ms-emp-bullets">
-                <li>Envision Workforce Innovation</li>
-                <li>Job readiness and career pathways</li>
-                <li>Assistive technology training</li>
-              </ul>
+            <div class="ms-emp-proof">
+              <div class="ms-emp-proof-stats">
+                <div class="ms-emp-proof-stat"><div class="num">Decades</div><div class="lab">U.S. manufacturing</div><div class="ctx">Continuous American production across the Envision system.</div></div>
+                <div class="ms-emp-proof-stat"><div class="num">88%</div><div class="lab">BVI Direct Labor</div><div class="ctx">Envision's combined Direct Labor performed by team members who are blind or low vision. Substantially exceeds AbilityOne's 75% threshold.</div></div>
+                <div class="ms-emp-proof-stat"><div class="num">4M+</div><div class="lab">Employment hours</div><div class="ctx">Provided to people who are blind or low vision since 1980. The reason our retention runs above industry average.</div></div>
+              </div>
+              <p class="ms-emp-credential">Workforce composition is a credential. Buyers choose us because we deliver. The mission is why our people stay.</p>
             </div>
           </div>
 
@@ -1430,7 +1417,6 @@
                 <div class="nm">Outreach</div>
               </div>
               <div class="ms-body">
-                <p class="ms-desc">Meeting people where they are, Envision delivers community-based programs, peer support, and partnerships that extend our reach beyond our walls and connect people who are blind or low vision at every stage of life.</p>
                 <ul class="ms-bullets">
                   <li>Envision Mission Services</li>
                   <li><strong>Envision Arts Center</strong></li>
@@ -1445,7 +1431,6 @@
                 <div class="nm">Rehabilitation</div>
               </div>
               <div class="ms-body">
-                <p class="ms-desc">The <strong>Envision Vision Rehabilitation Center</strong> delivers clinical low vision care, assistive technology training, and orientation and mobility instruction. Together they form a complete rehabilitation pipeline that helps people regain confidence and navigate the world on their own terms.</p>
                 <ul class="ms-bullets">
                   <li><strong>Envision Vision Rehabilitation Center</strong></li>
                   <li>Clinical low vision evaluations</li>
@@ -1460,7 +1445,6 @@
                 <div class="nm">Education</div>
               </div>
               <div class="ms-body">
-                <p class="ms-desc">Building strong foundations from the start, the <strong>Envision Child Development Center</strong> runs integrated classrooms where sighted peers learn alongside students who are blind or low vision, while continuing education equips professionals serving the blind and low vision community nationwide.</p>
                 <ul class="ms-bullets">
                   <li><strong>Envision Child Development Center</strong></li>
                   <li><strong>Envision Conference</strong> and <strong>Grand Rounds</strong></li>
@@ -1475,30 +1459,12 @@
                 <div class="nm">Research</div>
               </div>
               <div class="ms-body">
-                <p class="ms-desc">The <strong>Envision Research Institute</strong> advances vision science through clinical trials, technology development, and published research that moves the entire field forward. Post-doctoral fellowships train the next generation of researchers focused on real treatments and real change for people who are blind or low vision.</p>
                 <ul class="ms-bullets">
                   <li><strong>Envision Research Institute</strong></li>
                   <li>Post-doctoral fellowship programs</li>
                   <li>University and industry partnerships</li>
                 </ul>
               </div>
-            </div>
-          </div>
-
-          <div class="ms-workforce">
-            <div class="ms-wf-banner">
-              <img src="images/Envision-Workforce-employee-dallas-manufacoring.png" alt="Envision workforce on the manufacturing line" style="object-position:center 28%">
-            </div>
-            <div class="ms-wf-body">
-              <div class="ms-wf-eyebrow">Why Envision Delivers</div>
-              <div class="ms-wf-heading">A workforce credential buyers can verify.</div>
-              <p class="ms-wf-sub">Envision has built a manufacturing organization with retention well above industry average, quality consistency that holds across long runs, and the kind of operational track record that buyers across federal, commercial, and state channels rely on.</p>
-              <div class="ms-wf-stats">
-                <div class="ms-wf-stat"><div class="num">Decades</div><div class="lab">U.S. manufacturing</div><div class="ctx">Continuous American production across the Envision system.</div></div>
-                <div class="ms-wf-stat"><div class="num">88%</div><div class="lab">BVI Direct Labor</div><div class="ctx">Envision's combined Direct Labor performed by team members who are blind or low vision. Substantially exceeds AbilityOne's 75% threshold.</div></div>
-                <div class="ms-wf-stat"><div class="num">4M+</div><div class="lab">Employment hours</div><div class="ctx">Provided to people who are blind or low vision since 1980. The reason our retention runs above industry average.</div></div>
-              </div>
-              <p class="ms-wf-closing">Workforce composition is a credential. Buyers choose us because we deliver. The mission is why our people stay.</p>
             </div>
           </div>
 
