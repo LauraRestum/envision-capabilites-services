@@ -787,6 +787,39 @@
   .campus-card__addr{font-size:12.5px;line-height:1.6;color:var(--text-soft);text-align:center}
   @media (max-width:768px){.campus-footer{grid-template-columns:1fr}}
 
+  /* ---------- Decision Tree ---------- */
+  .dtree{max-width:620px;margin:0 auto;text-align:left}
+  .dtree-step{margin-bottom:18px;opacity:0;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease;pointer-events:none;height:0;overflow:hidden}
+  .dtree-step.is-visible{opacity:1;transform:translateY(0);pointer-events:auto;height:auto;overflow:visible}
+  .dtree-label{font-family:var(--sans);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-soft);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .dtree-label .step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--green);color:var(--navy);font-size:11px;font-weight:800;flex-shrink:0}
+  .dtree-select{
+    width:100%;font-family:var(--sans);font-size:15px;font-weight:600;color:var(--text-dark);
+    background:var(--bg-tint);border:1px solid var(--rule-light);border-radius:6px;
+    padding:14px 44px 14px 16px;cursor:pointer;
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%233a4a6b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 16px center;background-size:12px;
+    transition:border-color .18s;
+  }
+  .dtree-select:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-dim)}
+  .dtree-select:hover{border-color:var(--blue)}
+  .dtree-result{
+    margin-top:24px;padding:24px;border-radius:8px;border:1px solid var(--rule-light);
+    background:var(--bg-tint);opacity:0;transform:translateY(12px);
+    transition:opacity .35s ease,transform .35s ease;pointer-events:none;height:0;overflow:hidden;
+  }
+  .dtree-result.is-visible{opacity:1;transform:translateY(0);pointer-events:auto;height:auto;overflow:visible}
+  .dtree-result-title{font-size:17px;font-weight:800;color:var(--text-dark);margin-bottom:6px}
+  .dtree-result-desc{font-size:14px;color:var(--text-mid);line-height:1.65;margin-bottom:16px}
+  .dtree-result-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .dtree-chip{font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:4px;background:var(--green-dim);color:var(--navy);letter-spacing:.02em}
+  .dtree-cta{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-weight:800;font-size:14px;color:var(--navy);text-decoration:none;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;background:none;border:none;padding:0;transition:color .18s}
+  .dtree-cta:hover{color:var(--green)}
+  .dtree-cta svg{transition:transform .18s}
+  .dtree-cta:hover svg{transform:translateX(3px)}
+  @media(max-width:600px){.dtree-select{font-size:14px;padding:12px 40px 12px 14px}}
+
   /* ---------- Modals ---------- */
   .modal-backdrop{
     position:fixed;inset:0;background:rgba(0,5,20,0.55);backdrop-filter:blur(8px);
@@ -1612,12 +1645,49 @@
         <div class="wrap center">
           <div class="eyebrow">Envision · Capabilities &amp; Services</div>
           <h2 class="sec-h">Let's scope what fits your need.</h2>
-          <p class="subhead">Send a line item, a use case, or a contract vehicle. We respond within one business day.</p>
-          <div class="cta-actions">
-            <a class="btn-primary" href="#" aria-disabled="true">Email us directly</a>
-            <a class="btn-secondary" href="#" aria-disabled="true">Book a campus tour</a>
-            <a class="btn-secondary" href="#" aria-disabled="true">Request a quote</a>
+          <p class="subhead">Walk through the options below to find the right capability or service.</p>
+
+          <div class="dtree" id="dtree">
+            <!-- Step 1: Category -->
+            <div class="dtree-step is-visible" id="dtStep1">
+              <div class="dtree-label"><span class="step-num">1</span> What are you looking for?</div>
+              <select class="dtree-select" id="dtCat">
+                <option value="" disabled selected>Select a category…</option>
+                <option value="manufacturing">Manufacturing &amp; Production</option>
+                <option value="print">Print &amp; Document Services</option>
+                <option value="services">Business &amp; Support Services</option>
+                <option value="procurement">Procurement &amp; Compliance</option>
+                <option value="sale">Sales &amp; Fulfillment</option>
+              </select>
+            </div>
+
+            <!-- Step 2: Specific area -->
+            <div class="dtree-step" id="dtStep2">
+              <div class="dtree-label"><span class="step-num">2</span> Narrow it down</div>
+              <select class="dtree-select" id="dtArea">
+                <option value="" disabled selected>Select a specific area…</option>
+              </select>
+            </div>
+
+            <!-- Step 3: Detail -->
+            <div class="dtree-step" id="dtStep3">
+              <div class="dtree-label"><span class="step-num">3</span> What do you need?</div>
+              <select class="dtree-select" id="dtDetail">
+                <option value="" disabled selected>Select a detail…</option>
+              </select>
+            </div>
+
+            <!-- Result card -->
+            <div class="dtree-result" id="dtResult">
+              <div class="dtree-result-title" id="dtResultTitle"></div>
+              <div class="dtree-result-desc" id="dtResultDesc"></div>
+              <div class="dtree-result-meta" id="dtResultMeta"></div>
+              <button class="dtree-cta" id="dtResultCta" type="button">
+                Explore this capability <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </div>
           </div>
+
           <div class="contact-block">
             <div class="nm">[ contact name placeholder ]</div>
             <div class="ti">[ title placeholder ]</div>
@@ -2616,6 +2686,194 @@
   }, {passive:true});
 
   render();
+
+  // ===================== DECISION TREE =====================
+  (function(){
+    var TREE = {
+      manufacturing:[
+        {label:"Polymer & Film (Can Liners, Bags, Sheeting)", details:[
+          {label:"Can Liners (Max-Performance, Pro-Performance)", modal:"plastic", chips:["LLDPE","HDPE","Berry / TAA","Wichita"], desc:"Domestic LLDPE flat-pack and coreless can liners with minimum 10% post-consumer recycled content. Federal NSN coverage."},
+          {label:"Medical & Specialty Bags", modal:"plastic", chips:["OSHA","DOT 49 CFR","VA","Wichita"], desc:"Color-coded isolation bags, BFCUK kits, ZF seal-closure bags, VA belongings bags, and TidyGirl dispensers."},
+          {label:"Plastic Sheeting", modal:"plastic", chips:["ASTM-D4397","Construction","Ag","Wichita"], desc:"Water-resistant polyethylene sheeting for construction and agricultural use. Federal CID A-A-3174."}
+        ]},
+        {label:"Textile & Apparel (Safety Vests, Military Gear)", details:[
+          {label:"ANSI Safety Vests & Shirts (Class I–III)", modal:"textile", chips:["ANSI/ISEA 107","Berry","Dallas"], desc:"Mesh safety vests, shirts, and accessories in Class I through III. Sizes S through 8X."},
+          {label:"Military Apparel (APECS, ECWCS)", modal:"textile", chips:["Berry","MIL-SPEC","Dallas"], desc:"Berry-compliant military gear including APECS rain parkas and ECWCS trousers."},
+          {label:"Flame & Arc-Resistant (NFPA 70E)", modal:"textile", chips:["NFPA 70E","HRC","Dallas"], desc:"Flame-resistant and arc-rated garments meeting NFPA 70E standards."},
+          {label:"Hard Hats & Accessories", modal:"textile", chips:["Texas WorkQuest","ANSI","Dallas"], desc:"Cap-style and full-brim hard hats with suspension systems and accessories."}
+        ]},
+        {label:"Reflective Safety Systems", details:[
+          {label:"VISI-BELT & Reflective Vinyl", modal:"reflective", chips:["Reflective","Wichita"], desc:"In-house reflective vinyl manufacturing including the VISI-BELT system for high-visibility safety."}
+        ]},
+        {label:"Metal Assembly (Hand Trucks)", details:[
+          {label:"Steel-Frame Hand Trucks (300–700 lb)", modal:"metal", chips:["300–700 lb","Steel","Wichita"], desc:"Steel-frame hand trucks rated 300 to 700 lb capacity, assembled to spec at the Wichita campus."}
+        ]},
+        {label:"Binders & Writing Instruments", details:[
+          {label:"Custom Binders & Portfolios", modal:"bindery", chips:["Dallas"], desc:"Custom binders, presentation portfolios, and high-speed marker assembly."},
+          {label:"Writing Instruments (Marker Assembly)", modal:"bindery", chips:["High-speed","Dallas"], desc:"High-speed marker assembly line producing writing instruments at scale."}
+        ]}
+      ],
+      print:[
+        {label:"Commercial Print", details:[
+          {label:"Business Cards & Stationery", modal:"printSvc", chips:["Federal NSN","Wichita"], desc:"Offset and digital business cards, letterhead, envelopes, and stationery under federal NSN catalog."},
+          {label:"Brochures & Marketing Collateral", modal:"printSvc", chips:["Digital","Offset","Wichita"], desc:"Full-color brochures, flyers, and marketing materials in digital and offset production."},
+          {label:"Carbonless & Variable-Data Forms", modal:"printSvc", chips:["NCR","Variable data","Wichita"], desc:"Multi-part carbonless forms and variable-data printed cards."}
+        ]},
+        {label:"Web-to-Print Storefronts", details:[
+          {label:"Configurable Templates & Approval Workflows", modal:"printSvc", chips:["Self-service","Wichita"], desc:"Self-service web-to-print storefronts with configurable templates and built-in approval workflows."}
+        ]},
+        {label:"Braille Embossing", details:[
+          {label:"Grade 2 & Computer Braille", modal:"printSvc", chips:["ADA","Braille","Wichita"], desc:"In-house Braille embossing in Grade 2 and Computer Braille, up to 4 lines per application."}
+        ]},
+        {label:"Bindery & Finishing", details:[
+          {label:"Cutting, Folding, Saddle Stitch, Foil", modal:"printSvc", chips:["Finishing","Wichita"], desc:"Full bindery and finishing services including cutting, folding, saddle stitch, and foil stamping."}
+        ]},
+        {label:"Secure Document Services", details:[
+          {label:"Federal Mailroom & OCR/ICR Digitization", modal:"bpo", chips:["High-security","Dallas"], desc:"High-security federal mailrooms with OCR/ICR digitization, encrypted archive, and certified destruction."}
+        ]}
+      ],
+      services:[
+        {label:"Contact Center", details:[
+          {label:"Multi-Channel Customer Service", modal:"contact", chips:["Federal","Enterprise","Multi-site"], desc:"Bilateral multi-channel customer service for federal and enterprise scale. Synchronized Dallas and Wichita operations."}
+        ]},
+        {label:"Accessibility Services", details:[
+          {label:"ADA Title II Consulting", modal:"accessibility", chips:["ADA","WCAG","Wichita"], desc:"ADA Title II consulting with lived-experience expertise."},
+          {label:"WCAG Audits & Remediation", modal:"accessibility", chips:["WCAG 2.1","Section 508","Wichita"], desc:"Website accessibility audits against WCAG 2.1 and Section 508 standards."},
+          {label:"Training & Workshops", modal:"accessibility", chips:["Training","Wichita"], desc:"Accessibility awareness training and workshops delivered by experts with lived experience."}
+        ]},
+        {label:"Quality Assurance & Compliance", details:[
+          {label:"ISO 9001 & Testing", modal:"quality", chips:["ISO 9001:2015","QA Lab"], desc:"ISO 9001:2015 certified quality management system. Tensile testing on every production run."},
+          {label:"DCMA Alternate Release", modal:"quality", chips:["DCMA","Military"], desc:"DCMA Alternate Release authorization at Dallas Campus. Speeds federal acceptance timelines."}
+        ]}
+      ],
+      procurement:[
+        {label:"Federal Procurement Services", details:[
+          {label:"AbilityOne & Mandatory Source", modal:"procurement", chips:["AbilityOne","NIB"], desc:"AbilityOne mandatory-source participant nationally. Managed pathway into federal and military procurement."},
+          {label:"DLA Troop Support", modal:"procurement", chips:["DLA","SPE","Federal"], desc:"DLA Troop Support pricing pre-cleared. Direct delivery and compliance documentation."},
+          {label:"GSA / Contract Vehicles", modal:"procurement", chips:["GSA","Federal"], desc:"Access through GSA schedules and other federal contract vehicles."}
+        ]},
+        {label:"Compliance Credentials", details:[
+          {label:"Berry Amendment & TAA", modal:"quality", chips:["Berry","TAA","Domestic"], desc:"Full Berry Amendment and Trade Agreements Act compliance. 100% domestic manufacturing."},
+          {label:"ISO 9001 Certification", modal:"quality", chips:["ISO 9001:2015","Dallas"], desc:"ISO 9001:2015 certified quality management system at Dallas Campus."}
+        ]}
+      ],
+      sale:[
+        {label:"Fulfillment & Kitting", details:[
+          {label:"Pick & Pack / Kitting", modal:"fulfillment", chips:["MIL-STD-129","Multi-site"], desc:"Kitting, pick and pack, MIL-STD-129 packaging and climate-controlled storage."},
+          {label:"Value-Add Assembly", modal:"fulfillment", chips:["Assembly","Multi-site"], desc:"Value-add assembly services integrated with fulfillment and warehousing."}
+        ]},
+        {label:"Base Supply Centers", details:[
+          {label:"On-Base Retail (16 locations)", modal:null, chips:["AbilityOne","BSC","10 states"], desc:"16 Envision-operated Base Supply Centers across 10 states. Office supplies, janitorial, safety, and SKILCRAFT product lines.", bsc:true}
+        ]},
+        {label:"State Use Programs", details:[
+          {label:"Kansas State Use (Wichita)", modal:"textile", chips:["Kansas","State Use","Wichita"], desc:"Kansas State Use program participant out of the Wichita campus."},
+          {label:"Texas WorkQuest (Dallas)", modal:"textile", chips:["Texas","WorkQuest","Dallas"], desc:"Texas WorkQuest (State Use) participant out of the Dallas campus."}
+        ]}
+      ]
+    };
+
+    var dtCat = document.getElementById("dtCat");
+    var dtArea = document.getElementById("dtArea");
+    var dtDetail = document.getElementById("dtDetail");
+    var dtStep2 = document.getElementById("dtStep2");
+    var dtStep3 = document.getElementById("dtStep3");
+    var dtResult = document.getElementById("dtResult");
+    var dtResultTitle = document.getElementById("dtResultTitle");
+    var dtResultDesc = document.getElementById("dtResultDesc");
+    var dtResultMeta = document.getElementById("dtResultMeta");
+    var dtResultCta = document.getElementById("dtResultCta");
+    var currentDetail = null;
+
+    function resetSelect(sel, placeholder){
+      sel.innerHTML = '<option value="" disabled selected>'+placeholder+'</option>';
+    }
+    function hideStep(el){ el.classList.remove("is-visible"); }
+    function showStep(el){ el.classList.add("is-visible"); }
+
+    dtCat.addEventListener("change", function(){
+      var branch = TREE[dtCat.value];
+      if (!branch) return;
+      resetSelect(dtArea, "Select a specific area…");
+      branch.forEach(function(a, i){
+        var o = document.createElement("option");
+        o.value = i;
+        o.textContent = a.label;
+        dtArea.appendChild(o);
+      });
+      showStep(dtStep2);
+      hideStep(dtStep3);
+      hideStep(dtResult);
+      resetSelect(dtDetail, "Select a detail…");
+    });
+
+    dtArea.addEventListener("change", function(){
+      var branch = TREE[dtCat.value];
+      var area = branch[parseInt(dtArea.value)];
+      if (!area) return;
+      if (area.details.length === 1){
+        hideStep(dtStep3);
+        currentDetail = area.details[0];
+        showResult(currentDetail);
+        return;
+      }
+      resetSelect(dtDetail, "Select a detail…");
+      area.details.forEach(function(d, i){
+        var o = document.createElement("option");
+        o.value = i;
+        o.textContent = d.label;
+        dtDetail.appendChild(o);
+      });
+      showStep(dtStep3);
+      hideStep(dtResult);
+    });
+
+    dtDetail.addEventListener("change", function(){
+      var branch = TREE[dtCat.value];
+      var area = branch[parseInt(dtArea.value)];
+      currentDetail = area.details[parseInt(dtDetail.value)];
+      showResult(currentDetail);
+    });
+
+    function showResult(d){
+      dtResultTitle.textContent = d.label;
+      dtResultDesc.textContent = d.desc;
+      dtResultMeta.innerHTML = "";
+      (d.chips || []).forEach(function(c){
+        var s = document.createElement("span");
+        s.className = "dtree-chip";
+        s.textContent = c;
+        dtResultMeta.appendChild(s);
+      });
+      if (d.modal){
+        dtResultCta.style.display = "";
+        dtResultCta.textContent = "";
+        dtResultCta.innerHTML = 'Explore this capability <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+      } else if (d.bsc){
+        dtResultCta.style.display = "";
+        dtResultCta.innerHTML = 'View BSC Network Map <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+      } else {
+        dtResultCta.style.display = "none";
+      }
+      showStep(dtResult);
+    }
+
+    dtResultCta.addEventListener("click", function(){
+      if (!currentDetail) return;
+      if (currentDetail.bsc){
+        var bscModal = document.getElementById("bscModal");
+        var bscBackdrop = document.getElementById("bscBackdrop");
+        if (bscModal && bscBackdrop){
+          bscModal.classList.add("is-open");
+          bscBackdrop.classList.add("is-open");
+        }
+        return;
+      }
+      if (currentDetail.modal && typeof openModal === "function"){
+        openModal(currentDetail.modal);
+      }
+    });
+  })();
+
 })();
 </script>
 <script>
