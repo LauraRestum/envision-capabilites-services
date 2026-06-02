@@ -1644,36 +1644,36 @@
       <section class="slide" data-name="Contact">
         <div class="wrap center">
           <div class="eyebrow">Envision · Capabilities &amp; Services</div>
-          <h2 class="sec-h">Let's scope what fits your need.</h2>
-          <p class="subhead">Walk through the options below to find the right capability or service.</p>
+          <h2 class="sec-h">Identify the Right Capability</h2>
+          <p class="subhead">Use the guided selector below to match your requirement to a specific Envision capability or service.</p>
 
           <div class="dtree" id="dtree">
             <!-- Step 1: Category -->
             <div class="dtree-step is-visible" id="dtStep1">
-              <div class="dtree-label"><span class="step-num">1</span> What are you looking for?</div>
+              <div class="dtree-label"><span class="step-num">1</span> Area of Interest</div>
               <select class="dtree-select" id="dtCat">
-                <option value="" disabled selected>Select a category…</option>
+                <option value="" disabled selected>Select an area of interest</option>
                 <option value="manufacturing">Manufacturing &amp; Production</option>
                 <option value="print">Print &amp; Document Services</option>
-                <option value="services">Business &amp; Support Services</option>
-                <option value="procurement">Procurement &amp; Compliance</option>
-                <option value="sale">Sales &amp; Fulfillment</option>
+                <option value="services">Professional &amp; Support Services</option>
+                <option value="procurement">Federal Procurement &amp; Compliance</option>
+                <option value="sale">Fulfillment &amp; Distribution</option>
               </select>
             </div>
 
             <!-- Step 2: Specific area -->
             <div class="dtree-step" id="dtStep2">
-              <div class="dtree-label"><span class="step-num">2</span> Narrow it down</div>
+              <div class="dtree-label"><span class="step-num">2</span> Capability or Service</div>
               <select class="dtree-select" id="dtArea">
-                <option value="" disabled selected>Select a specific area…</option>
+                <option value="" disabled selected>Select a capability or service</option>
               </select>
             </div>
 
             <!-- Step 3: Detail -->
             <div class="dtree-step" id="dtStep3">
-              <div class="dtree-label"><span class="step-num">3</span> What do you need?</div>
+              <div class="dtree-label"><span class="step-num">3</span> Specific Requirement</div>
               <select class="dtree-select" id="dtDetail">
-                <option value="" disabled selected>Select a detail…</option>
+                <option value="" disabled selected>Select a product or service line</option>
               </select>
             </div>
 
@@ -1683,7 +1683,7 @@
               <div class="dtree-result-desc" id="dtResultDesc"></div>
               <div class="dtree-result-meta" id="dtResultMeta"></div>
               <button class="dtree-cta" id="dtResultCta" type="button">
-                Explore this capability <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                View Full Details <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </button>
             </div>
           </div>
@@ -2691,26 +2691,26 @@
   (function(){
     var TREE = {
       manufacturing:[
-        {label:"Polymer & Film (Can Liners, Bags, Sheeting)", details:[
-          {label:"Can Liners (Max-Performance, Pro-Performance)", modal:"plastic", chips:["LLDPE","HDPE","Berry / TAA","Wichita"], desc:"Domestic LLDPE flat-pack and coreless can liners with minimum 10% post-consumer recycled content. Federal NSN coverage."},
+        {label:"Polymer & Film Manufacturing", details:[
+          {label:"Can Liners", modal:"plastic", chips:["LLDPE","HDPE","Berry / TAA","Wichita"], desc:"Domestic LLDPE flat-pack and coreless can liners with minimum 10% post-consumer recycled content. Federal NSN coverage."},
           {label:"Medical & Specialty Bags", modal:"plastic", chips:["OSHA","DOT 49 CFR","VA","Wichita"], desc:"Color-coded isolation bags, BFCUK kits, ZF seal-closure bags, VA belongings bags, and TidyGirl dispensers."},
           {label:"Plastic Sheeting", modal:"plastic", chips:["ASTM-D4397","Construction","Ag","Wichita"], desc:"Water-resistant polyethylene sheeting for construction and agricultural use. Federal CID A-A-3174."}
         ]},
-        {label:"Textile & Apparel (Safety Vests, Military Gear)", details:[
-          {label:"ANSI Safety Vests & Shirts (Class I–III)", modal:"textile", chips:["ANSI/ISEA 107","Berry","Dallas"], desc:"Mesh safety vests, shirts, and accessories in Class I through III. Sizes S through 8X."},
-          {label:"Military Apparel (APECS, ECWCS)", modal:"textile", chips:["Berry","MIL-SPEC","Dallas"], desc:"Berry-compliant military gear including APECS rain parkas and ECWCS trousers."},
-          {label:"Flame & Arc-Resistant (NFPA 70E)", modal:"textile", chips:["NFPA 70E","HRC","Dallas"], desc:"Flame-resistant and arc-rated garments meeting NFPA 70E standards."},
+        {label:"Textile & Apparel", details:[
+          {label:"ANSI Class I–III Safety Vests & Shirts", modal:"textile", chips:["ANSI/ISEA 107","Berry","Dallas"], desc:"Mesh safety vests, shirts, and accessories in Class I through III. Sizes S through 8X."},
+          {label:"Military Apparel", modal:"textile", chips:["Berry","MIL-SPEC","Dallas"], desc:"Berry-compliant military gear including APECS rain parkas and ECWCS trousers."},
+          {label:"Flame & Arc-Resistant Garments", modal:"textile", chips:["NFPA 70E","HRC","Dallas"], desc:"Flame-resistant and arc-rated garments meeting NFPA 70E standards."},
           {label:"Hard Hats & Accessories", modal:"textile", chips:["Texas WorkQuest","ANSI","Dallas"], desc:"Cap-style and full-brim hard hats with suspension systems and accessories."}
         ]},
         {label:"Reflective Safety Systems", details:[
-          {label:"VISI-BELT & Reflective Vinyl", modal:"reflective", chips:["Reflective","Wichita"], desc:"In-house reflective vinyl manufacturing including the VISI-BELT system for high-visibility safety."}
+          {label:"VISI-BELT & Reflective Vinyl Products", modal:"reflective", chips:["Reflective","Wichita"], desc:"In-house reflective vinyl manufacturing including the VISI-BELT system for high-visibility safety applications."}
         ]},
-        {label:"Metal Assembly (Hand Trucks)", details:[
-          {label:"Steel-Frame Hand Trucks (300–700 lb)", modal:"metal", chips:["300–700 lb","Steel","Wichita"], desc:"Steel-frame hand trucks rated 300 to 700 lb capacity, assembled to spec at the Wichita campus."}
+        {label:"Metal Assembly", details:[
+          {label:"Steel-Frame Hand Trucks", modal:"metal", chips:["300–700 lb","Steel","Wichita"], desc:"Steel-frame hand trucks rated 300 to 700 lb capacity, assembled to specification at the Wichita campus."}
         ]},
         {label:"Binders & Writing Instruments", details:[
-          {label:"Custom Binders & Portfolios", modal:"bindery", chips:["Dallas"], desc:"Custom binders, presentation portfolios, and high-speed marker assembly."},
-          {label:"Writing Instruments (Marker Assembly)", modal:"bindery", chips:["High-speed","Dallas"], desc:"High-speed marker assembly line producing writing instruments at scale."}
+          {label:"Custom Binders & Presentation Portfolios", modal:"bindery", chips:["Dallas"], desc:"Custom binders, presentation portfolios, and high-speed marker assembly."},
+          {label:"Writing Instrument Assembly", modal:"bindery", chips:["High-speed","Dallas"], desc:"High-speed marker assembly line producing writing instruments at scale."}
         ]}
       ],
       print:[
@@ -2728,18 +2728,18 @@
         {label:"Bindery & Finishing", details:[
           {label:"Cutting, Folding, Saddle Stitch, Foil", modal:"printSvc", chips:["Finishing","Wichita"], desc:"Full bindery and finishing services including cutting, folding, saddle stitch, and foil stamping."}
         ]},
-        {label:"Secure Document Services", details:[
-          {label:"Federal Mailroom & OCR/ICR Digitization", modal:"bpo", chips:["High-security","Dallas"], desc:"High-security federal mailrooms with OCR/ICR digitization, encrypted archive, and certified destruction."}
+        {label:"Secure Document Processing", details:[
+          {label:"Federal Mailroom & Document Digitization", modal:"bpo", chips:["High-security","Dallas"], desc:"High-security federal mailrooms with OCR/ICR digitization, encrypted archive, and certified destruction."}
         ]}
       ],
       services:[
-        {label:"Contact Center", details:[
-          {label:"Multi-Channel Customer Service", modal:"contact", chips:["Federal","Enterprise","Multi-site"], desc:"Bilateral multi-channel customer service for federal and enterprise scale. Synchronized Dallas and Wichita operations."}
+        {label:"Envision Contact Center", details:[
+          {label:"Multi-Channel Customer Service Operations", modal:"contact", chips:["Federal","Enterprise","Multi-site"], desc:"Bilateral multi-channel customer service designed for federal and enterprise scale. Synchronized operations across Dallas and Wichita campuses."}
         ]},
         {label:"Accessibility Services", details:[
-          {label:"ADA Title II Consulting", modal:"accessibility", chips:["ADA","WCAG","Wichita"], desc:"ADA Title II consulting with lived-experience expertise."},
-          {label:"WCAG Audits & Remediation", modal:"accessibility", chips:["WCAG 2.1","Section 508","Wichita"], desc:"Website accessibility audits against WCAG 2.1 and Section 508 standards."},
-          {label:"Training & Workshops", modal:"accessibility", chips:["Training","Wichita"], desc:"Accessibility awareness training and workshops delivered by experts with lived experience."}
+          {label:"ADA Title II Consulting", modal:"accessibility", chips:["ADA","WCAG","Wichita"], desc:"ADA Title II consulting delivered by professionals with lived experience in accessibility."},
+          {label:"WCAG Audits & Remediation", modal:"accessibility", chips:["WCAG 2.1","Section 508","Wichita"], desc:"Comprehensive website accessibility audits against WCAG 2.1 and Section 508 standards."},
+          {label:"Accessibility Training & Workshops", modal:"accessibility", chips:["Training","Wichita"], desc:"Accessibility awareness training and workshops delivered by subject-matter experts with lived experience."}
         ]},
         {label:"Quality Assurance & Compliance", details:[
           {label:"ISO 9001 & Testing", modal:"quality", chips:["ISO 9001:2015","QA Lab"], desc:"ISO 9001:2015 certified quality management system. Tensile testing on every production run."},
@@ -2758,16 +2758,16 @@
         ]}
       ],
       sale:[
-        {label:"Fulfillment & Kitting", details:[
-          {label:"Pick & Pack / Kitting", modal:"fulfillment", chips:["MIL-STD-129","Multi-site"], desc:"Kitting, pick and pack, MIL-STD-129 packaging and climate-controlled storage."},
-          {label:"Value-Add Assembly", modal:"fulfillment", chips:["Assembly","Multi-site"], desc:"Value-add assembly services integrated with fulfillment and warehousing."}
+        {label:"Fulfillment, Kitting & Assembly", details:[
+          {label:"Pick, Pack & Kitting Services", modal:"fulfillment", chips:["MIL-STD-129","Multi-site"], desc:"Comprehensive kitting, pick-and-pack, MIL-STD-129 compliant packaging, and climate-controlled storage."},
+          {label:"Value-Add Assembly Services", modal:"fulfillment", chips:["Assembly","Multi-site"], desc:"Value-add assembly services fully integrated with fulfillment operations and warehousing infrastructure."}
         ]},
-        {label:"Base Supply Centers", details:[
-          {label:"On-Base Retail (16 locations)", modal:null, chips:["AbilityOne","BSC","10 states"], desc:"16 Envision-operated Base Supply Centers across 10 states. Office supplies, janitorial, safety, and SKILCRAFT product lines.", bsc:true}
+        {label:"Base Supply Center Network", details:[
+          {label:"On-Installation Retail Stores", modal:null, chips:["AbilityOne","BSC","10 states"], desc:"16 Envision-operated Base Supply Centers across 10 states providing office supplies, janitorial products, safety equipment, and SKILCRAFT product lines to federal buyers.", bsc:true}
         ]},
         {label:"State Use Programs", details:[
-          {label:"Kansas State Use (Wichita)", modal:"textile", chips:["Kansas","State Use","Wichita"], desc:"Kansas State Use program participant out of the Wichita campus."},
-          {label:"Texas WorkQuest (Dallas)", modal:"textile", chips:["Texas","WorkQuest","Dallas"], desc:"Texas WorkQuest (State Use) participant out of the Dallas campus."}
+          {label:"Kansas State Use Program", modal:"textile", chips:["Kansas","State Use","Wichita"], desc:"Kansas State Use program participant operating out of the Wichita campus."},
+          {label:"Texas WorkQuest Program", modal:"textile", chips:["Texas","WorkQuest","Dallas"], desc:"Texas WorkQuest State Use program participant operating out of the Dallas campus."}
         ]}
       ]
     };
@@ -2793,7 +2793,7 @@
     dtCat.addEventListener("change", function(){
       var branch = TREE[dtCat.value];
       if (!branch) return;
-      resetSelect(dtArea, "Select a specific area…");
+      resetSelect(dtArea, "Select a capability or service");
       branch.forEach(function(a, i){
         var o = document.createElement("option");
         o.value = i;
@@ -2803,7 +2803,7 @@
       showStep(dtStep2);
       hideStep(dtStep3);
       hideStep(dtResult);
-      resetSelect(dtDetail, "Select a detail…");
+      resetSelect(dtDetail, "Select a product or service line");
     });
 
     dtArea.addEventListener("change", function(){
@@ -2816,7 +2816,7 @@
         showResult(currentDetail);
         return;
       }
-      resetSelect(dtDetail, "Select a detail…");
+      resetSelect(dtDetail, "Select a product or service line");
       area.details.forEach(function(d, i){
         var o = document.createElement("option");
         o.value = i;
@@ -2847,10 +2847,10 @@
       if (d.modal){
         dtResultCta.style.display = "";
         dtResultCta.textContent = "";
-        dtResultCta.innerHTML = 'Explore this capability <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+        dtResultCta.innerHTML = 'View Full Details <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
       } else if (d.bsc){
         dtResultCta.style.display = "";
-        dtResultCta.innerHTML = 'View BSC Network Map <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+        dtResultCta.innerHTML = 'View Network Map <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
       } else {
         dtResultCta.style.display = "none";
       }
