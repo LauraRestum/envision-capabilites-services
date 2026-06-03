@@ -153,6 +153,9 @@
     box-shadow:inset 3px 0 0 var(--green);
   }
   @media (max-width:1080px){ .menu-btn{display:flex} }
+  /* Installed PWA (the app): navigate via the hamburger at any width. */
+  body.pwa .menu-btn{display:flex}
+  body.pwa .nav-links{display:none}
   /* Install affordance (PWA) */
   .install-btn{
     display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;
@@ -1976,6 +1979,23 @@
   document.addEventListener("keydown", function(e){
     if (e.key === "Escape" && !navMenu.hidden) closeMenu();
   });
+
+  /* Flag the installed-PWA (standalone) build. In the app the inline nav
+     links are replaced by the hamburger menu regardless of window width,
+     so section navigation is consistent on phone, tablet, and desktop. */
+  (function(){
+    function isStandalone(){
+      return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+             window.navigator.standalone === true;
+    }
+    function applyPwa(){ document.body.classList.toggle("pwa", isStandalone()); }
+    applyPwa();
+    if (window.matchMedia){
+      var mq = window.matchMedia("(display-mode: standalone)");
+      if (mq.addEventListener) mq.addEventListener("change", applyPwa);
+      else if (mq.addListener) mq.addListener(applyPwa);
+    }
+  })();
 
   var progressBar = document.getElementById("progressBar");
   var fsIc = document.getElementById("fsIc");
