@@ -730,9 +730,9 @@
   }
 
   .ms-band{
-    flex:1;min-height:0;border-radius:6px;overflow:hidden;
-    display:grid;grid-template-columns:minmax(150px,1fr) 2.4fr minmax(150px,1fr);
-    min-height:clamp(110px,15vh,170px);
+    flex:1 1 auto;border-radius:6px;overflow:hidden;
+    display:grid;grid-template-columns:minmax(160px,1fr) 2.4fr minmax(160px,1fr);
+    min-height:clamp(140px,18vh,210px);max-height:clamp(200px,30vh,320px);
   }
   .ms-band__photo{background-size:cover;background-position:center}
   .ms-band__quote{
@@ -1411,23 +1411,12 @@
         <div class="mw">
           <div class="ms-eyebrow">Our Mission</div>
 
-          <div class="ms-stats">
-            <div class="ms-stat">
-              <div class="n">662,000</div>
-              <div class="l">School-aged children in America are living with vision loss</div>
+          <div class="ms-band">
+            <div class="ms-band__photo" style="background-image:url('images/envision-child-development-center.png');background-position:70% center" role="img" aria-label="A child at the Envision Child Development Center playing on the soft-block floor"></div>
+            <div class="ms-band__quote">
+              <p>&ldquo;To improve the quality of life and provide inspiration for people who are blind or have low vision through employment, outreach, rehabilitation, education and research.&rdquo;</p>
             </div>
-            <div class="ms-stat">
-              <div class="n">86%</div>
-              <div class="l">Of high school graduates with vision loss do not enroll in a four-year college</div>
-            </div>
-            <div class="ms-stat">
-              <div class="n">7 in 10</div>
-              <div class="l">Americans with vision loss are unemployed</div>
-            </div>
-            <div class="ms-stat">
-              <div class="n">1 in 3</div>
-              <div class="l">Americans by age 65 will be living with an eye disease that threatens their vision</div>
-            </div>
+            <div class="ms-band__photo" style="background-image:url('images/envision-white-cane-day-walk.jpg');background-position:center 40%" role="img" aria-label="Community members gathered behind a White Cane Day Walk banner at the Dallas Zoo"></div>
           </div>
 
           <div class="ms-employment">
@@ -1451,7 +1440,6 @@
                 <div class="ms-emp-proof-stat"><div class="num">88%</div><div class="lab">BVI Direct Labor</div><div class="ctx">Envision's combined Direct Labor performed by team members who are blind or have low vision. Substantially exceeds AbilityOne's 75% threshold.</div></div>
                 <div class="ms-emp-proof-stat"><div class="num">4M+</div><div class="lab">Employment hours</div><div class="ctx">Provided to people who are blind or have low vision since 1980. The reason our retention runs above industry average.</div></div>
               </div>
-              <p class="ms-emp-credential">Workforce composition is a credential. Buyers choose us because we deliver. The mission is why our people stay.</p>
             </div>
           </div>
 
@@ -1511,14 +1499,6 @@
                 </ul>
               </div>
             </div>
-          </div>
-
-          <div class="ms-band">
-            <div class="ms-band__photo" style="background-image:url('images/envision-child-development-center.png');background-position:70% center" role="img" aria-label="A child at the Envision Child Development Center playing on the soft-block floor"></div>
-            <div class="ms-band__quote">
-              <p>&ldquo;To improve the quality of life and provide inspiration for people who are blind or have low vision through employment, outreach, rehabilitation, education and research.&rdquo;</p>
-            </div>
-            <div class="ms-band__photo" style="background-image:url('images/envision-white-cane-day-walk.jpg');background-position:center 40%" role="img" aria-label="Community members gathered behind a White Cane Day Walk banner at the Dallas Zoo"></div>
           </div>
         </div>
       </section>
