@@ -129,6 +129,33 @@
   .icbtn:hover{color:var(--navy);border-color:var(--navy)}
   .icbtn:disabled{opacity:.35;cursor:default}
   .icbtn svg{width:16px;height:16px}
+  /* Hamburger: only surfaces once the inline nav links are hidden (≤1080px) */
+  .menu-btn{display:none}
+  .menu-btn[aria-expanded="true"]{color:var(--navy);border-color:var(--navy)}
+  .menu-btn svg{width:18px;height:18px}
+  .nav-menu{
+    position:absolute;z-index:40;
+    top:calc(64px + env(safe-area-inset-top) + 6px);
+    right:var(--gut-x);
+    min-width:208px;max-width:min(280px,calc(100vw - 32px));
+    background:var(--bg-light);border:1px solid var(--rule-light);
+    border-radius:10px;box-shadow:0 14px 36px rgba(0,24,82,0.18);
+    padding:7px;display:flex;flex-direction:column;gap:1px;
+  }
+  .nav-menu[hidden]{display:none}
+  .nav-menu .navlink{
+    text-align:left;padding:11px 13px;border-bottom:0;border-radius:7px;
+    font-size:11.5px;
+  }
+  .nav-menu .navlink:hover{background:var(--bg-tint);color:var(--navy)}
+  .nav-menu .navlink.active{
+    color:var(--navy);background:rgba(120,190,33,0.12);
+    box-shadow:inset 3px 0 0 var(--green);
+  }
+  @media (max-width:1080px){ .menu-btn{display:flex} }
+  /* Installed PWA (the app): navigate via the hamburger at any width. */
+  body.pwa .menu-btn{display:flex}
+  body.pwa .nav-links{display:none}
   /* Install affordance (PWA) */
   .install-btn{
     display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;
@@ -1112,6 +1139,21 @@
     .m-spec{grid-template-columns:1fr}
     .nav-brand .brand-section{display:none}
     .modal{top:3rem}
+
+    /* Hero was built desktop-first (text confined to the left 40vw over a
+       side-lit image). On phones that column collapses to ~150px and the
+       headline looks zoomed. Let the copy use the full width and darken the
+       whole frame behind it instead. */
+    .hero{padding:clamp(28px,6vh,56px) 20px;justify-content:flex-end}
+    .hero-inner{max-width:none;width:100%}
+    .hero .overlay{
+      background:linear-gradient(180deg,
+        rgba(0,24,82,0.78) 0%,
+        rgba(0,24,82,0.42) 42%,
+        rgba(0,24,82,0.82) 100%);
+    }
+    h1.hero-h{font-size:clamp(2rem,8.5vw,2.7rem)}
+    .hero .subhead{font-size:clamp(1rem,4.2vw,1.16rem)}
   }
 
   /* ---------- Base Supply Center cross-links ---------- */
@@ -1291,6 +1333,8 @@
   body.presentation .icbtn{width:30px;height:30px}
   body.presentation .slide{padding-top:clamp(14px,2.4vh,36px);padding-bottom:clamp(14px,2.4vh,36px)}
   body.presentation .navlink{font-size:10.5px;padding:6px 8px}
+  body.presentation .nav-menu .navlink{font-size:11.5px;padding:11px 13px}
+  body.presentation .nav-menu{top:calc(48px + env(safe-area-inset-top) + 6px)}
   body.presentation{cursor:default}
 </style>
 </head>
@@ -1303,6 +1347,9 @@
     <div class="nav-brand"><img class="brand-logo" src="images/Envision_PrimaryFullColor_RBG.png" alt="Envision"><span class="brand-section">Capabilities &amp; Services</span></div>
     <div class="nav-links" id="navLinks"></div>
     <div class="nav-tools">
+      <button class="icbtn menu-btn" id="menuBtn" type="button" aria-label="Open section menu" aria-haspopup="true" aria-expanded="false" aria-controls="navMenu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
+      </button>
       <button class="icbtn" id="prevBtn" type="button" aria-label="Previous slide">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
@@ -1316,6 +1363,9 @@
       </button>
     </div>
   </nav>
+
+  <!-- Section menu (hamburger) — shown when the inline nav links are hidden -->
+  <div class="nav-menu" id="navMenu" role="menu" aria-label="Sections" hidden></div>
 
   <!-- ===================== STAGE ===================== -->
   <div class="stage">
@@ -1902,6 +1952,50 @@
     navLinksEl.appendChild(b);
     navButtons.push(b);
   });
+
+  /* Hamburger section menu (mobile / app, where the inline nav links hide) */
+  var menuBtn = document.getElementById("menuBtn");
+  var navMenu = document.getElementById("navMenu");
+  var menuButtons = [];
+  SECTIONS.forEach(function(s,i){
+    var b = document.createElement("button");
+    b.className = "navlink";
+    b.type = "button";
+    b.setAttribute("role","menuitem");
+    b.textContent = s.name;
+    b.addEventListener("click", function(){ closeMenu(); jumpToSection(i); });
+    navMenu.appendChild(b);
+    menuButtons.push(b);
+  });
+  function openMenu(){ navMenu.hidden = false; menuBtn.setAttribute("aria-expanded","true"); }
+  function closeMenu(){ navMenu.hidden = true; menuBtn.setAttribute("aria-expanded","false"); }
+  menuBtn.addEventListener("click", function(e){
+    e.stopPropagation();
+    if (navMenu.hidden) openMenu(); else closeMenu();
+  });
+  document.addEventListener("click", function(e){
+    if (!navMenu.hidden && !navMenu.contains(e.target) && e.target !== menuBtn) closeMenu();
+  });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && !navMenu.hidden) closeMenu();
+  });
+
+  /* Flag the installed-PWA (standalone) build. In the app the inline nav
+     links are replaced by the hamburger menu regardless of window width,
+     so section navigation is consistent on phone, tablet, and desktop. */
+  (function(){
+    function isStandalone(){
+      return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+             window.navigator.standalone === true;
+    }
+    function applyPwa(){ document.body.classList.toggle("pwa", isStandalone()); }
+    applyPwa();
+    if (window.matchMedia){
+      var mq = window.matchMedia("(display-mode: standalone)");
+      if (mq.addEventListener) mq.addEventListener("change", applyPwa);
+      else if (mq.addListener) mq.addListener(applyPwa);
+    }
+  })();
 
   var progressBar = document.getElementById("progressBar");
   var fsIc = document.getElementById("fsIc");
@@ -2879,6 +2973,7 @@
     slides.forEach(function(s,i){ s.classList.toggle("current", i === idx); });
     var sec = slideSection[idx];
     navButtons.forEach(function(b,i){ b.classList.toggle("active", i === sec); });
+    menuButtons.forEach(function(b,i){ b.classList.toggle("active", i === sec); });
     progressBar.style.width = ((idx + 1) / total * 100) + "%";
     document.getElementById("prevBtn").disabled = (idx === 0);
     document.getElementById("nextBtn").disabled = (idx === total - 1);
