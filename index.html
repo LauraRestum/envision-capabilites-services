@@ -1669,6 +1669,7 @@
                 <option value="procurement">Federal Procurement</option>
                 <option value="accessibility">Accessibility Services</option>
                 <option value="quality">Quality &amp; Compliance</option>
+                <option value="document-services">Secure Document Services</option>
                 <option value="bsc">Base Supply Centers</option>
               </select>
             </div>
@@ -2503,9 +2504,9 @@
       '<div class="m-block"><div class="m-sec-label">'+d.calloutLabel+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>'+
       catalogsBlock+
       '<div class="m-cta">'+
-        '<h3>Want to scope a '+d.title+' program?</h3>'+
-        '<p>Send a line item, a use case, or a contract vehicle. We respond within one business day.</p>'+
-        '<a class="btn-primary" href="#" aria-disabled="true">Contact us</a>'+
+        '<h3>Have questions about '+d.title+'?</h3>'+
+        '<p>Reach out and we'll connect you with the right team. We respond within one business day.</p>'+
+        '<a class="btn-primary m-cta-contact" href="#" data-contact-cat="'+key+'">Get in Touch</a>'+
       '</div>';
   }
 
@@ -2535,6 +2536,29 @@
 
   modalClose.addEventListener("click", closeModal);
   modalBackdrop.addEventListener("click", closeModal);
+
+  var MODAL_TO_CONTACT = {
+    plastic:"manufacturing", textile:"manufacturing", reflective:"manufacturing",
+    metal:"manufacturing", bindery:"manufacturing", fulfillment:"fulfillment",
+    printSvc:"print", contact:"contact-center", bpo:"document-services",
+    accessibility:"accessibility", procurement:"procurement", quality:"quality"
+  };
+
+  modal.addEventListener("click", function(e){
+    var cta = e.target.closest(".m-cta-contact");
+    if (!cta) return;
+    e.preventDefault();
+    var key = cta.getAttribute("data-contact-cat");
+    var catVal = MODAL_TO_CONTACT[key] || "";
+    closeModal();
+    var contactIdx = slideIndexByName("Contact");
+    if (contactIdx >= 0) jump(contactIdx);
+    var dtCat = document.getElementById("dtCat");
+    if (dtCat && catVal){
+      dtCat.value = catVal;
+      dtCat.dispatchEvent(new Event("change"));
+    }
+  });
 
   document.getElementById("slides").addEventListener("click", function(e){
     var aj = e.target.closest("[data-atag-jump]");
@@ -2724,6 +2748,7 @@
       "procurement":{dept:"Federal Procurement",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Wichita Campus"},
       "accessibility":{dept:"Accessibility Services",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Wichita Campus"},
       "quality":{dept:"Quality & Compliance",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Dallas Campus"},
+      "document-services":{dept:"Secure Document Services",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Dallas Campus"},
       "bsc":{dept:"Base Supply Centers",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Multi-site"}
     };
 
