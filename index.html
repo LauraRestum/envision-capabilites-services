@@ -571,14 +571,14 @@
   /* ---------- Mission pillars slide ---------- */
   .mission-slide{padding:0;overflow:hidden;display:flex}
   .mission-slide .mw{
-    max-width:1400px;margin:0 auto;width:100%;height:100%;
+    max-width:1560px;margin:0 auto;width:100%;height:100%;
     display:flex;flex-direction:column;
-    padding:clamp(14px,2.6vh,30px) clamp(20px,4vw,64px);
-    gap:clamp(10px,1.8vh,20px);
+    padding:clamp(14px,2.6vh,34px) clamp(20px,4vw,72px);
+    gap:clamp(10px,1.8vh,22px);
   }
   .ms-eyebrow{
     flex:none;text-align:center;
-    font-size:11px;font-weight:700;letter-spacing:.24em;
+    font-size:clamp(11px,0.8vw,13px);font-weight:800;letter-spacing:.24em;
     text-transform:uppercase;color:var(--green);
   }
   .ms-stats{
@@ -589,12 +589,12 @@
   .ms-stat{text-align:center;padding:0 clamp(6px,1vw,18px)}
   .ms-stat + .ms-stat{border-left:1px solid var(--rule-light)}
   .ms-stat .n{
-    font-weight:800;font-size:clamp(1.45rem,2.5vw,2.3rem);
+    font-weight:800;font-size:clamp(1.55rem,2.6vw,2.9rem);
     color:var(--navy);line-height:1;letter-spacing:-0.02em;
   }
   .ms-stat .l{
-    font-size:clamp(10px,0.82vw,12.5px);line-height:1.45;
-    color:var(--text-soft);font-weight:500;margin-top:9px;
+    font-size:clamp(11px,0.85vw,15px);line-height:1.45;
+    color:var(--text-soft);font-weight:600;margin-top:9px;
   }
   /* Employment hero box — dominant full-width treatment */
   .ms-employment{
@@ -621,12 +621,12 @@
   }
   .ms-employment .ms-emp-title{
     color:#fff;font-weight:800;text-transform:uppercase;
-    font-size:clamp(18px,1.8vw,26px);letter-spacing:.14em;
+    font-size:clamp(19px,1.9vw,30px);letter-spacing:.14em;
     margin-bottom:clamp(6px,1vh,10px);
   }
   .ms-employment .ms-emp-desc{
-    margin:0;color:rgba(255,255,255,0.85);
-    font-size:clamp(11px,0.9vw,13px);line-height:1.65;max-width:80ch;
+    margin:0;color:rgba(255,255,255,0.92);
+    font-size:clamp(12px,0.95vw,16px);line-height:1.65;max-width:88ch;
   }
   .ms-employment .ms-emp-bullets{
     list-style:none;display:flex;flex-wrap:wrap;
@@ -637,9 +637,9 @@
     margin-bottom:0;
   }
   .ms-employment .ms-emp-bullets li{
-    position:relative;padding-left:17px;
-    font-size:clamp(10px,0.8vw,12px);line-height:1.45;
-    color:#fff;font-weight:500;
+    position:relative;padding-left:18px;
+    font-size:clamp(11px,0.85vw,14.5px);line-height:1.45;
+    color:#fff;font-weight:600;
   }
   .ms-employment .ms-emp-bullets li::before{
     content:'';position:absolute;left:0;top:0.32em;
@@ -661,19 +661,19 @@
     padding:clamp(10px,1.4vh,16px) clamp(12px,1.2vw,18px);
   }
   .ms-emp-proof-stat .num{
-    font-weight:800;font-size:clamp(1.1rem,1.6vw,1.5rem);color:var(--green);
+    font-weight:800;font-size:clamp(1.25rem,1.7vw,1.85rem);color:var(--green);
     line-height:1;letter-spacing:-0.02em;
   }
   .ms-emp-proof-stat .lab{
-    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    color:rgba(255,255,255,0.6);margin:5px 0 4px;
+    font-size:clamp(10px,0.78vw,12.5px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,0.72);margin:6px 0 5px;
   }
   .ms-emp-proof-stat .ctx{
-    font-size:clamp(9.5px,0.72vw,11px);line-height:1.5;color:rgba(255,255,255,0.7);
+    font-size:clamp(11px,0.82vw,13.5px);line-height:1.5;color:rgba(255,255,255,0.82);
   }
   .ms-emp-credential{
-    font-size:clamp(10.5px,0.85vw,12.5px);font-weight:600;
-    color:rgba(255,255,255,0.9);line-height:1.5;max-width:64ch;margin:0;
+    font-size:clamp(12px,0.92vw,15px);font-weight:600;
+    color:rgba(255,255,255,0.92);line-height:1.5;max-width:72ch;margin:0;
   }
 
   .ms-pillars{
@@ -705,8 +705,8 @@
     stroke-linecap:round;stroke-linejoin:round;
   }
   .ms-head .nm{
-    color:#fff;font-weight:700;text-align:center;
-    font-size:clamp(11px,0.95vw,14px);letter-spacing:.1em;text-transform:uppercase;
+    color:#fff;font-weight:800;text-align:center;
+    font-size:clamp(12px,1vw,16px);letter-spacing:.1em;text-transform:uppercase;
   }
   .ms-body{
     display:flex;flex-direction:column;
@@ -720,8 +720,8 @@
   }
   .ms-bullets li{
     position:relative;padding-left:19px;
-    font-size:clamp(10px,0.8vw,12px);line-height:1.45;
-    color:var(--text-dark);font-weight:500;
+    font-size:clamp(11px,0.85vw,14.5px);line-height:1.45;
+    color:var(--text-dark);font-weight:600;
   }
   .ms-bullets li::before{
     content:'';position:absolute;left:0;top:0.32em;
@@ -741,8 +741,8 @@
     padding:clamp(16px,2.8vh,32px) clamp(20px,3vw,48px);
   }
   .ms-band__quote p{
-    color:#fff;font-style:italic;font-weight:300;text-align:center;
-    font-size:clamp(0.95rem,1.5vw,1.32rem);line-height:1.5;max-width:62ch;
+    color:#fff;font-style:italic;font-weight:400;text-align:center;
+    font-size:clamp(1.05rem,1.6vw,1.55rem);line-height:1.5;max-width:64ch;
     margin:0;
   }
   @media (max-width:1024px){
