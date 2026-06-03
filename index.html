@@ -16,12 +16,43 @@
 <meta name="twitter:description" content="American manufacturing and services. Built to scale.">
 <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
 <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png">
-<link rel="apple-touch-icon" sizes="180x180" href="images/favicon-180.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
 <link rel="shortcut icon" href="images/favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Envision">
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("/sw.js").catch(function (err) {
+        console.error("Service worker registration failed:", err);
+      });
+    });
+  }
+</script>
 <style>
+  /* Self-hosted Montserrat (woff2). Only typeface used, zero external requests. */
+  @font-face{
+    font-family:'Montserrat';font-style:normal;font-weight:400;font-display:swap;
+    src:url('/fonts/montserrat-400.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Montserrat';font-style:normal;font-weight:500;font-display:swap;
+    src:url('/fonts/montserrat-500.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Montserrat';font-style:normal;font-weight:600;font-display:swap;
+    src:url('/fonts/montserrat-600.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Montserrat';font-style:normal;font-weight:700;font-display:swap;
+    src:url('/fonts/montserrat-700.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'Montserrat';font-style:normal;font-weight:800;font-display:swap;
+    src:url('/fonts/montserrat-800.woff2') format('woff2');
+  }
   :root{
     /* Brand */
     --navy:#001852;
@@ -61,10 +92,10 @@
 
   /* ---------- Top navigation ---------- */
   .topnav{
-    position:relative;z-index:30;flex:none;height:64px;
+    position:relative;z-index:30;flex:none;height:calc(64px + env(safe-area-inset-top));
     background:var(--bg-light);border-bottom:1px solid var(--rule-light);
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 var(--gut-x);user-select:none;
+    padding:env(safe-area-inset-top) var(--gut-x) 0;user-select:none;
   }
   .nav-brand{
     font-family:var(--sans);font-weight:800;font-size:19px;letter-spacing:-0.01em;
@@ -98,6 +129,31 @@
   .icbtn:hover{color:var(--navy);border-color:var(--navy)}
   .icbtn:disabled{opacity:.35;cursor:default}
   .icbtn svg{width:16px;height:16px}
+  /* Install affordance (PWA) */
+  .install-btn{
+    display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;
+    background:var(--green);border:1px solid var(--green);border-radius:6px;cursor:pointer;
+    color:#fff;font-family:var(--sans);font-weight:700;font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;
+    transition:background .18s,border-color .18s;
+  }
+  .install-btn:hover{background:#5f9b18;border-color:#5f9b18}
+  .install-btn:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+  .install-btn svg{width:15px;height:15px}
+  .install-btn[hidden]{display:none}
+  .ios-hint{
+    position:fixed;top:calc(64px + env(safe-area-inset-top) + 10px);right:12px;z-index:90;
+    max-width:264px;background:var(--navy);color:#fff;font-family:var(--sans);
+    font-weight:500;font-size:12px;line-height:1.45;
+    padding:12px 14px;border-radius:8px;box-shadow:0 10px 30px rgba(0,24,82,0.35);
+  }
+  .ios-hint b{font-weight:700}
+  .ios-hint .ios-hint-close{
+    margin-top:8px;padding:0;background:none;border:0;cursor:pointer;
+    color:rgba(255,255,255,0.72);font-family:var(--sans);font-weight:600;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .ios-hint[hidden]{display:none}
 
   /* ---------- Stage ---------- */
   .stage{position:relative;flex:1;overflow:hidden;background:var(--bg-light)}
@@ -1042,9 +1098,9 @@
   img.ph-img{width:100%;height:100%;object-fit:cover;display:block}
 
   /* ---------- Bottom progress bar ---------- */
-  .progress{position:relative;flex:none;height:3px;background:var(--rule-light);z-index:30}
+  .progress{position:relative;flex:none;height:3px;background:var(--rule-light);z-index:30;padding-bottom:env(safe-area-inset-bottom)}
   .progress .bar{
-    position:absolute;left:0;top:0;height:100%;width:0;
+    position:absolute;left:0;top:0;height:3px;width:0;
     background:var(--green);transition:width .3s ease-out;
   }
 
@@ -1100,7 +1156,7 @@
     position:relative;width:100%;max-width:1240px;max-height:100%;
     background:var(--bsc-deep);border:1px solid var(--bsc-bd);
     border-radius:20px;overflow:hidden;
-    font-family:'Inter',var(--sans);
+    font-family:var(--sans);
     color:var(--bsc-white);
     opacity:0;transform:scale(0.96);
     transition:opacity .32s ease,transform .32s cubic-bezier(0.22,1,0.36,1);
@@ -1130,7 +1186,7 @@
     background:var(--bsc-bg);overflow-y:auto;
   }
   .bsc-map-panel h2{
-    font-family:'Inter',var(--sans);font-weight:800;
+    font-family:var(--sans);font-weight:800;
     font-size:clamp(1.4rem,2.1vw,2rem);letter-spacing:-0.02em;
     line-height:1.1;color:var(--bsc-white);margin-bottom:22px;
   }
@@ -1177,7 +1233,7 @@
   .bsc-sec:first-child{padding-top:6px}
   .bsc-sec:last-child{border-bottom:0;padding-bottom:6px}
   .bsc-sec h3{
-    font-family:'Inter',var(--sans);font-weight:800;
+    font-family:var(--sans);font-weight:800;
     font-size:clamp(1.05rem,1.4vw,1.3rem);letter-spacing:-0.015em;
     line-height:1.25;color:var(--bsc-white);margin-bottom:18px;
   }
@@ -1187,7 +1243,7 @@
     border-radius:9px;padding:16px 16px;
   }
   .bsc-statblk .n{
-    font-family:'Inter',var(--sans);font-weight:800;
+    font-family:var(--sans);font-weight:800;
     font-size:clamp(1.5rem,2.4vw,2rem);color:var(--bsc-lime);
     line-height:1;letter-spacing:-0.02em;
   }
@@ -1254,6 +1310,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <button class="icbtn" id="fsBtn" type="button" aria-label="Toggle fullscreen"><span id="fsIc"></span></button>
+      <button class="install-btn" id="installBtn" type="button" aria-label="Install app" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M5 21h14"/></svg>
+        <span>Install</span>
+      </button>
     </div>
   </nav>
 
@@ -1795,6 +1855,12 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- ===================== iOS INSTALL HINT ===================== -->
+<div class="ios-hint" id="iosHint" role="status" hidden>
+  To install, tap the <b>Share</b> button, then <b>Add to Home Screen</b>.
+  <div><button type="button" class="ios-hint-close" id="iosHintClose">Got it</button></div>
 </div>
 
 <script>
@@ -3150,6 +3216,63 @@
     }
   }, true);
 })();
+</script>
+<script>
+  /* PWA install control. Hidden entirely when already running standalone. */
+  (function () {
+    var installBtn = document.getElementById("installBtn");
+    var iosHint = document.getElementById("iosHint");
+    var iosHintClose = document.getElementById("iosHintClose");
+
+    function isStandalone() {
+      return window.matchMedia("(display-mode: standalone)").matches ||
+             window.navigator.standalone === true;
+    }
+    if (isStandalone()) { return; }
+
+    // Android and desktop Chrome: capture the prompt and show a real install button.
+    var deferredPrompt = null;
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (installBtn) { installBtn.hidden = false; }
+    });
+    if (installBtn) {
+      installBtn.addEventListener("click", function () {
+        if (!deferredPrompt) { return; }
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.finally(function () {
+          deferredPrompt = null;
+          installBtn.hidden = true;
+        });
+      });
+    }
+    window.addEventListener("appinstalled", function () {
+      deferredPrompt = null;
+      if (installBtn) { installBtn.hidden = true; }
+    });
+
+    // iOS Safari has no programmatic install, so show a one-time hint instead.
+    var ua = window.navigator.userAgent;
+    var isIOS = /iphone|ipad|ipod/i.test(ua) ||
+                (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    var isSafari = /^((?!chrome|crios|fxios|android).)*safari/i.test(ua);
+    if (isIOS && isSafari && iosHint) {
+      try {
+        if (!localStorage.getItem("envisionIosInstallHintShown")) {
+          iosHint.hidden = false;
+        }
+      } catch (err) {
+        iosHint.hidden = false;
+      }
+    }
+    if (iosHintClose && iosHint) {
+      iosHintClose.addEventListener("click", function () {
+        iosHint.hidden = true;
+        try { localStorage.setItem("envisionIosInstallHintShown", "1"); } catch (err) {}
+      });
+    }
+  })();
 </script>
 </body>
 </html>
