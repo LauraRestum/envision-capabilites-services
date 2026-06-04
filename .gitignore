@@ -2,3 +2,6 @@
 .DS_Store
 node_modules/
 *.log
+
+# Code-coverage / profiling artifacts
+*.profraw
