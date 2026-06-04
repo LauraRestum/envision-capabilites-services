@@ -1021,6 +1021,12 @@
     color:var(--text-faint);
   }
   .m-card-ph .ph-note{font-size:11px;color:var(--text-muted);max-width:34ch;line-height:1.5}
+  .m-card-photo{
+    aspect-ratio:4/3;width:100%;margin-bottom:16px;
+    background:#fff;border:1px solid var(--border-dark);
+    border-radius:4px;overflow:hidden;
+  }
+  .m-card-photo img{width:100%;height:100%;object-fit:contain;display:block}
   .m-spec{
     display:grid;grid-template-columns:1fr 1fr;gap:9px 16px;margin-top:14px;
     padding-top:14px;border-top:1px solid var(--border-dark);
@@ -2023,13 +2029,13 @@
       ],
       calloutLabel:"Product Families",
       callouts:[
-        {tag:"Can liners",title:"High Density (HDPE)",desc:"HDPE flat pack and coreless roll can liners across a wide range of gauges and sizes.",specs:[["Material","HDPE"],["Formats","Flat pack / Coreless roll"],["Gauge","6 to 16 mic"],["Catalog","Federal NSN"],["Custom","Sizes & colors on request"]]},
-        {tag:"Can liners",title:"Low Density (LLDPE)",desc:"LLDPE flat pack and coreless roll can liners, including the Insect Repellent and SecureFit Shredder lines.",specs:[["Material","LLDPE"],["Formats","Flat pack / Coreless roll"],["Lines","Insect Repellent · SecureFit Shredder"],["Catalog","Federal NSN"],["Custom","Sizes & colors on request"]]},
-        {tag:"Can liners",title:"Environmentally Friendly",desc:"Total Recycled Content, ASTM D6400 compostable, and Controlled Life-Cycle can liners.",specs:[["Recycled","Total Recycled Content"],["Compostable","ASTM D6400"],["Degradable","Controlled Life-Cycle"],["Custom","Sizes & colors on request"]]},
-        {tag:"Medical",title:"Medical Products",desc:"Color-coded isolation liners (red, yellow, blue) and the Body Fluid Clean Up Kit.",specs:[["Isolation","Red / Yellow / Blue"],["Kit","Body Fluid Clean Up Kit"],["Use","Infectious waste & linen"],["DOT","49 CFR 173.197"],["Custom","Sizes & colors on request"]]},
-        {tag:"Specialty",title:"Specialty Bags",desc:"Seal Closure reclosable bags, VA Belongings bags, T-Shirt “Thank You” bags, and TidyGirl feminine hygiene.",specs:[["Lines","Seal Closure · VA · T-Shirt · TidyGirl"],["Custom","Sizes & colors on request"]]},
+        {tag:"Can liners",title:"High Density (HDPE)",desc:"HDPE flat pack and coreless roll can liners across a wide range of gauges and sizes.",specs:[["Material","HDPE"],["Formats","Flat pack / Coreless roll"],["Gauge","6 to 16 mic"],["Catalog","Federal NSN"],["Custom","Sizes & colors on request"]],img:"images/products/can-liner-hdpe.jpg"},
+        {tag:"Can liners",title:"Low Density (LLDPE)",desc:"LLDPE flat pack and coreless roll can liners, including the Insect Repellent and SecureFit Shredder lines.",specs:[["Material","LLDPE"],["Formats","Flat pack / Coreless roll"],["Lines","Insect Repellent · SecureFit Shredder"],["Catalog","Federal NSN"],["Custom","Sizes & colors on request"]],img:"images/products/can-liner-lldpe.jpg"},
+        {tag:"Can liners",title:"Environmentally Friendly",desc:"Total Recycled Content, ASTM D6400 compostable, and Controlled Life-Cycle can liners.",specs:[["Recycled","Total Recycled Content"],["Compostable","ASTM D6400"],["Degradable","Controlled Life-Cycle"],["Custom","Sizes & colors on request"]],img:"images/products/can-liner-compostable.jpg"},
+        {tag:"Medical",title:"Medical Products",desc:"Color-coded isolation liners (red, yellow, blue) and the Body Fluid Clean Up Kit.",specs:[["Isolation","Red / Yellow / Blue"],["Kit","Body Fluid Clean Up Kit"],["Use","Infectious waste & linen"],["DOT","49 CFR 173.197"],["Custom","Sizes & colors on request"]],img:"images/products/medical-isolation-bags.jpg"},
+        {tag:"Specialty",title:"Specialty Bags",desc:"Seal Closure reclosable bags, VA Belongings bags, T-Shirt “Thank You” bags, and TidyGirl feminine hygiene.",specs:[["Lines","Seal Closure · VA · T-Shirt · TidyGirl"],["Custom","Sizes & colors on request"]],img:"images/products/va-belongings-bag.jpg"},
         {tag:"Specialty / High volume",title:"T-Shirt “Thank You” Bags",desc:"One of Wichita's highest-volume lines. Imprintable on one or two sides, with dispensing racks available. A commercial and grocery growth opportunity.",specs:[["Sizes","11.5x6.5x22 to 18x8x30"],["Imprint","1 or 2 sides"],["Catalog","TSB-12722TY · TSB-16630TY"]]},
-        {tag:"Construction",title:"Plastic Sheeting",desc:"Polyethylene sheeting from 2 to 6 mil for construction and flood control.",specs:[["Standard","ASTM-D4397-10"],["Fed CID","A-A-3174"],["Fed spec","L-P-378"]]}
+        {tag:"Construction",title:"Plastic Sheeting",desc:"Polyethylene sheeting from 2 to 6 mil for construction and flood control.",specs:[["Standard","ASTM-D4397-10"],["Fed CID","A-A-3174"],["Fed spec","L-P-378"]],img:"images/products/plastic-sheeting.jpg"}
       ],
       catalogs:[
         {title:"Can Liners · High Density (HDPE) · Flat Pack", meta:"Wichita · HDPE", columns:["Part #","NSN","Size","Gauge","Strength","Color","Qty/Case"], rows:[
@@ -2272,7 +2278,7 @@
       ],
       calloutLabel:"Product Families",
       callouts:[
-        {tag:"Flagship",title:"VISI-BELT Reflective System",desc:"Adjustable 31 to 55 inch belt with quick-release buckle, reflective vinyl with reinforced webbing.",specs:[["Length","31 to 55 in"],["Visibility","446 ft"],["Colors","7"],["Assembly","Kitting area"]]},
+        {tag:"Flagship",title:"VISI-BELT Reflective System",desc:"Adjustable 31 to 55 inch belt with quick-release buckle, reflective vinyl with reinforced webbing.",specs:[["Length","31 to 55 in"],["Visibility","446 ft"],["Colors","7"],["Assembly","Kitting area"]],img:"images/products/visi-belt.jpg"},
         {tag:"Safety",title:"Safety Vests",desc:"ANSI/ISEA 107 Class I, II, and III high-visibility vests. Also sewn as a Dallas textile line.",specs:[["Class","I / II / III"],["Standard","ANSI/ISEA 107"],["Also","Textile line"]]}
       ],
       colors:["White","Lime / Yellow","Blue","Red-Orange","Dark Green","Red","Fluorescent Green"],
@@ -2524,12 +2530,12 @@
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Service",title:"Custom kitting",desc:"Bundled product programs. BFCUK 8-piece OSHA kit, subscription boxes, promotional sets, multi-part repair kits.",specs:[["Example","BFCUK"],["Pieces","8"]]},
+        {tag:"Service",title:"Custom kitting",desc:"Bundled product programs. BFCUK 8-piece OSHA kit, subscription boxes, promotional sets, multi-part repair kits.",specs:[["Example","BFCUK"],["Pieces","8"]],img:"images/products/bfcuk-kit.jpg"},
         {tag:"Service",title:"Pick and pack fulfillment",desc:"Federal-compliant labor model. Multi-channel order fulfillment with WMS integration.",specs:[["Model","AbilityOne"],["Channels","Multi"]]},
         {tag:"Service",title:"Value-add assembly",desc:"Mechanical and electronic sub-assembly with functional pre-shipment audits. VISI-BELT assembly is one example.",specs:[["QA","100% pre-shipment"],["Example","VISI-BELT"]]},
         {tag:"Service",title:"Specialty packaging",desc:"Custom GS1-128 barcoding, tamper-evident heat-shrink, structural inserts, retail-ready blister packs, climate-controlled storage for sensitive materials.",specs:[["Std","GS1-128"],["Climate","Controlled"]]},
         {tag:"Service",title:"Specialty product lines",desc:"Eyeglass cases, hoist slings (EET/EEF web slings rated 6,200 lb), reusable cloth face masks, certified commissary and hygiene products through AbilityOne and Texas WorkQuest.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]},
-        {tag:"Product",title:"Hand Trucks",desc:"Steel-frame hand trucks, NSN cataloged, 300 to 700 lb across five configurations.",specs:[["Capacity","300 to 700 lb"],["Configurations","5"],["Catalog","NSN"]]}
+        {tag:"Product",title:"Hand Trucks",desc:"Steel-frame hand trucks, NSN cataloged, 300 to 700 lb across five configurations.",specs:[["Capacity","300 to 700 lb"],["Configurations","5"],["Catalog","NSN"]],img:"images/products/hand-truck.jpg"}
       ],
       catalogs:[
         {title:"Kit & Assembly Programs", meta:"Representative builds", columns:["Program","Pieces / Spec","Location","Notes"], rows:[
@@ -2829,7 +2835,9 @@
           return '<div><span class="sk">'+kv[0]+'</span><span class="sv">'+kv[1]+'</span></div>';
         }).join("")+'</div>';
       }
-      var ph = '<figure class="m-card-ph" role="img" aria-label="Product photo placeholder: '+c.title+'">'+
+      var ph = c.img
+        ? '<figure class="m-card-photo"><img src="'+c.img+'" alt="'+c.title+'" loading="lazy"></figure>'
+        : '<figure class="m-card-ph" role="img" aria-label="Product photo placeholder: '+c.title+'">'+
                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
                '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'+
                '</svg>'+
