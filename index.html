@@ -637,6 +637,26 @@
   }
   .callout-box strong{color:#fff;font-weight:700}
 
+  /* ---------- Innovation (compact, fits one frame, no scroll) ---------- */
+  .slide--innovation .img-banner{max-height:120px;margin-bottom:14px}
+  .slide--innovation .eyebrow{margin-bottom:9px}
+  .slide--innovation h2.sec-h{margin-bottom:9px;font-size:clamp(1.45rem,2.3vw,1.95rem)}
+  .slide--innovation .subhead{font-size:clamp(.9rem,1.05vw,1.02rem);line-height:1.5;max-width:96ch;margin-bottom:0}
+  .slide--innovation .cred-grid{margin-top:14px;gap:9px}
+  .slide--innovation .cred{padding:13px 15px}
+  .slide--innovation .cred .c-h{font-size:13.5px;margin-bottom:5px}
+  .slide--innovation .cred .c-d{font-size:11.5px;line-height:1.45}
+  .slide--innovation .proof-grid{margin-top:11px;gap:9px}
+  .slide--innovation .proof-card{padding:13px 15px}
+  .slide--innovation .proof-card .t-h{font-size:14.5px;margin-bottom:5px}
+  .slide--innovation .proof-card .t-d{font-size:11.5px;line-height:1.45}
+  .slide--innovation .proof-card .t-m{margin-top:8px;padding-top:8px;font-size:11px;line-height:1.4}
+  .slide--innovation .callout-box{margin-top:11px;padding:13px 18px;font-size:12.5px;line-height:1.5}
+  @media (min-width:760px){
+    .slide--innovation .cred-grid{grid-template-columns:repeat(3,1fr)}
+    .slide--innovation .proof-grid{grid-template-columns:repeat(2,1fr)}
+  }
+
   /* ---------- Mission ---------- */
   .mission-body p{
     font-size:clamp(1rem,1.35vw,1.18rem);line-height:1.75;color:var(--text-mid);
@@ -1655,12 +1675,26 @@
         </div>
       </section>
 
-      <!-- SLIDE 6.5: INNOVATION & PROTOTYPING LABORATORY -->
-      <section class="slide" data-name="Innovation">
+      <!-- SLIDE 7: SERVICES HUB -->
+      <section class="slide" data-name="Services">
         <div class="wrap">
           <figure class="img-banner">
-            <!-- IMAGE SLOT: swap for the Innovation & Prototyping Laboratory entrance photo from the M&D deck when supplied. Dallas manufacturing-floor image used as placeholder. -->
-            <img src="images/Envision-dallas-manufactoringfloor.png" alt="Walkway view across the Envision, Dallas Campus manufacturing floor, yellow guardrails and assembly equipment on either side" style="object-position:center 70%">
+            <img src="images/DSC_6255.jpg" alt="Envision contact center employee wearing a headset at her workstation" style="object-position:60% 35%">
+          </figure>
+          <div class="eyebrow">Services</div>
+          <h2 class="sec-h">Everything Envision <span class="accent">delivers.</span></h2>
+          <p class="subhead">Seven services that extend our manufacturing capability. Available as packaged offerings alongside any production program.</p>
+          <p class="hint">Tap any tile to explore in depth</p>
+          <div class="tile-grid" id="svcTiles"></div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7.5: INNOVATION & PROTOTYPING LABORATORY -->
+      <section class="slide slide--innovation" data-name="Innovation">
+        <div class="wrap">
+          <figure class="img-banner">
+            <!-- IMAGE SLOT: swap for the Innovation & Prototyping Laboratory entrance photo (the Paragon cutter shot) from the M&D deck when supplied. Dallas manufacturing-equipment image used as placeholder. -->
+            <img src="images/envision-manufacturing-floor-bag-machines.png" alt="Manufacturing equipment on the Envision, Dallas Campus production floor" style="object-position:center 55%">
           </figure>
           <div class="eyebrow">Innovation &amp; Prototyping</div>
           <h2 class="sec-h">Where new products <span class="accent">begin.</span></h2>
@@ -1706,20 +1740,6 @@
             </div>
           </div>
           <div class="callout-box"><strong>Bring us a design challenge.</strong> From first concept to finished product, Envision pairs hands-on prototyping with full-scale U.S. manufacturing.</div>
-        </div>
-      </section>
-
-      <!-- SLIDE 7: SERVICES HUB -->
-      <section class="slide" data-name="Services">
-        <div class="wrap">
-          <figure class="img-banner">
-            <img src="images/DSC_6255.jpg" alt="Envision contact center employee wearing a headset at her workstation" style="object-position:60% 35%">
-          </figure>
-          <div class="eyebrow">Services</div>
-          <h2 class="sec-h">Everything Envision <span class="accent">delivers.</span></h2>
-          <p class="subhead">Seven services that extend our manufacturing capability. Available as packaged offerings alongside any production program.</p>
-          <p class="hint">Tap any tile to explore in depth</p>
-          <div class="tile-grid" id="svcTiles"></div>
         </div>
       </section>
 
@@ -1983,8 +2003,8 @@
     {name:"Mission",     count:1},
     {name:"Operations",  count:1},
     {name:"Capabilities",count:1},
-    {name:"Innovation",  count:1},
     {name:"Services",    count:1},
+    {name:"Innovation",  count:1},
     {name:"Proof",       count:1},
     {name:"Compliance",  count:1},
     {name:"Contact",     count:1}
