@@ -70,8 +70,8 @@
     /* Dark theme (modals only) */
     --bg-dark:#000d2e;
     --text-light:#f0f4ff;
-    --text-muted:rgba(240,244,255,0.62);
-    --text-faint:rgba(240,244,255,0.35);
+    --text-muted:rgba(255,255,255,0.95);
+    --text-faint:rgba(255,255,255,0.72);
     --border-dark:rgba(255,255,255,0.08);
     --border-mid:rgba(255,255,255,0.14);
 
@@ -171,14 +171,14 @@
   .ios-hint{
     position:fixed;top:calc(64px + env(safe-area-inset-top) + 10px);right:12px;z-index:90;
     max-width:264px;background:var(--navy);color:#fff;font-family:var(--sans);
-    font-weight:500;font-size:12px;line-height:1.45;
+    font-weight:500;font-size:13px;line-height:1.45;
     padding:12px 14px;border-radius:8px;box-shadow:0 10px 30px rgba(0,24,82,0.35);
   }
   .ios-hint b{font-weight:700}
   .ios-hint .ios-hint-close{
     margin-top:8px;padding:0;background:none;border:0;cursor:pointer;
-    color:rgba(255,255,255,0.72);font-family:var(--sans);font-weight:600;
-    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:rgba(255,255,255,0.95);font-family:var(--sans);font-weight:600;
+    font-size:12px;letter-spacing:.08em;text-transform:uppercase;
   }
   .ios-hint[hidden]{display:none}
 
@@ -455,9 +455,9 @@
   }
   .fed-stat .lab{
     font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    color:rgba(255,255,255,0.55);margin:6px 0 4px;
+    color:rgba(255,255,255,0.85);margin:6px 0 4px;
   }
-  .fed-stat .ctx{font-size:11.5px;line-height:1.5;color:rgba(255,255,255,0.7)}
+  .fed-stat .ctx{font-size:12.5px;line-height:1.5;color:rgba(255,255,255,0.95)}
   .fed-stat.is-clickable{
     cursor:pointer;border-radius:5px;margin:-8px -10px;padding:8px 10px;
     transition:background .18s,transform .18s;
@@ -633,7 +633,7 @@
   .cred .c-d strong{color:var(--navy);font-weight:600}
   .callout-box{
     margin-top:22px;background:var(--navy);border-radius:6px;padding:22px 24px;
-    color:rgba(240,244,255,0.86);font-size:13.5px;line-height:1.65;
+    color:rgba(255,255,255,0.95);font-size:14.5px;line-height:1.65;
   }
   .callout-box strong{color:#fff;font-weight:700}
 
@@ -749,10 +749,10 @@
   }
   .ms-emp-proof-stat .lab{
     font-size:clamp(10px,0.78vw,12.5px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    color:rgba(255,255,255,0.72);margin:6px 0 5px;
+    color:rgba(255,255,255,0.88);margin:6px 0 5px;
   }
   .ms-emp-proof-stat .ctx{
-    font-size:clamp(12px,0.9vw,14.5px);line-height:1.5;color:rgba(255,255,255,0.85);
+    font-size:clamp(12px,0.9vw,14.5px);line-height:1.5;color:rgba(255,255,255,0.95);
   }
   .ms-emp-credential{
     font-size:clamp(12px,0.92vw,15px);font-weight:600;
@@ -969,7 +969,7 @@
     line-height:1.08;color:var(--text-light);margin-bottom:14px;
   }
   .m-summary .m-one{
-    font-size:clamp(0.98rem,1.25vw,1.12rem);line-height:1.65;color:var(--text-muted);
+    font-size:clamp(1.08rem,1.35vw,1.22rem);line-height:1.65;color:var(--text-muted);
     max-width:58ch;
   }
   .m-sum-left{flex:1 1 480px;min-width:280px}
@@ -980,7 +980,7 @@
     padding:6px 11px;border-radius:999px;
   }
   .m-block{padding:40px 0;border-bottom:1px solid var(--border-dark)}
-  .m-block p{font-size:15px;line-height:1.75;color:var(--text-muted);max-width:68ch;margin-bottom:14px}
+  .m-block p{font-size:16.5px;line-height:1.75;color:var(--text-muted);max-width:68ch;margin-bottom:14px}
   .m-block p:last-child{margin-bottom:0}
   .m-block p strong{color:var(--text-light);font-weight:600}
   .m-stats{
@@ -997,7 +997,7 @@
     font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     color:var(--text-light);margin:12px 0 10px;
   }
-  .m-stat .ctx{font-size:13px;line-height:1.6;color:var(--text-muted)}
+  .m-stat .ctx{font-size:14px;line-height:1.6;color:var(--text-muted)}
   .m-callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
   .m-card{
     background:rgba(255,255,255,0.02);border:1px solid var(--border-dark);
@@ -1008,7 +1008,7 @@
     color:var(--green);margin-bottom:9px;
   }
   .m-card h4{font-weight:700;font-size:15.5px;color:var(--text-light);margin-bottom:9px}
-  .m-card .m-card-d{font-size:13px;line-height:1.65;color:var(--text-muted)}
+  .m-card .m-card-d{font-size:14px;line-height:1.65;color:var(--text-muted)}
   .m-card-ph{
     aspect-ratio:4/3;width:100%;margin-bottom:16px;
     background:rgba(255,255,255,0.015);border:2px dashed var(--border-mid);
@@ -1020,7 +1020,7 @@
     font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     color:var(--text-faint);
   }
-  .m-card-ph .ph-note{font-size:11px;color:var(--text-muted);max-width:34ch;line-height:1.5}
+  .m-card-ph .ph-note{font-size:12px;color:var(--text-muted);max-width:34ch;line-height:1.5}
   .m-card-photo{
     aspect-ratio:4/3;width:100%;margin-bottom:16px;
     background:#fff;border:1px solid var(--border-dark);
@@ -1035,7 +1035,7 @@
     display:block;color:var(--text-faint);font-weight:700;font-size:10px;
     text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;
   }
-  .m-spec .sv{color:var(--text-muted);font-weight:600;font-size:12.5px}
+  .m-spec .sv{color:var(--text-muted);font-weight:600;font-size:13.5px}
   .m-colorstrip{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
   .m-colorstrip span{
     font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--text-muted);
@@ -1092,7 +1092,7 @@
   .m-catalog[open] > summary{border-bottom:1px solid var(--border-dark)}
   .m-cat-body{padding:0 4px 4px}
   .m-cat-table{
-    width:100%;border-collapse:collapse;font-size:12.5px;color:var(--text-muted);
+    width:100%;border-collapse:collapse;font-size:13.5px;color:var(--text-muted);
   }
   .m-cat-table th{
     text-align:left;font-weight:700;font-size:10px;letter-spacing:.12em;
@@ -1109,7 +1109,7 @@
   /* Let the modal own scroll. Nested scroll boxes break touch scrolling on mobile. */
   .m-cat-scroll{width:100%;overflow-x:auto;overscroll-behavior:contain}
   .m-cat-foot{
-    padding:12px 20px;font-size:11.5px;color:var(--text-faint);line-height:1.55;
+    padding:12px 20px;font-size:12.5px;color:var(--text-faint);line-height:1.55;
     border-top:1px solid var(--border-dark);background:rgba(0,0,0,0.15);
   }
   .m-cat-foot strong{color:var(--text-muted);font-weight:600}
@@ -1125,7 +1125,7 @@
     font-weight:800;font-size:clamp(1.4rem,2.4vw,2rem);color:var(--text-light);
     letter-spacing:-0.02em;margin-bottom:14px;
   }
-  .m-cta p{font-size:14px;line-height:1.65;color:var(--text-muted);max-width:52ch;margin:0 auto 24px}
+  .m-cta p{font-size:15px;line-height:1.65;color:var(--text-muted);max-width:52ch;margin:0 auto 24px}
 
   .image-bg{background:linear-gradient(135deg,#001852 0%,#003087 50%,#000d2e 100%)}
   img.ph-img{width:100%;height:100%;object-fit:cover;display:block}
@@ -1185,7 +1185,7 @@
   /* ---------- Base Supply Center map modal ---------- */
   :root{
     --bsc-bg:#0A1F44;--bsc-deep:#061530;--bsc-panel:#122a55;
-    --bsc-lime:#B8E04A;--bsc-white:#E8ECF5;--bsc-dim:#A8B3C7;
+    --bsc-lime:#B8E04A;--bsc-white:#E8ECF5;--bsc-dim:#E2E7F1;
     --bsc-bd:rgba(255,255,255,0.08);
   }
   .bsc-backdrop{
@@ -1268,7 +1268,7 @@
   }
   .bsc-legend{
     display:flex;flex-wrap:wrap;gap:22px;margin-top:18px;
-    font-size:12px;color:var(--bsc-dim);
+    font-size:13px;color:var(--bsc-dim);
   }
   .bsc-legend span{display:flex;align-items:center;gap:8px}
   .bsc-legend .lg-dot{width:11px;height:11px;border-radius:50%;background:var(--bsc-lime)}
@@ -1295,8 +1295,8 @@
     font-size:clamp(1.5rem,2.4vw,2rem);color:var(--bsc-lime);
     line-height:1;letter-spacing:-0.02em;
   }
-  .bsc-statblk .c{font-size:11.5px;line-height:1.4;color:var(--bsc-dim);margin-top:9px}
-  .bsc-sec p{font-size:13px;line-height:1.65;color:var(--bsc-dim)}
+  .bsc-statblk .c{font-size:12.5px;line-height:1.4;color:var(--bsc-dim);margin-top:9px}
+  .bsc-sec p{font-size:14px;line-height:1.65;color:var(--bsc-dim)}
   .bsc-tags{display:grid;grid-template-columns:1fr 1fr;gap:9px}
   .bsc-tags span{
     background:rgba(255,255,255,0.03);border:1px solid var(--bsc-bd);
@@ -1306,7 +1306,7 @@
   .bsc-vlist{list-style:none;display:flex;flex-direction:column;gap:14px}
   .bsc-vlist li{
     position:relative;padding-left:20px;
-    font-size:13px;line-height:1.55;color:var(--bsc-white);
+    font-size:14px;line-height:1.55;color:var(--bsc-white);
   }
   .bsc-vlist li::before{
     content:'';position:absolute;left:0;top:0.5em;
