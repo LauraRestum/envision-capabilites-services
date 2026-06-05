@@ -1335,6 +1335,22 @@
     color:var(--text-muted);border:1px solid var(--border-mid);
     padding:6px 11px;border-radius:999px;
   }
+  /* Clickable credential chips: each links to where the claim lives in the deck. */
+  .m-cred--link{
+    cursor:pointer;font-family:inherit;line-height:1.1;
+    background:transparent;-webkit-appearance:none;appearance:none;
+    transition:color .15s ease,border-color .15s ease,background .15s ease;
+  }
+  .m-cred--link:hover{color:var(--text-light);border-color:var(--green);background:rgba(120,190,33,0.10)}
+  .m-cred--link:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  /* Brief highlight on whatever a chip points to (works on light cards and dark blocks). */
+  .cred-flash{animation:credFlash 2.1s ease both}
+  @keyframes credFlash{
+    0%{box-shadow:0 0 0 0 rgba(120,190,33,0)}
+    15%{box-shadow:0 0 0 3px rgba(120,190,33,0.85)}
+    60%{box-shadow:0 0 0 3px rgba(120,190,33,0.45)}
+    100%{box-shadow:0 0 0 0 rgba(120,190,33,0)}
+  }
   .m-block{padding:40px 0;border-bottom:1px solid var(--border-dark)}
   .m-block p{font-size:16.5px;line-height:1.75;color:var(--text-muted);max-width:68ch;margin-bottom:14px}
   .m-block p:last-child{margin-bottom:0}
@@ -3512,7 +3528,7 @@
     if (!d) return;
     modalLabel.textContent = d.label;
 
-    var creds = d.creds.map(function(c){ return '<span class="m-cred">'+c+'</span>'; }).join("");
+    var creds = d.creds.map(function(c){ return '<button type="button" class="m-cred m-cred--link" data-cred="'+c+'">'+c+'</button>'; }).join("");
     var overview = d.overview.map(function(p){ return '<p>'+p+'</p>'; }).join("");
     var stats = d.stats.map(function(s){
       return '<div class="m-stat"><div class="num">'+s.num+'</div><div class="lab">'+s.label+'</div><div class="ctx">'+s.ctx+'</div></div>';
@@ -3673,7 +3689,7 @@
     if (!d) return;
     modalLabel.textContent = d.label;
 
-    var creds = (d.creds||[]).map(function(c){ return '<span class="m-cred">'+c+'</span>'; }).join("");
+    var creds = (d.creds||[]).map(function(c){ return '<button type="button" class="m-cred m-cred--link" data-cred="'+c+'">'+c+'</button>'; }).join("");
     var overview = (d.overview||[]).map(function(p){ return '<p>'+p+'</p>'; }).join("");
     var stats = (d.stats||[]).map(function(s){
       return '<div class="m-stat"><div class="num">'+s.num+'</div><div class="lab">'+s.label+'</div><div class="ctx">'+s.ctx+'</div></div>';
@@ -3782,12 +3798,135 @@
     accessibility:"accessibility", procurement:"procurement", quality:"quality"
   };
 
+  /* ---------- Clickable credential chips ----------
+     Every cred chip on a detail page links to where that claim is
+     substantiated in the deck. Routing order:
+       1. Compliance credentials (ISO, Berry, TAA, Buy American, DCMA,
+          AbilityOne) jump to the Compliance subpage and highlight the card.
+       2. Material chips (HDPE / LLDPE / Federal NSN) open and scroll to the
+          matching product-catalog table on the same detail page.
+       3. Procurement chips (DLA / BSC / Prime Vendor) open the Federal
+          Procurement detail page.
+       4. Anything else scrolls to where the claim is described on the page;
+          if it isn't found, it falls back to the most relevant section. */
+  function credFlash(el){
+    if (!el) return;
+    el.classList.remove("cred-flash");
+    void el.offsetWidth;
+    el.classList.add("cred-flash");
+    setTimeout(function(){ el.classList.remove("cred-flash"); }, 2200);
+  }
+  function scrollInModal(el){
+    if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
+  }
+  function switchModal(key){
+    if (!MODALS[key]) return;
+    renderModal(key);
+    modal.scrollTop = 0;
+    modalClose.focus();
+  }
+  function credToCompliance(match){
+    var sec = slideIndexByName("Compliance");
+    if (sec < 0){ closeModal(); return; }
+    if (sec === idx) closeModal(); else jump(sec);
+    setTimeout(function(){
+      var cards = document.querySelectorAll(".slide--compliance .cred");
+      var target = null;
+      for (var i=0;i<cards.length;i++){
+        var h = cards[i].querySelector(".c-h");
+        if (h && h.textContent.toLowerCase().indexOf(match.toLowerCase()) >= 0){ target = cards[i]; break; }
+      }
+      if (target){ target.scrollIntoView({behavior:"smooth", block:"center"}); credFlash(target); }
+    }, 90);
+  }
+  function credToCatalog(key){
+    var details = modalInner.querySelectorAll("details.m-catalog");
+    var target = null;
+    if (key){
+      for (var i=0;i<details.length;i++){
+        var sum = details[i].querySelector("summary");
+        if (sum && sum.textContent.toUpperCase().indexOf(key.toUpperCase()) >= 0){ target = details[i]; break; }
+      }
+    }
+    if (target){
+      target.open = true;
+      scrollInModal(target);
+      credFlash(target);
+      return true;
+    }
+    // No specific catalog (e.g. Federal NSN): open the Product Catalog block.
+    var blocks = modalInner.querySelectorAll(".m-block");
+    for (var b=0;b<blocks.length;b++){
+      var lab = blocks[b].querySelector(".m-sec-label");
+      if (lab && /catalog/i.test(lab.textContent)){
+        var first = blocks[b].querySelector("details.m-catalog");
+        if (first) first.open = true;
+        scrollInModal(blocks[b]);
+        credFlash(lab);
+        return true;
+      }
+    }
+    return false;
+  }
+  function credSearchKeys(label){
+    var keys = [label];
+    var head = label.split(/[\/+·]| - /)[0].trim();
+    if (head) keys.push(head);
+    var stripped = label.replace(/\b(compliant|compliance|capable|certified|ready|in-house)\b/ig, "").trim();
+    if (stripped) keys.push(stripped);
+    var word = label.match(/[A-Za-z0-9][A-Za-z0-9.\-\/]+/);
+    if (word) keys.push(word[0]);
+    return keys;
+  }
+  function credToModalText(label){
+    var nodes = modalInner.querySelectorAll(".m-block p, .m-stat, .m-card, .m-spec div, details.m-catalog > summary, .m-colorstrip span");
+    var keys = credSearchKeys(label);
+    for (var k=0;k<keys.length;k++){
+      var key = keys[k].toLowerCase();
+      if (key.length < 2) continue;
+      for (var i=0;i<nodes.length;i++){
+        if (nodes[i].closest(".m-creds")) continue;
+        if (nodes[i].textContent.toLowerCase().indexOf(key) >= 0){
+          scrollInModal(nodes[i]);
+          credFlash(nodes[i]);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  function credFallbackSection(){
+    var name = /service/i.test(modalLabel.textContent || "") ? "Services" : "Capabilities";
+    var sec = slideIndexByName(name);
+    if (sec < 0){ closeModal(); return; }
+    if (sec === idx) closeModal(); else jump(sec);
+  }
+  function routeCred(label){
+    if (!label) return;
+    if (/iso\s*9001/i.test(label))              return credToCompliance("ISO 9001");
+    if (/berry/i.test(label))                   return credToCompliance("Berry");
+    if (/\btaa\b|trade agreement/i.test(label)) return credToCompliance("TAA");
+    if (/buy american/i.test(label))            return credToCompliance("Buy American");
+    if (/dcma/i.test(label))                    return credToCompliance("DCMA");
+    if (/abilityone|workquest|state use/i.test(label)) return credToCompliance("AbilityOne");
+    if (/hdpe|high density/i.test(label)){ if (credToCatalog("HDPE")) return; }
+    if (/lldpe|low density/i.test(label)){ if (credToCatalog("LLDPE")) return; }
+    if (/\bnsn\b/i.test(label)){ if (credToCatalog(null)) return; }
+    if (/\bdla\b|prime vendor|\bbsc\b|base supply/i.test(label)){ switchModal("procurement"); return; }
+    if (credToModalText(label)) return;
+    credFallbackSection();
+  }
+
   modal.addEventListener("click", function(e){
     // In Action: open a project's detail view from the little-block grid.
     var open = e.target.closest("[data-project-open]");
     if (open){ renderProject(open.getAttribute("data-project-open"), true); modal.scrollTop = 0; modalClose.focus(); return; }
     // In Action: Back from a project detail to the project list.
     if (e.target.closest("[data-inaction-back]")){ renderInActionList(); modalClose.focus(); return; }
+
+    // Credential chip: route to where that claim is listed in the deck.
+    var credChip = e.target.closest("[data-cred]");
+    if (credChip){ e.preventDefault(); routeCred(credChip.getAttribute("data-cred")); return; }
 
     var cta = e.target.closest(".m-cta-contact");
     if (!cta) return;
