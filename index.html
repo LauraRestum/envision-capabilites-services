@@ -3346,21 +3346,36 @@
       stats:[
         {num:"Logo",label:"Embroidery",ctx:"Logo and emblem embroidery applied to apparel and finished goods."},
         {num:"HTV",label:"Heat-transfer logos",ctx:"Full color or black and white, within a defined maximum size [VERIFY w/ Steve]."},
-        {num:"6,200 lb",label:"Hoist sling rating",ctx:"EET / EEF web slings, vertical rating, within the specialty product lines."}
+        {num:"6,200 lb",label:"Hoist sling rating",ctx:"EET-type web slings, vertical rating, within the specialty product lines."}
       ],
       calloutLabel:"Service Lines",
       callouts:[
         {tag:"Decoration",title:"Embroidery",desc:"Logo and emblem embroidery applied to apparel and finished goods. Envision applies the decoration to your artwork; it does not produce the thread.",specs:[["Applied to","Apparel & finished goods"],["Options","[VERIFY w/ Steve]"]]},
         {tag:"Decoration",title:"Heat-Transfer Logos (HTV)",desc:"Heat-applied logo decoration in full color or black and white, within a defined maximum size. These are heat-transfer logos, not vinyl-cut graphics.",specs:[["Color","Full color or B/W"],["Max size","[VERIFY w/ Steve]"]]},
-        {tag:"Product",title:"Specialty product lines",desc:"Bespoke and lower-volume items produced to customer specification. Eyeglass cases, hoist slings (EET/EEF web slings rated 6,200 lb), reusable cloth face masks, certified commissary and hygiene products through AbilityOne and Texas WorkQuest.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]}
+        {tag:"Product",title:"Specialty product lines",desc:"Built-to-spec specialty lines produced through AbilityOne and Texas WorkQuest. See the tables below for the full catalog.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]}
       ],
       catalogs:[
-        {title:"Specialty Product Lines", meta:"AbilityOne + Texas WorkQuest", columns:["Product","Spec / Rating","Catalog"], rows:[
-          ["Eyeglass cases","Commercial","AbilityOne / WorkQuest"],
-          ["Hoist slings (EET / EEF web)","6,200 lb vertical","Federal"],
-          ["Reusable cloth face masks","Hygiene","Commissary"],
-          ["Commissary & hygiene products","Certified","AbilityOne / WorkQuest"]
-        ], footnote:"Specialty product lines are built to customer specification and flow through the same MIL-STD-129 packaging and labeling standards as core programs."}
+        {title:"Eyeglass Cases & Lifting Slings", meta:"Dallas · ISO 9001 supervised manufacturing", columns:["Part #","NSN","Item","Specifications","Case / Size"], rows:[
+          ["310006","540-01-475-6808","Vinyl Eyeglass Case","Black vinyl over plastic frame, lint-free cloth lining, Velcro fold-over","300 (50/bag, 6 bags/case)"],
+          ["34-00-EET2902-04","3940-01-458-6317","Twisted Loop Web Sling","Nylon 2-ply EET-type 4. Eye loops at 90 degrees. 6,200 lb vertical limit. Yellow.","4 ft L x 2 in W"],
+          ["34-00-EET2902-06","3940-01-458-6319","Twisted Loop Web Sling","Nylon 2-ply EET-type 4. Same specs.","6 ft L x 2 in W"],
+          ["34-00-EET2902-10","390001404N","Twisted Loop Web Sling","Nylon 2-ply EET-type 4. Same specs.","10 ft L x 2 in W"],
+          ["34-00-EET2902-12","390001405N","Twisted Loop Web Sling","Nylon 2-ply EET-type 4. Same specs.","12 ft L x 2 in W"],
+          ["34-00-EEF2902P-10","3940-01-523-6560","Flat Loop Web Sling","Polyester 2-ply EEF-type 3. Flat eyes coplanar with body. Vertical, choker, basket. Yellow.","10 ft L x 2 in W"],
+          ["34-00-EEF2902-12","3940-01-629-6209","Flat Loop Web Sling","Nylon 2-ply EEF-type 3.","12 ft L x 2 in W"]
+        ], footnote:"The 6,200 lb vertical rating applies to the EET-type slings. EEF-type capacity is not stated in source data; confirm before publishing."},
+        {title:"Reusable Cloth Face Masks", meta:"Triple-layer breathable cotton blend · machine washable", columns:["Part #","Size","Style","Case Qty"], rows:[
+          ["17-00-7000","Adult Universal","Adjustable ties","400"],
+          ["17-00-7010","Youth Universal","Adjustable ties","400"],
+          ["17-00-7050","Adult Universal","Adjustable ear loops","100"]
+        ]},
+        {title:"Commissary & Hygiene", meta:"Military supply points, state agencies, correctional systems", columns:["WorkQuest #","Category","Description","Pack","MOQ"], rows:[
+          ["39091350002","Food & Beverage","Purified drinking water, 16.9 oz bottles","24 / case","72 cases (multiples of 72)"],
+          ["39091350001","Food & Beverage","Purified drinking water, 16.9 oz, full truckload","1,584 cases / truck","1 truckload"],
+          ["3937440","Food & Beverage","Premium Mackerel Fillets in Brine, 3.53 oz tear-away pouches","50 / case","1 case (truckload 2,520 cases)"],
+          ["39374671202","Food & Beverage","Chunk Light Tuna in Water, 4.23 oz pouches","48 / case","1 case (truckload 1,890 cases)"],
+          ["65285541754","Personal Hygiene","Mint Toothpaste, 3 oz tubes (ADA Accepted, Fluoridated)","72 / case","1 case"]
+        ]}
       ],
       equipment:[
         {title:"Decoration Equipment", meta:"Dallas · machines at this stage include", columns:["Machine"], rows:[
