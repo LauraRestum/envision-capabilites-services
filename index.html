@@ -1339,21 +1339,57 @@
     position:relative;width:100%;aspect-ratio:960/600;
   }
   .bsc-map-aspect svg.bsc-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-  .bsc-state{fill:#0c2348;stroke:rgba(255,255,255,0.07);stroke-width:0.5}
-  .bsc-state.hi{fill:rgba(184,224,74,0.16);stroke:rgba(184,224,74,0.45);stroke-width:0.8}
+  .bsc-state{fill:#04102b;stroke:rgba(130,165,210,0.22);stroke-width:0.6}
+  .bsc-state.hi{fill:rgba(184,224,74,0.18);stroke:rgba(184,224,74,0.6);stroke-width:1}
   .bsc-leader{stroke:rgba(184,224,74,0.55);stroke-width:0.8;fill:none}
-  .bsc-dot{fill:var(--bsc-lime);stroke:var(--bsc-deep);stroke-width:1.4}
-  .bsc-halo{
-    fill:var(--bsc-lime);transform-box:fill-box;transform-origin:center;
-    animation:bscPulse 2.8s ease-out infinite;
+  .bsc-dot{
+    fill:var(--bsc-lime);stroke:var(--bsc-deep);stroke-width:1.4;
+    transform-box:fill-box;transform-origin:center;
   }
-  @keyframes bscPulse{
-    0%{transform:scale(0.5);opacity:0.5}
-    70%{opacity:0}
-    100%{transform:scale(2.6);opacity:0}
+  .bsc-halo{
+    fill:var(--bsc-lime);transform-box:fill-box;transform-origin:center;opacity:0;
+  }
+  .bsc-marker{cursor:pointer;outline:none}
+  .bsc-hit{fill:transparent}
+  .bsc-ring{
+    fill:none;stroke:var(--bsc-lime);stroke-width:1.6;opacity:0;
+    transition:opacity .15s ease;
+  }
+  .bsc-marker:hover .bsc-ring,
+  .bsc-marker:focus .bsc-ring,
+  .bsc-marker:focus-visible .bsc-ring{opacity:.85}
+  .bsc-tip{
+    position:absolute;transform:translate(-50%,calc(-100% - 13px));
+    background:var(--bsc-deep);border:1px solid rgba(184,224,74,0.5);
+    color:var(--bsc-white);padding:7px 10px;border-radius:7px;
+    font-family:var(--sans);font-size:11px;line-height:1.25;white-space:nowrap;
+    text-align:center;display:flex;flex-direction:column;gap:2px;
+    pointer-events:none;opacity:0;transition:opacity .15s ease;z-index:5;
+  }
+  .bsc-tip strong{font-weight:700;font-size:12px;letter-spacing:-0.01em}
+  .bsc-tip span{color:var(--bsc-lime);font-size:10px;letter-spacing:.04em}
+  .bsc-tip.show{opacity:1}
+
+  /* One-time entrance, replays on each open (driven off .bsc-modal.is-open). */
+  @media (prefers-reduced-motion:no-preference){
+    .bsc-modal.is-open .bsc-dot{animation:bscDotIn .55s cubic-bezier(0.22,1,0.36,1) both}
+    .bsc-modal.is-open .bsc-halo{animation:bscPing 1.6s ease-out both}
+    .bsc-modal.is-open .bsc-leader{animation:bscDraw .6s ease both}
+  }
+  @keyframes bscDotIn{
+    from{opacity:0;transform:scale(0.2)}
+    to{opacity:1;transform:scale(1)}
+  }
+  @keyframes bscPing{
+    0%{opacity:0;transform:scale(0.5)}
+    14%{opacity:0.5}
+    100%{opacity:0;transform:scale(2.6)}
+  }
+  @keyframes bscDraw{
+    from{stroke-dashoffset:var(--len,80)}
+    to{stroke-dashoffset:0}
   }
   @media (prefers-reduced-motion:reduce){
-    .bsc-halo{animation:none;opacity:0}
     .bsc-shell{transition:opacity .2s ease}
   }
   .bsc-lbl{
@@ -2044,7 +2080,7 @@
             <div class="bsc-statblk"><div class="n">16</div><div class="c">Envision-operated stores</div></div>
             <div class="bsc-statblk"><div class="n">10</div><div class="c">States across U.S.</div></div>
           </div>
-          <p>Envision's Base Supply Centers are the retail face of the AbilityOne BSC program inside Envision's footprint. Stores stock office supplies, janitorial, safety apparel, and SKILCRAFT product lines for active-duty personnel and federal buyers.</p>
+          <p>Envision's Base Supply Centers are the retail face of the AbilityOne BSC program inside Envision's footprint. Stores stock office supplies, janitorial, safety apparel, and SKILCRAFT product lines for active-duty personnel and federal buyers. Envision-manufactured products flow through this channel from our U.S. campuses.</p>
         </div>
         <div class="bsc-sec">
           <div class="bsc-eyebrow">What's Sold</div>
@@ -2057,15 +2093,6 @@
             <span>VISI-belts &amp; reflective gear</span>
             <span>Trash &amp; seal closure bags</span>
           </div>
-        </div>
-        <div class="bsc-sec">
-          <div class="bsc-eyebrow">Why It Matters To A Buyer</div>
-          <ul class="bsc-vlist">
-            <li>Pre-approved AbilityOne pricing. No competitive bid cycle required.</li>
-            <li>Mandatory-source under FAR Subpart 8.7 for listed products.</li>
-            <li>Direct fulfillment to base personnel. GPC and IMPAC card accepted.</li>
-            <li>Envision-manufactured products flow through this channel from our U.S. campuses.</li>
-          </ul>
         </div>
       </div>
     </div>
@@ -3374,10 +3401,129 @@
   var SVGNS = "http://www.w3.org/2000/svg";
   var built = false;
 
+  // Visible short label + tooltip full name + service branch, keyed by the
+  // existing BSC_MAP data name. Buckley and Peterson were redesignated Space
+  // Force bases in 2021, so they read SFB even though the data key says AFB.
+  var BASE_INFO = {
+    "Fairchild AFB":   {short:"Fairchild AFB",   full:"Fairchild Air Force Base",        branch:"Air Force"},
+    "NAS Lemoore":     {short:"NAS Lemoore",     full:"Naval Air Station Lemoore",        branch:"Navy"},
+    "Mtn Home AFB":    {short:"Mtn Home AFB",    full:"Mountain Home Air Force Base",     branch:"Air Force"},
+    "FE Warren AFB":   {short:"FE Warren AFB",   full:"F.E. Warren Air Force Base",       branch:"Air Force"},
+    "USAFA":           {short:"USAFA",           full:"U.S. Air Force Academy",           branch:"Air Force"},
+    "Buckley AFB":     {short:"Buckley SFB",     full:"Buckley Space Force Base",         branch:"Space Force"},
+    "Peterson AFB":    {short:"Peterson SFB",    full:"Peterson Space Force Base",        branch:"Space Force"},
+    "Ft Carson":       {short:"Ft Carson",       full:"Fort Carson",                      branch:"Army"},
+    "Minot AFB":       {short:"Minot AFB",       full:"Minot Air Force Base",             branch:"Air Force"},
+    "Grand Forks AFB": {short:"Grand Forks AFB", full:"Grand Forks Air Force Base",       branch:"Air Force"},
+    "Offutt AFB":      {short:"Offutt AFB",      full:"Offutt Air Force Base",            branch:"Air Force"},
+    "McConnell AFB":   {short:"McConnell AFB",   full:"McConnell Air Force Base",         branch:"Air Force"},
+    "Ft Riley":        {short:"Ft Riley",        full:"Fort Riley",                       branch:"Army"},
+    "Ft Leavenworth":  {short:"Ft Leavenworth",  full:"Fort Leavenworth",                 branch:"Army"},
+    "Whiteman AFB":    {short:"Whiteman AFB",    full:"Whiteman Air Force Base",          branch:"Air Force"},
+    "NSA Mid-South":   {short:"NSA Mid-South",   full:"Naval Support Activity Mid-South", branch:"Navy"}
+  };
+
+  // Repel + tooltip state (module scope so open/reset can reach it).
+  var labelObjs = [];
+  var mapAspect = null;
+  var tipEl = null;
+  var pointerInside = false, mouseX = 0, mouseY = 0, repelRaf = null;
+  var REPEL_R = 82, REPEL_MAX = 26;
+
+  function prefersReduced(){
+    return !!(window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
   function el(tag, attrs){
     var n = document.createElementNS(SVGNS, tag);
     for (var k in attrs) n.setAttribute(k, attrs[k]);
     return n;
+  }
+
+  function showTip(b, info){
+    if (!tipEl) return;
+    tipEl.innerHTML = "";
+    var strong = document.createElement("strong");
+    strong.textContent = info.full;
+    var span = document.createElement("span");
+    span.textContent = info.branch;
+    tipEl.appendChild(strong);
+    tipEl.appendChild(span);
+    tipEl.style.left = (b.x / BSC_MAP.W * 100) + "%";
+    tipEl.style.top  = (b.y / BSC_MAP.H * 100) + "%";
+    tipEl.classList.add("show");
+  }
+  function hideTip(){ if (tipEl) tipEl.classList.remove("show"); }
+
+  // Cursor-repelling tags: push each tag directly away from the pointer,
+  // strongest at the cursor and fading to zero by REPEL_R. Leader lines
+  // follow their tag's new position. Eased with a rAF lerp loop.
+  function repelFrame(){
+    if (!mapAspect) { repelRaf = null; return; }
+    var rect = mapAspect.getBoundingClientRect();
+    var W = BSC_MAP.W, H = BSC_MAP.H, active = false;
+    for (var i = 0; i < labelObjs.length; i++){
+      var o = labelObjs[i], tx = 0, ty = 0;
+      if (pointerInside){
+        var hx = o.pctX / 100 * rect.width, hy = o.pctY / 100 * rect.height;
+        var vx = hx - mouseX, vy = hy - mouseY;
+        var d = Math.sqrt(vx * vx + vy * vy);
+        if (d < REPEL_R && d > 0.01){
+          var p = (1 - d / REPEL_R) * REPEL_MAX;
+          tx = vx / d * p; ty = vy / d * p;
+        }
+      }
+      o.dx += (tx - o.dx) * 0.2;
+      o.dy += (ty - o.dy) * 0.2;
+      if (Math.abs(tx - o.dx) > 0.05 || Math.abs(ty - o.dy) > 0.05 ||
+          Math.abs(o.dx) > 0.05 || Math.abs(o.dy) > 0.05) active = true;
+      o.el.style.transform = "translate(calc(-50% + " + o.dx.toFixed(2) +
+        "px), calc(-50% + " + o.dy.toFixed(2) + "px))";
+      if (o.line){
+        o.line.setAttribute("x2", (o.baseVX + o.dx / rect.width * W).toFixed(2));
+        o.line.setAttribute("y2", (o.baseVY + o.dy / rect.height * H).toFixed(2));
+      }
+    }
+    repelRaf = active ? requestAnimationFrame(repelFrame) : null;
+  }
+  function kickRepel(){ if (!repelRaf) repelRaf = requestAnimationFrame(repelFrame); }
+
+  // Snap tags and leader lines back home (called on each open).
+  function resetTags(){
+    pointerInside = false;
+    if (repelRaf){ cancelAnimationFrame(repelRaf); repelRaf = null; }
+    for (var i = 0; i < labelObjs.length; i++){
+      var o = labelObjs[i];
+      o.dx = 0; o.dy = 0;
+      o.el.style.transform = "translate(-50%,-50%)";
+      if (o.line){ o.line.setAttribute("x2", o.baseVX); o.line.setAttribute("y2", o.baseVY); }
+    }
+    hideTip();
+  }
+
+  // Count the four stat numbers up on each open (instant under reduced motion).
+  function runCountUp(){
+    var nums = modal.querySelectorAll(".bsc-statblk .n");
+    var reduce = prefersReduced();
+    Array.prototype.forEach.call(nums, function(nEl){
+      var full = nEl.getAttribute("data-target");
+      if (full === null){ full = nEl.textContent.trim(); nEl.setAttribute("data-target", full); }
+      var m = full.match(/^(\d+)(.*)$/);
+      if (!m){ return; }
+      var target = parseInt(m[1], 10), suffix = m[2] || "";
+      if (reduce){ nEl.textContent = full; return; }
+      var dur = 900, startTs = null;
+      function step(ts){
+        if (startTs === null) startTs = ts;
+        var prog = Math.min((ts - startTs) / dur, 1);
+        var eased = 1 - Math.pow(1 - prog, 3);
+        nEl.textContent = Math.round(eased * target) + suffix;
+        if (prog < 1) requestAnimationFrame(step);
+        else nEl.textContent = full;
+      }
+      requestAnimationFrame(step);
+    });
   }
 
   function buildMap(){
@@ -3385,30 +3531,75 @@
     built = true;
     var W = BSC_MAP.W, H = BSC_MAP.H;
     var aspect = document.getElementById("bscMapAspect");
+    mapAspect = aspect;
 
     var svg = el("svg", {viewBox:"0 0 "+W+" "+H, "class":"bsc-svg",
-      preserveAspectRatio:"xMidYMid meet", "aria-hidden":"true"});
+      preserveAspectRatio:"xMidYMid meet", role:"group",
+      "aria-label":"Map of Envision Base Supply Center locations across the central United States"});
 
+    // Decorative geography in an aria-hidden group.
+    var geoG = el("g", {"aria-hidden":"true"});
     BSC_MAP.states.forEach(function(s){
-      svg.appendChild(el("path", {d:s.d, "class":"bsc-state"+(s.hi?" hi":"")}));
+      geoG.appendChild(el("path", {d:s.d, "class":"bsc-state"+(s.hi?" hi":"")}));
     });
+    svg.appendChild(geoG);
 
-    // Leader lines first so dots render on top.
-    BSC_MAP.bases.forEach(function(b){
+    // Leader lines (decorative) in an aria-hidden group; keep refs for the
+    // draw-in entrance and the cursor-repel follow.
+    var leaderG = el("g", {"aria-hidden":"true"});
+    var lineByName = {};
+    BSC_MAP.bases.forEach(function(b, i){
       var L = LABELS[b.name];
       if (L && L.leader){
-        svg.appendChild(el("line", {x1:b.x, y1:b.y, x2:L.leader[0], y2:L.leader[1], "class":"bsc-leader"}));
+        var line = el("line", {x1:b.x, y1:b.y, x2:L.leader[0], y2:L.leader[1], "class":"bsc-leader"});
+        var len = Math.sqrt(Math.pow(L.leader[0]-b.x,2) + Math.pow(L.leader[1]-b.y,2));
+        line.style.strokeDasharray = len.toFixed(2);
+        line.style.setProperty("--len", len.toFixed(2));
+        line.style.animationDelay = (0.25 + i * 0.04).toFixed(2) + "s";
+        leaderG.appendChild(line);
+        lineByName[b.name] = line;
       }
     });
+    svg.appendChild(leaderG);
 
-    BSC_MAP.bases.forEach(function(b){
-      svg.appendChild(el("circle", {cx:b.x, cy:b.y, r:5, "class":"bsc-halo"}));
-      svg.appendChild(el("circle", {cx:b.x, cy:b.y, r:4.5, "class":"bsc-dot"}));
+    // Interactive, focusable markers with a transparent hit area.
+    var markerG = el("g");
+    BSC_MAP.bases.forEach(function(b, i){
+      var info = BASE_INFO[b.name] || {short:b.name, full:b.name, branch:""};
+      var aria = info.full + (info.branch ? ", " + info.branch : "");
+      var g = el("g", {"class":"bsc-marker", tabindex:"0", role:"img", "aria-label":aria});
+      g.appendChild(el("circle", {cx:b.x, cy:b.y, r:13, "class":"bsc-hit"}));
+      g.appendChild(el("circle", {cx:b.x, cy:b.y, r:11, "class":"bsc-ring"}));
+      var halo = el("circle", {cx:b.x, cy:b.y, r:5, "class":"bsc-halo"});
+      var dot  = el("circle", {cx:b.x, cy:b.y, r:4.5, "class":"bsc-dot"});
+      halo.style.animationDelay = (0.15 + i * 0.05).toFixed(2) + "s";
+      dot.style.animationDelay  = (0.15 + i * 0.05).toFixed(2) + "s";
+      g.appendChild(halo);
+      g.appendChild(dot);
+      (function(bb, inf){
+        function show(){ showTip(bb, inf); }
+        g.addEventListener("pointerenter", show);
+        g.addEventListener("pointerleave", hideTip);
+        g.addEventListener("focus", show);
+        g.addEventListener("blur", hideTip);
+        g.addEventListener("click", show);
+      })(b, info);
+      markerG.appendChild(g);
     });
+    svg.appendChild(markerG);
 
     aspect.appendChild(svg);
 
+    // Tooltip element shared by hover, tap, and keyboard focus.
+    tipEl = document.createElement("div");
+    tipEl.className = "bsc-tip";
+    tipEl.setAttribute("aria-hidden", "true");
+    aspect.appendChild(tipEl);
+
+    // HTML name tags (short label) + repel bookkeeping.
+    labelObjs = [];
     BSC_MAP.bases.forEach(function(b){
+      var info = BASE_INFO[b.name] || {short:b.name};
       var L = LABELS[b.name] || {dir:"below"};
       var cx, cy;
       if (L.leader){ cx = L.leader[0]; cy = L.leader[1]; }
@@ -3416,10 +3607,29 @@
       else { cx = b.x; cy = b.y + 16; }
       var lab = document.createElement("div");
       lab.className = "bsc-lbl";
-      lab.textContent = b.name;
+      lab.textContent = info.short || b.name;
       lab.style.left = (cx / W * 100) + "%";
       lab.style.top  = (cy / H * 100) + "%";
       aspect.appendChild(lab);
+      labelObjs.push({
+        el: lab, pctX: cx / W * 100, pctY: cy / H * 100,
+        line: lineByName[b.name] || null, baseVX: cx, baseVY: cy,
+        dx: 0, dy: 0
+      });
+    });
+
+    // Pointer-only declutter; entirely disabled under reduced motion.
+    aspect.addEventListener("pointermove", function(e){
+      if (prefersReduced()) return;
+      var rect = aspect.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      pointerInside = true;
+      kickRepel();
+    });
+    aspect.addEventListener("pointerleave", function(){
+      pointerInside = false;
+      kickRepel();
     });
   }
 
@@ -3434,12 +3644,14 @@
   function openBsc(trigger){
     if (isOpen()) return;
     buildMap();
+    resetTags();
     returnFocus = trigger || document.activeElement;
     backdrop.classList.add("is-open");
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     closeBtn.focus();
+    runCountUp();
   }
 
   function closeBsc(){
