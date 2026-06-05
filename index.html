@@ -1312,6 +1312,18 @@
   .bcard-row{font-size:13px;font-weight:600;color:var(--navy);line-height:1.8}
   .bcard-loc{color:var(--text-soft);font-weight:500}
 
+  /* Key contacts (primary / secondary) */
+  .key-contacts{max-width:520px;margin:0 auto}
+  .bcard-row a{color:var(--green);font-weight:700;text-decoration:none;border-bottom:1px solid var(--green-dim)}
+  .bcard-row a:hover{color:var(--navy);border-bottom-color:var(--navy)}
+
+  /* Clickable campus name link (contact slide) */
+  .campus-name a{color:inherit;text-decoration:none;transition:color .15s}
+  .campus-name a:hover{color:var(--green)}
+  .contact-campus-grid{margin-top:30px}
+  .contact-campus-grid .campus-name a,
+  .contact-campus-grid .campus-addr a{text-decoration:underline;text-underline-offset:2px}
+
   /* General contacts section */
   .general-contacts{margin-top:36px;padding-top:28px;border-top:1px solid var(--rule-light);max-width:520px;margin-left:auto;margin-right:auto}
   .general-contacts-label{font-family:var(--sans);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-soft);margin-bottom:14px;text-align:left}
@@ -2477,39 +2489,42 @@
         <div class="wrap center">
           <div class="eyebrow">Envision · Capabilities &amp; Services</div>
           <h2 class="sec-h">Get in Touch</h2>
-          <p class="subhead">Select an area below to find the right point of contact for your inquiry.</p>
+          <p class="subhead">Connect with our leadership team for partnership, procurement, and new product development inquiries.</p>
 
-          <div class="dtree" id="dtree">
-            <div class="dtree-step is-visible" id="dtStep1">
-              <div class="dtree-label">I need to discuss</div>
-              <select class="dtree-select" id="dtCat">
-                <option value="" disabled selected>Select an area</option>
-                <option value="manufacturing">Manufacturing</option>
-                <option value="print">Print Services</option>
-                <option value="fulfillment">Fulfillment &amp; Distribution</option>
-                <option value="contact-center">Contact Center</option>
-                <option value="procurement">Federal Procurement</option>
-                <option value="accessibility">Accessibility Services</option>
-                <option value="quality">Quality &amp; Compliance</option>
-                <option value="document-services">Secure Document Services</option>
-                <option value="bsc">Base Supply Centers</option>
-              </select>
-            </div>
+          <div class="key-contacts">
+            <div class="general-contacts-label">Key Contacts</div>
+            <div class="general-contacts-grid">
 
-            <!-- Business card result -->
-            <div class="dtree-result" id="dtResult">
+              <!-- Primary contact -->
               <div class="bcard">
                 <div class="bcard-accent"></div>
                 <div class="bcard-body">
-                  <div class="bcard-dept" id="bcardDept"></div>
-                  <div class="bcard-name" id="bcardName">[ Name ]</div>
-                  <div class="bcard-title" id="bcardTitle">[ Title ]</div>
+                  <div class="bcard-dept">Primary Contact</div>
+                  <div class="bcard-name">Sebastian Zahr</div>
+                  <div class="bcard-title">Chief Revenue &amp; Strategy Officer</div>
                   <div class="bcard-divider"></div>
-                  <div class="bcard-row" id="bcardEmail">[ email@envisionus.com ]</div>
-                  <div class="bcard-row" id="bcardPhone">[ (316) 000-0000 ]</div>
-                  <div class="bcard-row bcard-loc" id="bcardLocation">[ Campus ]</div>
+                  <div class="bcard-row">Envision, Inc.</div>
+                  <div class="bcard-row bcard-loc">2301 S. Water St., Wichita, KS 67213</div>
+                  <div class="bcard-row"><a href="https://www.envisionus.com" target="_blank" rel="noopener">www.envisionus.com</a></div>
                 </div>
               </div>
+
+              <!-- Secondary contact -->
+              <div class="bcard">
+                <div class="bcard-accent"></div>
+                <div class="bcard-body">
+                  <div class="bcard-dept">Secondary Contact</div>
+                  <div class="bcard-name">Patrick Tuttle</div>
+                  <div class="bcard-title">Senior Vice President, Operations and New Product Development</div>
+                  <div class="bcard-divider"></div>
+                  <div class="bcard-row">Envision, Inc.</div>
+                  <div class="bcard-row bcard-loc">2301 S. Water St., Wichita, KS 67213</div>
+                  <div class="bcard-row">Direct: <a href="tel:+13164257129">316-425-7129</a></div>
+                  <div class="bcard-row">Mobile: <a href="tel:+13162531468">316-253-1468</a></div>
+                  <div class="bcard-row"><a href="https://www.envisionus.com" target="_blank" rel="noopener">www.envisionus.com</a></div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -2543,15 +2558,66 @@
             </div>
           </div>
 
-          <div class="campus-footer">
-            <div class="campus-card">
-              <img src="images/Envision-wichita-highangle-buildingphoto.png" alt="Envision Wichita Campus exterior">
-              <div class="campus-card__addr">Wichita Campus · 2301 S. Water Street, Wichita, KS 67213 · (316) 522-3232</div>
-            </div>
-            <div class="campus-card">
-              <img src="images/envision-dallas-building-exterior.png" alt="Envision, Dallas Campus exterior">
-              <div class="campus-card__addr">Dallas Campus · 1801 Valley View Lane, Farmers Branch, TX 75234</div>
-            </div>
+          <div class="campus-grid contact-campus-grid">
+
+            <article class="campus-card">
+              <div class="campus-photo" data-lightbox role="button" tabindex="0"
+                   data-lb-name="Envision, Dallas Campus"
+                   data-lb-addr="1801 Valley View Lane, Farmers Branch, TX 75234"
+                   data-lb-href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234"
+                   aria-label="Enlarge the Envision, Dallas Campus location image and area map">
+                <img src="images/campus-card-dallas.png" alt="Envision, Dallas Campus in Farmers Branch, Texas, shown with a map of the Dallas Fort Worth metroplex locating the campus near I-635, the Dallas North Tollway, and DFW International Airport" loading="lazy">
+                <div class="campus-photo-tag"><span class="accent-dot" style="background:#78BE21"></span>Envision, Dallas Campus</div>
+                <span class="campus-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
+              </div>
+              <div class="campus-body">
+                <div class="campus-head">
+                  <div>
+                    <div class="campus-name"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234" target="_blank" rel="noopener">Dallas Campus</a><small>Farmers Branch, TX</small></div>
+                  </div>
+                  <div class="campus-id"><strong>Since 1931</strong></div>
+                </div>
+                <div class="campus-stats">
+                  <div class="campus-stat"><div class="num">235K</div><div class="lab">sq ft</div></div>
+                  <div class="campus-stat"><div class="num">145</div><div class="lab">Employees</div></div>
+                  <div class="campus-stat"><div class="num">$40M</div><div class="lab">Capital investment</div></div>
+                </div>
+                <div class="campus-addr">
+                  <strong><a href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234" target="_blank" rel="noopener">1801 Valley View Lane, Farmers Branch, TX 75234</a></strong>
+                  (214) 821-2375
+                </div>
+              </div>
+            </article>
+
+            <article class="campus-card">
+              <div class="campus-photo" data-lightbox role="button" tabindex="0"
+                   data-lb-name="Envision, Wichita Campus"
+                   data-lb-addr="2301 S. Water Street, Wichita, KS 67213"
+                   data-lb-href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213"
+                   aria-label="Enlarge the Envision, Wichita Campus location image and area map">
+                <img src="images/campus-card-wichita.png" alt="Envision, Wichita Campus on South Water Street, shown with a map of Wichita locating the campus south of downtown near I-235, Wichita Dwight D. Eisenhower National Airport, and McConnell Air Force Base" loading="lazy">
+                <div class="campus-photo-tag"><span class="accent-dot" style="background:#003087"></span>Envision, Wichita Campus</div>
+                <span class="campus-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
+              </div>
+              <div class="campus-body">
+                <div class="campus-head">
+                  <div>
+                    <div class="campus-name"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213" target="_blank" rel="noopener">Wichita Campus</a><small>Wichita, KS</small></div>
+                  </div>
+                  <div class="campus-id"><strong>Since 1933</strong></div>
+                </div>
+                <div class="campus-stats">
+                  <div class="campus-stat"><div class="num">175K</div><div class="lab">sq ft</div></div>
+                  <div class="campus-stat"><div class="num">315</div><div class="lab">Employees</div></div>
+                  <div class="campus-stat"><div class="num">$15M</div><div class="lab">Capital investment</div></div>
+                </div>
+                <div class="campus-addr">
+                  <strong><a href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213" target="_blank" rel="noopener">2301 S. Water Street, Wichita, KS 67213</a></strong>
+                  (316) 522-3232
+                </div>
+              </div>
+            </article>
+
           </div>
         </div>
       </section>
@@ -4284,42 +4350,6 @@
   }, {passive:true});
 
   render();
-
-  // ===================== DECISION TREE =====================
-  (function(){
-    var CONTACTS = {
-      "manufacturing":{dept:"Manufacturing",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Wichita Campus"},
-      "print":{dept:"Print Services",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Wichita Campus"},
-      "fulfillment":{dept:"Fulfillment & Distribution",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Wichita Campus"},
-      "contact-center":{dept:"Contact Center",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Dallas & Wichita"},
-      "procurement":{dept:"Federal Procurement",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Wichita Campus"},
-      "accessibility":{dept:"Accessibility Services",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Wichita Campus"},
-      "quality":{dept:"Quality & Compliance",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Dallas Campus"},
-      "document-services":{dept:"Secure Document Services",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Dallas Campus"},
-      "bsc":{dept:"Base Supply Centers",name:"[ Name ]",title:"[ Title ]",email:"[ email@envisionus.com ]",phone:"[ (316) 000-0000 ]",location:"Multi-site"}
-    };
-
-    var dtCat = document.getElementById("dtCat");
-    var dtResult = document.getElementById("dtResult");
-    var bcardDept = document.getElementById("bcardDept");
-    var bcardName = document.getElementById("bcardName");
-    var bcardTitle = document.getElementById("bcardTitle");
-    var bcardEmail = document.getElementById("bcardEmail");
-    var bcardPhone = document.getElementById("bcardPhone");
-    var bcardLocation = document.getElementById("bcardLocation");
-
-    dtCat.addEventListener("change", function(){
-      var c = CONTACTS[dtCat.value];
-      if (!c) return;
-      bcardDept.textContent = c.dept;
-      bcardName.textContent = c.name;
-      bcardTitle.textContent = c.title;
-      bcardEmail.textContent = c.email;
-      bcardPhone.textContent = c.phone;
-      bcardLocation.textContent = c.location;
-      dtResult.classList.add("is-visible");
-    });
-  })();
 
 })();
 </script>
