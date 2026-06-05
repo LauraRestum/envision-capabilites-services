@@ -653,6 +653,14 @@
   @media (max-width:780px){
     .tile-grid{grid-template-columns:1fr}
   }
+  /* Capabilities hub renders two-by-four; Services keeps the shared three-wide rule. */
+  #capTiles{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:1100px) and (min-width:781px){
+    #capTiles{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:780px){
+    #capTiles{grid-template-columns:1fr}
+  }
   .tile{
     position:relative;background:var(--bg-tint);border:1px solid var(--rule-light);
     border-radius:4px;cursor:pointer;padding:26px 24px;overflow:hidden;
@@ -1839,7 +1847,7 @@
           </figure>
           <div class="eyebrow">Everything Envision Offers</div>
           <h2 class="sec-h">Every capability. Every service.</h2>
-          <p class="subhead">Six manufacturing capabilities and seven supporting services, delivered across the Envision system. Click any tile to explore.</p>
+          <p class="subhead">Eight capabilities spanning manufacturing, fulfillment, and custom production, and seven supporting services, delivered across the Envision system. Click any tile to explore.</p>
           <div class="zones-split">
             <div class="zone">
               <div class="zone-label">Capabilities</div>
@@ -1861,7 +1869,7 @@
           </figure>
           <div class="eyebrow">Capabilities</div>
           <h2 class="sec-h">Everything Envision <span class="accent">makes.</span></h2>
-          <p class="subhead">Six manufacturing capabilities operated across the Envision system. Each one shipped under contract today.</p>
+          <p class="subhead">Eight capabilities spanning manufacturing, fulfillment, and custom production, operated across the Envision system. Each one shipped under contract today.</p>
           <p class="hint">Tap any tile to explore in depth</p>
           <div class="tile-grid" id="capTiles"></div>
         </div>
@@ -2789,15 +2797,15 @@
       imgSrc:"images/envision-dallas-writing-instruments-assembly.jpg"
     },
     fulfillment:{
-      label:"Capabilities", eyebrow:"Capability", title:"Fulfillment, Kitting & Assembly",
+      label:"Capabilities", eyebrow:"Capability", title:"Fulfillment & Distribution",
       location:null,
-      summary:"Kitting, pick and pack, distribution, and value-add assembly across the system. Kitting area at Wichita. MIL-STD-129 compliant packaging, 23 dock doors plus 8 rail-spur doors, climate-controlled storage at Dallas.",
+      summary:"Pick and pack, MIL-STD-129 compliant packaging and labeling, climate-controlled storage, and distribution across the system. 23 dock doors plus 8 rail-spur doors at Dallas, on a federal-compliant labor model.",
       creds:["Federal compliant","MIL-STD-129","RFID","Climate-controlled","23 + 8 dock doors"],
       overview:[
-        "Custom <strong>kitting</strong> and bundled product programs. <strong>BFCUK</strong> (Body Fluid Clean Up Kit) is one example: an 8-piece kit assembled to the OSHA bloodborne pathogens standard.",
-        "<strong>VISI-BELT assembly</strong> is one example of value-add work happening in the Wichita kitting area.",
-        "<strong>Dallas warehouse &amp; fulfillment.</strong> 23 dock doors plus 8 doors adjoining an active rail spur. Climate-controlled storage, cross-docking, MIL-STD-129 packaging and labeling, RFID tagging, OCONUS shipping, and worldwide 3PL integrations.",
-        "Real-time inventory tracking, active cycle counting, automated restocks, e-commerce integrations, and analytics reporting through an audited WMS. Pick and pack fulfillment runs on the <strong>federal-compliant labor model</strong>."
+        "<strong>Pick and pack fulfillment.</strong> Multi-channel order fulfillment on a federal-compliant labor model, with e-commerce and UPS integrations.",
+        "<strong>Dallas warehouse &amp; distribution.</strong> 23 dock doors plus 8 doors adjoining an active rail spur. Climate-controlled storage, cross-docking, MIL-STD-129 packaging and labeling, RFID tagging, OCONUS shipping, and worldwide 3PL integrations.",
+        "Real-time inventory tracking, active cycle counting, automated restocks, e-commerce and UPS integrations, and analytics reporting through an audited WMS.",
+        "Distribution and shipping run on the <strong>federal-compliant labor model</strong>."
       ],
       statLabel:"The Numbers Behind the Build",
       stats:[
@@ -2807,11 +2815,35 @@
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Service",title:"Custom kitting",desc:"Bundled product programs. BFCUK 8-piece OSHA kit, subscription boxes, promotional sets, multi-part repair kits.",specs:[["Example","BFCUK"],["Pieces","8"]],img:"images/products/bfcuk-kit.jpg"},
         {tag:"Service",title:"Pick and pack fulfillment",desc:"Federal-compliant labor model. Multi-channel order fulfillment with WMS integration.",specs:[["Model","AbilityOne"],["Channels","Multi"]]},
-        {tag:"Service",title:"Value-add assembly",desc:"Mechanical and electronic sub-assembly with functional pre-shipment audits. VISI-BELT assembly is one example.",specs:[["QA","100% pre-shipment"],["Example","VISI-BELT"]]},
-        {tag:"Service",title:"Specialty packaging",desc:"Custom GS1-128 barcoding, tamper-evident heat-shrink, structural inserts, retail-ready blister packs, climate-controlled storage for sensitive materials.",specs:[["Std","GS1-128"],["Climate","Controlled"]]},
-        {tag:"Service",title:"Specialty product lines",desc:"Eyeglass cases, hoist slings (EET/EEF web slings rated 6,200 lb), reusable cloth face masks, certified commissary and hygiene products through AbilityOne and Texas WorkQuest.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]},
+        {tag:"Service",title:"Distribution & shipping",desc:"23 dock doors plus 8 rail-spur doors at Dallas. Cross-docking, OCONUS shipping, and worldwide 3PL integrations.",specs:[["Doors","23 + 8"],["Shipping","OCONUS / 3PL"]]},
+        {tag:"Service",title:"Inventory & WMS",desc:"Real-time inventory tracking, active cycle counting, automated restocks, e-commerce and UPS integrations, and analytics through an audited WMS.",specs:[["Tracking","Real-time"],["Restocks","Automated"]]},
+        {tag:"Service",title:"Specialty packaging",desc:"Custom GS1-128 barcoding, tamper-evident heat-shrink, structural inserts, retail-ready blister packs, climate-controlled storage for sensitive materials.",specs:[["Std","GS1-128"],["Climate","Controlled"]]}
+      ],
+      img:"Fulfillment and distribution line, 4:3",
+      imgSrc:"images/envision-dallas-warehouse-forklift.png"
+    },
+    kitting:{
+      label:"Capabilities", eyebrow:"Capability", title:"Kitting & Assembly",
+      location:null,
+      summary:"Value-add kitting and assembly that builds finished, ready-to-issue kits from component parts, including military kit builds, on a federal-compliant labor model.",
+      creds:["Federal compliant","MIL-STD-129","RFID","Military kit builds"],
+      overview:[
+        "<strong>Kitting.</strong> Components are gathered, counted, and packaged into finished, ready-to-issue kits to a defined bill of materials.",
+        "<strong>Value-add assembly.</strong> Hand and bench assembly of multi-component products, including military kit builds such as MOLLE and combat uniform e-tool pouch kits.",
+        "Packaging and labeling to MIL-STD-129, with RFID tagging where required.",
+        "Kitting and assembly run on a federal-compliant labor model and a workforce that is largely blind or has low vision."
+      ],
+      statLabel:"The Numbers Behind the Build",
+      stats:[
+        {num:"MIL-STD-129",label:"Compliant",ctx:"Packaging and labeling on assembled kits, with RFID tagging where required."},
+        {num:"Federal",label:"Labor model",ctx:"Kitting and assembly run on a federal-compliant labor model."},
+        {num:"5",label:"Hand truck configurations",ctx:"Steel-frame hand trucks, NSN cataloged, 300 to 700 lb."}
+      ],
+      calloutLabel:"Service Lines",
+      callouts:[
+        {tag:"Service",title:"Custom kitting",desc:"Components gathered, counted, and packaged into finished, ready-to-issue kits to a defined bill of materials. BFCUK 8-piece OSHA kit, subscription boxes, promotional sets, multi-part repair kits.",specs:[["Example","BFCUK"],["Pieces","8"]],img:"images/products/bfcuk-kit.jpg"},
+        {tag:"Service",title:"Value-add assembly",desc:"Hand and bench assembly of multi-component products, including military kit builds such as MOLLE and combat uniform e-tool pouch kits. VISI-BELT assembly is one example.",specs:[["QA","100% pre-shipment"],["Example","VISI-BELT"]]},
         {tag:"Product",title:"Hand Trucks",desc:"Steel-frame hand trucks, NSN cataloged, 300 to 700 lb across five configurations.",specs:[["Capacity","300 to 700 lb"],["Configurations","5"],["Catalog","NSN"]],img:"images/products/hand-truck.jpg"}
       ],
       catalogs:[
@@ -2820,23 +2852,48 @@
           ["VISI-BELT assembly","31 to 55 in. adjustable","Wichita","Value-add assembly. Kitting area."],
           ["Multi-part repair kits","Custom BOM","Dallas + Wichita","Verified bill-of-materials accuracy at production volumes."],
           ["Subscription & promotional sets","Custom","Dallas + Wichita","Bundled product programs."]
-        ], footnote:"Functional pre-shipment audits on assembled product. Federal-compliant labor model on pick and pack fulfillment."},
+        ], footnote:"Functional pre-shipment audits on assembled product. Federal-compliant labor model on kitting and assembly."},
         {title:"Hand Trucks", meta:"Wichita · steel-frame · NSN cataloged", columns:["Part #","NSN","Configuration","Height","Capacity","Color"], rows:[
           ["ENV-CFH600-HT","3920-00-NIB-0001","Continuous Flow Handle","48 in","600 lb","Green"],
           ["ENV-TH600-HT","3920-00-NIB-0002","Twin Handle","46 in","600 lb","Green"],
           ["ENV-ECON300-HT","3920-00-NIB-0003","Economy","40 in","300 lb","Green"],
           ["ENV-DH800-HT","3920-00-NIB-0004","D-Handle","48 in","600 lb","Green"],
           ["ENV-CONV600-HT","3920-00-NIB-0005","Convertible","48 in","700 lb vertical / 600 lb horizontal","Green"]
-        ], footnote:"Steel-frame hand trucks across five configurations. NSN cataloged for federal logistics and material handling."},
+        ], footnote:"Steel-frame hand trucks across five configurations. NSN cataloged for federal logistics and material handling."}
+      ],
+      img:"Kit assembly and value-add line, 4:3"
+    },
+    specialty:{
+      label:"Capabilities", eyebrow:"Capability", title:"Specialty Products",
+      location:"Dallas",
+      summary:"Custom decoration and bespoke production. Logo embroidery and heat-transfer logo application on apparel and finished goods, plus specialty product lines built to customer specification.",
+      creds:["Embroidery","Heat-transfer logos","Custom decoration","Built to spec"],
+      overview:[
+        "<strong>Embroidery.</strong> Logo and emblem embroidery applied to apparel and finished goods. Envision applies the decoration to your artwork; it does not produce the thread.",
+        "<strong>Heat-transfer logos (HTV).</strong> Heat-applied logo decoration in full color or black and white, within a defined maximum size. These are heat-transfer logos, not vinyl-cut graphics.",
+        "<strong>Specialty product lines.</strong> Bespoke and lower-volume items produced to customer specification."
+      ],
+      statLabel:"At a Glance",
+      stats:[
+        {num:"Logo",label:"Embroidery",ctx:"Logo and emblem embroidery applied to apparel and finished goods."},
+        {num:"HTV",label:"Heat-transfer logos",ctx:"Full color or black and white, within a defined maximum size [VERIFY w/ Steve]."},
+        {num:"6,200 lb",label:"Hoist sling rating",ctx:"EET / EEF web slings, vertical rating, within the specialty product lines."}
+      ],
+      calloutLabel:"Service Lines",
+      callouts:[
+        {tag:"Decoration",title:"Embroidery",desc:"Logo and emblem embroidery applied to apparel and finished goods. Envision applies the decoration to your artwork; it does not produce the thread.",specs:[["Applied to","Apparel & finished goods"],["Options","[VERIFY w/ Steve]"]]},
+        {tag:"Decoration",title:"Heat-Transfer Logos (HTV)",desc:"Heat-applied logo decoration in full color or black and white, within a defined maximum size. These are heat-transfer logos, not vinyl-cut graphics.",specs:[["Color","Full color or B/W"],["Max size","[VERIFY w/ Steve]"]]},
+        {tag:"Product",title:"Specialty product lines",desc:"Bespoke and lower-volume items produced to customer specification. Eyeglass cases, hoist slings (EET/EEF web slings rated 6,200 lb), reusable cloth face masks, certified commissary and hygiene products through AbilityOne and Texas WorkQuest.",specs:[["Slings","EET/EEF type"],["Rating","6,200 lb vertical"]]}
+      ],
+      catalogs:[
         {title:"Specialty Product Lines", meta:"AbilityOne + Texas WorkQuest", columns:["Product","Spec / Rating","Catalog"], rows:[
           ["Eyeglass cases","Commercial","AbilityOne / WorkQuest"],
           ["Hoist slings (EET / EEF web)","6,200 lb vertical","Federal"],
           ["Reusable cloth face masks","Hygiene","Commissary"],
           ["Commissary & hygiene products","Certified","AbilityOne / WorkQuest"]
-        ], footnote:"Specialty product lines flow through the same MIL-STD-129 packaging and labeling standards as core fulfillment programs."}
+        ], footnote:"Specialty product lines are built to customer specification and flow through the same MIL-STD-129 packaging and labeling standards as core programs."}
       ],
-      img:"Fulfillment line or kit assembly, 4:3",
-      imgSrc:"images/envision-dallas-warehouse-forklift.png"
+      img:"Embroidery and custom decoration detail, 4:3"
     },
     printSvc:{
       label:"Services", eyebrow:"Service", title:"Print",
@@ -3021,7 +3078,9 @@
     ["reflective","Reflective Safety Systems","Reflective vinyl products in-house, including the VISI-BELT system and safety vests.","Wichita"],
     ["binders","Binders & Document Covers","Custom binders, presentation portfolios, certificate and document covers, and Texas State Seal portfolios.","Dallas"],
     ["writing","Writing Instruments","Dry erase, highlighter, and permanent markers from Dallas, plus Wichita-assembled pens.","Dallas"],
-    ["fulfillment","Fulfillment, Kitting & Assembly","Kitting, pick and pack, MIL-STD-129 packaging, climate-controlled storage, value-add assembly, and hand trucks.",null]
+    ["fulfillment","Fulfillment & Distribution","Pick and pack, MIL-STD-129 packaging, climate-controlled storage, real-time inventory, and distribution on a federal-compliant labor model.",null],
+    ["kitting","Kitting & Assembly","Value-add kitting and hand assembly that builds finished, ready-to-issue kits, including military kit builds.",null],
+    ["specialty","Specialty Products","Logo embroidery and heat-transfer logo decoration on apparel and finished goods, plus bespoke specialty product lines.","Dallas"]
   ];
   var SVC_ORDER = [
     ["printSvc","Print","Web-to-print storefronts with instant soft proofs, federal-grade commercial print, in-house Braille embossing, and bindery. Digital and offset production.","Wichita"],
@@ -3209,6 +3268,7 @@
   var MODAL_TO_CONTACT = {
     plastic:"manufacturing", textile:"manufacturing", reflective:"manufacturing",
     binders:"manufacturing", writing:"manufacturing", fulfillment:"fulfillment",
+    kitting:"fulfillment", specialty:"fulfillment",
     printSvc:"print", contact:"contact-center", bpo:"document-services",
     accessibility:"accessibility", procurement:"procurement", quality:"quality"
   };
