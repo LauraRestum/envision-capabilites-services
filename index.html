@@ -714,24 +714,83 @@
   }
   .callout-box strong{color:#fff;font-weight:700}
 
-  /* ---------- Innovation (compact, fits one frame, no scroll) ---------- */
-  .slide--innovation .img-banner{max-height:120px;margin-bottom:14px}
-  .slide--innovation .eyebrow{margin-bottom:9px}
-  .slide--innovation h2.sec-h{margin-bottom:9px;font-size:clamp(1.45rem,2.3vw,1.95rem)}
-  .slide--innovation .subhead{font-size:clamp(.9rem,1.05vw,1.02rem);line-height:1.5;max-width:96ch;margin-bottom:0}
-  .slide--innovation .cred-grid{margin-top:14px;gap:9px}
-  .slide--innovation .cred{padding:13px 15px}
-  .slide--innovation .cred .c-h{font-size:13.5px;margin-bottom:5px}
-  .slide--innovation .cred .c-d{font-size:11.5px;line-height:1.45}
-  .slide--innovation .proof-grid{margin-top:11px;gap:9px}
-  .slide--innovation .proof-card{padding:13px 15px}
-  .slide--innovation .proof-card .t-h{font-size:14.5px;margin-bottom:5px}
-  .slide--innovation .proof-card .t-d{font-size:11.5px;line-height:1.45}
-  .slide--innovation .proof-card .t-m{margin-top:8px;padding-top:8px;font-size:11px;line-height:1.4}
-  .slide--innovation .callout-box{margin-top:11px;padding:13px 18px;font-size:12.5px;line-height:1.5}
-  @media (min-width:760px){
-    .slide--innovation .cred-grid{grid-template-columns:repeat(3,1fr)}
-    .slide--innovation .proof-grid{grid-template-columns:repeat(2,1fr)}
+  /* ---------- Innovation & Prototyping ---------- */
+  .slide--innovation .wrap{max-width:1340px}
+
+  /* Hero: intro text + lab image, side by side so the sign reads */
+  .slide--innovation .inv-hero{
+    display:grid;grid-template-columns:1fr 1.08fr;
+    gap:clamp(22px,3.4vw,52px);align-items:center;
+    margin-bottom:clamp(18px,3vh,30px);
+  }
+  .slide--innovation .inv-intro .eyebrow{margin-bottom:14px}
+  .slide--innovation h2.sec-h{
+    margin-bottom:14px;font-size:clamp(1.85rem,2.9vw,2.6rem);
+  }
+  .slide--innovation .subhead{
+    font-size:clamp(1rem,1.12vw,1.12rem);line-height:1.62;
+    max-width:52ch;margin-bottom:0;
+  }
+  .slide--innovation .inv-hero .img-banner{
+    max-height:none;height:clamp(228px,36vh,360px);margin:0;
+    box-shadow:0 20px 44px rgba(0,24,82,0.14);
+  }
+  .slide--innovation .inv-hero .img-banner img{object-position:center 30%}
+
+  /* Section heading for the capability grid */
+  .slide--innovation .inv-secline{
+    display:flex;align-items:center;gap:14px;margin-bottom:16px;
+  }
+  .slide--innovation .inv-secline h3{
+    font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--green);margin:0;white-space:nowrap;
+  }
+  .slide--innovation .inv-secline::after{
+    content:'';flex:1;height:1px;background:var(--rule-light);
+  }
+
+  /* Capability cards: balanced 3x2 grid with an accent on hover */
+  .slide--innovation .cred-grid{margin-top:0;gap:14px;grid-template-columns:repeat(3,1fr)}
+  .slide--innovation .cred{
+    padding:18px 20px;position:relative;overflow:hidden;
+    transition:border-color .2s,transform .2s,box-shadow .2s;
+  }
+  .slide--innovation .cred::before{
+    content:'';position:absolute;top:0;left:0;width:3px;height:0;
+    background:var(--green);transition:height .3s ease;
+  }
+  .slide--innovation .cred:hover{
+    border-color:var(--navy);transform:translateY(-2px);
+    box-shadow:0 12px 26px rgba(0,24,82,0.08);
+  }
+  .slide--innovation .cred:hover::before{height:100%}
+  .slide--innovation .cred .c-h{font-size:15px;margin-bottom:7px}
+  .slide--innovation .cred .c-d{font-size:13px;line-height:1.55}
+
+  /* Proof row: a balanced light / navy pair */
+  .slide--innovation .proof-grid{margin-top:18px;gap:14px;grid-template-columns:1fr 1fr}
+  .slide--innovation .proof-card{padding:20px 22px}
+  .slide--innovation .proof-card .t-h{font-size:16px;margin-bottom:8px}
+  .slide--innovation .proof-card .t-d{font-size:13px;line-height:1.6}
+  .slide--innovation .proof-card .t-m{margin-top:12px;padding-top:12px;font-size:12px;line-height:1.5}
+  .slide--innovation .proof-card--navy{background:var(--navy);border-color:var(--navy)}
+  .slide--innovation .proof-card--navy .tag{color:var(--green)}
+  .slide--innovation .proof-card--navy .t-h{color:#fff}
+  .slide--innovation .proof-card--navy .t-d{color:rgba(255,255,255,0.86)}
+  .slide--innovation .proof-card--navy .t-m{
+    color:rgba(255,255,255,0.72);border-top-color:rgba(255,255,255,0.18);
+  }
+
+  .slide--innovation .callout-box{margin-top:16px;padding:18px 24px;font-size:13.5px;line-height:1.6}
+
+  @media (max-width:880px){
+    .slide--innovation .inv-hero{grid-template-columns:1fr}
+    .slide--innovation .inv-hero .img-banner{order:-1;height:clamp(200px,30vh,300px)}
+    .slide--innovation .cred-grid{grid-template-columns:1fr 1fr}
+    .slide--innovation .proof-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:560px){
+    .slide--innovation .cred-grid{grid-template-columns:1fr}
   }
 
   /* ---------- Mission ---------- */
@@ -1815,12 +1874,17 @@
       <!-- SLIDE 7.5: INNOVATION & PROTOTYPING LABORATORY -->
       <section class="slide slide--innovation" data-name="Innovation">
         <div class="wrap">
-          <figure class="img-banner">
-            <img src="images/innovation-prototyping-lab.png" alt="Envision Innovation and Prototyping Laboratory, with the Implementation Shop and Quality Assurance and Test Laboratory beyond" style="object-position:center 55%">
-          </figure>
-          <div class="eyebrow">Innovation &amp; Prototyping</div>
-          <h2 class="sec-h">Where new products <span class="accent">begin.</span></h2>
-          <p class="subhead">Envision's Innovation &amp; Prototyping Laboratory is the front end of our manufacturing capability. We carry a concept from first sketch through prototyping to a production-ready solution, then move it onto the same U.S. floor that fills the order.</p>
+          <div class="inv-hero">
+            <div class="inv-intro">
+              <div class="eyebrow">Innovation &amp; Prototyping</div>
+              <h2 class="sec-h">Where new products <span class="accent">begin.</span></h2>
+              <p class="subhead">Envision's Innovation &amp; Prototyping Laboratory is the front end of our manufacturing capability. We carry a concept from first sketch through prototyping to a production-ready solution, then move it onto the same U.S. floor that fills the order.</p>
+            </div>
+            <figure class="img-banner">
+              <img src="images/innovation-prototyping-lab.png" alt="Envision Innovation and Prototyping Laboratory, with the Implementation Shop and Quality Assurance and Test Laboratory beyond">
+            </figure>
+          </div>
+          <div class="inv-secline"><h3>Lab Capabilities</h3></div>
           <div class="cred-grid">
             <div class="cred">
               <div class="c-h">End-to-End Prototyping</div>
@@ -1854,7 +1918,7 @@
               <div class="t-d">Envision's team developed a cold-weather hand warmer for a military end user, carrying it from prototype through a production-ready design and into manufacturing.</div>
               <div class="t-m">Concept to production, under one roof.</div>
             </div>
-            <div class="proof-card">
+            <div class="proof-card proof-card--navy">
               <div class="tag">The Envision Difference</div>
               <div class="t-h">Concept to Volume</div>
               <div class="t-d">The same domestic operation that prototypes your product can manufacture it at scale. Development and full-scale production sit on one floor, on federal-grade quality systems.</div>
