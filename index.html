@@ -384,10 +384,10 @@
     display:flex;flex-direction:column;
   }
   .campus-photo{
-    position:relative;aspect-ratio:5/2;overflow:hidden;background:var(--bg-tint);
+    position:relative;background:var(--bg-tint);
   }
   .campus-photo img{
-    width:100%;height:100%;object-fit:cover;display:block;
+    width:100%;height:auto;display:block;
   }
   .campus-photo-tag{
     position:absolute;top:12px;left:12px;background:#fff;color:var(--navy);
@@ -432,20 +432,9 @@
     font-size:12px;line-height:1.5;color:var(--text-soft);
   }
   .campus-addr strong{color:var(--navy);font-weight:700;display:block;margin-bottom:2px;font-size:12.5px}
-  .campus-map{margin-top:12px;padding-top:12px;border-top:1px solid var(--rule-light)}
-  .campus-map a{
-    display:block;text-decoration:none;
-    border-radius:5px;
-    transition:transform .18s;
-  }
-  .campus-map a:hover{transform:translateY(-1px)}
-  .campus-map a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-  .campus-map img{
-    width:100%;aspect-ratio:16/9;object-fit:cover;display:block;
-    border:1px solid var(--rule-light);
-  }
-  .campus-map .map-cue{margin-top:8px}
-  .campus-map a:hover .map-cue{text-decoration:underline}
+  .campus-addr a{color:inherit;text-decoration:none;transition:color .15s}
+  .campus-addr a:hover{color:var(--green);text-decoration:underline}
+  .campus-addr a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
   /* Act 3: Federal infrastructure band */
   .fed-band{
@@ -1478,7 +1467,7 @@
 
             <article class="campus-card">
               <div class="campus-photo">
-                <img src="images/envision-dallas-building-exterior.png" alt="Exterior of the Envision, Dallas Campus" loading="lazy">
+                <img src="images/campus-card-dallas.png" alt="Envision, Dallas Campus in Farmers Branch, Texas, shown with a map of the Dallas Fort Worth metroplex locating the campus near I-635, the Dallas North Tollway, and DFW International Airport" loading="lazy">
                 <div class="campus-photo-tag"><span class="accent-dot" style="background:#78BE21"></span>Envision, Dallas Campus</div>
               </div>
               <div class="campus-body">
@@ -1494,21 +1483,15 @@
                   <div class="campus-stat"><div class="num">$40M</div><div class="lab">Capital investment</div></div>
                 </div>
                 <div class="campus-addr">
-                  <strong>1801 Valley View Lane, Farmers Branch, TX 75234</strong>
+                  <strong><a href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234" target="_blank" rel="noopener">1801 Valley View Lane, Farmers Branch, TX 75234</a></strong>
                   (214) 821-2375
                 </div>
-                <figure class="campus-map">
-                  <a href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234" target="_blank" rel="noopener" aria-label="Get directions to the Envision, Dallas Campus on Google Maps">
-                    <img src="images/map-dallas-farmers-branch.png" alt="Map of the Dallas Fort Worth metroplex showing the Envision, Dallas Campus in Farmers Branch near I-635, the Dallas North Tollway, and DFW International Airport" loading="lazy">
-                    <span class="bsc-cue map-cue">Get Directions <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-                  </a>
-                </figure>
               </div>
             </article>
 
             <article class="campus-card">
               <div class="campus-photo">
-                <img src="images/envision-building-sideangle.png" alt="Side-angle exterior of Envision Wichita Campus entrance with Envision Industries signage" loading="lazy">
+                <img src="images/campus-card-wichita.png" alt="Envision, Wichita Campus on South Water Street, shown with a map of Wichita locating the campus south of downtown near I-235, Wichita Dwight D. Eisenhower National Airport, and McConnell Air Force Base" loading="lazy">
                 <div class="campus-photo-tag"><span class="accent-dot" style="background:#003087"></span>Envision, Wichita Campus</div>
               </div>
               <div class="campus-body">
@@ -1524,15 +1507,9 @@
                   <div class="campus-stat"><div class="num">$15M</div><div class="lab">Capital investment</div></div>
                 </div>
                 <div class="campus-addr">
-                  <strong>2301 S. Water Street, Wichita, KS 67213</strong>
+                  <strong><a href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213" target="_blank" rel="noopener">2301 S. Water Street, Wichita, KS 67213</a></strong>
                   (316) 522-3232
                 </div>
-                <figure class="campus-map">
-                  <a href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213" target="_blank" rel="noopener" aria-label="Get directions to the Envision, Wichita Campus on Google Maps">
-                    <img src="images/map-wichita-water-st.png" alt="Map of the Wichita area showing the Envision, Wichita Campus on South Water Street near downtown Wichita, I-235, and Kellogg Avenue" loading="lazy">
-                    <span class="bsc-cue map-cue">Get Directions <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-                  </a>
-                </figure>
               </div>
             </article>
 
