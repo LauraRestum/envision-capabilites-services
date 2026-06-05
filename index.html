@@ -1417,6 +1417,12 @@
   .bsc-marker:hover .bsc-ring,
   .bsc-marker:focus .bsc-ring,
   .bsc-marker:focus-visible .bsc-ring{opacity:.85}
+  .bsc-dot{transition:filter .18s ease}
+  .bsc-marker:hover .bsc-dot,
+  .bsc-marker:focus .bsc-dot,
+  .bsc-marker:focus-visible .bsc-dot{
+    filter:drop-shadow(0 0 4px var(--bsc-lime)) drop-shadow(0 0 9px rgba(184,224,74,0.65));
+  }
   .bsc-tip{
     position:absolute;transform:translate(-50%,calc(-100% - 13px));
     background:var(--bsc-deep);border:1px solid rgba(184,224,74,0.5);
@@ -1426,7 +1432,11 @@
     pointer-events:none;opacity:0;transition:opacity .15s ease;z-index:5;
   }
   .bsc-tip strong{font-weight:700;font-size:12px;letter-spacing:-0.01em}
-  .bsc-tip span{color:var(--bsc-lime);font-size:10px;letter-spacing:.04em}
+  .bsc-tip .bsc-tip-city{color:var(--bsc-white);opacity:.82;font-size:10.5px}
+  .bsc-tip .bsc-tip-branch{
+    color:var(--bsc-lime);font-size:9.5px;font-weight:600;
+    letter-spacing:.07em;text-transform:uppercase;
+  }
   .bsc-tip.show{opacity:1}
 
   /* One-time entrance, replays on each open (driven off .bsc-modal.is-open). */
@@ -3469,22 +3479,22 @@
   // existing BSC_MAP data name. Buckley and Peterson were redesignated Space
   // Force bases in 2021, so they read SFB even though the data key says AFB.
   var BASE_INFO = {
-    "Fairchild AFB":   {short:"Fairchild AFB",   full:"Fairchild Air Force Base",        branch:"Air Force"},
-    "NAS Lemoore":     {short:"NAS Lemoore",     full:"Naval Air Station Lemoore",        branch:"Navy"},
-    "Mtn Home AFB":    {short:"Mtn Home AFB",    full:"Mountain Home Air Force Base",     branch:"Air Force"},
-    "FE Warren AFB":   {short:"FE Warren AFB",   full:"F.E. Warren Air Force Base",       branch:"Air Force"},
-    "USAFA":           {short:"USAFA",           full:"U.S. Air Force Academy",           branch:"Air Force"},
-    "Buckley AFB":     {short:"Buckley SFB",     full:"Buckley Space Force Base",         branch:"Space Force"},
-    "Peterson AFB":    {short:"Peterson SFB",    full:"Peterson Space Force Base",        branch:"Space Force"},
-    "Ft Carson":       {short:"Ft Carson",       full:"Fort Carson",                      branch:"Army"},
-    "Minot AFB":       {short:"Minot AFB",       full:"Minot Air Force Base",             branch:"Air Force"},
-    "Grand Forks AFB": {short:"Grand Forks AFB", full:"Grand Forks Air Force Base",       branch:"Air Force"},
-    "Offutt AFB":      {short:"Offutt AFB",      full:"Offutt Air Force Base",            branch:"Air Force"},
-    "McConnell AFB":   {short:"McConnell AFB",   full:"McConnell Air Force Base",         branch:"Air Force"},
-    "Ft Riley":        {short:"Ft Riley",        full:"Fort Riley",                       branch:"Army"},
-    "Ft Leavenworth":  {short:"Ft Leavenworth",  full:"Fort Leavenworth",                 branch:"Army"},
-    "Whiteman AFB":    {short:"Whiteman AFB",    full:"Whiteman Air Force Base",          branch:"Air Force"},
-    "NSA Mid-South":   {short:"NSA Mid-South",   full:"Naval Support Activity Mid-South", branch:"Navy"}
+    "Fairchild AFB":   {short:"Fairchild AFB",   full:"Fairchild Air Force Base", city:"Spokane, WA",        branch:"Air Force"},
+    "NAS Lemoore":     {short:"NAS Lemoore",     full:"Naval Air Station Lemoore", city:"Lemoore, CA",        branch:"Navy"},
+    "Mtn Home AFB":    {short:"Mtn Home AFB",    full:"Mountain Home Air Force Base", city:"Mountain Home, ID",     branch:"Air Force"},
+    "FE Warren AFB":   {short:"FE Warren AFB",   full:"F.E. Warren Air Force Base", city:"Cheyenne, WY",       branch:"Air Force"},
+    "USAFA":           {short:"USAFA",           full:"U.S. Air Force Academy", city:"Colorado Springs, CO",           branch:"Air Force"},
+    "Buckley AFB":     {short:"Buckley SFB",     full:"Buckley Space Force Base", city:"Aurora, CO",         branch:"Space Force"},
+    "Peterson AFB":    {short:"Peterson SFB",    full:"Peterson Space Force Base", city:"Colorado Springs, CO",        branch:"Space Force"},
+    "Ft Carson":       {short:"Ft Carson",       full:"Fort Carson", city:"Colorado Springs, CO",                      branch:"Army"},
+    "Minot AFB":       {short:"Minot AFB",       full:"Minot Air Force Base", city:"Minot, ND",             branch:"Air Force"},
+    "Grand Forks AFB": {short:"Grand Forks AFB", full:"Grand Forks Air Force Base", city:"Grand Forks, ND",       branch:"Air Force"},
+    "Offutt AFB":      {short:"Offutt AFB",      full:"Offutt Air Force Base", city:"Bellevue, NE",            branch:"Air Force"},
+    "McConnell AFB":   {short:"McConnell AFB",   full:"McConnell Air Force Base", city:"Wichita, KS",         branch:"Air Force"},
+    "Ft Riley":        {short:"Ft Riley",        full:"Fort Riley", city:"Junction City, KS",                       branch:"Army"},
+    "Ft Leavenworth":  {short:"Ft Leavenworth",  full:"Fort Leavenworth", city:"Leavenworth, KS",                 branch:"Army"},
+    "Whiteman AFB":    {short:"Whiteman AFB",    full:"Whiteman Air Force Base", city:"Knob Noster, MO",          branch:"Air Force"},
+    "NSA Mid-South":   {short:"NSA Mid-South",   full:"Naval Support Activity Mid-South", city:"Millington, TN", branch:"Navy"}
   };
 
   // Repel + tooltip state (module scope so open/reset can reach it).
@@ -3493,6 +3503,7 @@
   var tipEl = null;
   var pointerInside = false, mouseX = 0, mouseY = 0, repelRaf = null;
   var REPEL_R = 82, REPEL_MAX = 26;
+  var pinned = null; // base object whose detail card is pinned open by a click
 
   function prefersReduced(){
     return !!(window.matchMedia &&
@@ -3505,20 +3516,37 @@
     return n;
   }
 
+  // Detail card: full name, city, and service division. Shown transiently on
+  // hover/focus and pinned open on click/tap.
   function showTip(b, info){
     if (!tipEl) return;
     tipEl.innerHTML = "";
     var strong = document.createElement("strong");
     strong.textContent = info.full;
-    var span = document.createElement("span");
-    span.textContent = info.branch;
     tipEl.appendChild(strong);
-    tipEl.appendChild(span);
+    if (info.city){
+      var city = document.createElement("span");
+      city.className = "bsc-tip-city";
+      city.textContent = info.city;
+      tipEl.appendChild(city);
+    }
+    var branch = document.createElement("span");
+    branch.className = "bsc-tip-branch";
+    branch.textContent = info.branch;
+    tipEl.appendChild(branch);
     tipEl.style.left = (b.x / BSC_MAP.W * 100) + "%";
     tipEl.style.top  = (b.y / BSC_MAP.H * 100) + "%";
     tipEl.classList.add("show");
   }
-  function hideTip(){ if (tipEl) tipEl.classList.remove("show"); }
+  // Drop the card unless a base is pinned; if one is, fall back to showing it.
+  function hideTip(){
+    if (pinned){ showTip(pinned.b, pinned.info); return; }
+    if (tipEl) tipEl.classList.remove("show");
+  }
+  function unpinTip(){
+    pinned = null;
+    if (tipEl) tipEl.classList.remove("show");
+  }
 
   // Cursor-repelling tags: push each tag directly away from the pointer,
   // strongest at the cursor and fading to zero by REPEL_R. Leader lines
@@ -3563,7 +3591,7 @@
       o.el.style.transform = "translate(-50%,-50%)";
       if (o.line){ o.line.setAttribute("x2", o.baseVX); o.line.setAttribute("y2", o.baseVY); }
     }
-    hideTip();
+    unpinTip();
   }
 
   // Count the four stat numbers up on each open (instant under reduced motion).
@@ -3630,8 +3658,10 @@
     var markerG = el("g");
     BSC_MAP.bases.forEach(function(b, i){
       var info = BASE_INFO[b.name] || {short:b.name, full:b.name, branch:""};
-      var aria = info.full + (info.branch ? ", " + info.branch : "");
-      var g = el("g", {"class":"bsc-marker", tabindex:"0", role:"img", "aria-label":aria});
+      var aria = info.full +
+        (info.city ? ", " + info.city : "") +
+        (info.branch ? ", " + info.branch : "");
+      var g = el("g", {"class":"bsc-marker", tabindex:"0", role:"button", "aria-label":aria});
       g.appendChild(el("circle", {cx:b.x, cy:b.y, r:13, "class":"bsc-hit"}));
       g.appendChild(el("circle", {cx:b.x, cy:b.y, r:11, "class":"bsc-ring"}));
       var halo = el("circle", {cx:b.x, cy:b.y, r:5, "class":"bsc-halo"});
@@ -3642,11 +3672,21 @@
       g.appendChild(dot);
       (function(bb, inf){
         function show(){ showTip(bb, inf); }
+        function toggle(e){
+          e.stopPropagation();
+          if (pinned && pinned.b === bb){ unpinTip(); }
+          else { pinned = {b:bb, info:inf}; showTip(bb, inf); }
+        }
         g.addEventListener("pointerenter", show);
         g.addEventListener("pointerleave", hideTip);
         g.addEventListener("focus", show);
         g.addEventListener("blur", hideTip);
-        g.addEventListener("click", show);
+        g.addEventListener("click", toggle);
+        g.addEventListener("keydown", function(e){
+          if (e.key === "Enter" || e.key === " " || e.key === "Spacebar"){
+            e.preventDefault(); toggle(e);
+          }
+        });
       })(b, info);
       markerG.appendChild(g);
     });
@@ -3694,6 +3734,11 @@
     aspect.addEventListener("pointerleave", function(){
       pointerInside = false;
       kickRepel();
+    });
+
+    // Click on empty map area dismisses a pinned detail card.
+    aspect.addEventListener("click", function(e){
+      if (!(e.target.closest && e.target.closest(".bsc-marker"))) unpinTip();
     });
   }
 
