@@ -722,6 +722,57 @@
   }
   .callout-box strong{color:#fff;font-weight:700}
 
+  /* ---------- Compliance: campus federal-registration bar ---------- */
+  .reg-bar{
+    margin-top:22px;background:var(--navy);border-radius:6px;
+    padding:20px 24px;color:#fff;
+  }
+  .reg-bar-row{display:flex;align-items:center;flex-wrap:wrap;gap:14px 18px}
+  .reg-bar-label{font-size:14.5px;font-weight:700;color:#fff}
+  .reg-tabs{display:flex;flex-wrap:wrap;gap:10px}
+  .reg-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    font:inherit;font-size:13.5px;font-weight:700;letter-spacing:.04em;
+    color:#fff;cursor:pointer;
+    background:rgba(255,255,255,0.10);
+    border:1.5px solid rgba(255,255,255,0.6);
+    border-radius:999px;padding:8px 16px;
+    transition:background .18s,border-color .18s,color .18s;
+  }
+  .reg-pill .reg-chev{width:13px;height:13px;flex:none;transition:transform .2s}
+  .reg-pill:hover{background:rgba(255,255,255,0.2);border-color:#fff}
+  .reg-pill[aria-expanded="true"]{background:var(--green);border-color:var(--green);color:var(--navy)}
+  .reg-pill[aria-expanded="true"] .reg-chev{transform:rotate(180deg)}
+  .reg-pill:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+  .reg-pill[aria-expanded="true"]:focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .reg-status{
+    margin-left:auto;display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;color:#fff;
+  }
+  .reg-status-dot{
+    width:9px;height:9px;border-radius:50%;background:var(--green);flex:none;
+    box-shadow:0 0 0 3px rgba(120,190,33,0.3);
+  }
+  .reg-panel{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.2)}
+  .reg-panel[hidden]{display:none}
+  .reg-panel-h{font-size:13.5px;font-weight:700;color:#fff;margin:0 0 12px}
+  .reg-entities{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .reg-entity{
+    background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);
+    border-radius:6px;padding:14px 16px;
+  }
+  .reg-entity-name{font-size:13.5px;font-weight:700;color:#fff;margin-bottom:9px}
+  .reg-codes{display:flex;flex-wrap:wrap;gap:7px 20px}
+  .reg-code{white-space:nowrap;font-size:13px;line-height:1.5;color:#fff;font-weight:600}
+  .reg-code-k{
+    color:rgba(255,255,255,0.72);font-weight:700;font-size:10.5px;
+    letter-spacing:.06em;text-transform:uppercase;margin-right:6px;
+  }
+  @media (max-width:560px){
+    .reg-status{margin-left:0}
+    .reg-bar-row{gap:12px 14px}
+  }
+
   /* ---------- Envision In Action ---------- */
   /* Pin the Proof grid to a balanced 2 rows of 3 (6 cards incl. In Action) */
   .slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(3,1fr)}
@@ -2308,7 +2359,76 @@
               <div class="c-d">AbilityOne mandatory-source participant nationally. Kansas State Use participant out of <span class="loc-chip loc-chip--wichita">Wichita</span> and Texas WorkQuest (State Use) participant out of <span class="loc-chip loc-chip--dallas">Dallas</span>.</div>
             </div>
           </div>
-          <div class="callout-box"><strong>Federal Operational Registrations.</strong> DUNS 007346745 · CAGE 5A062 (Dallas), 2A178 (Wichita) · SAM Active.</div>
+          <!-- Federal registrations by campus. Real <button> pills, single-open
+               accordion, ARIA-wired so the panel is announced to screen readers. -->
+          <div class="reg-bar">
+            <div class="reg-bar-row">
+              <span class="reg-bar-label">Federal Operational Registrations</span>
+              <div class="reg-tabs" role="group" aria-label="Federal registrations by campus">
+                <button type="button" class="reg-pill" id="regTab-ict" data-reg-tab aria-expanded="false" aria-controls="regPanel-ict">
+                  ICT
+                  <svg class="reg-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <button type="button" class="reg-pill" id="regTab-dfw" data-reg-tab aria-expanded="false" aria-controls="regPanel-dfw">
+                  DFW
+                  <svg class="reg-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <button type="button" class="reg-pill" id="regTab-bsc" data-reg-tab aria-expanded="false" aria-controls="regPanel-bsc">
+                  BSC
+                  <svg class="reg-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </div>
+              <span class="reg-status"><span class="reg-status-dot" aria-hidden="true"></span>SAM.gov Active</span>
+            </div>
+
+            <div class="reg-panel" id="regPanel-ict" role="region" aria-labelledby="regTab-ict" hidden>
+              <h3 class="reg-panel-h">ICT &mdash; Wichita, Kansas</h3>
+              <div class="reg-entities">
+                <div class="reg-entity">
+                  <div class="reg-entity-name">Envision Industries</div>
+                  <div class="reg-codes">
+                    <span class="reg-code"><span class="reg-code-k">CAGE</span>2A178</span>
+                    <span class="reg-code"><span class="reg-code-k">DUNS</span>964895283</span>
+                    <span class="reg-code"><span class="reg-code-k">UEI</span>HC9MYND3ZLW5</span>
+                  </div>
+                </div>
+                <div class="reg-entity">
+                  <div class="reg-entity-name">Envision, Inc.</div>
+                  <div class="reg-codes">
+                    <span class="reg-code"><span class="reg-code-k">CAGE</span>7A1U0</span>
+                    <span class="reg-code"><span class="reg-code-k">DUNS</span>007242498</span>
+                    <span class="reg-code"><span class="reg-code-k">UEI</span>KEAMG55THMS3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="reg-panel" id="regPanel-dfw" role="region" aria-labelledby="regTab-dfw" hidden>
+              <h3 class="reg-panel-h">DFW &mdash; Dallas, Texas</h3>
+              <div class="reg-entities">
+                <div class="reg-entity">
+                  <div class="reg-codes">
+                    <span class="reg-code"><span class="reg-code-k">CAGE</span>5A062</span>
+                    <span class="reg-code"><span class="reg-code-k">DUNS</span>007346745</span>
+                    <span class="reg-code"><span class="reg-code-k">UEI</span>RPKGK5NASDZ7</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="reg-panel" id="regPanel-bsc" role="region" aria-labelledby="regTab-bsc" hidden>
+              <h3 class="reg-panel-h">BSC &mdash; Base Supply Centers</h3>
+              <div class="reg-entities">
+                <div class="reg-entity">
+                  <div class="reg-codes">
+                    <span class="reg-code"><span class="reg-code-k">CAGE</span>3BLJ3</span>
+                    <span class="reg-code"><span class="reg-code-k">DUNS</span>118860779</span>
+                    <span class="reg-code"><span class="reg-code-k">UEI</span>WC8ZXNHDLKE1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Document quick-links. Replace each href="#" with the real PDF/URL once uploaded. -->
           <div class="doc-links">
@@ -4582,6 +4702,29 @@
         try { localStorage.setItem("envisionIosInstallHintShown", "1"); } catch (err) {}
       });
     }
+  })();
+</script>
+
+<script>
+  /* Compliance: campus federal-registration pills. Real <button> elements, so
+     Enter/Space toggle natively. Single-open accordion — opening one panel
+     collapses any other. aria-expanded reflects state; panels use [hidden] so
+     a screen reader reaches and announces only the open region. */
+  (function(){
+    var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-reg-tab]"));
+    if (!tabs.length) return;
+    function setOpen(tab, open){
+      var panel = document.getElementById(tab.getAttribute("aria-controls"));
+      tab.setAttribute("aria-expanded", open ? "true" : "false");
+      if (panel) panel.hidden = !open;
+    }
+    tabs.forEach(function(tab){
+      tab.addEventListener("click", function(){
+        var willOpen = tab.getAttribute("aria-expanded") !== "true";
+        tabs.forEach(function(t){ setOpen(t, false); });
+        if (willOpen) setOpen(tab, true);
+      });
+    });
   })();
 </script>
 </body>
