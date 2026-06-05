@@ -941,6 +941,55 @@
     .slide--innovation .cred-grid{grid-template-columns:1fr}
   }
 
+  /* The Process: generic textile staged flow, machine lists collapsed by default */
+  .slide--innovation .proc-flow{
+    display:flex;align-items:flex-start;gap:6px;margin-top:14px;
+  }
+  .slide--innovation .proc-stage{
+    flex:1 1 0;min-width:0;
+    background:var(--bg-tint);border:1px solid var(--rule-light);border-radius:6px;
+    padding:14px 16px;cursor:pointer;
+    transition:border-color .2s,box-shadow .2s,transform .2s;
+  }
+  .slide--innovation .proc-stage:hover{
+    border-color:var(--navy);transform:translateY(-2px);
+    box-shadow:0 12px 26px rgba(0,24,82,0.08);
+  }
+  .slide--innovation .proc-stage:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .slide--innovation .proc-head{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+  }
+  .slide--innovation .proc-name{
+    font-weight:700;font-size:14px;line-height:1.25;color:var(--navy);
+  }
+  .slide--innovation .proc-chev{
+    flex:none;width:14px;height:14px;color:var(--green);margin-top:1px;
+    transition:transform .25s ease;
+  }
+  .slide--innovation .proc-stage[aria-expanded="true"] .proc-chev{transform:rotate(180deg)}
+  .slide--innovation .proc-desc{
+    font-size:12px;line-height:1.5;color:var(--text-mid);margin-top:6px;
+  }
+  .slide--innovation .proc-machines{
+    display:none;flex-wrap:wrap;gap:6px;margin-top:12px;
+    padding-top:12px;border-top:1px solid var(--rule-light);
+  }
+  .slide--innovation .proc-stage[aria-expanded="true"] .proc-machines{display:flex}
+  .slide--innovation .proc-chip{
+    font-size:11px;font-weight:600;line-height:1.3;color:var(--navy);
+    background:var(--bg-light);border:1px solid var(--rule-light);
+    border-radius:999px;padding:4px 10px;
+  }
+  .slide--innovation .proc-arrow{
+    flex:none;align-self:flex-start;margin-top:24px;
+    color:var(--green);display:flex;align-items:center;justify-content:center;
+  }
+  .slide--innovation .proc-arrow svg{width:18px;height:18px}
+  @media (max-width:880px){
+    .slide--innovation .proc-flow{flex-direction:column;align-items:stretch}
+    .slide--innovation .proc-arrow{align-self:center;margin-top:0;transform:rotate(90deg)}
+  }
+
   /* ---------- Mission ---------- */
   .mission-body p{
     font-size:clamp(1rem,1.35vw,1.18rem);line-height:1.75;color:var(--text-mid);
@@ -2080,6 +2129,91 @@
               <div class="c-d">Smart textile integration, including RFID and embedded sensor technologies, and additive manufacturing with advanced 3D printing.</div>
             </div>
           </div>
+          <div class="inv-secline"><h3>The Process</h3></div>
+          <div class="proc-flow">
+            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Digital Pattern and Marker stage, show machines">
+              <div class="proc-head">
+                <div class="proc-name">Digital Pattern &amp; Marker</div>
+                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="proc-desc">CAD pattern, marker optimization</div>
+              <div class="proc-machines">
+                <span class="proc-chip">Gerber CAD nesting</span>
+                <span class="proc-chip">Marker optimization</span>
+                <span class="proc-chip">Digital pattern / DAM</span>
+              </div>
+            </div>
+            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Spreading and Cutting stage, show machines">
+              <div class="proc-head">
+                <div class="proc-name">Spreading &amp; Cutting</div>
+                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="proc-desc">Material prep, layup, cut</div>
+              <div class="proc-machines">
+                <span class="proc-chip">Belt Feed Laminator</span>
+                <span class="proc-chip">Gerber Spreader with Air Table</span>
+                <span class="proc-chip">Gerber Cutting System</span>
+                <span class="proc-chip">Manual Spreading Tables</span>
+                <span class="proc-chip">Manual Cutting Stations</span>
+                <span class="proc-chip">Hot Knife Slitting</span>
+              </div>
+            </div>
+            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Sewing and Construction stage, show machines">
+              <div class="proc-head">
+                <div class="proc-name">Sewing &amp; Construction</div>
+                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="proc-desc">Joining across stitch types</div>
+              <div class="proc-machines">
+                <span class="proc-chip">Chain Stitch</span>
+                <span class="proc-chip">Lockstitch</span>
+                <span class="proc-chip">Single Needle</span>
+                <span class="proc-chip">Double Needle</span>
+                <span class="proc-chip">Multi-Needle</span>
+                <span class="proc-chip">Programmable (PLK)</span>
+                <span class="proc-chip">Zig-Zag</span>
+                <span class="proc-chip">Merrow</span>
+                <span class="proc-chip">5-Thread Safety Stitch</span>
+                <span class="proc-chip">4-Thread Mock Safety Stitch</span>
+                <span class="proc-chip">3-Thread Sergers</span>
+                <span class="proc-chip">2-Needle Flat Lock</span>
+                <span class="proc-chip">2-3 Needle Topstitch</span>
+                <span class="proc-chip">Coverstitch</span>
+              </div>
+            </div>
+            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Reinforcement and Closures stage, show machines">
+              <div class="proc-head">
+                <div class="proc-name">Reinforcement &amp; Closures</div>
+                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="proc-desc">Strength points, hardware</div>
+              <div class="proc-machines">
+                <span class="proc-chip">Bar Tack</span>
+                <span class="proc-chip">Buttonhole</span>
+                <span class="proc-chip">Button Sew</span>
+                <span class="proc-chip">Automatic Belt Loop</span>
+                <span class="proc-chip">Grommet Install</span>
+                <span class="proc-chip">Snap Install</span>
+              </div>
+            </div>
+            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Decoration and Finishing stage, show machines">
+              <div class="proc-head">
+                <div class="proc-name">Decoration &amp; Finishing</div>
+                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <div class="proc-desc">Marking, final finishing</div>
+              <div class="proc-machines">
+                <span class="proc-chip">Heat Transfer Applicators</span>
+                <span class="proc-chip">Pad Print Applicators</span>
+                <span class="proc-chip">Portable Boiler Stations</span>
+                <span class="proc-chip">Semi-Auto Bottom Hemming</span>
+              </div>
+            </div>
+          </div>
           <div class="proof-card proof-card--navy proof-card--bar">
             <div class="bar-lead">
               <div class="tag">The Envision Difference</div>
@@ -2715,6 +2849,43 @@
           ["34556314507-1","Neck Shade","Snap-on Universal","Fluor Orange/Yellow"]
         ], footnote:"High-density polyethylene shells with chin straps and retroreflective micro-prismatic bands. One-time custom logo vector setup fee (3455656) where required."}
       ],
+      equipment:[
+        {title:"Cutting & Spreading", meta:"Dallas · machines at this stage include", columns:["Machine"], rows:[
+          ["Gerber Spreader with Air Table"],
+          ["Gerber Cutting System"],
+          ["Manual Spreading Tables"],
+          ["Manual Cutting Stations"],
+          ["Hot Knife Slitting Machines"]
+        ], footnote:"Functional inventory at the Dallas campus. Machines are grouped by the operation they perform, not by product or production sequence."},
+        {title:"Sewing & Construction", meta:"Dallas · machines at this stage include", columns:["Machine"], rows:[
+          ["Chain Stitch Machines"],
+          ["Lockstitch Machines"],
+          ["Single Needle Sewing Machines"],
+          ["Double Needle Sewing Machines"],
+          ["Multi-Needle Sewing Machines"],
+          ["Programmable (PLK) Sewing Machines"],
+          ["Zig-Zag Stitch Machines"],
+          ["Merrow Machines"],
+          ["5-Thread Safety Stitch Machines"],
+          ["4-Thread Mock Safety Stitch Machines"],
+          ["3-Thread Sergers"],
+          ["2-Needle Flat Lock Machines"],
+          ["2-3 Needle Topstitch Machines"],
+          ["Coverstitch Machines"]
+        ], footnote:"Stitch-forming machines grouped by function, spanning chain, lock, safety stitch, serging, flat lock, topstitch, and coverstitch families. Breadth of stitch types, not a production sequence."},
+        {title:"Reinforcement, Closures & Hardware", meta:"Dallas · machines at this stage include", columns:["Machine"], rows:[
+          ["Bar Tack Machines"],
+          ["Buttonhole Machines"],
+          ["Button Sew Machines"],
+          ["Automatic Belt Loop Machines"],
+          ["Grommet Installation Machines"],
+          ["Snap Installation Machines"]
+        ], footnote:"Reinforcement, closure, and hardware machines grouped by function at the Dallas campus. No product or sequence implied."},
+        {title:"Finishing", meta:"Dallas · machines at this stage include", columns:["Machine"], rows:[
+          ["Portable Boiler Stations"],
+          ["Semi-Automatic Bottom Hemming Machines"]
+        ], footnote:"Finishing machines grouped by function at the Dallas campus."}
+      ],
       img:"Cutting room or sewing line, Cordura roll and reflective trim, authentic Dallas floor",
       imgSrc:"images/Envision-Workforce-employee-dallas-manufacoring.png"
     },
@@ -3067,6 +3238,12 @@
           ["Commissary & hygiene products","Certified","AbilityOne / WorkQuest"]
         ], footnote:"Specialty product lines are built to customer specification and flow through the same MIL-STD-129 packaging and labeling standards as core programs."}
       ],
+      equipment:[
+        {title:"Decoration Equipment", meta:"Dallas · machines at this stage include", columns:["Machine"], rows:[
+          ["Heat Transfer Applicators"],
+          ["Pad Print Applicators"]
+        ], footnote:"Decoration machines grouped by function at the Dallas campus. No product or sequence implied."}
+      ],
       img:"Embroidery and custom decoration detail, 4:3"
     },
     printSvc:{
@@ -3362,9 +3539,8 @@
       colorStrip = '<div class="m-colorstrip">'+d.colors.map(function(c){ return '<span>'+c+'</span>'; }).join("")+'</div>';
     }
 
-    var catalogsBlock = "";
-    if (d.catalogs && d.catalogs.length){
-      var catsHTML = d.catalogs.map(function(cat){
+    function renderCatList(arr, toggleLabel){
+      return arr.map(function(cat){
         var head = '<thead><tr>'+cat.columns.map(function(col){ return '<th>'+col+'</th>'; }).join("")+'</tr></thead>';
         var body = '<tbody>'+cat.rows.map(function(row){
           return '<tr>'+row.map(function(cell){ return '<td>'+cell+'</td>'; }).join("")+'</tr>';
@@ -3374,7 +3550,7 @@
         return '<details class="m-catalog">'+
           '<summary>'+
             '<span>'+cat.title+'&nbsp;&nbsp;'+meta+'</span>'+
-            '<span class="cat-toggle">View catalog '+
+            '<span class="cat-toggle">'+toggleLabel+' '+
               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'+
             '</span>'+
           '</summary>'+
@@ -3384,7 +3560,16 @@
           '</div>'+
         '</details>';
       }).join("");
-      catalogsBlock = '<div class="m-block"><div class="m-sec-label">Product Catalog</div>'+catsHTML+'</div>';
+    }
+
+    var equipmentBlock = "";
+    if (d.equipment && d.equipment.length){
+      equipmentBlock = '<div class="m-block"><div class="m-sec-label">Equipment &amp; Machinery</div>'+renderCatList(d.equipment, 'View machines')+'</div>';
+    }
+
+    var catalogsBlock = "";
+    if (d.catalogs && d.catalogs.length){
+      catalogsBlock = '<div class="m-block"><div class="m-sec-label">Product Catalog</div>'+renderCatList(d.catalogs, 'View catalog')+'</div>';
     }
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
@@ -3404,6 +3589,7 @@
       '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
       '<div class="m-block"><div class="m-sec-label">'+d.statLabel+'</div><div class="m-stats">'+stats+'</div></div>'+
       '<div class="m-block"><div class="m-sec-label">'+d.calloutLabel+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>'+
+      equipmentBlock+
       catalogsBlock+
       '<div class="m-cta">'+
         '<h3>Have questions about '+d.title+'?</h3>'+
@@ -3621,6 +3807,15 @@
     var doc = e.target.closest("[data-doc]");
     if (doc && doc.getAttribute("href") === "#"){ e.preventDefault(); return; }
 
+    // Process flow: toggle a stage's machine list. Multiple stages can be open.
+    var stage = e.target.closest(".proc-stage");
+    if (stage){
+      e.stopPropagation();
+      var open = stage.getAttribute("aria-expanded") === "true";
+      stage.setAttribute("aria-expanded", open ? "false" : "true");
+      return;
+    }
+
     var proj = e.target.closest("[data-inaction]");
     if (proj){ e.stopPropagation(); openInAction(); return; }
 
@@ -3652,7 +3847,7 @@
   document.getElementById("slides").addEventListener("keydown", function(e){
     if (modalOpen()) return;
     if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
-    var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump]") : null;
+    var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump],.proc-stage") : null;
     if (!t || t.tagName === "BUTTON" || t.tagName === "A") return;
     e.preventDefault();
     t.click();
