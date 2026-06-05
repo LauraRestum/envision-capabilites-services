@@ -1277,11 +1277,14 @@
   .contact-block .nm{font-weight:800;font-size:19px;color:var(--text-dark)}
   .contact-block .ti{font-size:14px;font-weight:600;color:var(--text-soft);margin:4px 0 12px}
   .contact-block .ct{font-size:14px;font-weight:600;color:var(--navy);line-height:1.7}
-  .campus-footer{margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.6vw,32px);width:100%;max-width:760px;margin-left:auto;margin-right:auto}
-  .campus-card{display:flex;flex-direction:column;gap:10px}
-  .campus-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block}
-  .campus-card__addr{font-size:12.5px;line-height:1.6;color:var(--text-soft);text-align:center}
-  @media (max-width:768px){.campus-footer{grid-template-columns:1fr}}
+  .campus-footer{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,28px);width:100%;max-width:520px;margin-left:auto;margin-right:auto}
+  .campus-footer .campus-card{display:flex;flex-direction:column;gap:8px;border:0;background:none;border-radius:0;overflow:visible}
+  .campus-footer .campus-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block}
+  .campus-footer .campus-card__addr{font-size:12px;line-height:1.5;text-align:center}
+  .campus-footer .campus-card__addr a{color:var(--navy);font-weight:700;text-decoration:none;transition:color .15s}
+  .campus-footer .campus-card__addr a:hover{color:var(--green);text-decoration:underline}
+  .campus-footer .campus-card__addr a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  @media (max-width:768px){.campus-footer{grid-template-columns:1fr;max-width:340px}}
 
   /* ---------- Decision Tree ---------- */
   .dtree{max-width:520px;margin:0 auto;text-align:left}
@@ -1316,13 +1319,8 @@
   .bcard-row{font-size:13px;font-weight:600;color:var(--navy);line-height:1.8}
   .bcard-loc{color:var(--text-soft);font-weight:500}
 
-  /* General contacts section */
-  .general-contacts{margin-top:36px;padding-top:28px;border-top:1px solid var(--rule-light);max-width:520px;margin-left:auto;margin-right:auto}
-  .general-contacts-label{font-family:var(--sans);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-soft);margin-bottom:14px;text-align:left}
-  .general-contacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:600px){
     .dtree-select{font-size:14px;padding:12px 40px 12px 14px}
-    .general-contacts-grid{grid-template-columns:1fr}
     .bcard{max-width:100%}
   }
 
@@ -2517,44 +2515,14 @@
             </div>
           </div>
 
-          <div class="general-contacts">
-            <div class="general-contacts-label">General Inquiries</div>
-            <div class="general-contacts-grid">
-              <div class="bcard">
-                <div class="bcard-accent"></div>
-                <div class="bcard-body">
-                  <div class="bcard-dept">General Inquiries</div>
-                  <div class="bcard-name">[ Name ]</div>
-                  <div class="bcard-title">[ Title ]</div>
-                  <div class="bcard-divider"></div>
-                  <div class="bcard-row">[ email@envisionus.com ]</div>
-                  <div class="bcard-row">[ (316) 000-0000 ]</div>
-                  <div class="bcard-row bcard-loc">[ Campus ]</div>
-                </div>
-              </div>
-              <div class="bcard">
-                <div class="bcard-accent"></div>
-                <div class="bcard-body">
-                  <div class="bcard-dept">General Inquiries</div>
-                  <div class="bcard-name">[ Name ]</div>
-                  <div class="bcard-title">[ Title ]</div>
-                  <div class="bcard-divider"></div>
-                  <div class="bcard-row">[ email@envisionus.com ]</div>
-                  <div class="bcard-row">[ (316) 000-0000 ]</div>
-                  <div class="bcard-row bcard-loc">[ Campus ]</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div class="campus-footer">
             <div class="campus-card">
               <img src="images/Envision-wichita-highangle-buildingphoto.png" alt="Envision Wichita Campus exterior">
-              <div class="campus-card__addr">Wichita Campus · 2301 S. Water Street, Wichita, KS 67213 · (316) 522-3232</div>
+              <div class="campus-card__addr"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213" target="_blank" rel="noopener">2301 S. Water Street, Wichita, KS 67213</a></div>
             </div>
             <div class="campus-card">
               <img src="images/envision-dallas-building-exterior.png" alt="Envision, Dallas Campus exterior">
-              <div class="campus-card__addr">Dallas Campus · 1801 Valley View Lane, Farmers Branch, TX 75234</div>
+              <div class="campus-card__addr"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234" target="_blank" rel="noopener">1801 Valley View Lane, Farmers Branch, TX 75234</a></div>
             </div>
           </div>
         </div>
