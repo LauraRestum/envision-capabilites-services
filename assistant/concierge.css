@@ -1,0 +1,224 @@
+/* =====================================================================
+   ENVISION CAPABILITIES CONCIERGE  ·  STYLES
+   ---------------------------------------------------------------------
+   Visual layer only. Reuses the deck's brand tokens (--navy, --blue,
+   --green, grays) and Montserrat, set on :root in index.html, so the
+   concierge stays pixel-consistent with the deck. Weight contrast carries
+   the hierarchy; the only typeface is Montserrat. No em dashes anywhere.
+   ===================================================================== */
+
+.env-concierge{
+  /* Local fallbacks in case the deck tokens ever change names. */
+  --ec-navy: var(--navy, #001852);
+  --ec-blue: var(--blue, #003087);
+  --ec-green: var(--green, #78BE21);
+  --ec-ink: var(--text-dark, #001852);
+  --ec-mid: var(--text-mid, #3a4a6b);
+  --ec-soft: var(--text-soft, #6b7a96);
+  --ec-rule: var(--rule-light, #e5eaf2);
+  --ec-tint: var(--bg-tint, #f6f8fc);
+  --ec-radius: 16px;
+  --ec-shadow: 0 18px 50px rgba(0,24,82,0.22), 0 2px 8px rgba(0,24,82,0.10);
+  font-family: var(--sans, 'Montserrat', sans-serif);
+}
+
+/* ---------- Floating launcher ---------- */
+.ec-launcher{
+  position: fixed; right: clamp(14px, 2.5vw, 26px);
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 100;
+  display: inline-flex; align-items: center; gap: 9px;
+  height: 52px; padding: 0 20px 0 18px;
+  border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--ec-navy); color: #fff;
+  font-family: inherit; font-weight: 700; font-size: 14px; letter-spacing: .01em;
+  box-shadow: var(--ec-shadow);
+  transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.ec-launcher:hover{ background: var(--ec-blue); transform: translateY(-1px); }
+.ec-launcher:active{ transform: translateY(0); }
+.ec-launcher svg{ width: 20px; height: 20px; flex: none; }
+.ec-launcher .ec-launcher-label{ white-space: nowrap; }
+.ec-launcher[aria-expanded="true"]{ opacity: 0; pointer-events: none; }
+
+@media (max-width: 520px){
+  .ec-launcher .ec-launcher-label{
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .ec-launcher{ width: 52px; padding: 0; justify-content: center; }
+}
+
+/* ---------- Panel ---------- */
+.ec-panel{
+  position: fixed; right: clamp(14px, 2.5vw, 26px);
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 101;
+  width: min(396px, calc(100vw - 28px));
+  height: min(620px, calc(100vh - 96px));
+  display: flex; flex-direction: column;
+  background: #fff; border-radius: var(--ec-radius);
+  box-shadow: var(--ec-shadow);
+  overflow: hidden;
+  transform: translateY(16px) scale(.98); opacity: 0;
+  transition: transform .22s ease, opacity .22s ease;
+  pointer-events: none;
+}
+.ec-panel.is-open{ transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+.ec-panel[hidden]{ display: none; }
+
+@media (max-width: 520px){
+  .ec-panel{
+    right: 8px; left: 8px; bottom: 8px;
+    width: auto; height: min(78vh, calc(100vh - 80px));
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .ec-panel, .ec-launcher{ transition: none; }
+}
+
+/* ---------- Header ---------- */
+.ec-head{
+  flex: none; display: flex; align-items: center; gap: 11px;
+  padding: 15px 14px 15px 18px;
+  background: var(--ec-navy); color: #fff;
+}
+.ec-head-badge{
+  flex: none; width: 34px; height: 34px; border-radius: 9px;
+  background: rgba(255,255,255,0.12);
+  display: grid; place-items: center;
+}
+.ec-head-badge svg{ width: 19px; height: 19px; }
+.ec-head-txt{ display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.ec-head-title{ font-weight: 700; font-size: 14px; letter-spacing: .01em; }
+.ec-head-sub{ font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.72); }
+.ec-head-close{
+  margin-left: auto; flex: none;
+  width: 34px; height: 34px; border: 0; border-radius: 9px; cursor: pointer;
+  background: rgba(255,255,255,0.10); color: #fff;
+  display: grid; place-items: center;
+  transition: background .15s ease;
+}
+.ec-head-close:hover{ background: rgba(255,255,255,0.22); }
+.ec-head-close svg{ width: 17px; height: 17px; }
+
+/* ---------- Message log ---------- */
+.ec-log{
+  flex: 1 1 auto; overflow-y: auto; overflow-x: hidden;
+  padding: 16px 14px 8px;
+  display: flex; flex-direction: column; gap: 11px;
+  background: var(--ec-tint);
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce){ .ec-log{ scroll-behavior: auto; } }
+
+.ec-msg{ display: flex; max-width: 100%; }
+.ec-bubble{
+  font-size: 13.5px; line-height: 1.5; font-weight: 500;
+  padding: 11px 14px; border-radius: 14px;
+  max-width: 86%; word-wrap: break-word;
+}
+.ec-msg-bot{ justify-content: flex-start; }
+.ec-msg-bot .ec-bubble{
+  background: #fff; color: var(--ec-ink);
+  border: 1px solid var(--ec-rule); border-bottom-left-radius: 5px;
+}
+.ec-msg-user{ justify-content: flex-end; }
+.ec-msg-user .ec-bubble{
+  background: var(--ec-blue); color: #fff; border-bottom-right-radius: 5px;
+}
+
+/* Provenance line under an answer (source label, subtle) */
+.ec-source{
+  font-size: 10.5px; font-weight: 600; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--ec-soft);
+  margin: -3px 4px 1px;
+}
+
+/* ---------- Contact card ---------- */
+.ec-contact{
+  align-self: flex-start; max-width: 92%;
+  background: #fff; border: 1px solid var(--ec-rule);
+  border-left: 3px solid var(--ec-green);
+  border-radius: 12px; padding: 11px 13px;
+}
+.ec-contact-eyebrow{
+  font-size: 10px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ec-green); margin-bottom: 4px;
+}
+.ec-contact-name{ font-weight: 700; font-size: 13.5px; color: var(--ec-ink); }
+.ec-contact-title{ font-weight: 500; font-size: 11.5px; color: var(--ec-mid); margin-top: 1px; }
+.ec-contact-talk{ font-weight: 500; font-size: 12px; color: var(--ec-mid); margin-top: 6px; line-height: 1.45; }
+.ec-contact-methods{ display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; }
+.ec-contact-methods a, .ec-contact-methods span{
+  font-weight: 600; font-size: 12px; color: var(--ec-blue);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+}
+.ec-contact-methods a:hover{ text-decoration: underline; }
+.ec-contact-methods svg{ width: 13px; height: 13px; flex: none; }
+
+/* ---------- Chips (quick replies / clarify options / next step) ---------- */
+.ec-chips{
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 2px 2px 4px;
+}
+.ec-chip{
+  font-family: inherit; font-weight: 600; font-size: 12.5px;
+  color: var(--ec-blue); background: #fff;
+  border: 1px solid #cdd8ea; border-radius: 999px;
+  padding: 8px 14px; cursor: pointer; line-height: 1.2;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.ec-chip:hover{ background: var(--ec-blue); color: #fff; border-color: var(--ec-blue); }
+.ec-chip svg{ width: 13px; height: 13px; }
+
+/* Next-step chip reads as the primary action */
+.ec-chip--next{
+  background: var(--ec-green); color: #07330a; border-color: var(--ec-green);
+  font-weight: 700;
+}
+.ec-chip--next:hover{ background: #6aa81d; border-color: #6aa81d; color: #07330a; }
+
+/* ---------- Composer ---------- */
+.ec-form{
+  flex: none; display: flex; gap: 8px; align-items: flex-end;
+  padding: 11px 12px calc(11px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--ec-rule); background: #fff;
+}
+.ec-input{
+  flex: 1 1 auto; resize: none;
+  font-family: inherit; font-weight: 500; font-size: 13.5px; color: var(--ec-ink);
+  border: 1px solid #cdd8ea; border-radius: 12px;
+  padding: 10px 12px; max-height: 96px; line-height: 1.4;
+  background: var(--ec-tint);
+}
+.ec-input::placeholder{ color: var(--ec-soft); }
+.ec-send{
+  flex: none; width: 42px; height: 42px; border: 0; border-radius: 12px;
+  background: var(--ec-navy); color: #fff; cursor: pointer;
+  display: grid; place-items: center; transition: background .15s ease;
+}
+.ec-send:hover{ background: var(--ec-blue); }
+.ec-send:disabled{ opacity: .45; cursor: default; }
+.ec-send svg{ width: 18px; height: 18px; }
+
+/* ---------- Focus visibility (accessibility, not optional) ---------- */
+.env-concierge :focus-visible,
+.ec-launcher:focus-visible{
+  outline: 3px solid var(--ec-green);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.ec-head-close:focus-visible, .ec-send:focus-visible{ outline-offset: 2px; }
+
+/* High-contrast / forced colors: keep borders visible */
+@media (forced-colors: active){
+  .ec-chip, .ec-bubble, .ec-contact, .ec-input{ border: 1px solid CanvasText; }
+}
+
+/* Screen-reader-only utility */
+.ec-sr-only{
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
