@@ -1534,11 +1534,13 @@
   }
   .bsc-marker:hover .bsc-ring,
   .bsc-marker:focus .bsc-ring,
-  .bsc-marker:focus-visible .bsc-ring{opacity:.85}
+  .bsc-marker:focus-visible .bsc-ring,
+  .bsc-marker.is-active .bsc-ring{opacity:.85}
   .bsc-dot{transition:filter .18s ease}
   .bsc-marker:hover .bsc-dot,
   .bsc-marker:focus .bsc-dot,
-  .bsc-marker:focus-visible .bsc-dot{
+  .bsc-marker:focus-visible .bsc-dot,
+  .bsc-marker.is-active .bsc-dot{
     filter:drop-shadow(0 0 4px var(--bsc-lime)) drop-shadow(0 0 9px rgba(184,224,74,0.65));
   }
   .bsc-tip{
@@ -1584,7 +1586,14 @@
     background:#0c2348;border:1px solid rgba(184,224,74,0.5);
     color:var(--bsc-white);font-size:10px;font-weight:600;
     letter-spacing:.01em;line-height:1;white-space:nowrap;
-    padding:4px 7px;border-radius:5px;pointer-events:none;
+    padding:4px 7px;border-radius:5px;
+    pointer-events:auto;cursor:pointer;
+    transition:border-color .15s ease,box-shadow .15s ease,background .15s ease,color .15s ease;
+  }
+  .bsc-lbl:hover,
+  .bsc-lbl.is-active{
+    background:#103063;border-color:var(--bsc-lime);color:#fff;
+    box-shadow:0 0 0 1px rgba(184,224,74,0.45),0 0 13px rgba(184,224,74,0.5);
   }
   .bsc-legend{
     display:flex;flex-wrap:wrap;gap:22px;margin-top:18px;
@@ -3850,7 +3859,7 @@
   var mapAspect = null;
   var tipEl = null;
   var pointerInside = false, mouseX = 0, mouseY = 0, repelRaf = null;
-  var REPEL_R = 82, REPEL_MAX = 26;
+  var REPEL_R = 82, REPEL_MAX = 26, REPEL_LOCK = 52;
   var pinned = null; // base object whose detail card is pinned open by a click
 
   function prefersReduced(){
@@ -3895,17 +3904,45 @@
     pinned = null;
     if (tipEl) tipEl.classList.remove("show");
   }
+  // Pin/unpin a base's detail card (shared by the dot marker and the name tag).
+  function toggleBase(e, b, info){
+    if (e) e.stopPropagation();
+    if (pinned && pinned.b === b){ unpinTip(); }
+    else { pinned = {b:b, info:info}; showTip(b, info); }
+  }
+
+  // Mark one tag (plus its dot) as active so both light up together.
+  function setActive(o, on){
+    if (o.active === on) return;
+    o.active = on;
+    o.el.classList.toggle("is-active", on);
+    if (o.marker) o.marker.classList.toggle("is-active", on);
+  }
 
   // Cursor-repelling tags: push each tag directly away from the pointer,
-  // strongest at the cursor and fading to zero by REPEL_R. Leader lines
-  // follow their tag's new position. Eased with a rAF lerp loop.
+  // strongest at the cursor and fading to zero by REPEL_R. The single nearest
+  // tag instead LOCKS in place and lights up so it stays clickable while its
+  // neighbors declutter. Leader lines follow. Eased with a rAF lerp loop.
   function repelFrame(){
     if (!mapAspect) { repelRaf = null; return; }
     var rect = mapAspect.getBoundingClientRect();
     var W = BSC_MAP.W, H = BSC_MAP.H, active = false;
+
+    // Find the nearest tag to lock/light up (only when the pointer is inside).
+    var lockIdx = -1, lockD = REPEL_LOCK;
+    if (pointerInside){
+      for (var j = 0; j < labelObjs.length; j++){
+        var lo = labelObjs[j];
+        var lx = lo.pctX / 100 * rect.width, ly = lo.pctY / 100 * rect.height;
+        var ld = Math.sqrt(Math.pow(lx - mouseX, 2) + Math.pow(ly - mouseY, 2));
+        if (ld < lockD){ lockD = ld; lockIdx = j; }
+      }
+    }
+
     for (var i = 0; i < labelObjs.length; i++){
       var o = labelObjs[i], tx = 0, ty = 0;
-      if (pointerInside){
+      setActive(o, i === lockIdx);
+      if (pointerInside && i !== lockIdx){
         var hx = o.pctX / 100 * rect.width, hy = o.pctY / 100 * rect.height;
         var vx = hx - mouseX, vy = hy - mouseY;
         var d = Math.sqrt(vx * vx + vy * vy);
@@ -3937,6 +3974,7 @@
       var o = labelObjs[i];
       o.dx = 0; o.dy = 0;
       o.el.style.transform = "translate(-50%,-50%)";
+      setActive(o, false);
       if (o.line){ o.line.setAttribute("x2", o.baseVX); o.line.setAttribute("y2", o.baseVY); }
     }
     unpinTip();
@@ -4004,6 +4042,7 @@
 
     // Interactive, focusable markers with a transparent hit area.
     var markerG = el("g");
+    var gByName = {};
     BSC_MAP.bases.forEach(function(b, i){
       var info = BASE_INFO[b.name] || {short:b.name, full:b.name, branch:""};
       var aria = info.full +
@@ -4020,22 +4059,18 @@
       g.appendChild(dot);
       (function(bb, inf){
         function show(){ showTip(bb, inf); }
-        function toggle(e){
-          e.stopPropagation();
-          if (pinned && pinned.b === bb){ unpinTip(); }
-          else { pinned = {b:bb, info:inf}; showTip(bb, inf); }
-        }
         g.addEventListener("pointerenter", show);
         g.addEventListener("pointerleave", hideTip);
         g.addEventListener("focus", show);
         g.addEventListener("blur", hideTip);
-        g.addEventListener("click", toggle);
+        g.addEventListener("click", function(e){ toggleBase(e, bb, inf); });
         g.addEventListener("keydown", function(e){
           if (e.key === "Enter" || e.key === " " || e.key === "Spacebar"){
-            e.preventDefault(); toggle(e);
+            e.preventDefault(); toggleBase(e, bb, inf);
           }
         });
       })(b, info);
+      gByName[b.name] = g;
       markerG.appendChild(g);
     });
     svg.appendChild(markerG);
@@ -4062,11 +4097,14 @@
       lab.textContent = info.short || b.name;
       lab.style.left = (cx / W * 100) + "%";
       lab.style.top  = (cy / H * 100) + "%";
+      (function(bb, inf){
+        lab.addEventListener("click", function(e){ toggleBase(e, bb, inf); });
+      })(b, info);
       aspect.appendChild(lab);
       labelObjs.push({
         el: lab, pctX: cx / W * 100, pctY: cy / H * 100,
         line: lineByName[b.name] || null, baseVX: cx, baseVY: cy,
-        dx: 0, dy: 0
+        marker: gByName[b.name] || null, dx: 0, dy: 0, active: false
       });
     });
 
