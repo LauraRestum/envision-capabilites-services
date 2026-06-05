@@ -714,48 +714,78 @@
   }
   .callout-box strong{color:#fff;font-weight:700}
 
-  /* ---------- Envision In Action (current projects) ---------- */
-  .proj-grid{
-    display:grid;gap:16px;margin-top:30px;
-    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  /* ---------- Envision In Action ---------- */
+  /* Pin the Proof grid to a balanced 2 rows of 3 (6 cards incl. In Action) */
+  .slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:900px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:1fr}}
+
+  /* The "Current Projects" portal card (6th block in the Proof grid) */
+  .proof-card--action{cursor:pointer;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s}
+  .proof-card--action:hover{
+    border-color:var(--navy);transform:translateY(-2px);
+    box-shadow:0 14px 28px rgba(0,24,82,0.10);
   }
-  .proj-card{
-    background:var(--bg-tint);border:1px solid var(--rule-light);
-    border-radius:6px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;
-    transition:border-color .2s,transform .2s,box-shadow .2s;
-  }
-  .proj-card:hover{
-    border-color:var(--navy);transform:translateY(-3px);
-    box-shadow:0 16px 32px rgba(0,24,82,0.12);
-  }
-  .proj-card:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-  .proj-thumb{
-    height:172px;background-size:cover;background-position:center;
-    border-bottom:1px solid var(--rule-light);
-  }
-  .proj-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
-  .proj-status{
-    align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.13em;
-    text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:12px;
-  }
-  .proj-status--proto{color:#9a6a00;background:rgba(243,170,0,0.14);border:1px solid rgba(243,170,0,0.4)}
-  .proj-status--active{color:#4f8a17;background:rgba(120,190,33,0.14);border:1px solid rgba(120,190,33,0.4)}
-  .proj-status--shipping{color:#1f5fc0;background:rgba(43,108,214,0.12);border:1px solid rgba(43,108,214,0.38)}
-  .proj-card .t-h{font-weight:700;font-size:18px;color:var(--text-dark);margin-bottom:9px}
-  .proj-card .t-d{font-size:13.5px;line-height:1.6;color:var(--text-mid);flex:1}
+  .proof-card--action:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
   .proj-cue{
     margin-top:16px;display:inline-flex;align-items:center;gap:7px;
     font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--green);
   }
-  .proj-card:hover .proj-cue svg{transform:translateX(3px)}
+  .proof-card--action:hover .proj-cue svg{transform:translateX(3px)}
   .proj-cue svg{transition:transform .2s}
   .proj-jump{
     color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;
   }
   .proj-jump:hover,.proj-jump:focus-visible{color:var(--green)}
 
-  /* Compliance status badge inside the project modal */
+  /* Status chip — used on the project little-blocks and in the project detail */
+  .proj-status{
+    align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.13em;
+    text-transform:uppercase;padding:4px 10px;border-radius:999px;
+  }
+  .proj-status--proto{color:#9a6a00;background:rgba(243,170,0,0.14);border:1px solid rgba(243,170,0,0.4)}
+  .proj-status--active{color:#4f8a17;background:rgba(120,190,33,0.14);border:1px solid rgba(120,190,33,0.4)}
+  .proj-status--shipping{color:#1f5fc0;background:rgba(43,108,214,0.12);border:1px solid rgba(43,108,214,0.38)}
   .m-eyebrow .proj-status{display:inline-block;margin:0 0 0 10px;vertical-align:middle}
+
+  /* Project little-blocks grid inside the In Action modal */
+  .inaction-grid{
+    display:grid;gap:16px;margin-top:4px;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  }
+  .inaction-card{
+    text-align:left;font:inherit;color:inherit;cursor:pointer;
+    background:var(--bg-tint);border:1px solid var(--rule-light);
+    border-radius:6px;overflow:hidden;display:flex;flex-direction:column;
+    transition:border-color .2s,transform .2s,box-shadow .2s;
+  }
+  .inaction-card:hover{
+    border-color:var(--navy);transform:translateY(-3px);
+    box-shadow:0 16px 32px rgba(0,24,82,0.12);
+  }
+  .inaction-card:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .inaction-thumb{
+    height:158px;background-size:cover;background-position:center;
+    border-bottom:1px solid var(--rule-light);
+  }
+  .inaction-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;gap:0}
+  .inaction-body .proj-status{margin-bottom:12px}
+  .inaction-body .ia-h{font-weight:700;font-size:17px;color:var(--text-dark);margin-bottom:8px}
+  .inaction-body .ia-d{font-size:13px;line-height:1.6;color:var(--text-mid);flex:1}
+  .inaction-card .proj-cue{margin-top:14px}
+  .inaction-card:hover .proj-cue svg{transform:translateX(3px)}
+
+  /* Back-to-projects control in the project detail view */
+  .inaction-back{
+    display:inline-flex;align-items:center;gap:7px;margin:0 0 4px;
+    background:none;border:none;cursor:pointer;font:inherit;
+    font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--text-soft);transition:color .2s;
+  }
+  .inaction-back:hover,.inaction-back:focus-visible{color:var(--navy)}
+  .inaction-back svg{transition:transform .2s}
+  .inaction-back:hover svg{transform:translateX(-3px)}
 
   /* ---------- Compliance: balanced 2 rows of 3 ---------- */
   .slide--compliance .cred-grid{grid-template-columns:repeat(3,1fr)}
@@ -2063,32 +2093,14 @@
               <div class="t-d">The Dallas Campus is an authorized WorkQuest (formerly TIBH Industries) participant under the State of Texas State Use Program. Texas agencies procure Dallas-manufactured product, including embossed Texas Seal portfolios and high-visibility safety apparel, through the mandatory-source channel.</div>
               <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--dallas">Dallas</span></div>
             </div>
+            <div class="proof-card proof-card--action" data-inaction role="button" tabindex="0" aria-label="Open Envision in Action: current projects">
+              <div class="tag">Envision in Action</div>
+              <div class="t-h">Current Projects</div>
+              <div class="t-d">A live look at the programs moving through our campuses right now, from first prototype to full production run. Step inside to see what we're building.</div>
+              <div class="proj-cue">Explore current projects <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            </div>
           </div>
           <div class="callout-box"><strong>All pricing considered fair and reasonable by DLA Troop Support.</strong></div>
-        </div>
-      </section>
-
-      <!-- SLIDE: ENVISION IN ACTION (current projects) -->
-      <section class="slide slide--inaction" data-name="In Action">
-        <div class="wrap">
-          <div class="eyebrow">Envision in Action</div>
-          <h2 class="sec-h">Programs on the floor right now.</h2>
-          <p class="subhead">A live look at the work moving through our campuses, from first prototype to full production run. Select a project to see what we're building, the capabilities behind it, and where it stands today.</p>
-          <div class="proj-grid">
-
-            <!-- PROJECT: M&D Hand Warmers (in prototyping) -->
-            <div class="proj-card" data-project="handwarmers" role="button" tabindex="0" aria-label="Open the M&amp;D Hand Warmers project">
-              <div class="proj-thumb" style="background-image:url(&quot;images/innovation-prototyping-lab.png&quot;)" role="img" aria-label="M&amp;D Hand Warmers prototyping"></div>
-              <div class="proj-body">
-                <div class="proj-status proj-status--proto">In Prototyping</div>
-                <div class="t-h">M&amp;D Hand Warmers</div>
-                <div class="t-d">An air-activated hand warmer program in active prototyping at the Dallas Campus. Material, fill, and packaging are being validated against performance and shelf-life targets ahead of a production run.</div>
-                <div class="proj-cue">View project <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-              </div>
-            </div>
-
-          </div>
-          <div class="callout-box"><strong>More programs are added as they move into production.</strong> Want to see whether Envision can build yours? <span class="proj-jump" data-atag-jump="Contact" role="button" tabindex="0">Start a conversation.</span></div>
         </div>
       </section>
 
@@ -2358,7 +2370,6 @@
     {name:"Services",    count:1},
     {name:"Innovation",  count:1},
     {name:"Proof",       count:1},
-    {name:"In Action",   count:1},
     {name:"Compliance",  count:1},
     {name:"Contact",     count:1}
   ];
@@ -3357,10 +3368,13 @@
   modalClose.addEventListener("click", closeModal);
   modalBackdrop.addEventListener("click", closeModal);
 
-  /* ---------- Envision In Action: project mini-pages ----------
-     Reuses the same modal shell as the product modals. To add a project,
-     drop an entry here and add a matching .proj-card[data-project="key"]
-     on the In Action slide. statusClass: proto | active | shipping. */
+  /* ---------- Envision In Action: current projects ----------
+     The "Current Projects" card in the Proof grid opens this modal, which
+     lists each project as a little block. Clicking a block expands it to a
+     full detail view (with a Back control). To add a project, drop an entry
+     here — it appears in the list automatically. The PROJECT_ORDER array
+     controls the order. statusClass: proto | active | shipping. */
+  var PROJECT_ORDER = ["handwarmers"];
   var PROJECTS = {
     handwarmers:{
       label:"Envision in Action",
@@ -3368,6 +3382,8 @@
       status:"In Prototyping", statusClass:"proto",
       title:"M&D Hand Warmers",
       location:"Dallas",
+      blurb:"An air-activated hand warmer in active prototyping at the Dallas Campus — material, fill, and packaging under validation ahead of a production run.",
+      thumb:"images/innovation-prototyping-lab.png",
       summary:"An air-activated hand warmer program in active prototyping at the Dallas Campus. We're validating material, fill, and packaging against performance and shelf-life targets before committing to a production run.",
       creds:["Prototyping","Dallas Campus","Made in USA"],
       overview:[
@@ -3393,7 +3409,7 @@
     }
   };
 
-  function renderProject(key){
+  function renderProject(key, fromList){
     var d = PROJECTS[key];
     if (!d) return;
     modalLabel.textContent = d.label;
@@ -3422,8 +3438,10 @@
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
     var statsBlock = stats ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
     var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
+    var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
     modalInner.innerHTML =
+      backBar+
       '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
         ' role="img" aria-label="'+d.img+'"></div></div>'+
@@ -3445,10 +3463,49 @@
       '</div>';
   }
 
-  function openProject(key){
+  // The In Action landing view: every project as a clickable little block.
+  function renderInActionList(){
+    modalLabel.textContent = "Envision in Action";
+    var blocks = PROJECT_ORDER.map(function(key){
+      var d = PROJECTS[key];
+      if (!d) return "";
+      var status = d.status ? '<span class="proj-status proj-status--'+(d.statusClass||'active')+'">'+d.status+'</span>' : "";
+      var thumb = d.thumb
+        ? '<span class="inaction-thumb" style="background-image:url(&quot;'+d.thumb+'&quot;)" role="img" aria-label="'+d.title+'"></span>'
+        : '';
+      return '<button class="inaction-card" type="button" data-project-open="'+key+'">'+
+          thumb+
+          '<span class="inaction-body">'+
+            status+
+            '<span class="ia-h">'+d.title+'</span>'+
+            '<span class="ia-d">'+(d.blurb||d.summary||"")+'</span>'+
+            '<span class="proj-cue">View details <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
+          '</span>'+
+        '</button>';
+    }).join("");
+
+    modalInner.innerHTML =
+      '<div class="m-summary">'+
+        '<div class="m-sum-left">'+
+          '<div class="m-eyebrow">Envision in Action</div>'+
+          '<h2>Programs on the floor right now</h2>'+
+          '<p class="m-one">A live look at the work moving through our campuses, from first prototype to full production run. Select a project to see what we\'re building, the capabilities behind it, and where it stands today.</p>'+
+        '</div>'+
+      '</div>'+
+      '<div class="m-block"><div class="m-sec-label">Current Projects</div>'+
+        '<div class="inaction-grid">'+blocks+'</div>'+
+      '</div>'+
+      '<div class="m-cta">'+
+        '<h3>Have a program you need built?</h3>'+
+        '<p>From first prototype to full production, the same campuses that build for the federal government can build for you. We respond within one business day.</p>'+
+        '<a class="btn-primary m-cta-contact" href="#" data-contact-cat="manufacturing">Get in Touch</a>'+
+      '</div>';
+    modal.scrollTop = 0;
+  }
+
+  function openInAction(){
     if (modalOpen()) return;
-    if (!PROJECTS[key]) return;
-    renderProject(key);
+    renderInActionList();
     modalReturnFocus = document.activeElement;
     modal.scrollTop = 0;
     modalBackdrop.classList.add("is-open");
@@ -3466,6 +3523,12 @@
   };
 
   modal.addEventListener("click", function(e){
+    // In Action: open a project's detail view from the little-block grid.
+    var open = e.target.closest("[data-project-open]");
+    if (open){ renderProject(open.getAttribute("data-project-open"), true); modal.scrollTop = 0; modalClose.focus(); return; }
+    // In Action: Back from a project detail to the project list.
+    if (e.target.closest("[data-inaction-back]")){ renderInActionList(); modalClose.focus(); return; }
+
     var cta = e.target.closest(".m-cta-contact");
     if (!cta) return;
     e.preventDefault();
@@ -3486,8 +3549,8 @@
     var doc = e.target.closest("[data-doc]");
     if (doc && doc.getAttribute("href") === "#"){ e.preventDefault(); return; }
 
-    var proj = e.target.closest("[data-project]");
-    if (proj){ e.stopPropagation(); openProject(proj.getAttribute("data-project")); return; }
+    var proj = e.target.closest("[data-inaction]");
+    if (proj){ e.stopPropagation(); openInAction(); return; }
 
     var aj = e.target.closest("[data-atag-jump]");
     if (aj){
@@ -3517,7 +3580,7 @@
   document.getElementById("slides").addEventListener("keydown", function(e){
     if (modalOpen()) return;
     if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
-    var t = e.target.closest ? e.target.closest("[data-project],[data-atag-jump]") : null;
+    var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump]") : null;
     if (!t || t.tagName === "BUTTON" || t.tagName === "A") return;
     e.preventDefault();
     t.click();
