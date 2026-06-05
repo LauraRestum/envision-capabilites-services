@@ -398,15 +398,15 @@
   .campus-photo:focus-visible::after{background:rgba(0,24,82,0.07)}
   .campus-photo:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   .campus-zoom{
-    position:absolute;bottom:12px;right:12px;z-index:2;pointer-events:none;
-    display:flex;align-items:center;gap:6px;
+    position:absolute;bottom:10px;right:10px;z-index:2;pointer-events:none;
+    display:flex;align-items:center;gap:4px;
     background:#fff;color:var(--navy);
-    font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-    padding:6px 10px;border-radius:3px;
-    box-shadow:0 1px 3px rgba(0,24,82,0.12);
+    font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    padding:3px 6px;border-radius:3px;
+    box-shadow:0 1px 2px rgba(0,24,82,0.1);
     transition:background .18s,color .18s;
   }
-  .campus-zoom svg{stroke:var(--green);transition:stroke .18s}
+  .campus-zoom svg{width:9px;height:9px;stroke:var(--green);transition:stroke .18s}
   .campus-photo:hover .campus-zoom,
   .campus-photo:focus-visible .campus-zoom{background:var(--green);color:#fff}
   .campus-photo:hover .campus-zoom svg,
