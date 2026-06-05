@@ -714,6 +714,92 @@
   }
   .callout-box strong{color:#fff;font-weight:700}
 
+  /* ---------- Envision In Action (current projects) ---------- */
+  .proj-grid{
+    display:grid;gap:16px;margin-top:30px;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  }
+  .proj-card{
+    background:var(--bg-tint);border:1px solid var(--rule-light);
+    border-radius:6px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;
+    transition:border-color .2s,transform .2s,box-shadow .2s;
+  }
+  .proj-card:hover{
+    border-color:var(--navy);transform:translateY(-3px);
+    box-shadow:0 16px 32px rgba(0,24,82,0.12);
+  }
+  .proj-card:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .proj-thumb{
+    height:172px;background-size:cover;background-position:center;
+    border-bottom:1px solid var(--rule-light);
+  }
+  .proj-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+  .proj-status{
+    align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.13em;
+    text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:12px;
+  }
+  .proj-status--proto{color:#9a6a00;background:rgba(243,170,0,0.14);border:1px solid rgba(243,170,0,0.4)}
+  .proj-status--active{color:#4f8a17;background:rgba(120,190,33,0.14);border:1px solid rgba(120,190,33,0.4)}
+  .proj-status--shipping{color:#1f5fc0;background:rgba(43,108,214,0.12);border:1px solid rgba(43,108,214,0.38)}
+  .proj-card .t-h{font-weight:700;font-size:18px;color:var(--text-dark);margin-bottom:9px}
+  .proj-card .t-d{font-size:13.5px;line-height:1.6;color:var(--text-mid);flex:1}
+  .proj-cue{
+    margin-top:16px;display:inline-flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--green);
+  }
+  .proj-card:hover .proj-cue svg{transform:translateX(3px)}
+  .proj-cue svg{transition:transform .2s}
+  .proj-jump{
+    color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;
+  }
+  .proj-jump:hover,.proj-jump:focus-visible{color:var(--green)}
+
+  /* Compliance status badge inside the project modal */
+  .m-eyebrow .proj-status{display:inline-block;margin:0 0 0 10px;vertical-align:middle}
+
+  /* ---------- Compliance: balanced 2 rows of 3 ---------- */
+  .slide--compliance .cred-grid{grid-template-columns:repeat(3,1fr)}
+
+  /* ---------- Compliance: document quick-links ---------- */
+  .doc-links{margin-top:26px}
+  .doc-links-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    flex-wrap:wrap;gap:8px 18px;margin-bottom:14px;
+  }
+  .doc-links-head .m-sec-label{margin:0}
+  .doc-links-note{font-size:13px;color:var(--text-soft)}
+  .doc-links-note .proj-jump{color:var(--navy)}
+  .doc-grid{
+    display:grid;gap:12px;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  }
+  .doc-link{
+    display:flex;align-items:center;gap:14px;text-decoration:none;
+    background:var(--bg-tint);border:1px solid var(--rule-light);border-radius:6px;
+    padding:15px 16px;transition:border-color .2s,transform .2s,box-shadow .2s,background .2s;
+  }
+  .doc-link:hover{
+    border-color:var(--navy);transform:translateY(-2px);background:#fff;
+    box-shadow:0 12px 24px rgba(0,24,82,0.08);
+  }
+  .doc-link:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .doc-ic{
+    flex:none;width:40px;height:40px;border-radius:6px;display:flex;align-items:center;
+    justify-content:center;background:var(--navy);color:#fff;
+  }
+  .doc-txt{display:flex;flex-direction:column;min-width:0;flex:1}
+  .doc-name{font-size:14px;font-weight:700;color:var(--text-dark);line-height:1.3}
+  .doc-meta{font-size:11.5px;color:var(--text-soft);margin-top:3px}
+  .doc-dl{flex:none;color:var(--text-soft);transition:color .2s,transform .2s}
+  .doc-link:hover .doc-dl{color:var(--green);transform:translateY(2px)}
+
+  @media (max-width:900px){
+    .slide--compliance .cred-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:560px){
+    .slide--compliance .cred-grid{grid-template-columns:1fr}
+  }
+
   /* ---------- Innovation & Prototyping ---------- */
   .slide--innovation .wrap{max-width:1340px}
 
@@ -1982,8 +2068,32 @@
         </div>
       </section>
 
+      <!-- SLIDE: ENVISION IN ACTION (current projects) -->
+      <section class="slide slide--inaction" data-name="In Action">
+        <div class="wrap">
+          <div class="eyebrow">Envision in Action</div>
+          <h2 class="sec-h">Programs on the floor right now.</h2>
+          <p class="subhead">A live look at the work moving through our campuses, from first prototype to full production run. Select a project to see what we're building, the capabilities behind it, and where it stands today.</p>
+          <div class="proj-grid">
+
+            <!-- PROJECT: M&D Hand Warmers (in prototyping) -->
+            <div class="proj-card" data-project="handwarmers" role="button" tabindex="0" aria-label="Open the M&amp;D Hand Warmers project">
+              <div class="proj-thumb" style="background-image:url(&quot;images/innovation-prototyping-lab.png&quot;)" role="img" aria-label="M&amp;D Hand Warmers prototyping"></div>
+              <div class="proj-body">
+                <div class="proj-status proj-status--proto">In Prototyping</div>
+                <div class="t-h">M&amp;D Hand Warmers</div>
+                <div class="t-d">An air-activated hand warmer program in active prototyping at the Dallas Campus. Material, fill, and packaging are being validated against performance and shelf-life targets ahead of a production run.</div>
+                <div class="proj-cue">View project <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="callout-box"><strong>More programs are added as they move into production.</strong> Want to see whether Envision can build yours? <span class="proj-jump" data-atag-jump="Contact" role="button" tabindex="0">Start a conversation.</span></div>
+        </div>
+      </section>
+
       <!-- SLIDE 9: COMPLIANCE + PROCUREMENT ACCESS -->
-      <section class="slide" data-name="Compliance">
+      <section class="slide slide--compliance" data-name="Compliance">
         <div class="wrap">
           <div class="eyebrow">Compliance + Procurement Access</div>
           <h2 class="sec-h">The credentials are the door. We've already opened it.</h2>
@@ -2015,6 +2125,46 @@
             </div>
           </div>
           <div class="callout-box"><strong>Federal Operational Registrations.</strong> DUNS 007346745 · CAGE 5A062 (Dallas), 2A178 (Wichita) · SAM Active.</div>
+
+          <!-- Document quick-links. Replace each href="#" with the real PDF/URL once uploaded. -->
+          <div class="doc-links">
+            <div class="doc-links-head">
+              <div class="m-sec-label">Document Library</div>
+              <span class="doc-links-note">Need something else? <span class="proj-jump" data-atag-jump="Contact" role="button" tabindex="0">Request it here.</span></span>
+            </div>
+            <div class="doc-grid">
+              <a class="doc-link" href="#" data-doc>
+                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-txt"><span class="doc-name">Capabilities Statement</span><span class="doc-meta">PDF · one-page overview</span></span>
+                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+              </a>
+              <a class="doc-link" href="#" data-doc>
+                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-txt"><span class="doc-name">ISO 9001:2015 Certificate</span><span class="doc-meta">PDF · CERT-0145812, Dallas</span></span>
+                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+              </a>
+              <a class="doc-link" href="#" data-doc>
+                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-txt"><span class="doc-name">Line Card</span><span class="doc-meta">PDF · products &amp; NSN catalog</span></span>
+                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+              </a>
+              <a class="doc-link" href="#" data-doc>
+                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-txt"><span class="doc-name">Berry &amp; TAA Compliance Letter</span><span class="doc-meta">PDF · sourcing attestation</span></span>
+                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+              </a>
+              <a class="doc-link" href="#" data-doc>
+                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-txt"><span class="doc-name">SAM.gov Registration</span><span class="doc-meta">PDF · entity record</span></span>
+                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+              </a>
+              <a class="doc-link" href="#" data-doc>
+                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-txt"><span class="doc-name">W-9</span><span class="doc-meta">PDF · taxpayer ID</span></span>
+                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2208,6 +2358,7 @@
     {name:"Services",    count:1},
     {name:"Innovation",  count:1},
     {name:"Proof",       count:1},
+    {name:"In Action",   count:1},
     {name:"Compliance",  count:1},
     {name:"Contact",     count:1}
   ];
@@ -3206,6 +3357,107 @@
   modalClose.addEventListener("click", closeModal);
   modalBackdrop.addEventListener("click", closeModal);
 
+  /* ---------- Envision In Action: project mini-pages ----------
+     Reuses the same modal shell as the product modals. To add a project,
+     drop an entry here and add a matching .proj-card[data-project="key"]
+     on the In Action slide. statusClass: proto | active | shipping. */
+  var PROJECTS = {
+    handwarmers:{
+      label:"Envision in Action",
+      eyebrow:"Current Project",
+      status:"In Prototyping", statusClass:"proto",
+      title:"M&D Hand Warmers",
+      location:"Dallas",
+      summary:"An air-activated hand warmer program in active prototyping at the Dallas Campus. We're validating material, fill, and packaging against performance and shelf-life targets before committing to a production run.",
+      creds:["Prototyping","Dallas Campus","Made in USA"],
+      overview:[
+        "<strong>Where it stands.</strong> The M&D hand warmer is in the prototyping phase. Our team is building and testing samples to dial in heat output, duration, and a comfortable, consistent fit before scaling to production.",
+        "<strong>What we're validating.</strong> Iron-based exothermic fill formulation, breathable non-woven pouch construction, and oxygen-barrier overwrap for shelf life. Each sample is tested for activation time, peak temperature, and total warm-time.",
+        "<strong>The Envision build.</strong> The program draws on our prototyping lab, polymer and film converting, and fulfillment lines, so the same campus that designs the sample can pack and ship the finished product.",
+        "<em>Placeholder copy — swap in the real program details, target specs, and customer/end-use once confirmed.</em>"
+      ],
+      statLabel:"Prototype Targets",
+      stats:[
+        {num:"[ °F ]",label:"Peak temperature",ctx:"Target peak surface temperature under validation in the prototyping lab."},
+        {num:"[ hrs ]",label:"Warm time",ctx:"Target total warm-time per unit, measured from activation to drop-off."},
+        {num:"[ min ]",label:"Activation",ctx:"Target time from opening the overwrap to usable warmth."}
+      ],
+      calloutLabel:"Capabilities Behind It",
+      callouts:[
+        {tag:"Prototyping",title:"Sample Development",desc:"In-house prototyping lab builds and iterates samples, from fill formulation to pouch construction, with rapid test cycles.",specs:[["Phase","Active"],["Cycle","Rapid iteration"]]},
+        {tag:"Converting",title:"Polymer & Film",desc:"Non-woven pouch and oxygen-barrier overwrap converting on existing Envision film lines.",specs:[["Material","Non-woven"],["Barrier","O₂ overwrap"]]},
+        {tag:"Fulfillment",title:"Pack & Ship",desc:"Casing, kitting, and distribution handled on the same campus, ready to scale when the prototype is approved.",specs:[["Kitting","In-house"],["Ship","Direct"]]}
+      ],
+      img:"Envision prototyping lab",
+      imgSrc:"images/innovation-prototyping-lab.png", imgPos:"center"
+    }
+  };
+
+  function renderProject(key){
+    var d = PROJECTS[key];
+    if (!d) return;
+    modalLabel.textContent = d.label;
+
+    var creds = (d.creds||[]).map(function(c){ return '<span class="m-cred">'+c+'</span>'; }).join("");
+    var overview = (d.overview||[]).map(function(p){ return '<p>'+p+'</p>'; }).join("");
+    var stats = (d.stats||[]).map(function(s){
+      return '<div class="m-stat"><div class="num">'+s.num+'</div><div class="lab">'+s.label+'</div><div class="ctx">'+s.ctx+'</div></div>';
+    }).join("");
+    var callouts = (d.callouts||[]).map(function(c){
+      var sp = "";
+      if (c.specs && c.specs.length){
+        sp = '<div class="m-spec">'+c.specs.map(function(kv){
+          return '<div><span class="sk">'+kv[0]+'</span><span class="sv">'+kv[1]+'</span></div>';
+        }).join("")+'</div>';
+      }
+      var ph = '<figure class="m-card-ph" role="img" aria-label="Project detail: '+c.title+'">'+
+               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
+               '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'+
+               '</svg><div class="ph-title">'+c.tag+'</div><div class="ph-note">'+c.title+'</div></figure>';
+      return '<div class="m-card">'+ph+'<div class="tag">'+c.tag+'</div><h4>'+c.title+'</h4>'+
+             '<div class="m-card-d">'+c.desc+'</div>'+sp+'</div>';
+    }).join("");
+
+    var statusBadge = d.status ? '<span class="proj-status proj-status--'+(d.statusClass||'active')+'">'+d.status+'</span>' : "";
+    var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
+    var statsBlock = stats ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
+    var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
+
+    modalInner.innerHTML =
+      '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
+        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
+        ' role="img" aria-label="'+d.img+'"></div></div>'+
+      '<div class="m-summary">'+
+        '<div class="m-sum-left">'+
+          '<div class="m-eyebrow">'+d.eyebrow+locChip+statusBadge+'</div>'+
+          '<h2>'+d.title+'</h2>'+
+          '<p class="m-one">'+d.summary+'</p>'+
+        '</div>'+
+        '<div class="m-creds">'+creds+'</div>'+
+      '</div>'+
+      '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
+      statsBlock+
+      calloutsBlock+
+      '<div class="m-cta">'+
+        '<h3>Interested in '+d.title+'?</h3>'+
+        '<p>Reach out and we\'ll connect you with the right team. We respond within one business day.</p>'+
+        '<a class="btn-primary m-cta-contact" href="#" data-contact-cat="manufacturing">Get in Touch</a>'+
+      '</div>';
+  }
+
+  function openProject(key){
+    if (modalOpen()) return;
+    if (!PROJECTS[key]) return;
+    renderProject(key);
+    modalReturnFocus = document.activeElement;
+    modal.scrollTop = 0;
+    modalBackdrop.classList.add("is-open");
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+    modalClose.focus();
+  }
+
   var MODAL_TO_CONTACT = {
     plastic:"manufacturing", textile:"manufacturing", reflective:"manufacturing",
     binders:"manufacturing", writing:"manufacturing", fulfillment:"fulfillment",
@@ -3230,6 +3482,13 @@
   });
 
   document.getElementById("slides").addEventListener("click", function(e){
+    // Placeholder document links — no file wired up yet, so don't navigate.
+    var doc = e.target.closest("[data-doc]");
+    if (doc && doc.getAttribute("href") === "#"){ e.preventDefault(); return; }
+
+    var proj = e.target.closest("[data-project]");
+    if (proj){ e.stopPropagation(); openProject(proj.getAttribute("data-project")); return; }
+
     var aj = e.target.closest("[data-atag-jump]");
     if (aj){
       e.stopPropagation();
@@ -3251,6 +3510,17 @@
     }
     var tile = e.target.closest("[data-modal]");
     if (tile){ e.stopPropagation(); openModal(tile.getAttribute("data-modal")); }
+  });
+
+  // Keyboard activation for non-native (div/span) role="button" elements
+  // on the slides: project cards and inline jump links.
+  document.getElementById("slides").addEventListener("keydown", function(e){
+    if (modalOpen()) return;
+    if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+    var t = e.target.closest ? e.target.closest("[data-project],[data-atag-jump]") : null;
+    if (!t || t.tagName === "BUTTON" || t.tagName === "A") return;
+    e.preventDefault();
+    t.click();
   });
 
   function render(){
