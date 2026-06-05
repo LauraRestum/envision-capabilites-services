@@ -1834,6 +1834,8 @@
   body.presentation .nav-menu{top:calc(48px + env(safe-area-inset-top) + 6px)}
   body.presentation{cursor:default}
 </style>
+<!-- Capabilities concierge styles (self-hosted, no external request) -->
+<link rel="stylesheet" href="/assistant/concierge.css">
 </head>
 <body>
 <div class="fs-wipe" id="fsWipe" aria-hidden="true"></div>
@@ -4272,6 +4274,25 @@
 
   render();
 
+  /* ---------- Concierge bridge ----------
+     A tiny, read-only navigation API so the bundled capabilities concierge
+     (loaded as separate scripts below) can route a buyer straight to the
+     matching modal or deck section. Nothing about deck state leaks out
+     beyond these three safe, named actions. */
+  window.EnvisionDeck = {
+    openModal: function(key){ if (MODALS[key]) openModal(key); },
+    goToSection: function(name){
+      for (var i = 0; i < SECTIONS.length; i++){
+        if (SECTIONS[i].name === name){ jumpToSection(i); return true; }
+      }
+      return false;
+    },
+    openBSC: function(){
+      var el = document.querySelector("[data-bsc]");
+      if (el && el.click) el.click();
+    }
+  };
+
 })();
 </script>
 <script>
@@ -4832,5 +4853,21 @@
     });
   })();
 </script>
+
+<!-- =====================================================================
+     ENVISION CAPABILITIES CONCIERGE
+     Fully client-side, authored (not generative) assistant. Three editable
+     layers plus a bundled fuzzy-search library, all self-hosted. No external
+     API calls, no API keys, no language model. Load order matters: the
+     library and the two content files must be in place before the engine.
+       - knowledge.js   the answers (intents)        edit freely
+       - contacts.js    who to hand off to           edit freely
+       - vendor/minisearch.min.js  bundled matcher   do not edit
+       - concierge.js   matching engine + chat UI    tune CONFIG only
+     ===================================================================== -->
+<script src="/assistant/vendor/minisearch.min.js" defer></script>
+<script src="/assistant/knowledge.js" defer></script>
+<script src="/assistant/contacts.js" defer></script>
+<script src="/assistant/concierge.js" defer></script>
 </body>
 </html>
