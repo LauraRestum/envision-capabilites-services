@@ -1450,6 +1450,7 @@
     border-radius:4px;overflow:hidden;
   }
   .m-card-photo img{width:100%;height:100%;object-fit:contain;display:block}
+  .m-card-photo--cover img{object-fit:cover}
   .m-spec{
     display:grid;grid-template-columns:1fr 1fr;gap:9px 16px;margin-top:14px;
     padding-top:14px;border-top:1px solid var(--border-dark);
@@ -3568,13 +3569,13 @@
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Service",title:"On-site Quality Labs",desc:"Material and dimensional validation against gauge, strength, and spec.",img:"images/qa-mitutoyo-micrometer-inspection.png"},
-        {tag:"Service",title:"Federal compliance maintenance",desc:"ISO, Berry, TAA, Buy American across every capability.",img:"images/qa-tablet-floor-audit.png"},
-        {tag:"Service",title:"DCMA Alternate Release",desc:"Authorization held at Dallas Campus. Speeds federal acceptance timelines on military apparel and qualifying shipments.",img:"images/qa-dcma-alternate-release.png"},
+        {tag:"Service",title:"On-site Quality Labs",desc:"Material and dimensional validation against gauge, strength, and spec.",img:"images/qa-mitutoyo-micrometer-inspection.png",imgFit:"cover"},
+        {tag:"Service",title:"Federal compliance maintenance",desc:"ISO, Berry, TAA, Buy American across every capability.",img:"images/qa-tablet-floor-audit.png",imgFit:"cover"},
+        {tag:"Service",title:"DCMA Alternate Release",desc:"Authorization held at Dallas Campus. Speeds federal acceptance timelines on military apparel and qualifying shipments.",img:"images/qa-dcma-alternate-release.png",imgFit:"cover"},
         {tag:"Service",title:"DLA pricing pre-cleared",desc:"All federal-channel pricing considered fair and reasonable by DLA Troop Support."}
       ],
       img:"QA Lab material and dimensional validation, 4:3",
-      imgSrc:"images/qa-strategic-plan-inspection-station.png", imgPos:"center"
+      imgSrc:"images/qa-strategic-plan-inspection-station.png", imgPos:"center top"
     }
   };
 
@@ -3679,7 +3680,7 @@
         }).join("")+'</div>';
       }
       var ph = c.img
-        ? '<figure class="m-card-photo"><img src="'+c.img+'" alt="'+c.title+'" loading="lazy"></figure>'
+        ? '<figure class="m-card-photo'+(c.imgFit==='cover'?' m-card-photo--cover':'')+'"><img src="'+c.img+'" alt="'+c.title+'" loading="lazy"></figure>'
         : '<figure class="m-card-ph" role="img" aria-label="Product photo placeholder: '+c.title+'">'+
                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
                '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'+
@@ -3732,7 +3733,7 @@
 
     modalInner.innerHTML =
       '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
-        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
+        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:'+(d.imgSize||'cover')+';background-repeat:no-repeat;background-position:'+(d.imgPos||'center')+'"' : '')+
         ' role="img" aria-label="'+d.img+'"></div></div>'+
       '<div class="m-summary">'+
         '<div class="m-sum-left">'+
