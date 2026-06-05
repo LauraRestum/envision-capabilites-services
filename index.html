@@ -385,10 +385,32 @@
   }
   .campus-photo{
     position:relative;background:var(--bg-tint);
+    cursor:zoom-in;display:block;
   }
   .campus-photo img{
     width:100%;height:auto;display:block;
   }
+  .campus-photo::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:rgba(0,24,82,0);transition:background .18s;
+  }
+  .campus-photo:hover::after,
+  .campus-photo:focus-visible::after{background:rgba(0,24,82,0.07)}
+  .campus-photo:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .campus-zoom{
+    position:absolute;bottom:12px;right:12px;z-index:2;pointer-events:none;
+    display:flex;align-items:center;gap:6px;
+    background:#fff;color:var(--navy);
+    font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    padding:6px 10px;border-radius:3px;
+    box-shadow:0 1px 3px rgba(0,24,82,0.12);
+    transition:background .18s,color .18s;
+  }
+  .campus-zoom svg{stroke:var(--green);transition:stroke .18s}
+  .campus-photo:hover .campus-zoom,
+  .campus-photo:focus-visible .campus-zoom{background:var(--green);color:#fff}
+  .campus-photo:hover .campus-zoom svg,
+  .campus-photo:focus-visible .campus-zoom svg{stroke:#fff}
   .campus-photo-tag{
     position:absolute;top:12px;left:12px;background:#fff;color:var(--navy);
     font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
@@ -435,6 +457,58 @@
   .campus-addr a{color:inherit;text-decoration:none;transition:color .15s}
   .campus-addr a:hover{color:var(--green);text-decoration:underline}
   .campus-addr a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+  /* Campus location lightbox */
+  .lb-backdrop{
+    position:fixed;inset:0;background:rgba(6,21,48,0.78);
+    backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:130;
+  }
+  .lb-backdrop.is-open{opacity:1;pointer-events:auto}
+  .lb-modal{
+    position:fixed;inset:0;z-index:140;display:flex;
+    align-items:center;justify-content:center;
+    padding:clamp(16px,3vw,48px);pointer-events:none;
+  }
+  .lb-modal.is-open{pointer-events:auto}
+  .lb-figure{
+    position:relative;margin:0;max-width:1100px;width:100%;max-height:100%;
+    display:flex;flex-direction:column;align-items:center;
+    opacity:0;transform:scale(0.96);
+    transition:opacity .3s ease,transform .3s cubic-bezier(0.22,1,0.36,1);
+  }
+  .lb-modal.is-open .lb-figure{opacity:1;transform:scale(1)}
+  .lb-img{
+    display:block;max-width:100%;max-height:76vh;width:auto;height:auto;
+    border:1px solid var(--bsc-bd);border-radius:8px;background:var(--bsc-bg);
+  }
+  .lb-cap{margin:16px 0 0;text-align:center;font-family:var(--sans)}
+  .lb-name{
+    display:block;font-size:10.5px;font-weight:800;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--green);margin-bottom:8px;
+  }
+  .lb-addr{
+    display:inline-block;font-family:var(--sans);font-size:15px;font-weight:700;
+    color:#fff;text-decoration:none;padding-bottom:2px;
+    border-bottom:1px solid rgba(255,255,255,0.35);
+    transition:color .15s,border-color .15s;
+  }
+  .lb-addr:hover{color:var(--green);border-color:var(--green)}
+  .lb-addr:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .lb-close{
+    position:fixed;top:clamp(12px,2.5vw,28px);right:clamp(12px,2.5vw,28px);z-index:6;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(255,255,255,0.08);border:1px solid var(--bsc-bd);
+    color:#fff;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .18s,border-color .18s,color .18s;
+  }
+  .lb-close:hover{background:rgba(120,190,33,0.16);border-color:var(--green);color:var(--green)}
+  .lb-close:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){
+    .lb-figure{transition:opacity .2s ease;transform:none}
+    .lb-modal.is-open .lb-figure{transform:none}
+  }
 
   /* Act 3: Federal infrastructure band */
   .fed-band{
@@ -1466,9 +1540,14 @@
           <div class="campus-grid">
 
             <article class="campus-card">
-              <div class="campus-photo">
+              <div class="campus-photo" data-lightbox role="button" tabindex="0"
+                   data-lb-name="Envision, Dallas Campus"
+                   data-lb-addr="1801 Valley View Lane, Farmers Branch, TX 75234"
+                   data-lb-href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234"
+                   aria-label="Enlarge the Envision, Dallas Campus location image and area map">
                 <img src="images/campus-card-dallas.png" alt="Envision, Dallas Campus in Farmers Branch, Texas, shown with a map of the Dallas Fort Worth metroplex locating the campus near I-635, the Dallas North Tollway, and DFW International Airport" loading="lazy">
                 <div class="campus-photo-tag"><span class="accent-dot" style="background:#78BE21"></span>Envision, Dallas Campus</div>
+                <span class="campus-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
               </div>
               <div class="campus-body">
                 <div class="campus-head">
@@ -1490,9 +1569,14 @@
             </article>
 
             <article class="campus-card">
-              <div class="campus-photo">
+              <div class="campus-photo" data-lightbox role="button" tabindex="0"
+                   data-lb-name="Envision, Wichita Campus"
+                   data-lb-addr="2301 S. Water Street, Wichita, KS 67213"
+                   data-lb-href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213"
+                   aria-label="Enlarge the Envision, Wichita Campus location image and area map">
                 <img src="images/campus-card-wichita.png" alt="Envision, Wichita Campus on South Water Street, shown with a map of Wichita locating the campus south of downtown near I-235, Wichita Dwight D. Eisenhower National Airport, and McConnell Air Force Base" loading="lazy">
                 <div class="campus-photo-tag"><span class="accent-dot" style="background:#003087"></span>Envision, Wichita Campus</div>
+                <span class="campus-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
               </div>
               <div class="campus-body">
                 <div class="campus-head">
@@ -1986,6 +2070,21 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- ===================== CAMPUS LOCATION LIGHTBOX ===================== -->
+<div class="lb-backdrop" id="lbBackdrop"></div>
+<div class="lb-modal" id="lbModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Campus location">
+  <button class="lb-close" id="lbClose" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <figure class="lb-figure">
+    <img class="lb-img" id="lbImg" alt="">
+    <figcaption class="lb-cap">
+      <span class="lb-name" id="lbName"></span>
+      <a class="lb-addr" id="lbAddr" href="#" target="_blank" rel="noopener"></a>
+    </figcaption>
+  </figure>
 </div>
 
 <!-- ===================== iOS INSTALL HINT ===================== -->
@@ -3394,6 +3493,85 @@
     }
   }, true);
 })();
+</script>
+<script>
+  /* Campus location lightbox. Click a campus banner to view the building and
+     area map full size, with the address below as a Google Maps link. */
+  (function(){
+    var backdrop = document.getElementById("lbBackdrop");
+    var modal    = document.getElementById("lbModal");
+    var closeBtn = document.getElementById("lbClose");
+    var lbImg    = document.getElementById("lbImg");
+    var lbName   = document.getElementById("lbName");
+    var lbAddr   = document.getElementById("lbAddr");
+    if (!backdrop || !modal || !closeBtn) return;
+    var panelModal = document.getElementById("modal");
+    var returnFocus = null;
+
+    function isOpen(){ return modal.classList.contains("is-open"); }
+
+    function openLb(trigger){
+      if (isOpen()) return;
+      var img = trigger.querySelector("img");
+      if (img){ lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt || ""; }
+      lbName.textContent = trigger.getAttribute("data-lb-name") || "";
+      lbAddr.textContent = trigger.getAttribute("data-lb-addr") || "";
+      lbAddr.setAttribute("href", trigger.getAttribute("data-lb-href") || "#");
+      returnFocus = trigger;
+      backdrop.classList.add("is-open");
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeLb(){
+      if (!isOpen()) return;
+      modal.classList.remove("is-open");
+      backdrop.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow =
+        panelModal && panelModal.classList.contains("is-open") ? "hidden" : "";
+      if (returnFocus && returnFocus.focus) returnFocus.focus();
+      returnFocus = null;
+    }
+
+    closeBtn.addEventListener("click", closeLb);
+    backdrop.addEventListener("click", closeLb);
+    modal.addEventListener("click", function(e){
+      if (e.target === modal) closeLb();
+    });
+
+    /* Capture phase so the trigger wins over the deck's slide navigation. */
+    function handleTrigger(e){
+      var t = e.target.closest ? e.target.closest("[data-lightbox]") : null;
+      if (!t) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.type === "keydown"){
+        if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      }
+      openLb(t);
+    }
+    document.addEventListener("click", handleTrigger, true);
+    document.addEventListener("keydown", function(e){
+      if (isOpen()) return;
+      var t = e.target.closest ? e.target.closest("[data-lightbox]") : null;
+      if (t && (e.key === "Enter" || e.key === " " || e.key === "Spacebar")){
+        e.preventDefault(); e.stopPropagation(); openLb(t);
+      }
+    }, true);
+
+    document.addEventListener("keydown", function(e){
+      if (!isOpen()) return;
+      if (e.key === "Escape"){
+        e.preventDefault(); e.stopImmediatePropagation(); closeLb();
+      } else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
+                 e.key === " " || e.key === "Spacebar"){
+        e.preventDefault(); e.stopImmediatePropagation();
+      }
+    }, true);
+  })();
 </script>
 <script>
   /* PWA install control. Hidden entirely when already running standalone. */
