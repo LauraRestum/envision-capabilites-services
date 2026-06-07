@@ -34,9 +34,8 @@
    WHAT IS REAL VS. A PLACEHOLDER
    ---------------------------------------------------------------------
    The two people below (Zahr, Tuttle) are the only contacts authored in
-   the deck. Phone numbers shown are the ones published in the deck. No
-   email addresses were published, so none are listed. Add them when you
-   have them (see the TODO markers).
+   the deck. Phone numbers and emails shown are the ones published for
+   each person (firstname.lastname@envisionus.com).
 
    The commented STUBS at the bottom are templates for per-area sales leads.
    They are intentionally inactive. Fill in a real name, title, and method,
@@ -52,9 +51,8 @@ window.ENVISION_CONTACTS = {
     title: "Chief Revenue & Strategy Officer",
     org:   "Envision, Inc.",
     method: {
-      web: "www.envisionus.com"
-      // TODO: add a direct phone and/or email for Sebastian if you want
-      // buyers to reach him directly. e.g. email: "...", phone: "..."
+      email: "sebastian.zahr@envisionus.com",
+      web:   "www.envisionus.com"
     },
     talkTo: "Partnership, procurement strategy, and figuring out where to start."
   },
@@ -67,8 +65,8 @@ window.ENVISION_CONTACTS = {
     method: {
       phone:  "316-425-7129",
       mobile: "316-253-1468",
+      email:  "patrick.tuttle@envisionus.com",
       web:    "www.envisionus.com"
-      // TODO: add email if you want it surfaced.
     },
     talkTo: "Manufacturing capabilities, custom builds, and new product development."
   }
