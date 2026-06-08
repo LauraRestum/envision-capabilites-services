@@ -31,7 +31,13 @@
     // Intent ids shown as quick-reply chips when the panel first opens.
     openingChips: ["capabilities-overview", "how-to-buy", "abilityone", "locations", "contact-human"],
     // Fallback intent id used for the greeting bubble.
-    greetingId: "greeting"
+    greetingId: "greeting",
+    // A contact card is normally only shown when the visitor is actually after
+    // a person (an intent that opts in via showContact, or a handoff). As a
+    // safety net, once someone has asked this many questions in a session, we
+    // start appending the card so a human is always one tap away. Raise it to
+    // surface the card later, lower it to surface it sooner.
+    contactAfterQueries: 4
   };
 
   // Words too common to carry meaning. Filtering them keeps short function
@@ -186,6 +192,7 @@
 
   var opened = false;          // panel currently open
   var started = false;         // greeting has been shown once this session
+  var userTurns = 0;           // how many things the visitor has asked this session
 
   /* ------------------------------------------------------------------ *
    * 4. RENDER HELPERS                                                   *
@@ -204,6 +211,7 @@
   function scrollLog(){ log.scrollTop = log.scrollHeight; }
 
   function addUserMessage(text){
+    userTurns++;   // counts typed questions and tapped chips alike
     var wrap = el("div", "ec-msg ec-msg-user");
     wrap.appendChild(el("div", "ec-bubble", esc(text)));
     log.appendChild(wrap);
@@ -296,8 +304,15 @@
     }
     addBotBubble(intent.answer);
     var hasNext = addNextStep(intent);
-    var contact = resolveContact(intent);
-    addContactCard(contact);
+    // Only surface a contact card when the visitor is actually after a person:
+    // either the intent opts in (showContact, e.g. "talk to a person" or
+    // pricing), or they have asked enough questions that handing them a human
+    // is the helpful move. A plain informational answer just points back into
+    // the deck and does not nag with a contact.
+    var wantContact = intent.showContact === true ||
+                      userTurns >= CONFIG.contactAfterQueries;
+    var contact = wantContact ? resolveContact(intent) : null;
+    if (contact){ addContactCard(contact); }
     // "Never dead-end": if there is neither a next step nor a contact, give
     // the buyer a way forward.
     if (!hasNext && !contact){

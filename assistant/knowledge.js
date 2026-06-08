@@ -38,6 +38,12 @@
                Capabilities, Services, Innovation, Proof, Compliance, Contact.
      contact:  OPTIONAL contact id from contacts.js (e.g. "zahr","tuttle").
                If omitted, the engine falls back to the routing map there.
+     showContact: OPTIONAL boolean. By default the concierge does NOT attach a
+               contact card to an informational answer (it would nag). Set this
+               to true only on intents where reaching a person IS the point,
+               like "talk to a person" or pricing. As a safety net the engine
+               also starts showing the card on its own once a visitor has asked
+               several questions in a session (see CONFIG.contactAfterQueries).
      source:   Where in the deck this came from. For your reference only;
                not shown to buyers. Helps you keep answers honest.
      clarify:  OPTIONAL. Use INSTEAD of answer when a phrase is genuinely
@@ -73,7 +79,7 @@ window.ENVISION_INTENTS = [
       "line card", "capabilities", "capability", "what can you do", "what do you make",
       "what do you sell", "what do you offer", "what do you manufacture",
       "what do you produce", "range of products"],
-    answer: "Envision manufactures across two campuses. Polymer and film (can liners, medical and specialty bags, sheeting), textile and apparel (Berry-compliant military gear and ANSI high-visibility), reflective safety systems like the VISI-BELT, binders and document covers, and writing instruments, plus fulfillment, kitting, and specialty decoration. On the services side we run print with in-house Braille, the contact center, secure document services, accessibility services, federal procurement, and quality assurance. Tell me what you need and I will take you straight to it.",
+    answer: "Envision manufactures across two campuses, 410,000 square feet built for federal scale. On the floor: polymer and film (can liners, medical and specialty bags, sheeting), textile and apparel (Berry-compliant military gear and ANSI high-visibility), reflective safety systems like the VISI-BELT, binders and document covers, and writing instruments, plus fulfillment, kitting, and specialty decoration. On the services side we run print with in-house Braille, the contact center, secure document services, accessibility services, federal procurement, and quality assurance. Tell me what you need and I will take you straight to it.",
     next: {action:"section", target:"Capabilities", label:"Browse all capabilities"},
     contact: "zahr",
     source: "Capabilities + Services hubs"
@@ -84,7 +90,7 @@ window.ENVISION_INTENTS = [
     triggers: ["who is envision", "what is envision", "about envision", "envision history",
       "envision background", "company", "mission", "what do you do", "who are you",
       "nonprofit", "social enterprise"],
-    answer: "Envision is one of the nation's largest employers of people who are blind or have low vision, with 90 years of continuous U.S. manufacturing across two campuses. We provide manufacturing, printing, packaging, and fulfillment for federal, commercial, and state clients, and we run the services that sustain each program. Business first, mission throughout.",
+    answer: "Envision is one of the nation's largest employers of people who are blind or have low vision, backed by 90 years of continuous U.S. manufacturing across two campuses. We deliver manufacturing, printing, packaging, and fulfillment for federal, commercial, and state clients, and we run the services that keep each program performing. Business first, mission throughout.",
     next: {action:"section", target:"Mission", label:"See our mission and impact"},
     contact: "zahr",
     source: "Hero + Mission"
@@ -336,7 +342,7 @@ window.ENVISION_INTENTS = [
     triggers: ["how do i buy", "how to buy", "how to purchase", "procurement", "order",
       "contract vehicle", "buy from you", "contract", "channels", "acquisition",
       "how do we work together", "purchasing", "how to order"],
-    answer: "Envision is an active, pre-cleared source across federal and state channels, so the qualification work is already done. You can buy through AbilityOne mandatory source, our DLA Prime Vendor contracts, the Base Supply Center network, the federal NSN catalog, and the Texas WorkQuest and Kansas State Use programs. Tell me your product or agency and I will point you to the right channel.",
+    answer: "Buying from Envision is straightforward because we are already a pre-cleared source across federal and state channels, so the qualification work is done before you start. Order through AbilityOne mandatory source, our DLA Prime Vendor contracts, the Base Supply Center network, the federal NSN catalog, or the Texas WorkQuest and Kansas State Use programs. Tell me your product or agency and I will point you to the right channel.",
     next: {action:"section", target:"Proof", label:"See every channel"},
     contact: "zahr",
     source: "Proof"
@@ -426,6 +432,7 @@ window.ENVISION_INTENTS = [
       "delivery time", "eta", "ship date", "how long"],
     answer: "Pricing and lead times depend on the product, volume, and channel, and all federal-channel pricing is reviewed and approved as fair and reasonable by DLA Troop Support. I do not quote numbers here, but the right person can get you a precise figure for your order.",
     contact: "zahr",
+    showContact: true,
     source: "Proof (pricing routes to a human by design)"
   },
 
@@ -439,6 +446,7 @@ window.ENVISION_INTENTS = [
     answer: "Happy to connect you. Tell me what you are working on and I will route you to the right person. For partnership and procurement, our Chief Revenue and Strategy Officer is the front door.",
     next: {action:"section", target:"Contact", label:"See contact details"},
     contact: "zahr",
+    showContact: true,
     source: "Contact"
   },
 
@@ -448,7 +456,7 @@ window.ENVISION_INTENTS = [
     label: "Hello",
     triggers: ["hi", "hello", "hey", "good morning", "good afternoon", "start",
       "help", "what can you do", "get started", "howdy"],
-    answer: "Welcome. I am the Envision capabilities concierge. Ask me what we make, how to buy from us, or who to talk to, and I will route you to the right place.",
+    answer: "Welcome. I am the Envision concierge. Ask me what we manufacture, how to buy through our federal and state channels, or who to talk to, and I will take you straight there.",
     contact: null,
     source: "—"
   }
