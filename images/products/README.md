@@ -1,8 +1,14 @@
 # Product photos
 
-Source images for the product callouts in `index.html`. The 12 web-optimized
-JPGs in the root of this folder (e.g. `can-liner-hdpe.jpg`, `markers-dry-erase.jpg`,
-`visi-belt.jpg`) are the ones currently wired into the deck.
+Source images for the product callouts in `index.html`. The web-optimized
+files in the root of this folder (e.g. `can-liner-hdpe.jpg`, `markers-dry-erase.jpg`,
+`visi-belt.jpg`) are the ones currently wired into the deck. This now also
+includes three product hero shots wired into the Textiles & Apparel and
+Polymer & Film callouts:
+
+- `acu-trousers.webp` — OCP combat trousers (Army Combat Uniform line)
+- `molle-etool-pouch.jpg` — OCP MOLLE / ETOOL carrier pouch
+- `thank-you-bag.jpg` — imprintable "Thank You" T-shirt bag
 
 The subfolders below hold the additional product photography uploaded for each
 line — alternate angles and SKU shots — ready to be selected and wired in.
