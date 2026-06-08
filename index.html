@@ -4248,6 +4248,15 @@
   });
 
   document.addEventListener("keydown", function(e){
+    // Don't hijack keys while the visitor is typing in a field (e.g. the
+    // concierge input). Otherwise Space advances a slide instead of inserting
+    // a space, and arrows / F / number keys steal the keystroke mid-sentence.
+    var t = e.target;
+    if (t && (t.isContentEditable ||
+              /^(input|textarea|select)$/i.test(t.tagName || "") ||
+              (t.closest && t.closest(".env-concierge")))){
+      return;
+    }
     if (modalOpen()){
       if (e.key === "Escape"){ closeModal(); }
       else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
