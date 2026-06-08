@@ -2749,7 +2749,7 @@
         {tag:"Can liners",title:"Environmentally Friendly",desc:"Total Recycled Content, ASTM D6400 compostable, and Controlled Life-Cycle can liners.",specs:[["Recycled","Total Recycled Content"],["Compostable","ASTM D6400"],["Degradable","Controlled Life-Cycle"],["Custom","Sizes & colors on request"]],img:"images/products/can-liner-compostable.jpg"},
         {tag:"Medical",title:"Medical Products",desc:"Color-coded isolation liners (red, yellow, blue) and the Body Fluid Clean Up Kit.",specs:[["Isolation","Red / Yellow / Blue"],["Kit","Body Fluid Clean Up Kit"],["Use","Infectious waste & linen"],["DOT","49 CFR 173.197"],["Custom","Sizes & colors on request"]],img:"images/products/medical-isolation-bags.jpg"},
         {tag:"Specialty",title:"Specialty Bags",desc:"Seal Closure reclosable bags, VA Belongings bags, T-Shirt “Thank You” bags, and TidyGirl feminine hygiene.",specs:[["Lines","Seal Closure · VA · T-Shirt · TidyGirl"],["Custom","Sizes & colors on request"]],img:"images/products/va-belongings-bag.jpg"},
-        {tag:"Specialty / High volume",title:"T-Shirt “Thank You” Bags",desc:"One of Wichita's highest-volume lines. Imprintable on one or two sides, with dispensing racks available. A commercial and grocery growth opportunity.",specs:[["Sizes","11.5x6.5x22 to 18x8x30"],["Imprint","1 or 2 sides"],["Catalog","TSB-12722TY · TSB-16630TY"]]},
+        {tag:"Specialty / High volume",title:"T-Shirt “Thank You” Bags",desc:"One of Wichita's highest-volume lines. Imprintable on one or two sides, with dispensing racks available. A commercial and grocery growth opportunity.",specs:[["Sizes","11.5x6.5x22 to 18x8x30"],["Imprint","1 or 2 sides"],["Catalog","TSB-12722TY · TSB-16630TY"]],img:"images/products/thank-you-bag.jpg"},
         {tag:"Construction",title:"Plastic Sheeting",desc:"Polyethylene sheeting from 2 to 6 mil for construction and flood control.",specs:[["Standard","ASTM-D4397-10"],["Fed CID","A-A-3174"],["Fed spec","L-P-378"]],img:"images/products/plastic-sheeting.jpg"}
       ],
       catalogs:[
@@ -2929,8 +2929,8 @@
       ],
       calloutLabel:"Product Families",
       callouts:[
-        {tag:"Military",title:"Army Combat Uniform (ACU) Trousers",desc:"Active multi-station sewing line. Reinforced flat-felled double stitching, tactical pocket placements, IR-reflectivity compliance.",specs:[["Compliance","Berry / TAA"],["Construction","Flat-felled"],["IR","Compliant"]]},
-        {tag:"Military",title:"MOLLE & ETOOL Pouches",desc:"Cordura nylon construction, rigid reinforcement panels, military quick-release buckles, MOLLE webbing for modular gear integration. Includes 9mm single mag pouches.",specs:[["Material","Cordura"],["Standard","MIL"],["Modular","MOLLE"]]},
+        {tag:"Military",title:"Army Combat Uniform (ACU) Trousers",desc:"Active multi-station sewing line. Reinforced flat-felled double stitching, tactical pocket placements, IR-reflectivity compliance.",specs:[["Compliance","Berry / TAA"],["Construction","Flat-felled"],["IR","Compliant"]],img:"images/products/acu-trousers.webp"},
+        {tag:"Military",title:"MOLLE & ETOOL Pouches",desc:"Cordura nylon construction, rigid reinforcement panels, military quick-release buckles, MOLLE webbing for modular gear integration. Includes 9mm single mag pouches.",specs:[["Material","Cordura"],["Standard","MIL"],["Modular","MOLLE"]],img:"images/products/molle-etool-pouch.jpg"},
         {tag:"Safety",title:"High-Visibility Vests, Shirts & Trousers",desc:"ANSI/ISEA 107 Class I, II, and III. Fluorescent mesh layered with micro-prismatic retroreflective tape. Birdseye polyester mesh shirts in regular and tall lengths.",specs:[["Class","I / II / III"],["Sizing","S-8X"],["Cuts","Men's / Women's"]]}
       ],
       catalogs:[
@@ -3284,10 +3284,10 @@
       ],
       calloutLabel:"Service Lines",
       callouts:[
-        {tag:"Service",title:"Pick and pack fulfillment",desc:"Federal-compliant labor model. Multi-channel order fulfillment with WMS integration.",specs:[["Model","AbilityOne"],["Channels","Multi"]]},
-        {tag:"Service",title:"Distribution & shipping",desc:"Cross-docking, OCONUS shipping, and worldwide 3PL integration, integrated with the buyer's systems.",specs:[["Shipping","OCONUS / 3PL"],["Flow","Cross-dock"]]},
-        {tag:"Service",title:"Inventory & WMS",desc:"Real-time inventory tracking, active cycle counting, automated restocks, e-commerce and UPS integrations, and analytics through an audited WMS.",specs:[["Tracking","Real-time"],["Restocks","Automated"]]},
-        {tag:"Service",title:"Specialty packaging",desc:"Custom GS1-128 barcoding, tamper-evident heat-shrink, structural inserts, retail-ready blister packs, climate-controlled storage for sensitive materials.",specs:[["Std","GS1-128"],["Climate","Controlled"]]}
+        {tag:"Service",title:"Pick and pack fulfillment",desc:"Federal-compliant labor model. Multi-channel order fulfillment with WMS integration.",specs:[["Model","AbilityOne"],["Channels","Multi"]],noPhoto:true},
+        {tag:"Service",title:"Distribution & shipping",desc:"Cross-docking, OCONUS shipping, and worldwide 3PL integration, integrated with the buyer's systems.",specs:[["Shipping","OCONUS / 3PL"],["Flow","Cross-dock"]],noPhoto:true},
+        {tag:"Service",title:"Inventory & WMS",desc:"Real-time inventory tracking, active cycle counting, automated restocks, e-commerce and UPS integrations, and analytics through an audited WMS.",specs:[["Tracking","Real-time"],["Restocks","Automated"]],noPhoto:true},
+        {tag:"Service",title:"Specialty packaging",desc:"Custom GS1-128 barcoding, tamper-evident heat-shrink, structural inserts, retail-ready blister packs, climate-controlled storage for sensitive materials.",specs:[["Std","GS1-128"],["Climate","Controlled"]],noPhoto:true}
       ],
       img:"Fulfillment and distribution line, 4:3",
       imgSrc:"images/envision-dallas-warehouse-forklift.png"
@@ -3664,6 +3664,8 @@
       }
       var ph = c.img
         ? '<figure class="m-card-photo"><img src="'+c.img+'" alt="'+c.title+'" loading="lazy"></figure>'
+        : c.noPhoto
+        ? ''
         : '<figure class="m-card-ph" role="img" aria-label="Product photo placeholder: '+c.title+'">'+
                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
                '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'+
