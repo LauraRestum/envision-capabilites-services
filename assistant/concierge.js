@@ -37,7 +37,18 @@
     // safety net, once someone has asked this many questions in a session, we
     // start appending the card so a human is always one tap away. Raise it to
     // surface the card later, lower it to surface it sooner.
-    contactAfterQueries: 4
+    contactAfterQueries: 4,
+    // CATALOG LAYER (section 2b). A SECOND MiniSearch index, built over the
+    // deck's catalog and machine tables (window.ENVISION_CATALOG). It only
+    // fires when a query carries a "granular" signal (a color, size, NSN,
+    // part number, or the words size/nsn/machine, etc.), so family questions
+    // keep going to the authored intents and only specific ones reach the
+    // rows. These knobs are independent of scoreFloor above because the
+    // catalog is a separate index with its own score scale.
+    //   floor: minimum catalog match score to answer at all.
+    //   clarifySeparation: if the runner-up (in a DIFFERENT capability area)
+    //     is within this ratio, qualify with chips instead of guessing.
+    catalog: { floor: 4, clarifySeparation: 0.25 }
   };
 
   // Words too common to carry meaning. Filtering them keeps short function
@@ -137,6 +148,223 @@
              (intent && ROUTING[intent.id]) ||
              ROUTING.default;
     return id && CONTACTS[id] ? CONTACTS[id] : null;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 2b. CATALOG LAYER  ·  surface the deck's granular catalog data      *
+   * ------------------------------------------------------------------ *
+   * The deck (index.html) exposes its data object as a single shared    *
+   * global, window.ENVISION_CATALOG. We index the catalog and machine   *
+   * tables it already renders, so a granular question ("what colors do  *
+   * isolation liners come in", "what sewing machines do you run", "NSN  *
+   * on 6 mil black sheeting") gets a short, sourced answer drawn from   *
+   * the exact same rows the modals show. One source, no drift. We never *
+   * author a fact here; we summarize rows that already exist, then offer *
+   * the modal for the full table and the right person.                  *
+   *                                                                     *
+   * HONESTY BY CONSTRUCTION: we index ONLY the `catalogs` and           *
+   * `equipment` tables, never the prose (summary, overview, stats,      *
+   * callouts). That deliberately keeps the two flagged-for-verification *
+   * items out of the index entirely, because they live only in prose:   *
+   * the specialty [VERIFY w/ Steve] embroidery/HTV notes and the        *
+   * 610 N Main Street contact-center address. They are unreachable from *
+   * this layer and stay that way until a human confirms them.           *
+   * ------------------------------------------------------------------ */
+  var CATALOG = window.ENVISION_CATALOG || null;
+  var catMini = null;
+  var CATALOG_COLORS = {};   // lowercase color word -> true, harvested from rows
+
+  // Modal key -> contact id. Mirrors the routing the family intents use:
+  // manufacturing plus the print and quality services go to Patrick Tuttle;
+  // the buyer-facing services go to Sebastian Zahr.
+  var CATALOG_CONTACT = {
+    plastic:"tuttle", textile:"tuttle", reflective:"tuttle", binders:"tuttle",
+    writing:"tuttle", fulfillment:"tuttle", kitting:"tuttle", specialty:"tuttle",
+    printSvc:"tuttle", quality:"tuttle",
+    contact:"zahr", bpo:"zahr", accessibility:"zahr", procurement:"zahr"
+  };
+
+  function colIndex(cols, names){
+    cols = cols || [];
+    for (var k = 0; k < cols.length; k++){
+      var c = String(cols[k]).toLowerCase();
+      for (var j = 0; j < names.length; j++){ if (c.indexOf(names[j]) >= 0) return k; }
+    }
+    return -1;
+  }
+
+  function buildCatalog(){
+    if (!CATALOG || !window.MiniSearch) return;
+    var docs = [];
+    Object.keys(CATALOG).forEach(function(key){
+      var m = CATALOG[key]; if (!m) return;
+      var groups = [];
+      (m.catalogs || []).forEach(function(t){ groups.push(["catalog", t]); });
+      (m.equipment || []).forEach(function(t){ groups.push(["machines", t]); });
+      groups.forEach(function(g, idx){
+        var kind = g[0], t = g[1];
+        // Searchable text: the modal title, the table title and meta, the
+        // column headers, and every cell (so part numbers, NSNs, colors,
+        // sizes, and machine names are all matchable).
+        var parts = [m.title, t.title, t.meta || ""];
+        (t.columns || []).forEach(function(c){ parts.push(c); });
+        (t.rows || []).forEach(function(r){
+          (r || []).forEach(function(cell){ parts.push(String(cell)); });
+        });
+        // Harvest color words so the granular-signal test can spot a bare
+        // color in a query ("vests in orange").
+        var ci = colIndex(t.columns, ["color", "colour"]);
+        if (ci >= 0){
+          (t.rows || []).forEach(function(r){
+            String((r || [])[ci] || "").toLowerCase().split(/[^a-z]+/).forEach(function(w){
+              if (w.length > 2) CATALOG_COLORS[w] = true;
+            });
+          });
+        }
+        (m.colors || []).forEach(function(c){
+          String(c).toLowerCase().split(/[^a-z]+/).forEach(function(w){ if (w.length > 2) CATALOG_COLORS[w] = true; });
+        });
+        docs.push({
+          id: key + "::" + kind + idx,
+          modalKey: key, modalTitle: m.title, location: m.location || "",
+          kind: kind, title: t.title, meta: t.meta || "", footnote: t.footnote || "",
+          columns: t.columns || [], rows: t.rows || [],
+          text: parts.join(" ")
+        });
+      });
+    });
+    if (!docs.length) return;
+    catMini = new window.MiniSearch({
+      fields: ["title", "meta", "text"],
+      storeFields: ["modalKey", "modalTitle", "location", "kind", "title", "meta", "footnote", "columns", "rows"],
+      idField: "id",
+      processTerm: processTerm,
+      searchOptions: { boost: { title: 3, meta: 2, text: 1 }, fuzzy: 0.1, prefix: true, combineWith: "OR" }
+    });
+    catMini.addAll(docs);
+  }
+
+  // A query reaches the catalog only when it carries a granular signal: an
+  // explicit attribute word, a size/gauge, a part/NSN-ish token, or a known
+  // color. Family questions ("can liners", "do you make pens") carry none of
+  // these, so they stay with the authored intents.
+  var CATALOG_ATTR_RE = /\b(colou?rs?|nsn|sku|skus|part\s*(?:numbers?|nos?|#)|size[sd]?|gauge|thickness|mils?|micron|machine[s]?)\b/i;
+  function granularSignal(q){
+    var s = " " + String(q).toLowerCase() + " ";
+    if (CATALOG_ATTR_RE.test(s)) return true;
+    if (/\d{2,}\s*x\s*\d/.test(s)) return true;             // 33x40, 30 x 37
+    if (/\b\d{1,2}\s*(?:mil|mic|micron)\b/.test(s)) return true; // 6 mil, 8 mic
+    if (/\b\d{3,}\b/.test(s)) return true;                  // NSN / part fragment
+    if (/[a-z]{2,}-\d{2,}/.test(s)) return true;            // HVBF-022, TRC-3658
+    var toks = s.split(/[^a-z0-9]+/);
+    for (var i = 0; i < toks.length; i++){ if (CATALOG_COLORS[toks[i]]) return true; }
+    return false;
+  }
+
+  function classifyCatalog(text){
+    if (!catMini || !granularSignal(text)) return null;
+    var res = catMini.search(text || "");
+    if (!res.length || res[0].score < CONFIG.catalog.floor) return null;
+    var top = res[0];
+    // If a strong runner-up sits in a DIFFERENT capability area, the query is
+    // genuinely ambiguous (e.g. "vests" spans reflective and textile). Qualify
+    // with chips rather than pick for the buyer.
+    if (res.length > 1){
+      var sep = (res[0].score - res[1].score) / res[0].score;
+      if (sep < CONFIG.catalog.clarifySeparation && res[1].modalKey !== top.modalKey){
+        var opts = [], seenKey = {};
+        for (var k = 0; k < res.length && opts.length < 3; k++){
+          if (res[k].score < CONFIG.catalog.floor) break;
+          if (seenKey[res[k].modalKey]) continue;
+          seenKey[res[k].modalKey] = true;
+          opts.push(res[k]);
+        }
+        if (opts.length >= 2){
+          return {
+            type: "clarify",
+            question: "That could fit a couple of different lines. Which is closest to what you need?",
+            options: opts
+          };
+        }
+      }
+    }
+    return { type: "answer", doc: top };
+  }
+
+  /* ---- Compose a short, sourced answer from a matched table ---- */
+  function listPhrase(items){
+    if (items.length === 1) return items[0];
+    if (items.length === 2) return items[0] + " and " + items[1];
+    return items.slice(0, -1).join(", ") + ", and " + items[items.length - 1];
+  }
+  // Join up to `max` items, ending on "and more" when the list is longer so we
+  // never imply a partial list is the whole catalog.
+  function joinFacet(items, max){
+    if (items.length <= max) return listPhrase(items);
+    return items.slice(0, max).join(", ") + ", and more";
+  }
+  function distinctCol(doc, names){
+    var i = colIndex(doc.columns, names);
+    if (i < 0) return null;
+    var seen = {}, out = [];
+    (doc.rows || []).forEach(function(r){
+      var v = String((r || [])[i] || "").trim();
+      if (!v || v === "-" || seen[v]) return;
+      seen[v] = true; out.push(v);
+    });
+    return out.length ? out : null;
+  }
+  // House style: the concierge never speaks an em or en dash, and the deck's
+  // middot separator reads as a comma in a spoken sentence.
+  function houseStyle(s){
+    return String(s)
+      .replace(/\s*[—–]\s*/g, ". ")
+      .replace(/\s*·\s*/g, ", ")
+      .replace(/\s{2,}/g, " ").trim();
+  }
+  // Drop any sentence that is an internal note never meant for a buyer. Belt
+  // and suspenders: the index already excludes the flagged prose, but a table
+  // footnote can still carry a "confirm before publishing" aside.
+  function stripInternalNotes(s){
+    if (!s) return "";
+    var INTERNAL = /verify w\/?\s*steve|confirm before publishing|not stated in source|placeholder|to ?do\b/i;
+    // Split into sentences WITHOUT a lookbehind (older iOS Safari, where this
+    // runs as a PWA, does not support lookbehind and would fail to parse).
+    var sentences = String(s).match(/[^.!?]+[.!?]*/g) || [String(s)];
+    return sentences.filter(function(x){
+      return x && !INTERNAL.test(x);
+    }).join(" ").replace(/\s{2,}/g, " ").trim();
+  }
+  function summarizeCatalog(doc){
+    var loc = doc.location ? " (" + doc.location + ")" : "";
+    var lead = houseStyle(doc.title) + loc + ".";
+    // One clean descriptive clause: the footnote (internal notes stripped) if
+    // present, else the table's meta line.
+    var desc = stripInternalNotes(doc.footnote);
+    if (!desc) desc = doc.meta || "";
+    desc = houseStyle(desc);
+    var facts = [];
+    if (doc.kind === "machines"){
+      var names = (doc.rows || []).map(function(r){ return String((r || [])[0] || "").trim(); }).filter(Boolean);
+      if (names.length){
+        facts.push("We run " + names.length + " machine types at this stage, including " +
+          joinFacet(names, 4));
+      }
+    } else {
+      var n = (doc.rows || []).length;
+      var f = "We catalog " + (n === 1 ? "1 item" : n + " items");
+      var colors = distinctCol(doc, ["color", "colour"]);
+      if (colors){ f += ", in " + joinFacet(colors, 6); }
+      facts.push(f);
+      var sizes = distinctCol(doc, ["size"]);
+      if (sizes && sizes.length > 1){
+        facts.push("Sizes run " + joinFacet(sizes, 4));
+      }
+    }
+    var out = [lead];
+    if (desc) out.push(desc);
+    if (facts.length) out.push(facts.join(". ") + ".");
+    return out.join(" ").replace(/\s+\./g, ".").replace(/\.\.+/g, ".");
   }
 
   /* ------------------------------------------------------------------ *
@@ -363,14 +591,58 @@
     addChips(chips);
   }
 
+  // A matched catalog table: speak the short sourced summary, then offer the
+  // full table (the modal) and the right person. Reaching a human is part of
+  // the value on a granular question, so the contact rides along here.
+  function dispatchCatalog(doc){
+    addBotBubble(summarizeCatalog(doc));
+    addChips([{
+      label: "Open " + doc.modalTitle,
+      primary: true,
+      onClick: function(){ runNext({ action: "modal", target: doc.modalKey }); }
+    }]);
+    var contact = CONTACTS[CATALOG_CONTACT[doc.modalKey]] ||
+                  (ROUTING.default && CONTACTS[ROUTING.default]) || null;
+    if (contact){ addContactCard(contact); }
+  }
+
+  function renderCatalogClarify(question, options){
+    addBotBubble(question);
+    addChips(options.map(function(doc){
+      return {
+        label: doc.modalTitle,
+        onClick: function(){ addUserMessage(doc.modalTitle); dispatchCatalog(doc); }
+      };
+    }));
+  }
+
+  // Session-only, in-memory log of queries that matched nothing (below floor,
+  // no catalog hit). No storage, no network. Real buyer language that fell
+  // through is the raw material for next week's intents and triggers.
+  // Read it live in the console: EnvisionConcierge.unmatched()
+  var MISS_LOG = [];
+  function logMiss(text){
+    MISS_LOG.push({ q: text, at: new Date().toISOString() });
+    if (window.console && console.debug){
+      console.debug("[Envision concierge] unmatched (below floor):", text);
+    }
+  }
+
   function handleQuery(text){
     text = (text || "").trim();
     if (!text) return;
     addUserMessage(text);
+    // Granular questions reach the catalog first; everything else stays with
+    // the authored intents.
+    var cat = classifyCatalog(text);
+    if (cat){
+      if (cat.type === "answer"){ dispatchCatalog(cat.doc); return; }
+      if (cat.type === "clarify"){ renderCatalogClarify(cat.question, cat.options); return; }
+    }
     var verdict = classify(text);
     if (verdict.type === "answer"){ dispatchIntent(verdict.intent); }
     else if (verdict.type === "clarify"){ renderClarify(verdict.question, verdict.options); }
-    else { renderHandoff(); }
+    else { logMiss(text); renderHandoff(); }
   }
 
   /* ------------------------------------------------------------------ *
@@ -455,5 +727,26 @@
     input.style.height = Math.min(input.scrollHeight, 96) + "px";
   }
   input.addEventListener("input", autosize);
+
+  /* ------------------------------------------------------------------ *
+   * 9. STARTUP  ·  build the catalog index, expose a tiny debug surface *
+   * ------------------------------------------------------------------ */
+  // The catalog layer is a bonus, never a dependency. If anything about the
+  // shared data object is off, the concierge still answers from the intents.
+  try {
+    buildCatalog();
+  } catch (e){
+    catMini = null;
+    if (window.console && console.warn){
+      console.warn("[Envision concierge] catalog layer disabled:", e);
+    }
+  }
+
+  // Session-only inspection surface for the weekly strengthening ritual.
+  // EnvisionConcierge.unmatched()    -> queries that matched nothing
+  // EnvisionConcierge.catalogReady() -> whether the catalog index built
+  window.EnvisionConcierge = window.EnvisionConcierge || {};
+  window.EnvisionConcierge.unmatched    = function(){ return MISS_LOG.slice(); };
+  window.EnvisionConcierge.catalogReady = function(){ return !!catMini; };
 
 })();
