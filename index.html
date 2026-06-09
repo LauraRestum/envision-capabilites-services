@@ -4295,6 +4295,13 @@
      (loaded as separate scripts below) can route a buyer straight to the
      matching modal or deck section. Nothing about deck state leaks out
      beyond these three safe, named actions. */
+  // Expose the deck's catalog data object to the concierge as ONE shared
+  // source of truth. This is the exact same object the modals render from
+  // (a reference, not a copy), so the concierge can never drift out of sync
+  // with the deck. The concierge indexes only its `catalogs` and `equipment`
+  // tables. See /assistant/concierge.js, section 2b.
+  window.ENVISION_CATALOG = MODALS;
+
   window.EnvisionDeck = {
     openModal: function(key){ if (MODALS[key]) openModal(key); },
     goToSection: function(name){
