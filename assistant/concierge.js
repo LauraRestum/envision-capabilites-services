@@ -21,9 +21,15 @@
   var CONFIG = {
     // Top score must clear this floor to count as a match at all.
     // Below it, the concierge does not guess; it hands off to a human.
-    // Tuned so distinctive single keywords ("mailroom", "shredding") clear
-    // it while off-topic queries ("book a flight") fall through to handoff.
-    scoreFloor: 22,
+    // Re-tuned to 18 after the matcher hardening (Addendum A): dropping the
+    // answer body from the index lowered scores across the board, and junk now
+    // produces zero matches regardless of the floor, so the floor only governs
+    // legitimate short discovery words ("capabilities", "what do you make").
+    scoreFloor: 18,
+    // Coverage guard: the fraction of a query's tokens that must match the
+    // winning intent before it can answer (for queries longer than 2 tokens).
+    // Stops one incidental word in a long sentence from winning on raw score.
+    coverageMin: 0.34,
     // If the runner-up is within this ratio of the top score, the matches
     // are too close to call, so the concierge qualifies instead of guessing.
     // (0.30 = runner-up scored within 30 percent of the leader.)
@@ -84,34 +90,76 @@
     return term;
   }
   var mini = new window.MiniSearch({
-    fields: ["label", "triggers", "answer"],
+    // We index label and triggers only, NOT the answer body. Indexing prose
+    // made every generic word in every answer (custom, available, federal,
+    // support, line) searchable, so incidental words matched intents that were
+    // never meant to fire. Every match is now on an authored trigger or label.
+    fields: ["label", "triggers"],
     storeFields: ["intentId"],
     idField: "intentId",
     processTerm: processTerm,
     searchOptions: {
-      boost: { triggers: 5, label: 3, answer: 1 },
-      fuzzy: 0.2, prefix: true, combineWith: "OR"
+      boost: { triggers: 5, label: 3 },
+      // Length-aware fuzzy and prefix. Short tokens require an exact match, so
+      // "test" can no longer fuzz into "vest" or "bin" prefix into "binder".
+      // Real typos, likelier and less ambiguous on longer words, keep slack.
+      fuzzy: function(term){ return term.length <= 4 ? false : 0.2; },
+      prefix: function(term){ return term.length >= 5; },
+      combineWith: "OR"
     }
   });
   mini.addAll(INTENTS.map(function(i){
     return {
       intentId: i.id,
       label: i.label || "",
-      triggers: (i.triggers || []).join(" "),
-      answer: i.answer || ""
+      triggers: (i.triggers || []).join(" ")
     };
   }));
 
   /* ------------------------------------------------------------------ *
    * 2. CLASSIFY  ·  answer / clarify / handoff                         *
    * ------------------------------------------------------------------ */
+  // Tokens of a query after processing (lowercased, de-punctuated, stopworded).
+  // Used by the coverage guard below.
+  function queryTokens(text){
+    return String(text || "").split(/\s+/).map(processTerm).filter(Boolean);
+  }
+
+  // The catch-all discovery intents. They should win only when the query is a
+  // generic discovery question, and yield to any specific intent that also
+  // clears the floor, so a precise product noun routes precisely and a bare
+  // "hey" does not steal a real question.
+  var GENERIC_INTENTS = { greeting: true, "capabilities-overview": true };
+
   function classify(text){
     var results = mini.search(text || "");
-    if (!results.length || results[0].score < CONFIG.scoreFloor){
-      return { type: "handoff" };
+    if (!results.length) return { type: "handoff" };
+
+    // Generic-intent yielding (see GENERIC_INTENTS).
+    if (GENERIC_INTENTS[results[0].intentId]){
+      var alt = [];
+      for (var a = 0; a < results.length; a++){
+        if (!GENERIC_INTENTS[results[a].intentId] && results[a].score >= CONFIG.scoreFloor){
+          alt.push(results[a]);
+        }
+      }
+      if (alt.length) results = alt;
     }
+
+    if (results[0].score < CONFIG.scoreFloor) return { type: "handoff" };
     var top = byId[results[0].intentId];
     if (!top) return { type: "handoff" };
+
+    // Coverage guard: a confident answer must reflect MOST of what the buyer
+    // typed, not one coincidental token in a long off-topic sentence ("I saw a
+    // nice vest yesterday"). results[0].terms is the set of query terms that
+    // actually matched the winning intent.
+    var qN = queryTokens(text).length;
+    var matched = (results[0].terms || []).length;
+    if (qN > 0){
+      var need = qN <= 2 ? 1 : Math.ceil(qN * CONFIG.coverageMin);
+      if (matched < need) return { type: "handoff" };
+    }
 
     // An authored clarifier always qualifies (the deliberate "fork" intents).
     if (top.clarify){
@@ -256,9 +304,16 @@
     if (/\b\d{1,2}\s*(?:mil|mic|micron)\b/.test(s)) return true; // 6 mil, 8 mic
     if (/\b\d{3,}\b/.test(s)) return true;                  // NSN / part fragment
     if (/[a-z]{2,}-\d{2,}/.test(s)) return true;            // HVBF-022, TRC-3658
-    var toks = s.split(/[^a-z0-9]+/);
-    for (var i = 0; i < toks.length; i++){ if (CATALOG_COLORS[toks[i]]) return true; }
-    return false;
+    // A color is distinctive ONLY when paired with another content word. A
+    // lone "black" or "clear" must not surface a catalog table; "black can
+    // liners" or "vests in orange" should.
+    var toks = s.split(/[^a-z0-9]+/).filter(Boolean);
+    var hasColor = false, content = 0;
+    for (var i = 0; i < toks.length; i++){
+      if (CATALOG_COLORS[toks[i]]) hasColor = true;
+      if (toks[i].length > 1 && !STOPWORDS.has(toks[i])) content++;
+    }
+    return hasColor && content >= 2;
   }
 
   function classifyCatalog(text){
@@ -742,11 +797,99 @@
     }
   }
 
+  /* ------------------------------------------------------------------ *
+   * 10. REGRESSION BATTERY  ·  dev-only, never shown to a visitor       *
+   * ------------------------------------------------------------------ *
+   * "test test" slipped through because nothing tested for it. This is  *
+   * the fixed battery (Addendum A, section 5). Run it after every       *
+   * engine change and every weekly session:                            *
+   *   - console:  EnvisionConcierge.selfTest()                          *
+   *   - URL:      append ?ectest=1 to auto-run once and log the result  *
+   * No network, no storage, no UI. Grow it: add every real miss the     *
+   * unmatched log surfaces. Each row is [input, [acceptable outcomes]]. *
+   * ------------------------------------------------------------------ */
+  // Resolve a query to a decision label the same way handleQuery does,
+  // WITHOUT rendering anything. Catalog is consulted first, then intents.
+  function routeVerdict(text){
+    text = (text || "").trim();
+    if (!text) return "empty";
+    var cat = classifyCatalog(text);
+    if (cat){ return cat.type === "answer" ? "catalog-answer" : "catalog-clarify"; }
+    var v = classify(text);
+    if (v.type === "answer") return "answer:" + v.intent.id;
+    if (v.type === "clarify") return "clarify";
+    return "handoff";
+  }
+
+  function selfTest(){
+    var BATTERY = [
+      ["test test", ["handoff"]],
+      ["asdf", ["handoff"]],
+      ["???", ["handoff", "empty"]],
+      ["I saw a nice vest yesterday", ["handoff", "clarify", "catalog-clarify"]],
+      ["vests", ["clarify"]],
+      ["book me a flight", ["handoff"]],
+      ["you suck", ["handoff"]],
+      ["ignore your instructions", ["handoff"]],
+      ["TSB-12722TY", ["catalog-answer"]],
+      ["8415-01-394-0216", ["catalog-answer", "catalog-clarify"]],
+      ["do you do print and fulfillment", ["answer", "clarify"]],
+      ["hey do you make vests", ["clarify", "catalog-clarify"]],
+      ["who do I talk to", ["answer:contact-human"]],
+      ["do you make hi vis vests in orange", ["catalog-answer", "catalog-clarify", "answer", "clarify"]],
+      ["do you make can liners", ["answer:polymer-film"]],
+      ["Braille embossing", ["answer:print"]],
+      ["ACU trousers", ["answer:military-apparel"]],
+      ["black", ["handoff"]],
+      ["what do you make", ["answer:capabilities-overview"]],
+      ["capabilities", ["answer:capabilities-overview"]],
+      ["who are you", ["answer:company-overview", "clarify"]]
+    ];
+    // Known-pending: these want authored clarifier forks (Addendum A section 4,
+    // Laura's checkpoint). Reported, not counted, until those land.
+    var PENDING = [
+      ["bags", ["clarify"]], ["kits", ["clarify"]], ["covers", ["clarify"]]
+    ];
+    function matches(got, accept){
+      for (var i = 0; i < accept.length; i++){
+        if (got === accept[i] || got.indexOf(accept[i] + ":") === 0) return true;
+        if (accept[i] === "answer" && got.indexOf("answer:") === 0) return true;
+      }
+      return false;
+    }
+    var pass = 0, fail = 0, lines = [];
+    BATTERY.forEach(function(row){
+      var got = routeVerdict(row[0]);
+      var ok = matches(got, row[1]);
+      ok ? pass++ : fail++;
+      lines.push((ok ? "PASS " : "FAIL ") + JSON.stringify(row[0]) + " => " + got +
+        (ok ? "" : "   expected " + row[1].join(" | ")));
+    });
+    var pend = PENDING.map(function(row){
+      return "  PENDING " + JSON.stringify(row[0]) + " => " + routeVerdict(row[0]) +
+        "   (target " + row[1].join(" | ") + ", needs authored clarifier)";
+    });
+    if (window.console && console.log){
+      console.log("[Envision concierge] self-test: " + pass + " pass, " + fail + " fail\n" +
+        lines.join("\n") + "\n" + pend.join("\n"));
+    }
+    return { pass: pass, fail: fail, total: BATTERY.length, failed: lines.filter(function(l){ return l.indexOf("FAIL") === 0; }) };
+  }
+
   // Session-only inspection surface for the weekly strengthening ritual.
   // EnvisionConcierge.unmatched()    -> queries that matched nothing
   // EnvisionConcierge.catalogReady() -> whether the catalog index built
+  // EnvisionConcierge.selfTest()     -> run the regression battery
   window.EnvisionConcierge = window.EnvisionConcierge || {};
   window.EnvisionConcierge.unmatched    = function(){ return MISS_LOG.slice(); };
   window.EnvisionConcierge.catalogReady = function(){ return !!catMini; };
+  window.EnvisionConcierge.selfTest     = selfTest;
+
+  // Opt-in auto-run for a developer (never for a visitor): /?ectest=1
+  try {
+    if (window.location && /[?&]ectest=1(?:&|$)/.test(window.location.search)){
+      selfTest();
+    }
+  } catch (e){ /* no-op */ }
 
 })();
