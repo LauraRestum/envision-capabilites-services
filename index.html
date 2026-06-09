@@ -983,6 +983,20 @@
     border-top:none;border-left:1px solid rgba(255,255,255,0.18);
     padding-left:clamp(20px,2vw,28px);
   }
+  /* Small CTA in the navy bar that opens the Envision in Action pop-up */
+  .slide--innovation .inv-action-link{
+    margin-top:12px;display:inline-flex;align-items:center;gap:7px;
+    background:var(--green);color:#fff;border:none;border-radius:6px;
+    padding:8px 14px;font-size:12px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;cursor:pointer;font-family:inherit;
+    transition:transform .2s,box-shadow .2s;
+  }
+  .slide--innovation .inv-action-link:hover{
+    transform:translateY(-2px);box-shadow:0 10px 22px rgba(120,190,33,0.32);
+  }
+  .slide--innovation .inv-action-link:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .slide--innovation .inv-action-link svg{transition:transform .2s}
+  .slide--innovation .inv-action-link:hover svg{transform:translateX(3px)}
 
   @media (max-width:880px){
     .slide--innovation .inv-hero{grid-template-columns:1fr}
@@ -2309,6 +2323,7 @@
             <div class="bar-lead">
               <div class="tag">The Envision Difference</div>
               <div class="t-h">Concept to Volume</div>
+              <button class="inv-action-link" type="button" data-inaction aria-label="Open Envision in Action: current projects">See Envision in Action <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
             </div>
             <div class="t-d">The same domestic operation that prototypes your product can manufacture it at scale. Development and full-scale production sit on one floor, on federal-grade quality systems.</div>
             <div class="t-m">No hand-off, and no re-qualification between prototype and production.</div>
