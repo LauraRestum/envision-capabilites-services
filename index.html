@@ -842,6 +842,7 @@
   .inaction-body .ia-d{font-size:13px;line-height:1.6;color:var(--text-mid);flex:1}
   .inaction-card .proj-cue{margin-top:14px}
   .inaction-card:hover .proj-cue svg{transform:translateX(3px)}
+  .ia-rev{margin-top:16px;text-align:right;font-size:10px;letter-spacing:.08em;color:var(--text-mid);opacity:.5}
 
   /* Back-to-projects control in the project detail view */
   .inaction-back{
@@ -3813,6 +3814,11 @@
      controls the order. statusClass: proto | active | shipping.
      logo: partner mark shown as the card cover (contained on white);
      falls back to the thumb photo when absent. */
+  /* Bump on every release. Shown in tiny type at the bottom of the
+     In Action modal and logged to the console, so any device can be
+     checked for a stale page at a glance. */
+  var BUILD_REV = "rev 106 · 2026-06-10";
+  try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
   var LOGO_DATA = {
@@ -4076,21 +4082,29 @@
         '<h3>Have a program you need built?</h3>'+
         '<p>From first prototype to full production, the same campuses that build for the federal government can build for you. We respond within one business day.</p>'+
         '<a class="btn-primary m-cta-contact" href="#" data-contact-cat="manufacturing">Get in Touch</a>'+
-      '</div>';
-    // If a logo cover fails to load (stale service-worker cache, flaky
-    // network), swap in the project's photo thumb so the card never shows
-    // a blank cover.
+      '</div>'+
+      '<div class="ia-rev">'+BUILD_REV+'</div>';
+    // If a logo cover fails to load, swap in the project's photo thumb so
+    // the card never shows a blank cover. Some network filters black-hole
+    // image requests without erroring, so a watchdog timer treats a probe
+    // that neither loads nor errors within 3s as failed too.
     PROJECT_ORDER.forEach(function(key){
       var d = PROJECTS[key];
       if (!d || !d.logo) return;
       var el = modalInner.querySelector('[data-project-open="'+key+'"] .inaction-thumb');
       if (!el) return;
       var probe = new Image();
-      probe.onerror = function(){
+      var settled = false;
+      var swapToThumb = function(){
+        if (settled) return;
+        settled = true;
         if (!d.thumb) return;
         el.classList.remove("inaction-thumb--logo");
         el.style.backgroundImage = 'url("'+d.thumb+'")';
       };
+      probe.onload = function(){ settled = true; };
+      probe.onerror = swapToThumb;
+      setTimeout(swapToThumb, 3000);
       probe.src = d.logo;
     });
     modal.scrollTop = 0;
