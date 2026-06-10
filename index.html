@@ -3807,38 +3807,162 @@
      full detail view (with a Back control). To add a project, drop an entry
      here — it appears in the list automatically. The PROJECT_ORDER array
      controls the order. statusClass: proto | active | shipping. */
-  var PROJECT_ORDER = ["handwarmers"];
+  var PROJECT_ORDER = ["massif","underarmour","dallas311","oncor","texaslions"];
   var PROJECTS = {
-    handwarmers:{
+    massif:{
       label:"Envision in Action",
       eyebrow:"Current Project",
-      status:"In Prototyping", statusClass:"proto",
-      title:"M&D Hand Warmers",
+      status:"[ Status ]", statusClass:"active",
+      title:"Massif",
       location:"Dallas",
-      blurb:"An air-activated hand warmer in active prototyping at the Dallas Campus — material, fill, and packaging under validation ahead of a production run.",
-      thumb:"images/innovation-prototyping-lab.png",
-      summary:"An air-activated hand warmer program in active prototyping at the Dallas Campus. We're validating material, fill, and packaging against performance and shelf-life targets before committing to a production run.",
-      creds:["Prototyping","Dallas Campus","Made in USA"],
+      blurb:"[ One-line blurb for the Massif program — what we're building, where it stands, and the campus behind it. ]",
+      thumb:"images/Envision-Workforce-employee-dallas-manufacoring.png",
+      summary:"[ Two-to-three sentence summary of the Massif program — the product or service, the Envision capabilities it runs on, and the current phase. ]",
+      creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
       overview:[
-        "<strong>Where it stands.</strong> The M&D hand warmer is in the prototyping phase. Our team is building and testing samples to dial in heat output, duration, and a comfortable, consistent fit before scaling to production.",
-        "<strong>What we're validating.</strong> Iron-based exothermic fill formulation, breathable non-woven pouch construction, and oxygen-barrier overwrap for shelf life. Each sample is tested for activation time, peak temperature, and total warm-time.",
-        "<strong>The Envision build.</strong> The program draws on our prototyping lab, polymer and film converting, and fulfillment lines, so the same campus that designs the sample can pack and ship the finished product.",
-        "<em>Placeholder copy — swap in the real program details, target specs, and customer/end-use once confirmed.</em>"
+        "<strong>Where it stands.</strong> [ Current phase of the Massif program and what the team is working on right now. ]",
+        "<strong>What we're building.</strong> [ Product or service detail — materials, processes, and the specs being met. ]",
+        "<strong>The Envision build.</strong> [ The capabilities and campus behind the program, and why Envision is the right fit. ]",
+        "<em>Template copy — swap in the real Massif program details, specs, and end-use once confirmed.</em>"
       ],
-      statLabel:"Prototype Targets",
+      statLabel:"By the Numbers",
       stats:[
-        {num:"[ °F ]",label:"Peak temperature",ctx:"Target peak surface temperature under validation in the prototyping lab."},
-        {num:"[ hrs ]",label:"Warm time",ctx:"Target total warm-time per unit, measured from activation to drop-off."},
-        {num:"[ min ]",label:"Activation",ctx:"Target time from opening the overwrap to usable warmth."}
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"}
       ],
       calloutLabel:"Capabilities Behind It",
       callouts:[
-        {tag:"Prototyping",title:"Sample Development",desc:"In-house prototyping lab builds and iterates samples, from fill formulation to pouch construction, with rapid test cycles.",specs:[["Phase","Active"],["Cycle","Rapid iteration"]]},
-        {tag:"Converting",title:"Polymer & Film",desc:"Non-woven pouch and oxygen-barrier overwrap converting on existing Envision film lines.",specs:[["Material","Non-woven"],["Barrier","O₂ overwrap"]]},
-        {tag:"Fulfillment",title:"Pack & Ship",desc:"Casing, kitting, and distribution handled on the same campus, ready to scale when the prototype is approved.",specs:[["Kitting","In-house"],["Ship","Direct"]]}
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Massif program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Massif program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Massif program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]}
       ],
-      img:"Envision prototyping lab",
-      imgSrc:"images/innovation-prototyping-lab.png", imgPos:"center"
+      img:"Massif program at Envision",
+      imgSrc:"images/Envision-Workforce-employee-dallas-manufacoring.png", imgPos:"center"
+    },
+    underarmour:{
+      label:"Envision in Action",
+      eyebrow:"Current Project",
+      status:"[ Status ]", statusClass:"active",
+      title:"Under Armour",
+      location:"Dallas",
+      blurb:"[ One-line blurb for the Under Armour program — what we're building, where it stands, and the campus behind it. ]",
+      thumb:"images/Envision-dallas-manufactoringfloor.png",
+      summary:"[ Two-to-three sentence summary of the Under Armour program — the product or service, the Envision capabilities it runs on, and the current phase. ]",
+      creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
+      overview:[
+        "<strong>Where it stands.</strong> [ Current phase of the Under Armour program and what the team is working on right now. ]",
+        "<strong>What we're building.</strong> [ Product or service detail — materials, processes, and the specs being met. ]",
+        "<strong>The Envision build.</strong> [ The capabilities and campus behind the program, and why Envision is the right fit. ]",
+        "<em>Template copy — swap in the real Under Armour program details, specs, and end-use once confirmed.</em>"
+      ],
+      statLabel:"By the Numbers",
+      stats:[
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"}
+      ],
+      calloutLabel:"Capabilities Behind It",
+      callouts:[
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Under Armour program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Under Armour program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Under Armour program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]}
+      ],
+      img:"Under Armour program at Envision",
+      imgSrc:"images/Envision-dallas-manufactoringfloor.png", imgPos:"center"
+    },
+    dallas311:{
+      label:"Envision in Action",
+      eyebrow:"Current Project",
+      status:"[ Status ]", statusClass:"active",
+      title:"Dallas 311",
+      location:"Dallas",
+      blurb:"[ One-line blurb for the Dallas 311 program — the service we provide, where it stands, and the campus behind it. ]",
+      thumb:"images/envision-call-center-employee-headset.png",
+      summary:"[ Two-to-three sentence summary of the Dallas 311 program — the service, the Envision capabilities it runs on, and the current phase. ]",
+      creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
+      overview:[
+        "<strong>Where it stands.</strong> [ Current phase of the Dallas 311 program and what the team is working on right now. ]",
+        "<strong>What we're delivering.</strong> [ Service detail — call volumes, channels, hours of coverage, and the standards being met. ]",
+        "<strong>The Envision build.</strong> [ The capabilities and campus behind the program, and why Envision is the right fit. ]",
+        "<em>Template copy — swap in the real Dallas 311 program details, metrics, and scope once confirmed.</em>"
+      ],
+      statLabel:"By the Numbers",
+      stats:[
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"}
+      ],
+      calloutLabel:"Capabilities Behind It",
+      callouts:[
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Dallas 311 program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Dallas 311 program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Dallas 311 program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]}
+      ],
+      img:"Dallas 311 program at Envision",
+      imgSrc:"images/envision-call-center-employee-headset.png", imgPos:"center"
+    },
+    oncor:{
+      label:"Envision in Action",
+      eyebrow:"Current Project",
+      status:"[ Status ]", statusClass:"active",
+      title:"Oncor",
+      location:"Dallas",
+      blurb:"[ One-line blurb for the Oncor program — the service we provide, where it stands, and the campus behind it. ]",
+      thumb:"images/envision-employee-man-headset-white-cane.png",
+      summary:"[ Two-to-three sentence summary of the Oncor program — the service, the Envision capabilities it runs on, and the current phase. ]",
+      creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
+      overview:[
+        "<strong>Where it stands.</strong> [ Current phase of the Oncor program and what the team is working on right now. ]",
+        "<strong>What we're delivering.</strong> [ Service detail — scope, volumes, and the standards being met. ]",
+        "<strong>The Envision build.</strong> [ The capabilities and campus behind the program, and why Envision is the right fit. ]",
+        "<em>Template copy — swap in the real Oncor program details, metrics, and scope once confirmed.</em>"
+      ],
+      statLabel:"By the Numbers",
+      stats:[
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"}
+      ],
+      calloutLabel:"Capabilities Behind It",
+      callouts:[
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Oncor program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Oncor program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Oncor program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]}
+      ],
+      img:"Oncor program at Envision",
+      imgSrc:"images/envision-employee-man-headset-white-cane.png", imgPos:"center"
+    },
+    texaslions:{
+      label:"Envision in Action",
+      eyebrow:"Current Project",
+      status:"[ Status ]", statusClass:"active",
+      title:"Texas Lions Club",
+      location:"Dallas",
+      blurb:"[ One-line blurb for the Texas Lions Club program — what we're building, where it stands, and the campus behind it. ]",
+      thumb:"images/envision-dallas-warehouse-aisle.png",
+      summary:"[ Two-to-three sentence summary of the Texas Lions Club program — the product or service, the Envision capabilities it runs on, and the current phase. ]",
+      creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
+      overview:[
+        "<strong>Where it stands.</strong> [ Current phase of the Texas Lions Club program and what the team is working on right now. ]",
+        "<strong>What we're building.</strong> [ Product or service detail — scope, volumes, and the specs being met. ]",
+        "<strong>The Envision build.</strong> [ The capabilities and campus behind the program, and why Envision is the right fit. ]",
+        "<em>Template copy — swap in the real Texas Lions Club program details, specs, and end-use once confirmed.</em>"
+      ],
+      statLabel:"By the Numbers",
+      stats:[
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"},
+        {num:"[ # ]",label:"[ Stat label ]",ctx:"[ One-line context for this number. ]"}
+      ],
+      calloutLabel:"Capabilities Behind It",
+      callouts:[
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Texas Lions Club program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Texas Lions Club program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]},
+        {tag:"[ Tag ]",title:"[ Capability title ]",desc:"[ How this capability supports the Texas Lions Club program. ]",specs:[["[ Spec ]","[ Value ]"],["[ Spec ]","[ Value ]"]]}
+      ],
+      img:"Texas Lions Club program at Envision",
+      imgSrc:"images/envision-dallas-warehouse-aisle.png", imgPos:"center"
     }
   };
 
