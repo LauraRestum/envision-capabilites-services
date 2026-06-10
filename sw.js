@@ -1,5 +1,5 @@
 /* Envision PWA service worker */
-const CACHE = "envision-pwa-v2";
+const CACHE = "envision-pwa-v3";
 
 /* Minimal shell precache for installability only. No images, no large assets. */
 const PRECACHE = [

@@ -4069,6 +4069,22 @@
         '<p>From first prototype to full production, the same campuses that build for the federal government can build for you. We respond within one business day.</p>'+
         '<a class="btn-primary m-cta-contact" href="#" data-contact-cat="manufacturing">Get in Touch</a>'+
       '</div>';
+    // If a logo cover fails to load (stale service-worker cache, flaky
+    // network), swap in the project's photo thumb so the card never shows
+    // a blank cover.
+    PROJECT_ORDER.forEach(function(key){
+      var d = PROJECTS[key];
+      if (!d || !d.logo) return;
+      var el = modalInner.querySelector('[data-project-open="'+key+'"] .inaction-thumb');
+      if (!el) return;
+      var probe = new Image();
+      probe.onerror = function(){
+        if (!d.thumb) return;
+        el.classList.remove("inaction-thumb--logo");
+        el.style.backgroundImage = 'url("'+d.thumb+'")';
+      };
+      probe.src = d.logo;
+    });
     modal.scrollTop = 0;
   }
 
