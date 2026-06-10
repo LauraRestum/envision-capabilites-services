@@ -832,6 +832,10 @@
     height:158px;background-size:cover;background-position:center;
     border-bottom:1px solid var(--rule-light);
   }
+  /* Partner-logo covers: show the whole mark on white, never cropped */
+  .inaction-thumb--logo{
+    background-size:contain;background-repeat:no-repeat;background-color:#fff;
+  }
   .inaction-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;gap:0}
   .inaction-body .proj-status{margin-bottom:12px}
   .inaction-body .ia-h{font-weight:700;font-size:17px;color:var(--text-dark);margin-bottom:8px}
@@ -3806,7 +3810,9 @@
      lists each project as a little block. Clicking a block expands it to a
      full detail view (with a Back control). To add a project, drop an entry
      here — it appears in the list automatically. The PROJECT_ORDER array
-     controls the order. statusClass: proto | active | shipping. */
+     controls the order. statusClass: proto | active | shipping.
+     logo: partner mark shown as the card cover (contained on white);
+     falls back to the thumb photo when absent. */
   var PROJECT_ORDER = ["massif","underarmour","dallas311","oncor","texaslions"];
   var PROJECTS = {
     massif:{
@@ -3816,6 +3822,7 @@
       title:"Massif",
       location:"Dallas",
       blurb:"[ One-line blurb for the Massif program — what we're building, where it stands, and the campus behind it. ]",
+      logo:"images/logos/massif.png",
       thumb:"images/Envision-Workforce-employee-dallas-manufacoring.png",
       summary:"[ Two-to-three sentence summary of the Massif program — the product or service, the Envision capabilities it runs on, and the current phase. ]",
       creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
@@ -3878,6 +3885,7 @@
       title:"Dallas 311",
       location:"Dallas",
       blurb:"[ One-line blurb for the Dallas 311 contact center program — the service we provide, where it stands, and the campus behind it. ]",
+      logo:"images/logos/dallas-311.png",
       thumb:"images/envision-call-center-employee-headset.png",
       summary:"[ Two-to-three sentence summary of the Dallas 311 contact center program — the service, the Envision capabilities it runs on, and the current phase. ]",
       creds:["Contact Center","[ Campus ]","[ Credential ]"],
@@ -3909,6 +3917,7 @@
       title:"Oncor",
       location:"Dallas",
       blurb:"[ One-line blurb for the Oncor textiles program — what we're making, where it stands, and the campus behind it. ]",
+      logo:"images/logos/oncor.png",
       thumb:"images/envision-manufacturing-floor-bag-machines.png",
       summary:"[ Two-to-three sentence summary of the Oncor textiles program — the product, the Envision textile capabilities it runs on, and the current phase. ]",
       creds:["Textiles","[ Campus ]","[ Credential ]"],
@@ -3940,6 +3949,7 @@
       title:"Texas Lions Club",
       location:"Dallas",
       blurb:"[ One-line blurb for the Texas Lions Club textiles program — what we're making, where it stands, and the campus behind it. ]",
+      logo:"images/logos/texas-lions-club.png",
       thumb:"images/envision-employee-with-guide-dog-factory.png",
       summary:"[ Two-to-three sentence summary of the Texas Lions Club textiles program — the product, the Envision textile capabilities it runs on, and the current phase. ]",
       creds:["Textiles","[ Campus ]","[ Credential ]"],
@@ -4027,8 +4037,9 @@
       var d = PROJECTS[key];
       if (!d) return "";
       var status = d.status ? '<span class="proj-status proj-status--'+(d.statusClass||'active')+'">'+d.status+'</span>' : "";
-      var thumb = d.thumb
-        ? '<span class="inaction-thumb" style="background-image:url(&quot;'+d.thumb+'&quot;)" role="img" aria-label="'+d.title+'"></span>'
+      var thumbSrc = d.logo || d.thumb;
+      var thumb = thumbSrc
+        ? '<span class="inaction-thumb'+(d.logo ? ' inaction-thumb--logo' : '')+'" style="background-image:url(&quot;'+thumbSrc+'&quot;)" role="img" aria-label="'+d.title+(d.logo ? ' logo' : '')+'"></span>'
         : '';
       return '<button class="inaction-card" type="button" data-project-open="'+key+'">'+
           thumb+
