@@ -3819,7 +3819,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 107 · 2026-06-10";
+  var BUILD_REV = "rev 108 · 2026-06-10";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -3840,6 +3840,7 @@
       location:"Dallas",
       blurb:"[ One-line blurb for the Massif program — what we're building, where it stands, and the campus behind it. ]",
       logo:LOGO_DATA.massif,
+      logoFile:"images/logos/massif.png",
       thumb:"images/Envision-Workforce-employee-dallas-manufacoring.png",
       summary:"[ Two-to-three sentence summary of the Massif program — the product or service, the Envision capabilities it runs on, and the current phase. ]",
       creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
@@ -3872,6 +3873,7 @@
       location:"Dallas",
       blurb:"[ One-line blurb for the Under Armour program — what we're building, where it stands, and the campus behind it. ]",
       logo:LOGO_DATA.underarmour,
+      logoFile:"images/logos/under-armour.png",
       thumb:"images/Envision-dallas-manufactoringfloor.png",
       summary:"[ Two-to-three sentence summary of the Under Armour program — the product or service, the Envision capabilities it runs on, and the current phase. ]",
       creds:["[ Capability ]","[ Campus ]","[ Credential ]"],
@@ -3904,6 +3906,7 @@
       location:"Dallas",
       blurb:"[ One-line blurb for the Dallas 311 contact center program — the service we provide, where it stands, and the campus behind it. ]",
       logo:LOGO_DATA.dallas311,
+      logoFile:"images/logos/dallas-311.png",
       thumb:"images/envision-call-center-employee-headset.png",
       summary:"[ Two-to-three sentence summary of the Dallas 311 contact center program — the service, the Envision capabilities it runs on, and the current phase. ]",
       creds:["Contact Center","[ Campus ]","[ Credential ]"],
@@ -3936,6 +3939,7 @@
       location:"Dallas",
       blurb:"[ One-line blurb for the Oncor textiles program — what we're making, where it stands, and the campus behind it. ]",
       logo:LOGO_DATA.oncor,
+      logoFile:"images/logos/oncor.png",
       thumb:"images/envision-manufacturing-floor-bag-machines.png",
       summary:"[ Two-to-three sentence summary of the Oncor textiles program — the product, the Envision textile capabilities it runs on, and the current phase. ]",
       creds:["Textiles","[ Campus ]","[ Credential ]"],
@@ -3968,6 +3972,7 @@
       location:"Dallas",
       blurb:"Custom service vests for Texas Lions Club members — CNC cut, sewn, and shipped end to end at the Dallas Campus.",
       logo:LOGO_DATA.texaslions,
+      logoFile:"images/logos/texas-lions-club.png",
       thumb:"images/envision-employee-with-guide-dog-factory.png",
       summary:"Custom service vests for Texas Lions Club members, designed and produced end to end at Envision's Dallas Campus. Panels are cut on Gerber Paragon CNC cutting systems, sewn by our industrial sewing team, then packaged and shipped in house. One facility, design through delivery, no outside vendors.",
       creds:["Textiles","Dallas Campus","NIB Affiliated"],
@@ -4087,30 +4092,41 @@
         '<a class="btn-primary m-cta-contact" href="#" data-contact-cat="manufacturing">Get in Touch</a>'+
       '</div>'+
       '<div class="ia-rev">'+BUILD_REV+'</div>';
-    // If a logo cover fails to render, swap in the project's photo thumb so
-    // the card never shows a blank cover. Some network filters black-hole
-    // image requests without erroring, so a watchdog timer treats a logo
-    // that neither loads nor errors within 3s as failed too.
+    // Logo covers try each source in order — embedded data URI, then the
+    // same-origin file (in case a security proxy blocks data: images) —
+    // before swapping in the project's photo thumb, so the card never
+    // shows a blank cover. Some network filters black-hole image requests
+    // without erroring, so a watchdog timer treats a source that neither
+    // loads nor errors within 3s as failed too.
     PROJECT_ORDER.forEach(function(key){
       var d = PROJECTS[key];
       if (!d || !d.logo) return;
       var wrap = modalInner.querySelector('[data-project-open="'+key+'"] .inaction-thumb');
       var img = wrap && wrap.querySelector('.inaction-logo-img');
       if (!wrap || !img) return;
+      var sources = d.logoFile ? [d.logoFile] : [];
       var settled = false;
-      var swapToThumb = function(){
+      var timer = null;
+      var nextSource = function(){
         if (settled) return;
+        clearTimeout(timer);
+        if (sources.length) {
+          img.src = sources.shift();
+          timer = setTimeout(nextSource, 3000);
+          return;
+        }
         settled = true;
         if (!d.thumb) return;
         wrap.classList.remove("inaction-thumb--logo");
         wrap.innerHTML = "";
         wrap.style.backgroundImage = 'url("'+d.thumb+'")';
       };
-      if (img.complete && img.naturalWidth > 0) { settled = true; return; }
-      if (img.complete) { swapToThumb(); return; }
-      img.onload = function(){ settled = true; };
-      img.onerror = swapToThumb;
-      setTimeout(swapToThumb, 3000);
+      var markOk = function(){ settled = true; clearTimeout(timer); };
+      img.onload = markOk;
+      img.onerror = nextSource;
+      if (img.complete && img.naturalWidth > 0) { markOk(); return; }
+      if (img.complete) { nextSource(); return; }
+      timer = setTimeout(nextSource, 3000);
     });
     modal.scrollTop = 0;
   }
