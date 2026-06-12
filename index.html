@@ -3783,16 +3783,61 @@
 
   function modalOpen(){ return modal.classList.contains("is-open"); }
 
+  /* ---------- Overlay coordination ----------
+     Only one overlay layer should ever be interactive at a time. Without this,
+     a chat panel (z-index 101) floats over an open detail modal (z-index 100),
+     the section menu stays open behind a modal, and keyboard / screen-reader
+     focus can tab onto the hidden slides behind an overlay (they are only
+     dimmed with opacity, never removed). syncOverlayState() is the single
+     source of truth: while any deck overlay is open it marks the body, makes
+     the deck inert, and (via the body flag) hides the concierge launcher so a
+     chat cannot be stacked on top. It is called by every overlay's open AND
+     close handler, here and in the BSC / lightbox modules, so the state is
+     always recomputed from what is actually on screen. */
+  var deckEl = document.querySelector(".deck");
+  function anyDeckOverlayOpen(){
+    var ids = ["modal", "bscModal", "lbModal"];
+    for (var i = 0; i < ids.length; i++){
+      var n = document.getElementById(ids[i]);
+      if (n && n.classList.contains("is-open")) return true;
+    }
+    return false;
+  }
+  function syncOverlayState(){
+    var open = anyDeckOverlayOpen();
+    document.body.classList.toggle("env-overlay-open", open);
+    if (deckEl){
+      if (open){
+        deckEl.setAttribute("aria-hidden", "true");
+        if ("inert" in deckEl) deckEl.inert = true;
+      } else {
+        deckEl.removeAttribute("aria-hidden");
+        if ("inert" in deckEl) deckEl.inert = false;
+      }
+    }
+  }
+  window.__envSyncOverlay = syncOverlayState;
+  function closeConcierge(){
+    if (window.EnvisionConcierge && window.EnvisionConcierge.close){
+      window.EnvisionConcierge.close();
+    }
+  }
+  /* Run before an overlay paints: clear anything that would otherwise be left
+     open behind it (the section menu, the chat panel). */
+  function dismissPeers(){ closeMenu(); closeConcierge(); }
+
   function openModal(key){
     if (modalOpen()) return;
     renderModal(key);
     modalReturnFocus = document.activeElement;
     modal.scrollTop = 0;
+    dismissPeers();
     modalBackdrop.classList.add("is-open");
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
     modalClose.focus();
+    syncOverlayState();
   }
   function closeModal(){
     if (!modalOpen()) return;
@@ -3801,6 +3846,7 @@
     modal.setAttribute("aria-hidden","true");
     document.body.style.overflow = "";
     modal.scrollTop = 0;
+    syncOverlayState();
     if (modalReturnFocus && modalReturnFocus.focus) modalReturnFocus.focus();
     modalReturnFocus = null;
   }
@@ -4136,20 +4182,14 @@
     renderInActionList();
     modalReturnFocus = document.activeElement;
     modal.scrollTop = 0;
+    dismissPeers();
     modalBackdrop.classList.add("is-open");
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
     modalClose.focus();
+    syncOverlayState();
   }
-
-  var MODAL_TO_CONTACT = {
-    plastic:"manufacturing", textile:"manufacturing", reflective:"manufacturing",
-    binders:"manufacturing", writing:"manufacturing", fulfillment:"fulfillment",
-    kitting:"fulfillment", specialty:"fulfillment",
-    printSvc:"print", contact:"contact-center", bpo:"document-services",
-    accessibility:"accessibility", procurement:"procurement", quality:"quality"
-  };
 
   /* ---------- Clickable credential chips ----------
      Every cred chip on a detail page links to where that claim is
@@ -4284,16 +4324,11 @@
     var cta = e.target.closest(".m-cta-contact");
     if (!cta) return;
     e.preventDefault();
-    var key = cta.getAttribute("data-contact-cat");
-    var catVal = MODAL_TO_CONTACT[key] || "";
+    // Close the detail modal and jump to the Contact section. (There is no
+    // category form on the Contact slide today, so nothing to pre-select.)
     closeModal();
     var contactIdx = slideIndexByName("Contact");
     if (contactIdx >= 0) jump(contactIdx);
-    var dtCat = document.getElementById("dtCat");
-    if (dtCat && catVal){
-      dtCat.value = catVal;
-      dtCat.dispatchEvent(new Event("change"));
-    }
   });
 
   document.getElementById("slides").addEventListener("click", function(e){
@@ -4347,6 +4382,24 @@
     t.click();
   });
 
+  /* Collapse every per-slide disclosure (the Compliance registration "tabs"
+     and the Innovation process-stage machine lists) back to their default
+     closed state. These widgets live on slides that are only hidden with
+     opacity (not removed from the DOM), so without this an expanded panel
+     would still be open the next time the visitor returns to that slide. */
+  function resetSlideDisclosures(){
+    var pills = document.querySelectorAll('.reg-pill[aria-expanded="true"]');
+    Array.prototype.forEach.call(pills, function(p){
+      p.setAttribute("aria-expanded", "false");
+      var panel = document.getElementById(p.getAttribute("aria-controls"));
+      if (panel) panel.hidden = true;
+    });
+    var stages = document.querySelectorAll('.proc-stage[aria-expanded="true"]');
+    Array.prototype.forEach.call(stages, function(s){
+      s.setAttribute("aria-expanded", "false");
+    });
+  }
+
   function render(){
     slides.forEach(function(s,i){ s.classList.toggle("current", i === idx); });
     var sec = slideSection[idx];
@@ -4356,10 +4409,12 @@
     document.getElementById("prevBtn").disabled = (idx === 0);
     document.getElementById("nextBtn").disabled = (idx === total - 1);
     updateFsIcon();
+    resetSlideDisclosures();
     var cur = slides[idx];
     if (cur) cur.scrollTop = 0;
   }
   function go(n){
+    closeMenu();
     n = Math.max(0, Math.min(total - 1, n));
     if (n === idx) return;
     idx = n;
@@ -4477,8 +4532,19 @@
               (t.closest && t.closest(".env-concierge")))){
       return;
     }
-    if (modalOpen()){
-      if (e.key === "Escape"){ closeModal(); }
+    // While the concierge is open it owns navigation, even if focus has
+    // drifted onto the slide behind its (corner) panel. Its own handler still
+    // takes Escape (close) and Tab (trap); the deck stays put.
+    if (window.EnvisionConcierge && window.EnvisionConcierge.isOpen &&
+        window.EnvisionConcierge.isOpen()){
+      return;
+    }
+    if (anyDeckOverlayOpen()){
+      // A deck overlay owns the screen. The BSC map and lightbox have their own
+      // capture-phase Escape/arrow handlers; this guard makes sure the deck's
+      // own shortcuts (f for fullscreen, 1-9 for section jumps, arrows/space)
+      // never act on the slides hidden behind any open overlay.
+      if (e.key === "Escape"){ if (modalOpen()) closeModal(); }
       else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                e.key === " " || e.key === "Spacebar"){ e.preventDefault(); }
       return;
@@ -4502,7 +4568,9 @@
     tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY;
   }, {passive:true});
   stage.addEventListener("touchend", function(e){
-    if (modalOpen()) return;
+    if (anyDeckOverlayOpen()) return;
+    if (window.EnvisionConcierge && window.EnvisionConcierge.isOpen &&
+        window.EnvisionConcierge.isOpen()) return;
     var dx = e.changedTouches[0].clientX - tx;
     var dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){ linear(dx < 0 ? idx + 1 : idx - 1); }
@@ -4533,7 +4601,8 @@
     openBSC: function(){
       var el = document.querySelector("[data-bsc]");
       if (el && el.click) el.click();
-    }
+    },
+    closeMenu: function(){ closeMenu(); }
   };
 
 })();
@@ -4872,16 +4941,24 @@
 
   function isOpen(){ return modal.classList.contains("is-open"); }
 
+  function dismissPeers(){
+    if (window.EnvisionDeck && window.EnvisionDeck.closeMenu) window.EnvisionDeck.closeMenu();
+    if (window.EnvisionConcierge && window.EnvisionConcierge.close) window.EnvisionConcierge.close();
+  }
+  function syncOverlay(){ if (window.__envSyncOverlay) window.__envSyncOverlay(); }
+
   function openBsc(trigger){
     if (isOpen()) return;
     buildMap();
     resetTags();
     returnFocus = trigger || document.activeElement;
+    dismissPeers();
     backdrop.classList.add("is-open");
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     closeBtn.focus();
+    syncOverlay();
     runCountUp();
   }
 
@@ -4892,6 +4969,7 @@
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow =
       panelModal && panelModal.classList.contains("is-open") ? "hidden" : "";
+    syncOverlay();
     if (returnFocus && returnFocus.focus) returnFocus.focus();
     returnFocus = null;
   }
@@ -4953,6 +5031,12 @@
 
     function isOpen(){ return modal.classList.contains("is-open"); }
 
+    function dismissPeers(){
+      if (window.EnvisionDeck && window.EnvisionDeck.closeMenu) window.EnvisionDeck.closeMenu();
+      if (window.EnvisionConcierge && window.EnvisionConcierge.close) window.EnvisionConcierge.close();
+    }
+    function syncOverlay(){ if (window.__envSyncOverlay) window.__envSyncOverlay(); }
+
     function openLb(trigger){
       if (isOpen()) return;
       var img = trigger.querySelector("img");
@@ -4961,11 +5045,13 @@
       lbAddr.textContent = trigger.getAttribute("data-lb-addr") || "";
       lbAddr.setAttribute("href", trigger.getAttribute("data-lb-href") || "#");
       returnFocus = trigger;
+      dismissPeers();
       backdrop.classList.add("is-open");
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
       closeBtn.focus();
+      syncOverlay();
     }
 
     function closeLb(){
@@ -4975,6 +5061,7 @@
       modal.setAttribute("aria-hidden", "true");
       document.body.style.overflow =
         panelModal && panelModal.classList.contains("is-open") ? "hidden" : "";
+      syncOverlay();
       if (returnFocus && returnFocus.focus) returnFocus.focus();
       returnFocus = null;
     }

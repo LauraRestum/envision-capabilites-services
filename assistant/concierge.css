@@ -41,6 +41,14 @@
 .ec-launcher .ec-launcher-label{ white-space: nowrap; }
 .ec-launcher[aria-expanded="true"]{ opacity: 0; pointer-events: none; }
 
+/* When the deck owns the screen with a full-screen overlay (detail modal,
+   BSC map, or campus lightbox), it sets body.env-overlay-open. Hide the chat
+   launcher and panel so a second layer can never stack on top of the overlay.
+   Functional, not cosmetic: the concierge sits at z-index 101, above the
+   modal's 100, so without this an open chat would float over the modal. */
+body.env-overlay-open .ec-launcher,
+body.env-overlay-open .ec-panel{ display: none !important; }
+
 @media (max-width: 520px){
   .ec-launcher .ec-launcher-label{
     position: absolute; width: 1px; height: 1px; overflow: hidden;
