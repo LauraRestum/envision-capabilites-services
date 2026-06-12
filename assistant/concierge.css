@@ -20,6 +20,16 @@
   --ec-radius: 16px;
   --ec-shadow: 0 18px 50px rgba(0,24,82,0.22), 0 2px 8px rgba(0,24,82,0.10);
   font-family: var(--sans, 'Montserrat', sans-serif);
+
+  /* Viewport height used to size the panel. Falls back to vh, prefers dvh
+     (which tracks the *visible* viewport as mobile browser chrome shows and
+     hides). JS further overrides --ec-kb with the on-screen keyboard inset so
+     the composer is lifted above the keyboard instead of hiding behind it. */
+  --ec-vph: 100vh;
+  --ec-kb: 0px;
+}
+@supports (height: 100dvh){
+  .env-concierge{ --ec-vph: 100dvh; }
 }
 
 /* ---------- Floating launcher ---------- */
@@ -39,7 +49,12 @@
 .ec-launcher:active{ transform: translateY(0); }
 .ec-launcher svg{ width: 20px; height: 20px; flex: none; }
 .ec-launcher .ec-launcher-label{ white-space: nowrap; }
-.ec-launcher[aria-expanded="true"]{ opacity: 0; pointer-events: none; }
+/* While the panel is open the launcher is not just visually hidden but pulled
+   out of the tab order and the a11y tree, so a keyboard or screen-reader user
+   cannot land on an invisible control behind the open dialog. */
+.ec-launcher[aria-expanded="true"]{
+  opacity: 0; pointer-events: none; visibility: hidden;
+}
 
 /* When the deck owns the screen with a full-screen overlay (detail modal,
    BSC map, or campus lightbox), it sets body.env-overlay-open. Hide the chat
@@ -60,14 +75,18 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 /* ---------- Panel ---------- */
 .ec-panel{
   position: fixed; right: clamp(14px, 2.5vw, 26px);
-  bottom: calc(18px + env(safe-area-inset-bottom));
+  bottom: calc(18px + var(--ec-kb) + env(safe-area-inset-bottom));
   z-index: 101;
   width: min(396px, calc(100vw - 28px));
-  height: min(620px, calc(100vh - 96px));
+  /* dvh + keyboard inset keeps the whole panel — including the composer —
+     inside the visible viewport on mobile, so nothing slides off-screen and
+     the visitor never has to pinch-zoom to reach the input. */
+  height: min(620px, calc(var(--ec-vph) - var(--ec-kb) - 96px));
+  max-height: calc(var(--ec-vph) - var(--ec-kb) - 24px);
   display: flex; flex-direction: column;
   background: #fff; border-radius: var(--ec-radius);
   box-shadow: var(--ec-shadow);
-  overflow: hidden;
+  overflow: hidden; overscroll-behavior: contain;
   transform: translateY(16px) scale(.98); opacity: 0;
   transition: transform .22s ease, opacity .22s ease;
   pointer-events: none;
@@ -77,8 +96,10 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 
 @media (max-width: 520px){
   .ec-panel{
-    right: 8px; left: 8px; bottom: 8px;
-    width: auto; height: min(78vh, calc(100vh - 80px));
+    right: 8px; left: 8px;
+    bottom: calc(8px + var(--ec-kb) + env(safe-area-inset-bottom));
+    width: auto;
+    height: min(620px, calc(var(--ec-vph) - var(--ec-kb) - 16px));
   }
 }
 @media (prefers-reduced-motion: reduce){
@@ -117,14 +138,32 @@ body.env-overlay-open .ec-panel{ display: none !important; }
   display: flex; flex-direction: column; gap: 11px;
   background: var(--ec-tint);
   scroll-behavior: smooth;
+  /* Keep a scroll gesture inside the chat from chaining through to the slide
+     deck behind it (which scroll-snaps), and stop iOS rubber-band bleed. */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 @media (prefers-reduced-motion: reduce){ .ec-log{ scroll-behavior: auto; } }
+
+/* Each new message / chip row "pops" in so the conversation reads as live and
+   the eye is drawn to what just arrived. */
+.ec-log > *{ animation: ec-pop .2s ease both; }
+@keyframes ec-pop{
+  from{ opacity: 0; transform: translateY(6px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .ec-log > *{ animation: none; }
+}
 
 .ec-msg{ display: flex; max-width: 100%; }
 .ec-bubble{
   font-size: 13.5px; line-height: 1.5; font-weight: 500;
   padding: 11px 14px; border-radius: 14px;
   max-width: 86%; word-wrap: break-word;
+  /* A long unbroken token (an NSN, a part number, a URL) breaks instead of
+     forcing the bubble past the panel edge. */
+  overflow-wrap: anywhere;
 }
 .ec-msg-bot{ justify-content: flex-start; }
 .ec-msg-bot .ec-bubble{
@@ -161,6 +200,7 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 .ec-contact-methods a, .ec-contact-methods span{
   font-weight: 600; font-size: 12px; color: var(--ec-blue);
   text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+  max-width: 100%; overflow-wrap: anywhere;
 }
 .ec-contact-methods a:hover{ text-decoration: underline; }
 .ec-contact-methods svg{ width: 13px; height: 13px; flex: none; }
@@ -176,6 +216,10 @@ body.env-overlay-open .ec-panel{ display: none !important; }
   border: 1px solid #cdd8ea; border-radius: 999px;
   padding: 8px 14px; cursor: pointer; line-height: 1.2;
   display: inline-flex; align-items: center; gap: 6px;
+  /* A long label (e.g. "Explore Quality Assurance & Compliance") wraps inside
+     the chip instead of spilling past the panel edge. */
+  max-width: 100%; text-align: left; white-space: normal;
+  overflow-wrap: anywhere;
   transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
 .ec-chip:hover{ background: var(--ec-blue); color: #fff; border-color: var(--ec-blue); }
@@ -196,10 +240,19 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 }
 .ec-input{
   flex: 1 1 auto; resize: none;
-  font-family: inherit; font-weight: 500; font-size: 13.5px; color: var(--ec-ink);
+  /* 16px is deliberate and load-bearing: iOS Safari force-zooms the page when
+     a focused field is under 16px, and with no maximum-scale it never zooms
+     back, which is exactly the "text got too big, I had to zoom out" report.
+     Hold this at >= 16px on touch. */
+  font-family: inherit; font-weight: 500; font-size: 16px; color: var(--ec-ink);
   border: 1px solid #cdd8ea; border-radius: 12px;
   padding: 10px 12px; max-height: 96px; line-height: 1.4;
   background: var(--ec-tint);
+}
+/* On a comfortable pointer (desktop) the smaller type reads better and there
+   is no auto-zoom risk. */
+@media (min-width: 521px) and (pointer: fine){
+  .ec-input{ font-size: 13.5px; }
 }
 .ec-input::placeholder{ color: var(--ec-soft); }
 .ec-send{
@@ -207,9 +260,17 @@ body.env-overlay-open .ec-panel{ display: none !important; }
   background: var(--ec-navy); color: #fff; cursor: pointer;
   display: grid; place-items: center; transition: background .15s ease;
 }
-.ec-send:hover{ background: var(--ec-blue); }
-.ec-send:disabled{ opacity: .45; cursor: default; }
+.ec-send:hover:not(:disabled){ background: var(--ec-blue); }
+.ec-send:disabled{ opacity: .4; cursor: default; }
 .ec-send svg{ width: 18px; height: 18px; }
+
+/* Coarse pointers (touch): grow the header-close and send hit areas to the
+   44px minimum so they are reliably tappable, not fiddly. */
+@media (pointer: coarse){
+  .ec-head-close{ width: 40px; height: 40px; }
+  .ec-send{ width: 46px; height: 46px; }
+  .ec-chip{ padding: 10px 16px; }
+}
 
 /* ---------- Focus visibility (accessibility, not optional) ---------- */
 .env-concierge :focus-visible,

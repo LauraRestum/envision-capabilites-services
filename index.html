@@ -3829,7 +3829,13 @@
   function openModal(key){
     if (modalOpen()) return;
     renderModal(key);
-    modalReturnFocus = document.activeElement;
+    // Capture where to send focus on close. If the chat opened this modal, its
+    // panel is about to be hidden, so returning focus into it would strand the
+    // focus ring on an invisible control; fall back to the chat launcher.
+    var active = document.activeElement;
+    modalReturnFocus = (active && active.closest && active.closest(".env-concierge"))
+      ? (document.querySelector(".ec-launcher") || active)
+      : active;
     modal.scrollTop = 0;
     dismissPeers();
     modalBackdrop.classList.add("is-open");
@@ -4979,6 +4985,16 @@
   modal.addEventListener("click", function(e){
     if (e.target === modal) closeBsc();
   });
+
+  // Give the concierge a direct, reliable way in. The earlier bridge synthesized
+  // a click on the first [data-bsc] element, which lives on a non-current slide;
+  // calling openBsc() straight is sturdier and lets us aim the on-close focus at
+  // the chat launcher rather than a hidden element behind an inert slide.
+  if (window.EnvisionDeck){
+    window.EnvisionDeck.openBSC = function(){
+      openBsc(document.querySelector(".ec-launcher") || null);
+    };
+  }
 
   // Cross-link delegation (capture phase so it wins over deck/panel handlers).
   function handleTrigger(e){
