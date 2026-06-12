@@ -443,7 +443,7 @@
       SVG.chat + '<span class="ec-launcher-label">Ask Envision</span>' +
     '</button>' +
     '<section class="ec-panel" id="ecPanel" role="dialog" aria-modal="true" ' +
-      'aria-labelledby="ecHeadTitle" hidden>' +
+      'aria-labelledby="ecHeadTitle" tabindex="-1" hidden>' +
       '<header class="ec-head">' +
         '<span class="ec-head-badge" aria-hidden="true">' + SVG.chat + '</span>' +
         '<span class="ec-head-txt">' +
@@ -459,7 +459,8 @@
       '<form class="ec-form" id="ecForm">' +
         '<label class="ec-sr-only" for="ecInput">Type your question for the Envision concierge</label>' +
         '<textarea class="ec-input" id="ecInput" rows="1" autocomplete="off" ' +
-          'placeholder="Ask about a product, a channel, or who to call"></textarea>' +
+          'enterkeyhint="send" ' +
+          'placeholder="Ask about a product or who to call"></textarea>' +
         '<button class="ec-send" id="ecSend" type="submit" aria-label="Send message">' + SVG.send + '</button>' +
       '</form>' +
     '</section>';
@@ -526,7 +527,16 @@
 
   function addContactCard(contact){
     if (!contact) return;
+    // Don't stack the identical card twice in a row. Once a visitor passes
+    // CONFIG.contactAfterQueries, every answer wants to append the same person;
+    // showing it once per run is helpful, repeating it under each bubble nags.
+    var prev = log.lastElementChild;
+    if (prev && prev.className === "ec-contact" &&
+        prev.getAttribute("data-contact") === (contact.name || "")){
+      return;
+    }
     var card = el("div", "ec-contact");
+    card.setAttribute("data-contact", contact.name || "");
     var html =
       '<div class="ec-contact-eyebrow">Talk to</div>' +
       '<div class="ec-contact-name">' + esc(contact.name) + '</div>' +
@@ -541,7 +551,7 @@
     if (m.email)  methods.push('<a href="mailto:' + esc(m.email) + '">' + SVG.mail + esc(m.email) + '</a>');
     if (m.web){
       var href = /^https?:/i.test(m.web) ? m.web : "https://" + m.web;
-      methods.push('<a href="' + esc(href) + '" target="_blank" rel="noopener">' + SVG.web + esc(m.web) + '</a>');
+      methods.push('<a href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + SVG.web + esc(m.web) + '</a>');
     }
     if (methods.length){
       html += '<div class="ec-contact-methods">' + methods.join("") + '</div>';
@@ -556,12 +566,23 @@
    * ------------------------------------------------------------------ */
   function runNext(next){
     var deck = window.EnvisionDeck || {};
+    var fn = next.action === "modal"   ? deck.openModal
+           : next.action === "section" ? deck.goToSection
+           : next.action === "bsc"     ? deck.openBSC
+           : null;
+    // If the deck bridge is missing (deck script failed, or a stale `next`
+    // names an action the deck does not expose), never close the chat into a
+    // blank screen. Keep the conversation and hand over a real person instead
+    // of a button that goes nowhere.
+    if (typeof fn !== "function"){
+      addBotBubble("I could not open that view just now, but I can still point you to the right person.");
+      addContactCard(resolveContact(null));
+      return;
+    }
     // Opening a deck modal / section takes over the screen, so close the
     // concierge first to keep focus management clean (no nested dialogs).
     closePanel({ silent: true });
-    if (next.action === "modal" && deck.openModal){ deck.openModal(next.target); }
-    else if (next.action === "section" && deck.goToSection){ deck.goToSection(next.target); }
-    else if (next.action === "bsc" && deck.openBSC){ deck.openBSC(); }
+    fn.call(deck, next.target);
   }
 
   function addNextStep(intent){
@@ -742,8 +763,16 @@
       addBotBubble(greeting ? greeting.answer : "Welcome to the Envision concierge. How can I help?");
       offerOpeningChips(null);
     }
-    // Move focus into the panel for keyboard and screen-reader users.
-    setTimeout(function(){ input.focus(); }, 60);
+    // Move focus into the panel for keyboard and screen-reader users. On a
+    // touch device, do NOT auto-focus the textarea: that pops the soft
+    // keyboard (and on iOS the zoom) the instant the panel opens, before the
+    // visitor has even read the greeting. Focus the dialog instead; the
+    // visitor taps the field when they are ready to type.
+    var coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    setTimeout(function(){
+      if (!opened) return;
+      if (coarse){ panel.focus(); } else { input.focus(); }
+    }, 60);
   }
 
   function closePanel(opts){
@@ -752,6 +781,8 @@
     panel.classList.remove("is-open");
     launcher.setAttribute("aria-expanded", "false");
     document.removeEventListener("keydown", onKeydown, true);
+    // Drop any keyboard-inset lift so the launcher sits at its normal anchor.
+    root.style.setProperty("--ec-kb", "0px");
     var done = function(){ panel.hidden = true; };
     // Wait out the transition, then hide.
     setTimeout(done, 220);
@@ -772,12 +803,15 @@
     var text = input.value;
     input.value = "";
     autosize();
+    syncSend();
     handleQuery(text);
   });
 
-  // Enter sends, Shift+Enter makes a newline.
+  // Enter sends, Shift+Enter makes a newline. `isComposing` guards an IME: a
+  // visitor typing CJK presses Enter to confirm a candidate, which must commit
+  // the text, not fire off a half-composed message.
   input.addEventListener("keydown", function(e){
-    if (e.key === "Enter" && !e.shiftKey){
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing && e.keyCode !== 229){
       e.preventDefault();
       form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true }));
     }
@@ -787,7 +821,31 @@
     input.style.height = "auto";
     input.style.height = Math.min(input.scrollHeight, 96) + "px";
   }
-  input.addEventListener("input", autosize);
+  // Disable Send when there is nothing to send, so a tap on an empty box is
+  // never a dead, silent no-op (the disabled style already existed; nothing
+  // ever toggled it).
+  function syncSend(){ sendBtn.disabled = !input.value.trim(); }
+  input.addEventListener("input", function(){ autosize(); syncSend(); });
+  syncSend();
+
+  /* ------------------------------------------------------------------ *
+   * KEYBOARD-AWARE SIZING  ·  keep the composer above the soft keyboard *
+   * ------------------------------------------------------------------ *
+   * On a phone, position:fixed is anchored to the layout viewport, so an
+   * open keyboard slides the composer out of sight behind it. We measure the
+   * keyboard inset from the VisualViewport and expose it as --ec-kb; the CSS
+   * lifts the panel by exactly that much. Guarded: where VisualViewport is
+   * absent the inset stays 0 and the panel behaves as before.            */
+  function syncKeyboardInset(){
+    var vv = window.visualViewport;
+    if (!vv){ return; }
+    var inset = opened ? Math.max(0, window.innerHeight - vv.height - vv.offsetTop) : 0;
+    root.style.setProperty("--ec-kb", Math.round(inset) + "px");
+  }
+  if (window.visualViewport){
+    window.visualViewport.addEventListener("resize", syncKeyboardInset);
+    window.visualViewport.addEventListener("scroll", syncKeyboardInset);
+  }
 
   /* ------------------------------------------------------------------ *
    * 9. STARTUP  ·  build the catalog index, expose a tiny debug surface *

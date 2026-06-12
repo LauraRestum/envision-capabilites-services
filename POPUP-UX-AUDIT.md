@@ -187,3 +187,100 @@ Its own handler still owns Escape (close) and Tab (trap).
   un-inerted before focus is restored on close.
 - Confirmed the credential-chip deck-jump paths still route through `go()`, which
   closes the modal and re-runs `render()` (resetting disclosures) as expected.
+
+---
+
+## Round 3 — concierge field audit (mobile sizing, routing, interaction)
+
+Triggered by two reports from real use: **"once I clicked the text it was too big
+on the screen, I had to zoom out"** and **"I clicked a CTA button and it didn't go
+anywhere."** Rounds 1–2 hardened overlay *coordination* but never touched the
+concierge's own mobile sizing, input behavior, or the CTA bridge. This round
+walks the concierge end to end — how it pops up, what it says, where each button
+lands, and how it behaves on a phone — and fixes 27 things. Engine matching
+logic (classify / catalog / MiniSearch config) was **not** touched, so the
+in-browser regression battery (`EnvisionConcierge.selfTest()`) is unaffected.
+
+### The two reported bugs — root-caused
+
+**"Text too big, had to zoom out" (F9, High).** The composer `<textarea>` was
+`13.5px`. iOS Safari force-zooms the page whenever a focused field is under
+`16px`, and because the viewport meta sets no `maximum-scale`, it never zooms
+back — the visitor is left magnified. Worse, the panel *auto-focused* that field
+on open, so merely tapping "Ask Envision" zoomed the page before a word was read.
+**Fix:** input is `16px` on touch (`13.5px` only on `pointer:fine` desktop), and
+the textarea is no longer auto-focused on coarse pointers (the dialog takes focus
+instead; the keyboard appears when the visitor actually taps the field).
+
+**"CTA went nowhere" (F10, High).** `runNext()` closed the chat *first*, then
+tried `deck.openModal/goToSection/openBSC`. If the deck bridge was missing or the
+action wasn't exposed, the panel had already vanished and nothing opened — a
+literal dead end. **Fix:** `runNext()` now resolves the handler *before*
+committing to close; if it can't, it keeps the conversation open and hands over a
+person instead of a blank screen. The BSC bridge also no longer synthesizes a
+click on the first `[data-bsc]` element (which lives on a non-current,
+`pointer-events:none` slide) — it calls `openBsc()` directly.
+
+### All 27 fixes
+
+**Mobile sizing / "pops up" behavior**
+1. Input `16px` on touch — kills the iOS focus-zoom (the core report).
+2. Desktop keeps the compact `13.5px` via `@media (pointer:fine)`.
+3. Panel height switched from `vh` to `dvh` so it tracks the *visible* viewport
+   as the mobile browser's toolbar shows/hides (no more off-screen overflow).
+4. Keyboard-aware lift: JS measures the on-screen-keyboard inset from
+   `VisualViewport` and exposes `--ec-kb`; CSS lifts the panel by exactly that
+   much so the composer sits above the keyboard instead of behind it.
+5. `--ec-kb` reset to `0` on close so the launcher returns to its anchor.
+6. No textarea auto-focus on coarse pointers — the keyboard/zoom no longer pops
+   the instant the panel opens.
+7. Panel given `tabindex="-1"` so focus can land on the dialog itself.
+8. Message and chip rows now "pop" in with a short, reduced-motion-aware
+   entrance animation — the conversation reads as live.
+
+**Routing / CTAs / "where it lands"**
+9. CTA dead-end guard in `runNext()` (see F10) — never closes into nothing.
+10. Handler resolved before close; missing bridge → human handoff, chat stays up.
+11. Direct, reliable BSC open bridge replacing the off-slide synthetic click.
+12. Focus restoration: closing a deck modal the *chat* opened now returns focus
+    to the launcher, not a hidden control inside the dismissed panel.
+13. BSC on-close focus likewise aimed at the launcher.
+
+**Interaction correctness**
+14. Send button actually disables when the field is empty (the `:disabled` style
+    existed but nothing ever toggled it) — no silent dead tap.
+15. Send state re-synced after each submit.
+16. IME-safe Enter (`isComposing` / `keyCode 229`) — Enter confirming a CJK
+    candidate commits text instead of firing a half-composed message.
+17. `enterkeyhint="send"` so mobile keyboards show a Send key, matching the
+    Enter-sends behavior.
+18. Placeholder shortened so it no longer clips inside the `16px` field on a
+    narrow phone.
+
+**Accessibility**
+19. Launcher pulled out of the tab order and a11y tree while the panel is open
+    (`visibility:hidden`) — a keyboard/SR user can't land on an invisible control
+    behind the open dialog.
+20. Larger touch targets (header-close, send, chips) on `pointer:coarse`.
+
+**Containment / overflow**
+21. `overscroll-behavior:contain` on the log — a scroll gesture in the chat no
+    longer chains through to the scroll-snapping deck behind it.
+22. `overscroll-behavior:contain` on the panel as a second backstop.
+23. Long chip labels (e.g. "Explore Quality Assurance & Compliance") wrap inside
+    the chip instead of spilling past the panel edge.
+24. Long unbroken tokens (NSN, part number, URL) wrap inside bot bubbles.
+25. Long emails / links wrap inside the contact card.
+
+**Hygiene**
+26. Duplicate contact cards no longer stack under every answer once a visitor
+    passes `contactAfterQueries` (dedupe of the identical card in a row).
+27. `rel="noreferrer"` added alongside `noopener` on the external web link.
+
+### Round 3 verification
+- `node --check` passes on `concierge.js` and all six inline `index.html`
+  scripts after the edits.
+- Engine matching code paths untouched (only UI, the CTA bridge, a11y, and CSS
+  changed); `selfTest()` outcomes are therefore unchanged from Round 2.
+- Traced `runNext()` for all three `next` actions (modal / section / bsc) and the
+  missing-bridge branch to confirm the panel only closes when an action will run.
