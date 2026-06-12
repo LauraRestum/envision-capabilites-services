@@ -4545,8 +4545,12 @@
               (t.closest && t.closest(".env-concierge")))){
       return;
     }
-    if (modalOpen()){
-      if (e.key === "Escape"){ closeModal(); }
+    if (anyDeckOverlayOpen()){
+      // A deck overlay owns the screen. The BSC map and lightbox have their own
+      // capture-phase Escape/arrow handlers; this guard makes sure the deck's
+      // own shortcuts (f for fullscreen, 1-9 for section jumps, arrows/space)
+      // never act on the slides hidden behind any open overlay.
+      if (e.key === "Escape"){ if (modalOpen()) closeModal(); }
       else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                e.key === " " || e.key === "Spacebar"){ e.preventDefault(); }
       return;
@@ -4570,7 +4574,7 @@
     tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY;
   }, {passive:true});
   stage.addEventListener("touchend", function(e){
-    if (modalOpen()) return;
+    if (anyDeckOverlayOpen()) return;
     var dx = e.changedTouches[0].clientX - tx;
     var dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){ linear(dx < 0 ? idx + 1 : idx - 1); }

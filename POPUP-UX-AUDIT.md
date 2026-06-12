@@ -123,6 +123,62 @@ switching is ever wired up it will need `switchModal` semantics.
 
 ---
 
+---
+
+## Round 2 — full-site sweep (beyond popups)
+
+Audited: service worker, manifest, vercel config, the concierge engine + its
+three data files, every local asset reference, section/slide mapping, all
+keyboard/touch handlers, and the modal-internal click delegation.
+
+### F6 — Deck keyboard shortcuts & swipe drove the slides *behind* an open BSC map / lightbox  ·  FIXED
+**Severity: High.** The global keydown handler bailed only on `modalOpen()`,
+which checks the `#modal` detail modal **only**. The BSC map and lightbox each
+have a capture-phase handler that swallows Escape and the arrow/space keys — but
+**not** `f` or the number keys `1`–`9`. So with the map or a campus photo open,
+pressing `f` toggled fullscreen and pressing a digit jumped the deck to another
+section, leaving the overlay floating over a slide it no longer matched. The
+touch-swipe handler had the same `modalOpen()`-only guard.
+
+**Fix:** both guards now use `anyDeckOverlayOpen()` (detail modal **or** BSC map
+**or** lightbox). The deck's `f` / digit / arrow / swipe shortcuts are inert
+while any overlay owns the screen; the overlays keep their own Escape handling.
+
+### Clean — no bugs found
+- **Concierge referential integrity:** 34 intents (no dup ids), every `contact`,
+  `next` modal/section target, `clarify` option, opening-chip, `CATALOG_CONTACT`
+  entry, self-test assertion, and `ROUTING.default` resolves. 0 broken.
+- **Asset references:** all 71 image/font/icon refs in `index.html`, all 5 in
+  `sw.js`, all 3 in the manifest resolve with exact case (Linux/Vercel-safe).
+  (Many unused files exist on disk — the inverse of a broken link, not a bug.)
+- **Section ↔ slide mapping:** 10 slides / 10 sections; every `slideIndexByName`
+  call and `data-atag-jump` value matches a real `data-name`. The section-name
+  vs `data-name` gap (`Home`/`Open`, `Campuses`/`Campus`) is never exercised —
+  `goToSection` keys off the `SECTIONS` array index, not the name.
+- **No duplicate element IDs**; no missing helpers; all inline scripts and
+  `concierge.js` syntax-check clean.
+
+### Observations — not user-facing bugs (left as-is, flagged for you)
+- **Dead code: `dtCat` contact-category preselect.** The modal "Get in Touch"
+  handler tries to pre-select a category via `getElementById("dtCat")`, but there
+  is **no `<select>` anywhere on the site** and no `dtCat` element. The
+  `if (dtCat && catVal)` guard makes it a silent no-op, so the jump-to-Contact
+  still works; the preselect is leftover from a removed form. Also note the
+  In-Action CTA passes `data-contact-cat="manufacturing"` (already a category),
+  which the handler would mis-look-up as a modal key — moot while `dtCat` is
+  absent. Safe to delete the dead block whenever the Contact form's final shape
+  is settled.
+- **Arrow-key deck nav while the chat is open.** The concierge is `aria-modal`
+  but only traps Tab, not the deck's arrow/number shortcuts, so if focus sits
+  outside the panel the slides behind it can still be paged. Low impact (the
+  chat is a corner panel and closes whenever a real overlay opens); call it if
+  you want the chat to fully capture navigation.
+- **First-ever offline load.** `sw.js` is network-first and never precaches `/`
+  or the app shell (only the manifest + icons, by design), so the very first
+  visit while offline has no fallback. Expected for this PWA; noted for clarity.
+
+---
+
 ## Verification performed
 - All inline scripts in `index.html` and `assistant/concierge.js` syntax-check
   clean.
