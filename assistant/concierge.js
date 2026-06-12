@@ -723,6 +723,12 @@
 
   function openPanel(){
     if (opened) return;
+    // One overlay layer at a time: never raise the chat over an open deck
+    // modal / map / lightbox (the launcher is already hidden then, but a
+    // keyboard activation could still reach this), and fold away the deck's
+    // section menu if it happens to be open.
+    if (document.body.classList.contains("env-overlay-open")) return;
+    if (window.EnvisionDeck && window.EnvisionDeck.closeMenu) window.EnvisionDeck.closeMenu();
     opened = true;
     panel.hidden = false;
     // Allow the [hidden] removal to paint before transitioning in.
@@ -884,6 +890,10 @@
   window.EnvisionConcierge.unmatched    = function(){ return MISS_LOG.slice(); };
   window.EnvisionConcierge.catalogReady = function(){ return !!catMini; };
   window.EnvisionConcierge.selfTest     = selfTest;
+  // Let the deck dismiss the chat when it opens a full-screen overlay, so the
+  // panel never lingers behind (or above) a modal. Silent: no focus return,
+  // because the deck is taking focus into the overlay it just opened.
+  window.EnvisionConcierge.close        = function(){ closePanel({ silent: true }); };
 
   // Opt-in auto-run for a developer (never for a visitor): /?ectest=1
   try {
