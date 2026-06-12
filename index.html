@@ -4191,14 +4191,6 @@
     syncOverlayState();
   }
 
-  var MODAL_TO_CONTACT = {
-    plastic:"manufacturing", textile:"manufacturing", reflective:"manufacturing",
-    binders:"manufacturing", writing:"manufacturing", fulfillment:"fulfillment",
-    kitting:"fulfillment", specialty:"fulfillment",
-    printSvc:"print", contact:"contact-center", bpo:"document-services",
-    accessibility:"accessibility", procurement:"procurement", quality:"quality"
-  };
-
   /* ---------- Clickable credential chips ----------
      Every cred chip on a detail page links to where that claim is
      substantiated in the deck. Routing order:
@@ -4332,16 +4324,11 @@
     var cta = e.target.closest(".m-cta-contact");
     if (!cta) return;
     e.preventDefault();
-    var key = cta.getAttribute("data-contact-cat");
-    var catVal = MODAL_TO_CONTACT[key] || "";
+    // Close the detail modal and jump to the Contact section. (There is no
+    // category form on the Contact slide today, so nothing to pre-select.)
     closeModal();
     var contactIdx = slideIndexByName("Contact");
     if (contactIdx >= 0) jump(contactIdx);
-    var dtCat = document.getElementById("dtCat");
-    if (dtCat && catVal){
-      dtCat.value = catVal;
-      dtCat.dispatchEvent(new Event("change"));
-    }
   });
 
   document.getElementById("slides").addEventListener("click", function(e){
@@ -4545,6 +4532,13 @@
               (t.closest && t.closest(".env-concierge")))){
       return;
     }
+    // While the concierge is open it owns navigation, even if focus has
+    // drifted onto the slide behind its (corner) panel. Its own handler still
+    // takes Escape (close) and Tab (trap); the deck stays put.
+    if (window.EnvisionConcierge && window.EnvisionConcierge.isOpen &&
+        window.EnvisionConcierge.isOpen()){
+      return;
+    }
     if (anyDeckOverlayOpen()){
       // A deck overlay owns the screen. The BSC map and lightbox have their own
       // capture-phase Escape/arrow handlers; this guard makes sure the deck's
@@ -4575,6 +4569,8 @@
   }, {passive:true});
   stage.addEventListener("touchend", function(e){
     if (anyDeckOverlayOpen()) return;
+    if (window.EnvisionConcierge && window.EnvisionConcierge.isOpen &&
+        window.EnvisionConcierge.isOpen()) return;
     var dx = e.changedTouches[0].clientX - tx;
     var dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){ linear(dx < 0 ? idx + 1 : idx - 1); }

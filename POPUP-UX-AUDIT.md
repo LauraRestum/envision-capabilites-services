@@ -158,21 +158,21 @@ while any overlay owns the screen; the overlays keep their own Escape handling.
 - **No duplicate element IDs**; no missing helpers; all inline scripts and
   `concierge.js` syntax-check clean.
 
-### Observations — not user-facing bugs (left as-is, flagged for you)
-- **Dead code: `dtCat` contact-category preselect.** The modal "Get in Touch"
-  handler tries to pre-select a category via `getElementById("dtCat")`, but there
-  is **no `<select>` anywhere on the site** and no `dtCat` element. The
-  `if (dtCat && catVal)` guard makes it a silent no-op, so the jump-to-Contact
-  still works; the preselect is leftover from a removed form. Also note the
-  In-Action CTA passes `data-contact-cat="manufacturing"` (already a category),
-  which the handler would mis-look-up as a modal key — moot while `dtCat` is
-  absent. Safe to delete the dead block whenever the Contact form's final shape
-  is settled.
-- **Arrow-key deck nav while the chat is open.** The concierge is `aria-modal`
-  but only traps Tab, not the deck's arrow/number shortcuts, so if focus sits
-  outside the panel the slides behind it can still be paged. Low impact (the
-  chat is a corner panel and closes whenever a real overlay opens); call it if
-  you want the chat to fully capture navigation.
+### F7 — Dead `dtCat` contact-category preselect removed  ·  FIXED (cleanup)
+The modal "Get in Touch" handler tried to pre-select a category via
+`getElementById("dtCat")`, but there is **no `<select>` anywhere on the site**
+and no `dtCat` element — a null guard made it a permanent no-op. Removed the dead
+block and the now-orphaned `MODAL_TO_CONTACT` lookup table. "Get in Touch" still
+closes the modal and jumps to the Contact section, exactly as before.
+
+### F8 — Chat now fully captures navigation  ·  FIXED
+The concierge is `aria-modal` but only trapped Tab. If focus drifted onto the
+slide behind its corner panel, the deck's arrow/number shortcuts and touch-swipe
+still paged the slides underneath. The concierge now exposes `isOpen()`, and both
+the deck keydown handler and the swipe handler stand down while the chat is open.
+Its own handler still owns Escape (close) and Tab (trap).
+
+### Observations — not bugs (flagged for you)
 - **First-ever offline load.** `sw.js` is network-first and never precaches `/`
   or the app shell (only the manifest + icons, by design), so the very first
   visit while offline has no fallback. Expected for this PWA; noted for clarity.

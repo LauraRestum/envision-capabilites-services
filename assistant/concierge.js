@@ -894,6 +894,10 @@
   // panel never lingers behind (or above) a modal. Silent: no focus return,
   // because the deck is taking focus into the overlay it just opened.
   window.EnvisionConcierge.close        = function(){ closePanel({ silent: true }); };
+  // Let the deck know the chat is open so it can stand its keyboard / swipe
+  // navigation down while the visitor is in the conversation, even if focus
+  // has drifted out of the panel onto the slide behind it.
+  window.EnvisionConcierge.isOpen       = function(){ return opened; };
 
   // Opt-in auto-run for a developer (never for a visitor): /?ectest=1
   try {
