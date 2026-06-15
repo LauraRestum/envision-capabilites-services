@@ -161,7 +161,7 @@ window.ENVISION_INTENTS = [
       "refuse bag", "poly bag", "plastic bag", "hdpe", "lldpe", "isolation bag",
       "medical bag", "biohazard bag", "plastic sheeting", "sheeting", "polyethylene film",
       "body fluid kit", "tidygirl", "va belongings bag", "compostable bag", "liners"],
-    answer: "Out of Wichita we convert polyethylene film into finished can liners, medical and specialty bags, and plastic sheeting, in HDPE and LLDPE across a wide range of gauges and sizes. Lines include high-density and low-density can liners, environmentally friendly and compostable options, color-coded medical isolation liners, and specialty bags. Custom sizes, colors, and in-line imprinting are standard.",
+    answer: "Out of Wichita we convert polyethylene film into finished can liners, medical and specialty bags, and plastic sheeting, in HDPE and LLDPE across a wide range of gauges and sizes. Lines include high-density and low-density can liners, environmentally friendly and compostable options, color-coded medical isolation liners, and specialty bags. Custom sizes, colors, and in-line imprinting are standard. Programs run end to end at the Wichita campus, from sample development through production and pack and ship.",
     next: {action:"modal", target:"plastic", label:"Explore Polymer & Film"},
     contact: "tuttle",
     source: "Capabilities, Polymer & Film (Wichita)"
@@ -172,7 +172,7 @@ window.ENVISION_INTENTS = [
     triggers: ["military apparel", "acu", "army combat uniform", "combat trousers",
       "molle", "etool", "pouches", "military gear", "uniforms", "berry apparel",
       "cordura", "mag pouch", "tactical gear", "combat uniform"],
-    answer: "Our Dallas campus runs heavy sewing operations producing Berry-compliant military gear. Army Combat Uniform trousers on an active multi-station line, MOLLE and ETOOL pouches in Cordura with military hardware, and more. Gerber Paragon CNC cutting with digital pattern nesting feeds the floor. Berry and TAA compliant, and authorized under DCMA Alternate Release.",
+    answer: "Our Dallas campus runs heavy sewing operations producing Berry-compliant military gear. Army Combat Uniform trousers on an active multi-station line, MOLLE and ETOOL pouches in Cordura with military hardware, and more. Gerber Paragon CNC cutting feeds the floor, run from partner-supplied digital patterns and markers. Berry and TAA compliant, and authorized under DCMA Alternate Release.",
     next: {action:"modal", target:"textile", label:"Explore Textile & Apparel"},
     contact: "tuttle",
     source: "Capabilities, Textile & Apparel (Dallas)"
