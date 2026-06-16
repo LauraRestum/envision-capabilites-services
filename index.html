@@ -3845,6 +3845,7 @@
     document.body.style.overflow = "hidden";
     modalClose.focus();
     syncOverlayState();
+    writeHash(modalSlugForKey(key));
   }
   function closeModal(){
     if (!modalOpen()) return;
@@ -3856,6 +3857,7 @@
     syncOverlayState();
     if (modalReturnFocus && modalReturnFocus.focus) modalReturnFocus.focus();
     modalReturnFocus = null;
+    writeHash(slideSlugForIdx(idx));
   }
 
   modalClose.addEventListener("click", closeModal);
@@ -4264,7 +4266,183 @@
     document.body.style.overflow = "hidden";
     modalClose.focus();
     syncOverlayState();
+    writeHash("projects");
   }
+
+  /* ---------- Deep links: shareable URL anchors ----------
+     Inbound, the hash routes a visitor straight to a spot:
+       #mission #capabilities #contact ...   -> that slide
+       #textile #plastic #procurement ...    -> that capability/service pop-up
+       #textile/products                     -> the pop-up's product catalog
+       #boeing #massif #dallas311 ...        -> that current project
+       #projects                             -> the "Envision in Action" list
+     Outbound, the address bar is kept in sync (replaceState, so it never
+     pollutes history or fights the in-app Back button) as the visitor moves,
+     so the current URL is always a copyable link to wherever they are.
+     New tiles / projects need no work here: every slug derives from the same
+     data the modals and the project list already render from. */
+
+  // Slide slugs: each slide's data-name, plus the two nav-name aliases.
+  var SLIDE_SLUG_TO_IDX = {};
+  slides.forEach(function(s, i){
+    var nm = (s.getAttribute("data-name") || "").toLowerCase();
+    if (nm) SLIDE_SLUG_TO_IDX[nm] = i;
+  });
+  [["home","Open"],["campuses","Campus"]].forEach(function(a){
+    var t = slideIndexByName(a[1]);
+    if (t >= 0) SLIDE_SLUG_TO_IDX[a[0]] = t;
+  });
+  function slideSlugForIdx(i){
+    var nm = (slides[i] && slides[i].getAttribute("data-name") || "").toLowerCase();
+    // Home is the bare URL (no hash), so we never write a hash for it.
+    return (nm === "open") ? "" : nm;
+  }
+
+  // Modal slugs: every capability/service key is its own slug, plus readable
+  // aliases. Each modal also remembers which hub slide sits behind it, so a
+  // deep link lands on the right hub before the pop-up opens.
+  var MODAL_HUB_IDX = {};
+  CAP_ORDER.forEach(function(r){ MODAL_HUB_IDX[r[0]] = CAP_HUB; });
+  SVC_ORDER.forEach(function(r){ MODAL_HUB_IDX[r[0]] = SVC_HUB; });
+  var MODAL_SLUG_TO_KEY = {};
+  Object.keys(MODAL_HUB_IDX).forEach(function(k){
+    var slug = k.toLowerCase();
+    // Don't let a modal key shadow a slide slug (e.g. "contact" the slide).
+    if (!SLIDE_SLUG_TO_IDX.hasOwnProperty(slug)) MODAL_SLUG_TO_KEY[slug] = k;
+  });
+  var MODAL_ALIAS = {
+    "polymer":"plastic", "polymer-film":"plastic", "film":"plastic",
+    "apparel":"textile",
+    "reflective-safety":"reflective", "safety":"reflective",
+    "document-covers":"binders", "binder":"binders",
+    "writing-instruments":"writing", "markers":"writing", "pens":"writing",
+    "distribution":"fulfillment",
+    "assembly":"kitting",
+    "specialty-products":"specialty",
+    "print":"printSvc", "printing":"printSvc",
+    "contact-center":"contact", "contactcenter":"contact",
+    "secure-documents":"bpo", "document-services":"bpo", "mailroom":"bpo",
+    "federal-procurement":"procurement", "procurement-services":"procurement",
+    "quality-assurance":"quality"
+  };
+  Object.keys(MODAL_ALIAS).forEach(function(a){
+    if (MODAL_HUB_IDX.hasOwnProperty(MODAL_ALIAS[a])) MODAL_SLUG_TO_KEY[a] = MODAL_ALIAS[a];
+  });
+  // Canonical slug written to the URL when a given modal opens.
+  var MODAL_KEY_TO_SLUG = {};
+  Object.keys(MODAL_HUB_IDX).forEach(function(k){ MODAL_KEY_TO_SLUG[k] = k.toLowerCase(); });
+  MODAL_KEY_TO_SLUG.printSvc = "print";
+  MODAL_KEY_TO_SLUG.contact  = "contact-center";
+  function modalSlugForKey(key){ return MODAL_KEY_TO_SLUG[key] || String(key).toLowerCase(); }
+
+  // Project slugs are the project keys exactly (massif, boeing, dallas311 ...).
+  var PROJECT_SLUG_TO_KEY = {};
+  PROJECT_ORDER.forEach(function(k){ PROJECT_SLUG_TO_KEY[k.toLowerCase()] = k; });
+  var IN_ACTION_SLUGS = { "projects":1, "in-action":1, "inaction":1, "current-projects":1 };
+
+  // ----- URL <-> state plumbing -----
+  // hashReady stays false until the boot route has run, so the deck's initial
+  // render() can't clear an incoming deep link before we read it.
+  var hashReady = false;
+  var suppressHashRoute = false;
+  function writeHash(slug){
+    if (!hashReady) return;
+    var want = slug ? ("#" + slug) : "";
+    if ((location.hash || "") === want) return;
+    try {
+      if (slug) history.replaceState(null, "", "#" + slug);
+      else history.replaceState(null, "", location.pathname + location.search);
+    } catch (_){
+      // file:// or older browsers: a hash assignment fires hashchange, so flag
+      // it to keep our own write from re-routing.
+      suppressHashRoute = true;
+      location.hash = slug || "";
+    }
+  }
+
+  function resolveHash(raw){
+    raw = String(raw == null ? "" : raw).replace(/^#/, "");
+    try { raw = decodeURIComponent(raw); } catch (_){}
+    raw = raw.trim().toLowerCase();
+    if (!raw) return null;
+    var parts = raw.split("/");
+    var head = parts[0], sub = parts[1] || "";
+    if (PROJECT_SLUG_TO_KEY.hasOwnProperty(head)) return { type:"project", key:PROJECT_SLUG_TO_KEY[head] };
+    if (IN_ACTION_SLUGS.hasOwnProperty(head))     return { type:"projects" };
+    if (MODAL_SLUG_TO_KEY.hasOwnProperty(head))   return { type:"modal", key:MODAL_SLUG_TO_KEY[head], sub:sub };
+    if (SLIDE_SLUG_TO_IDX.hasOwnProperty(head))   return { type:"slide", index:SLIDE_SLUG_TO_IDX[head] };
+    return null;
+  }
+
+  // Open a sub-section inside an already-open modal — the phase-2 deep target,
+  // e.g. #textile/products -> the Product Catalog block.
+  function openModalSub(sub){
+    if (!sub) return;
+    setTimeout(function(){
+      if (/^(products?|catalog|catalogue|catalogs)$/.test(sub)){
+        credToCatalog(null);
+      } else if (/^(equipment|machinery|machines)$/.test(sub)){
+        var blocks = modalInner.querySelectorAll(".m-block");
+        for (var b = 0; b < blocks.length; b++){
+          var lab = blocks[b].querySelector(".m-sec-label");
+          if (lab && /equipment|machinery/i.test(lab.textContent)){
+            var first = blocks[b].querySelector("details.m-catalog");
+            if (first) first.open = true;
+            blocks[b].scrollIntoView({ behavior:"smooth", block:"center" });
+            break;
+          }
+        }
+      } else {
+        // Anything else: treat the segment as a specific catalog name to expand.
+        credToCatalog(sub);
+      }
+    }, 70);
+  }
+
+  function applyRoute(r){
+    if (!r) return;
+    if (r.type === "project"){
+      if (modalOpen()) closeModal();
+      var ph = slideIndexByName("Proof");
+      showBack(idx);
+      if (ph >= 0 && ph !== idx) go(ph);
+      openInAction();
+      renderProject(r.key, true);
+      modal.scrollTop = 0;
+      modalClose.focus();
+      writeHash(r.key.toLowerCase());
+      return;
+    }
+    if (r.type === "projects"){
+      if (modalOpen()) closeModal();
+      var ph2 = slideIndexByName("Proof");
+      showBack(idx);
+      if (ph2 >= 0 && ph2 !== idx) go(ph2);
+      openInAction();
+      return;
+    }
+    if (r.type === "modal"){
+      if (modalOpen()) closeModal();
+      var hub = MODAL_HUB_IDX[r.key];
+      showBack(idx);
+      if (typeof hub === "number" && hub >= 0 && hub !== idx) go(hub);
+      openModal(r.key);
+      if (r.sub){ openModalSub(r.sub); writeHash(modalSlugForKey(r.key) + "/" + r.sub); }
+      return;
+    }
+    if (r.type === "slide"){
+      go(r.index); // go() closes any open modal/menu and is a no-op if already there
+    }
+  }
+
+  function onHashChange(){
+    if (suppressHashRoute){ suppressHashRoute = false; return; }
+    var r = resolveHash(location.hash);
+    if (r) applyRoute(r);
+  }
+
+  // Public hook so the concierge (or any console caller) can route by slug.
+  function deepLink(slug){ var r = resolveHash(slug); if (r){ applyRoute(r); return true; } return false; }
 
   /* ---------- Clickable credential chips ----------
      Every cred chip on a detail page links to where that claim is
@@ -4292,6 +4470,7 @@
     renderModal(key);
     modal.scrollTop = 0;
     modalClose.focus();
+    writeHash(modalSlugForKey(key));
   }
   function credToCompliance(match){
     var sec = slideIndexByName("Compliance");
@@ -4388,9 +4567,9 @@
   modal.addEventListener("click", function(e){
     // In Action: open a project's detail view from the little-block grid.
     var open = e.target.closest("[data-project-open]");
-    if (open){ renderProject(open.getAttribute("data-project-open"), true); modal.scrollTop = 0; modalClose.focus(); return; }
+    if (open){ var pk = open.getAttribute("data-project-open"); renderProject(pk, true); modal.scrollTop = 0; modalClose.focus(); writeHash(pk.toLowerCase()); return; }
     // In Action: Back from a project detail to the project list.
-    if (e.target.closest("[data-inaction-back]")){ renderInActionList(); modalClose.focus(); return; }
+    if (e.target.closest("[data-inaction-back]")){ renderInActionList(); modalClose.focus(); writeHash("projects"); return; }
 
     // Credential chip: route to where that claim is listed in the deck.
     var credChip = e.target.closest("[data-cred]");
@@ -4487,6 +4666,7 @@
     resetSlideDisclosures();
     var cur = slides[idx];
     if (cur) cur.scrollTop = 0;
+    writeHash(slideSlugForIdx(idx));
   }
   function go(n){
     closeMenu();
@@ -4653,6 +4833,17 @@
 
   render();
 
+  /* ---------- Boot the deep-link router ----------
+     Read the incoming hash before anything can clear it, then route. From
+     here on, writeHash() is live so navigation keeps the URL in sync. */
+  (function bootDeepLink(){
+    var first = resolveHash(location.hash);
+    hashReady = true;
+    if (first){ applyRoute(first); }
+    else { writeHash(slideSlugForIdx(idx)); } // normalize a bare or unknown hash
+    window.addEventListener("hashchange", onHashChange);
+  })();
+
   /* ---------- Concierge bridge ----------
      A tiny, read-only navigation API so the bundled capabilities concierge
      (loaded as separate scripts below) can route a buyer straight to the
@@ -4677,7 +4868,8 @@
       var el = document.querySelector("[data-bsc]");
       if (el && el.click) el.click();
     },
-    closeMenu: function(){ closeMenu(); }
+    closeMenu: function(){ closeMenu(); },
+    deepLink: function(slug){ return deepLink(slug); }
   };
 
 })();
