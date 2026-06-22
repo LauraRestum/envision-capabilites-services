@@ -4145,7 +4145,6 @@
              '<div class="m-card-d">'+c.desc+'</div>'+sp+'</div>';
     }).join("");
 
-    var statusBadge = d.status ? '<span class="proj-status proj-status--'+(d.statusClass||'active')+'">'+d.status+'</span>' : "";
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
     var statsBlock = stats ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
     var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
@@ -4158,7 +4157,7 @@
         ' role="img" aria-label="'+d.img+'"></div></div>'+
       '<div class="m-summary">'+
         '<div class="m-sum-left">'+
-          '<div class="m-eyebrow">'+d.eyebrow+locChip+statusBadge+'</div>'+
+          '<div class="m-eyebrow">'+d.eyebrow+locChip+'</div>'+
           '<h2>'+d.title+'</h2>'+
           '<p class="m-one">'+d.summary+'</p>'+
         '</div>'+
@@ -4180,7 +4179,6 @@
     var blocks = PROJECT_ORDER.map(function(key){
       var d = PROJECTS[key];
       if (!d) return "";
-      var status = d.status ? '<span class="proj-status proj-status--'+(d.statusClass||'active')+'">'+d.status+'</span>' : "";
       var thumb = d.logo
         ? '<span class="inaction-thumb inaction-thumb--logo"><img class="inaction-logo-img" src="'+d.logo+'" alt="'+d.title+' logo"></span>'
         : (d.thumb
@@ -4189,7 +4187,6 @@
       return '<button class="inaction-card" type="button" data-project-open="'+key+'">'+
           thumb+
           '<span class="inaction-body">'+
-            status+
             '<span class="ia-h">'+d.title+'</span>'+
             '<span class="ia-d">'+(d.blurb||d.summary||"")+'</span>'+
             '<span class="proj-cue">View details <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
