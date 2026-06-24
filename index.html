@@ -507,6 +507,11 @@
     display:flex;align-items:center;justify-content:center;
     transition:background .18s,border-color .18s,color .18s;
   }
+  /* This button is position:fixed, so it escapes the figure's opacity fade and
+     would otherwise sit at the top-right corner over every screen. Tie it to
+     the modal's open state. */
+  .lb-close{opacity:0;pointer-events:none;visibility:hidden}
+  .lb-modal.is-open .lb-close{opacity:1;pointer-events:auto;visibility:visible}
   .lb-close:hover{background:rgba(120,190,33,0.16);border-color:var(--green);color:var(--green)}
   .lb-close:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
@@ -600,6 +605,10 @@
     display:flex;align-items:center;justify-content:center;
     transition:background .18s,border-color .18s,color .18s;
   }
+  /* Same as .lb-close: fixed-position, so gate it on the modal's open state or
+     it lingers at the top-right corner over every screen. */
+  .vid-close{opacity:0;pointer-events:none;visibility:hidden}
+  .vid-modal.is-open .vid-close{opacity:1;pointer-events:auto;visibility:visible}
   .vid-close:hover{background:rgba(120,190,33,0.16);border-color:var(--green);color:var(--green)}
   .vid-close:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){
@@ -1701,10 +1710,12 @@
   @media (max-width:1080px){ .nav-links{display:none} }
   @media (max-width:680px){
     .slide{padding:28px 20px}
-    .m-summary{flex-direction:column;padding:30px 0 24px}
-    /* In the column layout the flex-basis becomes a forced HEIGHT, which would
-       stretch this box to 240px tall and stretch the chips into tall lozenges.
-       Let it size to its content and keep the chips their natural height. */
+    /* Column layout on phones. The children carry desktop flex-bases (480px /
+       240px) that become forced HEIGHTS once the main axis is vertical, which
+       left a tall empty gap under the copy and stretched the chips into
+       lozenges. Reset every basis to content height and stack from the top. */
+    .m-summary{flex-direction:column;padding:30px 0 24px;justify-content:flex-start}
+    .m-sum-left{flex:0 0 auto;min-width:0}
     .m-creds{flex:0 0 auto;align-items:flex-start;justify-content:flex-start}
     .m-spec{grid-template-columns:1fr}
     .nav-brand .brand-section{display:none}
