@@ -1702,7 +1702,10 @@
   @media (max-width:680px){
     .slide{padding:28px 20px}
     .m-summary{flex-direction:column}
-    .m-creds{justify-content:flex-start}
+    /* In the column layout the flex-basis becomes a forced HEIGHT, which would
+       stretch this box to 240px tall and stretch the chips into tall lozenges.
+       Let it size to its content and keep the chips their natural height. */
+    .m-creds{flex:0 0 auto;align-items:flex-start;justify-content:flex-start}
     .m-spec{grid-template-columns:1fr}
     .nav-brand .brand-section{display:none}
     .modal{top:3rem}
