@@ -1701,11 +1701,29 @@
   @media (max-width:1080px){ .nav-links{display:none} }
   @media (max-width:680px){
     .slide{padding:28px 20px}
-    .m-summary{flex-direction:column}
-    .m-creds{justify-content:flex-start}
+    .m-summary{flex-direction:column;padding:30px 0 24px}
+    /* In the column layout the flex-basis becomes a forced HEIGHT, which would
+       stretch this box to 240px tall and stretch the chips into tall lozenges.
+       Let it size to its content and keep the chips their natural height. */
+    .m-creds{flex:0 0 auto;align-items:flex-start;justify-content:flex-start}
     .m-spec{grid-template-columns:1fr}
     .nav-brand .brand-section{display:none}
-    .modal{top:3rem}
+
+    /* Full-bleed on phones. At top:3rem the page nav (logo, menu, fullscreen
+       icon) peeked through the blurred backdrop above the modal, which read as
+       a stray gray strip and a second, phantom close button. Cover the whole
+       screen so the only chrome is the modal's own topbar + Close. */
+    .modal{top:0;border-top:none}
+    /* Solid (not translucent) so content scrolling under the sticky bar does
+       not ghost through it as half-cut text. Respect the notch/status bar. */
+    .modal-topbar{
+      background:var(--bg-dark);backdrop-filter:none;-webkit-backdrop-filter:none;
+      padding-top:max(16px,env(safe-area-inset-top));
+    }
+    /* Tighten the desktop-scale vertical rhythm so phones are not mostly
+       whitespace between sections. */
+    .m-block{padding:30px 0}
+    .m-topbanner{margin:18px 0 4px}
 
     /* Hero was built desktop-first (text confined to the left 40vw over a
        side-lit image). On phones that column collapses to ~150px and the
