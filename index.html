@@ -509,6 +509,70 @@
   }
   .lb-close:hover{background:rgba(120,190,33,0.16);border-color:var(--green);color:var(--green)}
   .lb-close:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+  /* Video preview banner + in-app player */
+  .m-topbanner--video{
+    display:block;padding:0;border:0;cursor:pointer;
+    background:transparent;-webkit-appearance:none;appearance:none;
+  }
+  .m-topbanner--video::after{
+    content:"";position:absolute;inset:0;
+    background:rgba(6,21,48,0.18);transition:background .2s ease;
+  }
+  .m-topbanner--video:hover::after,
+  .m-topbanner--video:focus-visible::after{background:rgba(6,21,48,0.34)}
+  .m-topbanner--video:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .m-video-play{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+    width:72px;height:72px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(120,190,33,0.92);color:#04210a;
+    box-shadow:0 6px 22px rgba(0,0,0,0.35);
+    transition:transform .2s cubic-bezier(0.22,1,0.36,1),background .2s ease;
+  }
+  .m-video-play svg{margin-left:3px}
+  .m-topbanner--video:hover .m-video-play,
+  .m-topbanner--video:focus-visible .m-video-play{transform:translate(-50%,-50%) scale(1.08);background:var(--green)}
+
+  .vid-backdrop{
+    position:fixed;inset:0;background:rgba(6,21,48,0.82);
+    backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:130;
+  }
+  .vid-backdrop.is-open{opacity:1;pointer-events:auto}
+  .vid-modal{
+    position:fixed;inset:0;z-index:140;display:flex;
+    align-items:center;justify-content:center;
+    padding:clamp(16px,3vw,48px);pointer-events:none;
+  }
+  .vid-modal.is-open{pointer-events:auto}
+  .vid-figure{
+    position:relative;margin:0;
+    width:min(420px,calc(76vh * 9 / 16),100%);max-height:100%;
+    opacity:0;transform:scale(0.96);
+    transition:opacity .3s ease,transform .3s cubic-bezier(0.22,1,0.36,1);
+  }
+  .vid-modal.is-open .vid-figure{opacity:1;transform:scale(1)}
+  .vid-frame{
+    position:relative;width:100%;aspect-ratio:9/16;
+    border:1px solid var(--bsc-bd);border-radius:10px;overflow:hidden;
+    background:#000;
+  }
+  .vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vid-close{
+    position:fixed;top:clamp(12px,2.5vw,28px);right:clamp(12px,2.5vw,28px);z-index:6;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(255,255,255,0.08);border:1px solid var(--bsc-bd);
+    color:#fff;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .18s,border-color .18s,color .18s;
+  }
+  .vid-close:hover{background:rgba(120,190,33,0.16);border-color:var(--green);color:var(--green)}
+  .vid-close:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){
+    .vid-figure{transition:opacity .2s ease;transform:none}
+    .m-video-play{transition:none}
+  }
   @media (prefers-reduced-motion:reduce){
     .lb-figure{transition:opacity .2s ease;transform:none}
     .lb-modal.is-open .lb-figure{transform:none}
@@ -2665,6 +2729,16 @@
   </figure>
 </div>
 
+<div class="vid-backdrop" id="vidBackdrop"></div>
+<div class="vid-modal" id="vidModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Video player">
+  <button class="vid-close" id="vidClose" type="button" aria-label="Close video">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <figure class="vid-figure">
+    <div class="vid-frame" id="vidFrame"></div>
+  </figure>
+</div>
+
 <!-- ===================== iOS INSTALL HINT ===================== -->
 <div class="ios-hint" id="iosHint" role="status" hidden>
   To install, tap the <b>Share</b> button, then <b>Add to Home Screen</b>.
@@ -3797,7 +3871,7 @@
      always recomputed from what is actually on screen. */
   var deckEl = document.querySelector(".deck");
   function anyDeckOverlayOpen(){
-    var ids = ["modal", "bscModal", "lbModal"];
+    var ids = ["modal", "bscModal", "lbModal", "vidModal"];
     for (var i = 0; i < ids.length; i++){
       var n = document.getElementById(ids[i]);
       if (n && n.classList.contains("is-open")) return true;
@@ -4051,7 +4125,8 @@
         {tag:"Fulfillment",title:"Packaging & Fulfillment",desc:"Finished vests are inspected, packaged, and shipped directly from the Dallas Campus, with no third-party handoffs at any stage.",specs:[["QC","100% inspection"],["Shipping","Direct from facility"]]}
       ],
       img:"Texas Lions Club textiles program at Envision",
-      imgSrc:"images/texas-lions-club-program.jpg", imgPos:"center"
+      imgSrc:"images/texas-lions-club-program.jpg", imgPos:"center",
+      video:"Gmb3zpWDcmo", videoLabel:"Watch the Texas Lions Club vest program"
     },
     va:{
       label:"Envision in Action",
@@ -4176,11 +4251,22 @@
     var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
+    // When a project has a video, the top banner becomes a clickable preview:
+    // the program image is the poster, a play button overlays it, and the click
+    // opens the in-app video player (see the vidModal module below).
+    var bannerBg = '<div class="image-bg"'+
+        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
+        ' role="img" aria-label="'+d.img+'"></div>';
+    var topBanner = d.video
+      ? '<button type="button" class="m-imgbreak m-topbanner m-topbanner--video" data-video="'+d.video+'" data-video-label="'+(d.videoLabel||('Play video: '+d.title))+'" aria-label="'+(d.videoLabel||('Play video: '+d.title))+'">'+
+          bannerBg+
+          '<span class="m-video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>'+
+        '</button>'
+      : '<div class="m-imgbreak m-topbanner">'+bannerBg+'</div>';
+
     modalInner.innerHTML =
       backBar+
-      '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
-        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
-        ' role="img" aria-label="'+d.img+'"></div></div>'+
+      topBanner+
       '<div class="m-summary">'+
         '<div class="m-sum-left">'+
           '<div class="m-eyebrow">'+d.eyebrow+locChip+'</div>'+
@@ -5398,6 +5484,85 @@
       } else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                  e.key === " " || e.key === "Spacebar"){
         e.preventDefault(); e.stopImmediatePropagation();
+      }
+    }, true);
+  })();
+
+  /* In-app video player. A project banner with a [data-video] YouTube id opens
+     this overlay, which injects an autoplaying embed; closing removes the
+     iframe so playback stops and nothing keeps running behind the deck. */
+  (function(){
+    var backdrop = document.getElementById("vidBackdrop");
+    var modal    = document.getElementById("vidModal");
+    var closeBtn = document.getElementById("vidClose");
+    var frame    = document.getElementById("vidFrame");
+    if (!backdrop || !modal || !closeBtn || !frame) return;
+    var panelModal = document.getElementById("modal");
+    var returnFocus = null;
+
+    function isOpen(){ return modal.classList.contains("is-open"); }
+    function dismissPeers(){
+      if (window.EnvisionDeck && window.EnvisionDeck.closeMenu) window.EnvisionDeck.closeMenu();
+      if (window.EnvisionConcierge && window.EnvisionConcierge.close) window.EnvisionConcierge.close();
+    }
+    function syncOverlay(){ if (window.__envSyncOverlay) window.__envSyncOverlay(); }
+
+    function openVid(trigger){
+      if (isOpen()) return;
+      var id = trigger.getAttribute("data-video");
+      if (!id) return;
+      var label = trigger.getAttribute("data-video-label") || "Video player";
+      modal.setAttribute("aria-label", label);
+      var iframe = document.createElement("iframe");
+      iframe.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) +
+        "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
+      iframe.title = label;
+      iframe.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      iframe.setAttribute("allowfullscreen", "");
+      frame.innerHTML = "";
+      frame.appendChild(iframe);
+      returnFocus = trigger;
+      dismissPeers();
+      backdrop.classList.add("is-open");
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+      syncOverlay();
+    }
+
+    function closeVid(){
+      if (!isOpen()) return;
+      modal.classList.remove("is-open");
+      backdrop.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      frame.innerHTML = "";
+      document.body.style.overflow =
+        panelModal && panelModal.classList.contains("is-open") ? "hidden" : "";
+      syncOverlay();
+      if (returnFocus && returnFocus.focus) returnFocus.focus();
+      returnFocus = null;
+    }
+
+    closeBtn.addEventListener("click", closeVid);
+    backdrop.addEventListener("click", closeVid);
+    modal.addEventListener("click", function(e){
+      if (e.target === modal) closeVid();
+    });
+
+    /* Capture phase so a video banner wins over the modal's own handlers. */
+    document.addEventListener("click", function(e){
+      var t = e.target.closest ? e.target.closest("[data-video]") : null;
+      if (!t) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openVid(t);
+    }, true);
+
+    document.addEventListener("keydown", function(e){
+      if (!isOpen()) return;
+      if (e.key === "Escape"){
+        e.preventDefault(); e.stopImmediatePropagation(); closeVid();
       }
     }, true);
   })();
