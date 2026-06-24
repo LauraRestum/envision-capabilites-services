@@ -510,29 +510,62 @@
   .lb-close:hover{background:rgba(120,190,33,0.16);border-color:var(--green);color:var(--green)}
   .lb-close:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
-  /* Video preview banner + in-app player */
-  .m-topbanner--video{
-    display:block;padding:0;border:0;cursor:pointer;
+  /* Overview block with a video: copy on the left, video preview on the right */
+  .m-block--video{
+    display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,56px);
+    align-items:flex-start;justify-content:space-between;
+  }
+  .m-overview-main{flex:1 1 420px;min-width:0}
+  .m-overview-main p{max-width:60ch}
+  /* Clickable video preview card */
+  .m-video-card{
+    flex:0 0 auto;width:clamp(200px,22vw,260px);
+    display:flex;flex-direction:column;gap:12px;
+    padding:0;border:0;cursor:pointer;text-align:left;
     background:transparent;-webkit-appearance:none;appearance:none;
   }
-  .m-topbanner--video::after{
-    content:"";position:absolute;inset:0;
-    background:rgba(6,21,48,0.18);transition:background .2s ease;
+  .m-video-poster{
+    position:relative;display:block;width:100%;aspect-ratio:9/16;
+    border:1px solid var(--border-mid);border-radius:10px;overflow:hidden;
+    background:linear-gradient(135deg,#001852 0%,#003087 50%,#000d2e 100%);
+    background-size:cover;background-position:center;
+    transition:border-color .2s ease,transform .2s cubic-bezier(0.22,1,0.36,1);
   }
-  .m-topbanner--video:hover::after,
-  .m-topbanner--video:focus-visible::after{background:rgba(6,21,48,0.34)}
-  .m-topbanner--video:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .m-video-poster::after{
+    content:"";position:absolute;inset:0;
+    background:rgba(6,21,48,0.22);transition:background .2s ease;
+  }
+  .m-video-card:hover .m-video-poster,
+  .m-video-card:focus-visible .m-video-poster{transform:translateY(-2px);border-color:var(--green)}
+  .m-video-card:hover .m-video-poster::after,
+  .m-video-card:focus-visible .m-video-poster::after{background:rgba(6,21,48,0.10)}
+  .m-video-card:focus-visible{outline:none}
+  .m-video-card:focus-visible .m-video-poster{outline:2px solid var(--green);outline-offset:3px}
   .m-video-play{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-    width:72px;height:72px;border-radius:50%;
+    width:60px;height:60px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    background:rgba(120,190,33,0.92);color:#04210a;
+    background:rgba(120,190,33,0.94);color:#04210a;
     box-shadow:0 6px 22px rgba(0,0,0,0.35);
     transition:transform .2s cubic-bezier(0.22,1,0.36,1),background .2s ease;
   }
   .m-video-play svg{margin-left:3px}
-  .m-topbanner--video:hover .m-video-play,
-  .m-topbanner--video:focus-visible .m-video-play{transform:translate(-50%,-50%) scale(1.08);background:var(--green)}
+  .m-video-card:hover .m-video-play,
+  .m-video-card:focus-visible .m-video-play{transform:translate(-50%,-50%) scale(1.08);background:var(--green)}
+  .m-video-card-cap{
+    font-family:var(--sans);font-size:12.5px;font-weight:700;line-height:1.4;
+    letter-spacing:.01em;color:var(--text-muted);
+    display:flex;align-items:center;gap:7px;
+  }
+  .m-video-card-cap::before{
+    content:"";flex:0 0 auto;width:8px;height:8px;border-radius:50%;
+    background:var(--green);
+  }
+  .m-video-card:hover .m-video-card-cap,
+  .m-video-card:focus-visible .m-video-card-cap{color:var(--text-light)}
+  @media (max-width:640px){
+    .m-video-card{width:100%;max-width:300px;margin:0 auto}
+  }
 
   .vid-backdrop{
     position:fixed;inset:0;background:rgba(6,21,48,0.82);
@@ -4252,18 +4285,27 @@
     var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
-    // When a project has a video, the top banner becomes a clickable preview:
-    // the program image is the poster, a play button overlays it, and the click
-    // opens the in-app video player (see the vidModal module below).
-    var bannerBg = '<div class="image-bg"'+
+    var topBanner = '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
-        ' role="img" aria-label="'+d.img+'"></div>';
-    var topBanner = d.video
-      ? '<button type="button" class="m-imgbreak m-topbanner m-topbanner--video" data-video="'+d.video+'" data-video-label="'+(d.videoLabel||('Play video: '+d.title))+'" aria-label="'+(d.videoLabel||('Play video: '+d.title))+'">'+
-          bannerBg+
-          '<span class="m-video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>'+
-        '</button>'
-      : '<div class="m-imgbreak m-topbanner">'+bannerBg+'</div>';
+        ' role="img" aria-label="'+d.img+'"></div></div>';
+
+    // When a project has a video, the Overview block becomes two columns: the
+    // copy on the left and a clickable video preview on the right. The preview
+    // is a poster (the program image) with a play button; clicking opens the
+    // in-app player (see the vidModal module below).
+    var vidLabel = d.videoLabel || ('Play video: '+d.title);
+    var overviewBlock = d.video
+      ? '<div class="m-block m-block--video">'+
+          '<div class="m-overview-main"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
+          '<button type="button" class="m-video-card" data-video="'+d.video+'" data-video-label="'+vidLabel+'" aria-label="'+vidLabel+'">'+
+            '<span class="m-video-poster"'+
+              (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;)"' : '')+'>'+
+              '<span class="m-video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>'+
+            '</span>'+
+            '<span class="m-video-card-cap">'+vidLabel+'</span>'+
+          '</button>'+
+        '</div>'
+      : '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>';
 
     modalInner.innerHTML =
       backBar+
@@ -4276,7 +4318,7 @@
         '</div>'+
         '<div class="m-creds">'+creds+'</div>'+
       '</div>'+
-      '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
+      overviewBlock+
       statsBlock+
       calloutsBlock+
       '<div class="m-cta">'+
@@ -5489,8 +5531,8 @@
     }, true);
   })();
 
-  /* In-app video player. A project banner with a [data-video] YouTube id opens
-     this overlay, which injects an autoplaying embed; closing removes the
+  /* In-app video player. A project's video card (a [data-video] YouTube id)
+     opens this overlay, which injects an autoplaying embed; closing removes the
      iframe so playback stops and nothing keeps running behind the deck. */
   (function(){
     var backdrop = document.getElementById("vidBackdrop");
@@ -5551,7 +5593,7 @@
       if (e.target === modal) closeVid();
     });
 
-    /* Capture phase so a video banner wins over the modal's own handlers. */
+    /* Capture phase so a video card wins over the modal's own handlers. */
     document.addEventListener("click", function(e){
       var t = e.target.closest ? e.target.closest("[data-video]") : null;
       if (!t) return;
