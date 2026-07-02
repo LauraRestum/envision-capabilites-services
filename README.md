@@ -60,8 +60,8 @@ Append the hash to the deployed URL, e.g. `https://…/#textile`.
 > Note: `#contact` is the Contact **slide**; the contact-center **pop-up** is
 > `#contact-center`.
 
-**Current projects** — the hash is just the project's name: `#massif`,
-`#underarmour`, `#dallas311`, `#oncor`, `#texaslions`, `#va`, `#boeing`. The
+**Current projects** — the hash is just the project's name: `#h2f`,
+`#underarmour`, `#dallas311`, `#oncor`, `#texaslions`, `#va`. The
 project-list pop-up is `#projects`.
 
 **Nested (drops straight into a pop-up's catalog):** add a second segment —
