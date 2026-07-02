@@ -1350,6 +1350,27 @@
     box-shadow:0 0 0 3px rgba(120,190,33,0.16);
   }
 
+  /* Mission pillars are interactive: each opens a detail popup */
+  .ms-col[data-modal],.ms-employment[data-modal]{cursor:pointer}
+  .ms-employment[data-modal]{transition:transform .2s,box-shadow .2s}
+  .ms-employment[data-modal]:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,24,82,0.22)}
+  .ms-col[data-modal] .ms-head,.ms-employment[data-modal] .ms-emp-top{position:relative}
+  .ms-more-cue{
+    position:absolute;top:9px;right:10px;z-index:2;
+    display:inline-flex;align-items:center;justify-content:center;
+    width:20px;height:20px;border-radius:999px;
+    background:rgba(255,255,255,0.14);color:#fff;
+    opacity:.6;transition:opacity .2s,background .2s;pointer-events:none;
+  }
+  .ms-more-cue svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+  .ms-col[data-modal]:hover .ms-more-cue,.ms-employment[data-modal]:hover .ms-more-cue,
+  .ms-col[data-modal]:focus-visible .ms-more-cue,.ms-employment[data-modal]:focus-visible .ms-more-cue{
+    opacity:1;background:var(--green);
+  }
+  .ms-col[data-modal]:focus-visible,.ms-employment[data-modal]:focus-visible{
+    outline:3px solid var(--green);outline-offset:3px;
+  }
+
   .ms-band{
     flex:none;border-radius:6px;overflow:hidden;
     display:grid;grid-template-columns:minmax(120px,1.15fr) 3fr minmax(120px,1.15fr);
@@ -2201,8 +2222,9 @@
             <div class="ms-band__photo" style="background-image:url('images/envision-white-cane-day-walk.jpg');background-position:center 65%" role="img" aria-label="Community members gathered behind a White Cane Day Walk banner at the Dallas Zoo"></div>
           </div>
 
-          <div class="ms-employment">
+          <div class="ms-employment" data-modal="mission-employment" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Employment: open detail with programs and proof">
             <div class="ms-emp-top">
+              <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
               <div class="ms-emp-icon">
                 <svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
               </div>
@@ -2226,8 +2248,9 @@
           </div>
 
           <div class="ms-pillars">
-            <div class="ms-col">
+            <div class="ms-col" data-modal="mission-outreach" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Outreach: open detail with programs and community engagement">
               <div class="ms-head">
+                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
                 <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <div class="nm">Outreach</div>
               </div>
@@ -2240,8 +2263,9 @@
               </div>
             </div>
 
-            <div class="ms-col">
+            <div class="ms-col" data-modal="mission-rehabilitation" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Rehabilitation: open detail with programs and community engagement">
               <div class="ms-head">
+                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
                 <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg>
                 <div class="nm">Rehabilitation</div>
               </div>
@@ -2254,8 +2278,9 @@
               </div>
             </div>
 
-            <div class="ms-col">
+            <div class="ms-col" data-modal="mission-education" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Education: open detail with programs and community engagement">
               <div class="ms-head">
+                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
                 <svg viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
                 <div class="nm">Education</div>
               </div>
@@ -2268,8 +2293,9 @@
               </div>
             </div>
 
-            <div class="ms-col">
+            <div class="ms-col" data-modal="mission-research" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Research: open detail with programs and community engagement">
               <div class="ms-head">
+                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
                 <svg viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>
                 <div class="nm">Research</div>
               </div>
@@ -2899,6 +2925,95 @@
   function updateFsIcon(){ fsIc.innerHTML = document.fullscreenElement ? ICON_MIN : ICON_MAX; }
 
   var MODALS = {
+    "mission-employment":{
+      label:"Our Mission", eyebrow:"Our Mission", title:"Employment",
+      img:"An Envision team member on the manufacturing floor",
+      imgSrc:"images/Envision-Workforce-employee-dallas-manufacoring.png", imgPos:"center 40%",
+      summary:"Envision's core business, and the reason it works is engineering.",
+      creds:[],
+      overview:[
+        "The Workforce Innovation Center re-engineers workstations, tooling, and assistive technology so complex production roles are fully performable. That system is why 88 percent of combined direct labor is performed by people who are blind or have low vision, above the 75 percent AbilityOne threshold, and it makes Envision one of the nation's largest employers of people with vision loss."
+      ],
+      stats:[],
+      calloutLabel:"What's under Employment",
+      callouts:[
+        {tag:"Engineering",title:"Envision Workforce Innovation Center",desc:"Re-engineers the work itself: accessible workstations, adapted tooling, and assistive technology that turn complex manufacturing and professional roles into roles a person who is blind can run start to finish.",noPhoto:true},
+        {tag:"Development",title:"Level Up and Pathways",desc:"Structured career development that starts with teens and carries through to working adults, building the skills, credentials, and confidence that lead to real jobs, not placements.",noPhoto:true},
+        {tag:"Readiness",title:"Workforce Readiness Bootcamp",desc:"A concentrated program that takes a person from interested to job-ready: interviewing, workplace technology, and the day-one skills employers actually screen for.",noPhoto:true},
+        {tag:"Training",title:"Job readiness and assistive technology training",desc:"One-on-one instruction in screen readers, magnification, and adaptive workplace tools, matched to the specific role a team member is stepping into.",noPhoto:true}
+      ]
+    },
+    "mission-rehabilitation":{
+      label:"Our Mission", eyebrow:"Our Mission", title:"Rehabilitation",
+      img:"An Envision client using a white cane during independence training",
+      imgSrc:"images/envision-employee-woman-with-white-cane.png", imgPos:"center 30%",
+      summary:"Comprehensive because the full continuum sits under one institution.",
+      creds:[],
+      overview:[
+        "A person moves from clinical low vision evaluation to assistive technology training to independent living skills to adaptive products without ever leaving Envision. That integration is what comprehensive actually means."
+      ],
+      stats:[],
+      calloutLabel:"What's under Rehabilitation",
+      callouts:[
+        {tag:"Clinical",title:"Envision Vision Rehabilitation Center",desc:"Clinician-led low vision evaluations, occupational therapy, and orientation and mobility training, with referring physicians sending patients here for care they cannot get from a standard eye exam.",noPhoto:true},
+        {tag:"Independence",title:"Training for Independence Program",desc:"Immersive training inside Esther's Place, a fully functional training apartment where people practice cooking, medication management, laundry, and home organization until it is routine. Runs as TIP for adults and SKIP for older adults newly adjusting to vision loss.",noPhoto:true},
+        {tag:"Daily living",title:"Assistive technology training and the Everyday Store",desc:"Hands-on instruction in magnifiers, screen readers, and adaptive devices, paired with a storefront stocked with the labeled, tactile, and talking products that make daily tasks practical.",noPhoto:true}
+      ]
+    },
+    "mission-education":{
+      label:"Our Mission", eyebrow:"Our Mission", title:"Education",
+      img:"Envision youth program students smiling together",
+      imgSrc:"images/envision-youth-program-students-smiling.png", imgPos:"center 30%",
+      summary:"From early childhood through the convening that brings the field together.",
+      creds:[],
+      overview:[
+        "Grand Rounds and the Envision Conference deliver professional continuing education to the clinicians, therapists, and researchers across vision rehabilitation, co-hosted with VisionServe Alliance and home to the Envision Oculus Award. That is what makes Envision a convener and authority in the field, not just a service provider."
+      ],
+      stats:[],
+      calloutLabel:"What's under Education",
+      callouts:[
+        {tag:"Early childhood",title:"Envision Child Development Center",desc:"Integrated classrooms where children who are blind or have low vision learn alongside sighted peers from the earliest years, in facilities built for exactly that.",noPhoto:true},
+        {tag:"Youth",title:"Level Up",desc:"College and career readiness for teens: academic skills, workplace exposure, and assistive technology fluency before they ever hit a job market.",noPhoto:true},
+        {tag:"Professional",title:"Grand Rounds and the Envision Conference",desc:"Continuing education that draws the clinicians, occupational therapists, orientation and mobility specialists, and researchers who make up the vision-rehabilitation field, and home to the Envision Oculus Award.",noPhoto:true}
+      ]
+    },
+    "mission-research":{
+      label:"Our Mission", eyebrow:"Our Mission", title:"Research",
+      img:"An Envision campus exterior",
+      imgSrc:"images/envision-dallas-building-exterior.png", imgPos:"center 55%",
+      summary:"A working research operation, not a talking point.",
+      creds:[],
+      overview:[
+        "The Envision Research Institute publishes peer-reviewed research, including in PLOS, runs post-doctoral fellowships, and partners with universities and industry. That output is what puts Envision at the front of vision-rehabilitation science."
+      ],
+      stats:[],
+      calloutLabel:"What's under Research",
+      callouts:[
+        {tag:"Published",title:"Peer-reviewed research",desc:"Original science on how people with vision loss perceive, navigate, and work, published in peer-reviewed outlets including PLOS rather than in-house white papers.",noPhoto:true},
+        {tag:"Fellowships",title:"Post-doctoral fellowships",desc:"A working lab where post-doctoral researchers launch careers in vision science, keeping specialized talent inside the field and inside Envision's orbit.",noPhoto:true},
+        {tag:"Partnerships",title:"University and industry partnerships",desc:"Collaborative projects with university labs and industry partners that move findings out of the journal and into tools, treatments, and workplaces.",noPhoto:true}
+      ]
+    },
+    "mission-outreach":{
+      label:"Our Mission", eyebrow:"Our Mission", title:"Outreach",
+      img:"Community members behind a White Cane Day Walk banner",
+      imgSrc:"images/envision-white-cane-day-walk.jpg", imgPos:"center 60%",
+      summary:"Standing you can measure in longevity and reach.",
+      creds:[],
+      overview:[
+        "Envision's youth camps have run for more than two decades and draw campers from several states, its flagship walk is in its second year, and it is a trusted voice with local and federal policymakers. That is what embedded and trusted looks like in practice."
+      ],
+      stats:[],
+      calloutLabel:"What's under Outreach",
+      callouts:[
+        {tag:"Camps",title:"Heather's Camp and Heather's Camp Teenies",desc:"More than two decades of summer camp for kids who are blind or have low vision, drawing campers from multiple states, with a dedicated day-camp session for campers as young as five.",noPhoto:true},
+        {tag:"Community",title:"Youth clubs and peer support groups",desc:"Monthly, year-round programming: support groups for adults and families, youth clubs, and social events that mean no one adjusts to vision loss alone.",noPhoto:true},
+        {tag:"Events",title:"White Cane Day Walk",desc:"An annual public walk that puts hundreds of community members, sponsors, and families behind one banner and makes Envision's community leadership visible.",noPhoto:true},
+        {tag:"Education",title:"School and community speaker engagements",desc:"Envision teams in classrooms and civic groups running white cane demonstrations, healthy-vision education, and empathy-building sessions, the region's go-to resource on vision loss.",noPhoto:true},
+        {tag:"Arts",title:"Envision Arts Center",desc:"A studio and gallery in one, showing work by world-renowned artists and building monthly rotating exhibitions through community partnerships, with programming that spans visual art, dance, and music.",noPhoto:true},
+        {tag:"Advocacy",title:"Policymaker partnerships",desc:"A seat at the table with local and federal policymakers on the issues that affect people who are blind or have low vision, earned over decades of showing up.",noPhoto:true}
+      ]
+    },
     plastic:{
       label:"Capabilities", eyebrow:"Capability", title:"Polymer & Film Manufacturing",
       location:"Wichita",
@@ -3826,12 +3941,12 @@
     if (!d) return;
     modalLabel.textContent = d.label;
 
-    var creds = d.creds.map(function(c){ return '<button type="button" class="m-cred m-cred--link" data-cred="'+c+'">'+c+'</button>'; }).join("");
-    var overview = d.overview.map(function(p){ return '<p>'+p+'</p>'; }).join("");
-    var stats = d.stats.map(function(s){
+    var creds = (d.creds||[]).map(function(c){ return '<button type="button" class="m-cred m-cred--link" data-cred="'+c+'">'+c+'</button>'; }).join("");
+    var overview = (d.overview||[]).map(function(p){ return '<p>'+p+'</p>'; }).join("");
+    var stats = (d.stats||[]).map(function(s){
       return '<div class="m-stat"><div class="num">'+s.num+'</div><div class="lab">'+s.label+'</div><div class="ctx">'+s.ctx+'</div></div>';
     }).join("");
-    var callouts = d.callouts.map(function(c){
+    var callouts = (d.callouts||[]).map(function(c){
       var sp = "";
       if (c.specs && c.specs.length){
         sp = '<div class="m-spec">'+c.specs.map(function(kv){
@@ -3894,6 +4009,13 @@
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
 
+    var overviewBlock = (d.overview && d.overview.length)
+      ? '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>' : '';
+    var statsBlock = (d.stats && d.stats.length)
+      ? '<div class="m-block"><div class="m-sec-label">'+d.statLabel+'</div><div class="m-stats">'+stats+'</div></div>' : '';
+    var calloutsBlock = (d.callouts && d.callouts.length)
+      ? '<div class="m-block"><div class="m-sec-label">'+d.calloutLabel+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>' : '';
+
     modalInner.innerHTML =
       '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
@@ -3906,9 +4028,7 @@
         '</div>'+
         '<div class="m-creds">'+creds+'</div>'+
       '</div>'+
-      '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
-      '<div class="m-block"><div class="m-sec-label">'+d.statLabel+'</div><div class="m-stats">'+stats+'</div></div>'+
-      '<div class="m-block"><div class="m-sec-label">'+d.calloutLabel+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>'+
+      overviewBlock+statsBlock+calloutsBlock+
       equipmentBlock+
       catalogsBlock+
       '<div class="m-cta">'+
@@ -4810,7 +4930,7 @@
   document.getElementById("slides").addEventListener("keydown", function(e){
     if (modalOpen()) return;
     if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
-    var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump],.proc-stage") : null;
+    var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump],.proc-stage,[data-modal]") : null;
     if (!t || t.tagName === "BUTTON" || t.tagName === "A") return;
     e.preventDefault();
     t.click();
