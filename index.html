@@ -1642,20 +1642,6 @@
   .m-card-link svg{transition:transform .2s}
   .m-card-link:hover svg,.m-card-link:focus-visible svg{transform:translateX(3px)}
   .m-card-link:focus-visible{outline:2px solid var(--green);outline-offset:2px}
-  /* Testimonial-style pull quote inside a project pop-up */
-  .m-quote{
-    border-left:3px solid var(--green);background:rgba(120,190,33,0.05);
-    border-radius:0 4px 4px 0;padding:24px 28px;margin:0;
-  }
-  .m-quote p{
-    font-size:clamp(16px,1.6vw,19px);line-height:1.7;font-weight:600;
-    color:var(--text-light);
-  }
-  .m-quote cite{
-    display:block;margin-top:14px;font-style:normal;
-    font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--green);
-  }
   /* "In Action" strip: a capability/service pop-up pointing at the project
      that proves it (the reverse of .m-card-link) */
   .m-proof{
@@ -4433,13 +4419,9 @@
         "<strong>The channel.</strong> Envision is the dedicated contract support for the DLA Holistic Health &amp; Fitness program (contract SPE8EG-24-D-0005). Envision supplies DLA with kits and NSN line items; DLA stocks the inventory and fulfills orders direct to the end customer — one accountable channel from quote to delivery.",
         "<strong>Two ways to source readiness.</strong> Units order the standardized twelve-item AFT/CFT test kit, any individual NSN line item for replacements and partial orders, or a fully customized H2F facility build-out — strength, cardio, turf, recovery, and forward-deployed container builds — reviewed for scope per order.",
         "<strong>Open to the whole force.</strong> Despite the Army's AFT/CFT branding, H2F is not Army-only. Equipment is available to every branch of the U.S. Department of War — SOCOM, Army, Navy, Air Force, Marine Corps, Space Force, Coast Guard, and National Guard — and to federal agencies including DHS, Customs &amp; Border Protection, TSA, and federal law enforcement.",
+        "<strong>The platform, seen from the customer side.</strong> A unit submits an RFQ and takes delivery of a ready-to-issue kit. Everything between those two moments — the contract vehicle, the kit build, the MIL-STD packaging, the compliance sign-off — is an Envision capability or service doing its job. The cards below link to each one as it appears across this deck.",
         "<strong>How to order.</strong> Orders are accepted via MILSTRIP and G-INV, CONUS and OCONUS. To start, submit an RFQ to the DLA program office at <a href=\"mailto:TrpSpt_H2Fitness@dla.mil\">TrpSpt_H2Fitness@dla.mil</a>; once the request is confirmed in scope, Envision provides the official quote."
       ],
-      quoteLabel:"What the Customer Experiences",
-      quote:{
-        text:"&ldquo;A unit submits an RFQ and takes delivery of a ready-to-issue kit. Everything between those two moments &mdash; the contract vehicle, the kit build, the MIL-STD packaging, the compliance sign-off &mdash; is an Envision capability doing its job.&rdquo;",
-        attr:"How H2F runs on the Envision platform"
-      },
       statLabel:"By the Numbers",
       stats:[
         {num:"$18M+",label:"Channel volume",ctx:"Annual equipment volume moving through the H2F procurement channel."},
@@ -4520,11 +4502,6 @@
     }).join("");
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
-    var quoteBlock = d.quote
-      ? '<div class="m-block"><div class="m-sec-label">'+(d.quoteLabel||'In Practice')+'</div>'+
-        '<blockquote class="m-quote"><p>'+d.quote.text+'</p>'+
-        (d.quote.attr ? '<cite>'+d.quote.attr+'</cite>' : '')+'</blockquote></div>'
-      : '';
     var statsBlock = stats ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
     var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
@@ -4563,7 +4540,6 @@
         '<div class="m-creds">'+creds+'</div>'+
       '</div>'+
       overviewBlock+
-      quoteBlock+
       statsBlock+
       calloutsBlock+
       '<div class="m-cta">'+
