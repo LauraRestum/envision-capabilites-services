@@ -1625,6 +1625,10 @@
     border-radius:4px;overflow:hidden;
   }
   .m-card-photo img{width:100%;height:100%;object-fit:contain;display:block}
+  /* --cover: photographic card images (people, events) fill the frame instead
+     of floating on the white product-shot background. */
+  .m-card-photo--cover{background:rgba(255,255,255,0.02)}
+  .m-card-photo--cover img{object-fit:cover}
   .m-card-icon{
     width:46px;height:46px;margin-bottom:16px;flex:0 0 auto;
     display:flex;align-items:center;justify-content:center;
@@ -2957,8 +2961,6 @@
   var MODALS = {
     "mission-employment":{
       label:"Our Mission", eyebrow:"Our Mission", title:"Employment",
-      img:"Envision Level Up program participants and staff together at a campus event",
-      imgSrc:"levelup-group-2026.jpg", imgPos:"center 42%",
       summary:"Envision's core business, and the reason it works is engineering.",
       creds:[],
       overview:[
@@ -2968,15 +2970,13 @@
       calloutLabel:"What's under Employment",
       callouts:[
         {tag:"Engineering",title:"Envision Workforce Innovation Center",desc:"Re-engineers the work itself: accessible workstations, adapted tooling, and assistive technology that turn complex manufacturing and professional roles into roles a person who is blind can run start to finish.",noPhoto:true},
-        {tag:"Development",title:"Level Up and Pathways",desc:"Structured career development that starts with teens and carries through to working adults, building the skills, credentials, and confidence that lead to real jobs, not placements.",noPhoto:true},
+        {tag:"Development",title:"Level Up and Pathways",desc:"Structured career development that starts with teens and carries through to working adults, building the skills, credentials, and confidence that lead to real jobs, not placements.",img:"IMG_0522-2.jpg",cover:true,imgAlt:"An Envision participant wearing a head-worn assistive technology device"},
         {tag:"Readiness",title:"Workforce Readiness Bootcamp",desc:"A concentrated program that takes a person from interested to job-ready: interviewing, workplace technology, and the day-one skills employers actually screen for.",noPhoto:true},
         {tag:"Training",title:"Job readiness and assistive technology training",desc:"One-on-one instruction in screen readers, magnification, and adaptive workplace tools, matched to the specific role a team member is stepping into.",noPhoto:true}
       ]
     },
     "mission-rehabilitation":{
       label:"Our Mission", eyebrow:"Our Mission", title:"Rehabilitation",
-      img:"An Envision participant wearing a head-worn assistive technology device",
-      imgSrc:"IMG_0522-2.jpg", imgPos:"center 28%",
       summary:"Comprehensive because the full continuum sits under one institution.",
       creds:[],
       overview:[
@@ -2992,8 +2992,6 @@
     },
     "mission-education":{
       label:"Our Mission", eyebrow:"Our Mission", title:"Education",
-      img:"A presenter speaking at the Envision Conference",
-      imgSrc:"EVSVSA26-02.jpg", imgPos:"center 22%",
       summary:"From early childhood through the convening that brings the field together.",
       creds:[],
       overview:[
@@ -3004,13 +3002,13 @@
       callouts:[
         {tag:"Early childhood",title:"Envision Child Development Center",desc:"Integrated classrooms where children who are blind or have low vision learn alongside sighted peers from the earliest years, in facilities built for exactly that.",noPhoto:true},
         {tag:"Youth",title:"Level Up",desc:"College and career readiness for teens: academic skills, workplace exposure, and assistive technology fluency before they ever hit a job market.",noPhoto:true},
-        {tag:"Professional",title:"Grand Rounds and the Envision Conference",desc:"Continuing education that draws the clinicians, occupational therapists, orientation and mobility specialists, and researchers who make up the vision-rehabilitation field, and home to the Envision Oculus Award.",noPhoto:true}
+        {tag:"Professional",title:"Grand Rounds and the Envision Conference",desc:"Continuing education that draws the clinicians, occupational therapists, orientation and mobility specialists, and researchers who make up the vision-rehabilitation field, and home to the Envision Oculus Award.",img:"EVSVSA26-08.jpg",cover:true,imgAlt:"An Envision researcher presenting vision-science findings at the Envision Conference"}
       ]
     },
     "mission-research":{
       label:"Our Mission", eyebrow:"Our Mission", title:"Research",
-      img:"An Envision researcher presenting vision-science findings at the Envision Conference",
-      imgSrc:"EVSVSA26-08.jpg", imgPos:"center 32%",
+      img:"Envision Level Up program participants and staff together at a campus event",
+      imgSrc:"levelup-group-2026.jpg", imgPos:"center 42%",
       summary:"A working research operation, not a talking point.",
       creds:[],
       overview:[
@@ -3020,14 +3018,12 @@
       calloutLabel:"What's under Research",
       callouts:[
         {tag:"Published",title:"Peer-reviewed research",desc:"Original science on how people with vision loss perceive, navigate, and work, published in peer-reviewed outlets including PLOS rather than in-house white papers.",noPhoto:true},
-        {tag:"Fellowships",title:"Post-doctoral fellowships",desc:"A working lab where post-doctoral researchers launch careers in vision science, keeping specialized talent inside the field and inside Envision's orbit.",noPhoto:true},
+        {tag:"Fellowships",title:"Post-doctoral fellowships",desc:"A working lab where post-doctoral researchers launch careers in vision science, keeping specialized talent inside the field and inside Envision's orbit.",img:"EVSVSA26-02.jpg",cover:true,imgPos:"center 22%",imgAlt:"A presenter speaking at the Envision Conference"},
         {tag:"Partnerships",title:"University and industry partnerships",desc:"Collaborative projects with university labs and industry partners that move findings out of the journal and into tools, treatments, and workplaces.",noPhoto:true}
       ]
     },
     "mission-outreach":{
       label:"Our Mission", eyebrow:"Our Mission", title:"Outreach",
-      img:"Community members behind a White Cane Day Walk banner",
-      imgSrc:"images/envision-white-cane-day-walk.jpg", imgPos:"center 60%",
       summary:"Standing you can measure in longevity and reach.",
       creds:[],
       overview:[
@@ -3038,7 +3034,7 @@
       callouts:[
         {tag:"Camps",title:"Heather's Camp and Heather's Camp Teenies",desc:"More than two decades of summer camp for kids who are blind or have low vision, drawing campers from multiple states, with a dedicated day-camp session for campers as young as five.",noPhoto:true},
         {tag:"Community",title:"Youth clubs and peer support groups",desc:"Monthly, year-round programming: support groups for adults and families, youth clubs, and social events that mean no one adjusts to vision loss alone.",noPhoto:true},
-        {tag:"Events",title:"White Cane Day Walk",desc:"An annual public walk that puts hundreds of community members, sponsors, and families behind one banner and makes Envision's community leadership visible.",noPhoto:true},
+        {tag:"Events",title:"White Cane Day Walk",desc:"An annual public walk that puts hundreds of community members, sponsors, and families behind one banner and makes Envision's community leadership visible.",img:"images/envision-white-cane-day-walk.jpg",cover:true,imgPos:"center 60%",imgAlt:"Community members behind a White Cane Day Walk banner"},
         {tag:"Education",title:"School and community speaker engagements",desc:"Envision teams in classrooms and civic groups running white cane demonstrations, healthy-vision education, and empathy-building sessions, the region's go-to resource on vision loss.",noPhoto:true},
         {tag:"Arts",title:"Envision Arts Center",desc:"A studio and gallery in one, showing work by world-renowned artists and building monthly rotating exhibitions through community partnerships, with programming that spans visual art, dance, and music.",noPhoto:true},
         {tag:"Advocacy",title:"Policymaker partnerships",desc:"A seat at the table with local and federal policymakers on the issues that affect people who are blind or have low vision, earned over decades of showing up.",noPhoto:true}
@@ -3984,7 +3980,7 @@
         }).join("")+'</div>';
       }
       var ph = c.img
-        ? '<figure class="m-card-photo"><img src="'+c.img+'" alt="'+escAttr(c.title)+'" loading="lazy" decoding="async"></figure>'
+        ? '<figure class="m-card-photo'+(c.cover?' m-card-photo--cover':'')+'"><img src="'+c.img+'" alt="'+escAttr(c.imgAlt||c.title)+'"'+(c.imgPos?' style="object-position:'+c.imgPos+'"':'')+' loading="lazy" decoding="async"></figure>'
         : c.icon
         ? '<figure class="m-card-icon" aria-hidden="true">'+c.icon+'</figure>'
         : c.noPhoto
@@ -4047,9 +4043,11 @@
       ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>' : '';
 
     modalInner.innerHTML =
-      '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
-        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
-        ' role="img" aria-label="'+escAttr(d.img||d.title||'')+'"></div></div>'+
+      (d.imgSrc
+        ? '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
+          ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"'+
+          ' role="img" aria-label="'+escAttr(d.img||d.title||'')+'"></div></div>'
+        : '')+
       '<div class="m-summary">'+
         '<div class="m-sum-left">'+
           '<div class="m-eyebrow">'+d.eyebrow+locChip+'</div>'+
