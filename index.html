@@ -4620,6 +4620,13 @@
   var MODAL_HUB_IDX = {};
   CAP_ORDER.forEach(function(r){ MODAL_HUB_IDX[r[0]] = CAP_HUB; });
   SVC_ORDER.forEach(function(r){ MODAL_HUB_IDX[r[0]] = SVC_HUB; });
+  // Mission pillar popups live on the Mission slide. Register them too so the
+  // #mission-* hash the deck writes when one opens is routable — otherwise a
+  // reload or shared link with that hash silently lands on the hero.
+  var MISSION_HUB = slideIndexByName("Mission");
+  Object.keys(MODALS).forEach(function(k){
+    if (!MODAL_HUB_IDX.hasOwnProperty(k)) MODAL_HUB_IDX[k] = MISSION_HUB;
+  });
   var MODAL_SLUG_TO_KEY = {};
   Object.keys(MODAL_HUB_IDX).forEach(function(k){
     var slug = k.toLowerCase();
