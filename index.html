@@ -128,6 +128,7 @@
   .navlink:hover{color:var(--navy)}
   .navlink.active{color:var(--navy);border-bottom-color:var(--green)}
   .navlink:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .icbtn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   .nav-tools{display:flex;align-items:center;gap:6px;flex:none}
   .icbtn{
     background:none;border:1px solid var(--rule-light);border-radius:6px;cursor:pointer;
@@ -244,6 +245,9 @@
   .hero .kb-frame:nth-child(4){background-image:url("images/envision-building-sideangle.jpg");animation-delay:30s}
   .hero .kb-frame:nth-child(5){background-image:url("images/Envision-wichita-highangle-buildingphoto.jpg");animation-delay:40s}
   .hero .kb-frame:nth-child(6){background-image:url("images/envision-dallas-building-exterior.jpg");animation-delay:50s}
+  /* The 6 promoted Ken Burns layers otherwise keep compositing for the whole
+     session even while the hero slide is invisible. */
+  .slide:not(.current) .kb-frame{animation-play-state:paused;will-change:auto}
   @keyframes kb-cycle{
     0%   {opacity:0;transform:scale(1.04)}
     3%   {opacity:1}
@@ -2056,14 +2060,20 @@
   <div class="nav-menu" id="navMenu" role="menu" aria-label="Sections" hidden></div>
 
   <!-- ===================== STAGE ===================== -->
-  <div class="stage">
+  <div class="stage" role="main">
+    <noscript>
+      <p style="margin:24px auto;max-width:640px;padding:14px 18px;border:1px solid #d7deeb;border-radius:8px;background:#fff;color:#061530;font:500 14px/1.5 Montserrat,system-ui,sans-serif">
+        This presentation needs JavaScript to run. Please enable JavaScript, or contact Envision at
+        <a href="tel:+13165223232">(316) 522-3232</a> for a copy of the capabilities deck.
+      </p>
+    </noscript>
     <div class="slides" id="slides">
 
       <!-- SLIDE 1: HERO -->
       <section class="slide hero-slide" data-name="Open">
         <div class="hero">
           <!-- IMAGE SLOT: Ken Burns rotation of campus exteriors and factory shots -->
-          <div class="image-bg">
+          <div class="image-bg" aria-hidden="true">
             <div class="kb-frame"></div>
             <div class="kb-frame"></div>
             <div class="kb-frame"></div>
@@ -2102,7 +2112,7 @@
           <p class="subhead">410K square feet of climate-controlled industrial space across Wichita and Dallas. 90+ years of continuous U.S. manufacturing. One of the largest combined workforces of people who are blind or have low vision in American industry.</p>
 
           <!-- Act 1: Combined totals -->
-          <div class="combined-band" aria-label="Combined Envision system totals">
+          <div class="combined-band" role="group" aria-label="Combined Envision system totals">
             <div class="cb-cell">
               <div class="cb-lab">Combined facility</div>
               <div class="cb-num">410K<span class="cb-unit">sq ft</span></div>
@@ -2754,7 +2764,7 @@
 
 <!-- ===================== MODAL LAYER ===================== -->
 <div class="modal-backdrop" id="modalBackdrop"></div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalLabel">
   <div class="modal-topbar">
     <span class="m-label" id="modalLabel"></span>
     <button class="m-close" id="modalClose" type="button">
@@ -4029,7 +4039,7 @@
     modalInner.innerHTML =
       '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
-        ' role="img" aria-label="'+d.img+'"></div></div>'+
+        ' role="img" aria-label="'+(d.img||d.title||'')+'"></div></div>'+
       '<div class="m-summary">'+
         '<div class="m-sum-left">'+
           '<div class="m-eyebrow">'+d.eyebrow+locChip+'</div>'+
@@ -4409,7 +4419,7 @@
 
     var topBanner = '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
-        ' role="img" aria-label="'+d.img+'"></div></div>';
+        ' role="img" aria-label="'+(d.img||d.title||'')+'"></div></div>';
 
     // When a project has a video, the Overview block becomes two columns: the
     // copy on the left and a clickable video preview on the right. The preview
@@ -4928,7 +4938,15 @@
   }
 
   function render(){
-    slides.forEach(function(s,i){ s.classList.toggle("current", i === idx); });
+    slides.forEach(function(s,i){
+      var isCurrent = (i === idx);
+      s.classList.toggle("current", isCurrent);
+      /* Off-screen slides are hidden only via opacity, so without `inert`
+         they stay in the tab order and the screen-reader tree — keyboard
+         focus would land on invisible controls. */
+      if (isCurrent) { s.removeAttribute("inert"); s.removeAttribute("aria-hidden"); }
+      else { s.setAttribute("inert", ""); s.setAttribute("aria-hidden", "true"); }
+    });
     var sec = slideSection[idx];
     navButtons.forEach(function(b,i){ b.classList.toggle("active", i === sec); });
     menuButtons.forEach(function(b,i){ b.classList.toggle("active", i === sec); });
