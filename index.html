@@ -1632,6 +1632,44 @@
     border-radius:8px;
   }
   .m-card-icon svg{width:24px;height:24px;color:var(--green);opacity:.9}
+  /* Cross-link from a project callout card to its capability/service pop-up */
+  .m-card-link{
+    display:inline-flex;align-items:center;gap:7px;margin-top:14px;
+    background:none;border:0;padding:0;cursor:pointer;font-family:inherit;
+    font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--green);
+  }
+  .m-card-link svg{transition:transform .2s}
+  .m-card-link:hover svg,.m-card-link:focus-visible svg{transform:translateX(3px)}
+  .m-card-link:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  /* Testimonial-style pull quote inside a project pop-up */
+  .m-quote{
+    border-left:3px solid var(--green);background:rgba(120,190,33,0.05);
+    border-radius:0 4px 4px 0;padding:24px 28px;margin:0;
+  }
+  .m-quote p{
+    font-size:clamp(16px,1.6vw,19px);line-height:1.7;font-weight:600;
+    color:var(--text-light);
+  }
+  .m-quote cite{
+    display:block;margin-top:14px;font-style:normal;
+    font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--green);
+  }
+  /* "In Action" strip: a capability/service pop-up pointing at the project
+     that proves it (the reverse of .m-card-link) */
+  .m-proof{
+    display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+    width:100%;text-align:left;cursor:pointer;font-family:inherit;
+    background:rgba(120,190,33,0.06);border:1px solid rgba(120,190,33,0.22);
+    border-radius:4px;padding:20px 24px;
+  }
+  .m-proof:hover{border-color:var(--green);background:rgba(120,190,33,0.10)}
+  .m-proof:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+  .m-proof .mp-title{display:block;font-weight:700;font-size:15.5px;color:var(--text-light);margin-bottom:7px}
+  .m-proof .mp-text{display:block;font-size:14px;line-height:1.65;color:var(--text-muted);max-width:62ch}
+  .m-proof .proj-cue{margin-top:0;flex:0 0 auto}
+  .m-proof:hover .proj-cue svg{transform:translateX(3px)}
   .m-spec{
     display:grid;grid-template-columns:1fr 1fr;gap:9px 16px;margin-top:14px;
     padding-top:14px;border-top:1px solid var(--border-dark);
@@ -3589,6 +3627,7 @@
     fulfillment:{
       label:"Capabilities", eyebrow:"Capability", title:"Fulfillment & Distribution",
       location:null,
+      inAction:{project:"h2f", text:"H2F equipment moves through this operation — kitted and repackaged in Wichita, then shipped through DLA direct to units in every branch, CONUS and OCONUS."},
       summary:"Federal-grade rigor applied to commercial fulfillment. The qualification work is already done: compliant, audited fulfillment that ships anywhere and integrates with your systems, on a federal-compliant labor model.",
       creds:["Federal compliant","MIL-STD-129","RFID","Audited WMS","OCONUS"],
       overview:[
@@ -3616,6 +3655,7 @@
     kitting:{
       label:"Capabilities", eyebrow:"Capability", title:"Kitting & Assembly",
       location:null,
+      inAction:{project:"h2f", text:"The standardized twelve-item AFT/CFT test kit for the DLA Holistic Health &amp; Fitness program is this capability at work — components counted, assembled, and repackaged into ready-to-issue kits in Wichita."},
       summary:"Value-add kitting and assembly that builds finished, ready-to-issue kits from component parts, including military kit builds, on a federal-compliant labor model.",
       creds:["Federal compliant","MIL-STD-129","RFID","Military kit builds"],
       overview:[
@@ -3832,6 +3872,7 @@
     procurement:{
       label:"Services", eyebrow:"Service", title:"Federal Procurement Services",
       location:null,
+      inAction:{project:"h2f", text:"Envision is the dedicated contract support for the DLA Holistic Health &amp; Fitness program — one accountable channel from RFQ to delivery for every branch of the force."},
       summary:"A managed pathway into federal and military procurement. We handle the channel infrastructure, compliance credentials, and procurement intelligence so manufacturers can sell into government markets without building the federal machinery themselves.",
       creds:["AbilityOne","DLA Prime Vendor","BSC network","NSN catalog","Berry / TAA"],
       overview:[
@@ -3857,6 +3898,7 @@
     quality:{
       label:"Services", eyebrow:"Service", title:"Quality Assurance & Compliance",
       location:null,
+      inAction:{project:"h2f", text:"Every H2F order ships from an AbilityOne provider on an authorized federal channel, at pricing DLA Troop Support considers fair and reasonable."},
       summary:"ISO 9001:2015 across the Wichita and Dallas campuses, registered at the Dallas Campus. Material and dimensional validation against gauge, strength, and spec in the on-site Quality Labs. Federal compliance credentials maintained across every capability. DCMA Alternate Release Program out of Dallas.",
       creds:["ISO 9001:2015","Berry","TAA","Buy American","DCMA Alternate Release"],
       overview:[
@@ -4046,6 +4088,20 @@
     var calloutsBlock = (d.callouts && d.callouts.length)
       ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>' : '';
 
+    // inAction: points this capability/service at the current project that
+    // proves it (the reverse of a project card's data-cap-link). Clicking it
+    // swaps in the project detail via the existing [data-project-open] route.
+    var proofBlock = "";
+    if (d.inAction && PROJECTS[d.inAction.project] && !PROJECTS[d.inAction.project].hidden){
+      var pj = PROJECTS[d.inAction.project];
+      proofBlock = '<div class="m-block"><div class="m-sec-label">In Action</div>'+
+        '<button type="button" class="m-proof" data-project-open="'+d.inAction.project+'">'+
+          '<span class="mp-body"><span class="mp-title">'+pj.title+'</span>'+
+          '<span class="mp-text">'+d.inAction.text+'</span></span>'+
+          '<span class="proj-cue">See the project <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
+        '</button></div>';
+    }
+
     modalInner.innerHTML =
       '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
@@ -4061,6 +4117,7 @@
       overviewBlock+statsBlock+calloutsBlock+
       equipmentBlock+
       catalogsBlock+
+      proofBlock+
       '<div class="m-cta">'+
         '<h3>Have questions about '+d.title+'?</h3>'+
         '<p>Reach out and we\'ll connect you with the right team. We respond within one business day.</p>'+
@@ -4185,7 +4242,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 108 · 2026-06-10";
+  var BUILD_REV = "rev 109 · 2026-07-03";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -4370,7 +4427,7 @@
       location:"Wichita",
       blurb:"Envision is the dedicated contract support for the DLA Holistic Health & Fitness program — one channel from RFQ to delivery for every branch of the force.",
       thumb:"images/employee-factory-wichita.jpg",
-      summary:"Envision Industries is the dedicated contract support for the Defense Logistics Agency's Holistic Health &amp; Fitness (H2F) program. Through a single channel, units source the standardized AFT/CFT test kit, individual NSN line items, or fully customized H2F facility equipment — with kitting and repackaging run out of Envision's Wichita campus. <a href=\"mailto:TrpSpt_H2Fitness@dla.mil\">Submit an RFQ</a> to start an order.",
+      summary:"Envision Industries is the dedicated contract support for the Defense Logistics Agency's Holistic Health &amp; Fitness (H2F) program. Through a single channel, units source the standardized AFT/CFT test kit, individual NSN line items, or fully customized H2F facility equipment — with kitting and repackaging run out of Envision's Wichita campus. It is also the clearest working example of this deck: four Envision capabilities and services operating as one accountable channel. <a href=\"mailto:TrpSpt_H2Fitness@dla.mil\">Submit an RFQ</a> to start an order.",
       creds:["DLA Dedicated Contract Support","Wichita Campus","AbilityOne Provider"],
       overview:[
         "<strong>The channel.</strong> Envision is the dedicated contract support for the DLA Holistic Health &amp; Fitness program (contract SPE8EG-24-D-0005). Envision supplies DLA with kits and NSN line items; DLA stocks the inventory and fulfills orders direct to the end customer — one accountable channel from quote to delivery.",
@@ -4378,17 +4435,23 @@
         "<strong>Open to the whole force.</strong> Despite the Army's AFT/CFT branding, H2F is not Army-only. Equipment is available to every branch of the U.S. Department of War — SOCOM, Army, Navy, Air Force, Marine Corps, Space Force, Coast Guard, and National Guard — and to federal agencies including DHS, Customs &amp; Border Protection, TSA, and federal law enforcement.",
         "<strong>How to order.</strong> Orders are accepted via MILSTRIP and G-INV, CONUS and OCONUS. To start, submit an RFQ to the DLA program office at <a href=\"mailto:TrpSpt_H2Fitness@dla.mil\">TrpSpt_H2Fitness@dla.mil</a>; once the request is confirmed in scope, Envision provides the official quote."
       ],
+      quoteLabel:"What the Customer Experiences",
+      quote:{
+        text:"&ldquo;A unit submits an RFQ and takes delivery of a ready-to-issue kit. Everything between those two moments &mdash; the contract vehicle, the kit build, the MIL-STD packaging, the compliance sign-off &mdash; is an Envision capability doing its job.&rdquo;",
+        attr:"How H2F runs on the Envision platform"
+      },
       statLabel:"By the Numbers",
       stats:[
         {num:"$18M+",label:"Channel volume",ctx:"Annual equipment volume moving through the H2F procurement channel."},
         {num:"12",label:"AFT/CFT NSN items",ctx:"The standardized twelve-item NSN equipment set behind the Army's AFT and CFT fitness standards."},
         {num:"All",label:"DoW branches + federal",ctx:"Open to every U.S. Department of War branch and to federal agencies through DLA."}
       ],
-      calloutLabel:"Capabilities Behind It",
+      calloutLabel:"The Capabilities &amp; Services Behind It",
       callouts:[
-        {tag:"Fulfillment",title:"Kitting &amp; Repackaging",desc:"The standardized AFT/CFT kit is assembled and repackaged at Envision's Wichita campus, then shipped through DLA direct to the end customer.",specs:[["Campus","Wichita"],["Set","12 NSN items"]]},
-        {tag:"Public Sector",title:"DLA Dedicated Contract Support",desc:"Envision is the dedicated contract support for the DLA H2F program, coordinating quote, F&amp;R pricing, and award through one accountable channel from RFQ to delivery.",specs:[["Contract","SPE8EG-24-D-0005"],["Orders","MILSTRIP · G-INV"]]},
-        {tag:"Compliance",title:"AbilityOne &amp; Federal Channel",desc:"An AbilityOne provider on an authorized DoW federal channel, supporting all branches and federal agencies both CONUS and OCONUS.",specs:[["Provider","AbilityOne"],["Coverage","CONUS + OCONUS"]]}
+        {tag:"Capability",title:"Kitting &amp; Assembly",link:"kitting",desc:"Every AFT/CFT set a unit unboxes was gathered, counted, and packaged into a ready-to-issue kit at Envision's Wichita campus — built to a defined bill of materials, the same way Envision builds military kits across its catalog.",specs:[["Campus","Wichita"],["Set","12 NSN items"]]},
+        {tag:"Capability",title:"Fulfillment &amp; Distribution",link:"fulfillment",desc:"Orders reach every branch, CONUS and OCONUS, because the channel runs on Envision's federal-grade fulfillment operation — MIL-STD-129 packaging, audited inventory, and repackaged stock shipped through DLA direct to the end customer.",specs:[["Standard","MIL-STD-129"],["Reach","CONUS + OCONUS"]]},
+        {tag:"Service",title:"Federal Procurement Services",link:"procurement",desc:"Units never touch the federal machinery — Envision runs it for them as the DLA program's dedicated contract support, coordinating quote, F&amp;R pricing, and award through one accountable channel from RFQ to delivery.",specs:[["Contract","SPE8EG-24-D-0005"],["Orders","MILSTRIP · G-INV"]]},
+        {tag:"Service",title:"Quality Assurance &amp; Compliance",link:"quality",desc:"The compliance is done before an order is ever placed: an AbilityOne provider on an authorized DoW federal channel, with every price considered fair and reasonable by DLA Troop Support.",specs:[["Provider","AbilityOne"],["Pricing","DLA F&amp;R"]]}
       ],
       img:"H2F program at Envision",
       imgSrc:"images/employee-factory-wichita.jpg", imgPos:"center"
@@ -4407,6 +4470,8 @@
       return svg('<path d="M3 18v-5a9 9 0 0 1 18 0v5"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>');
     if (/textile|sew|cut|cnc|fabric|apparel|garment|material|reflect|safety/.test(k))
       return svg('<circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M20 4 8.1 15.9"/><path d="M14.5 14.5 20 20"/><path d="M8.1 8.1 12 12"/>');
+    if (/kitting|kit builds?|assembl/.test(k))
+      return svg('<path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>');
     if (/fulfill|ship|distribut|package|kit|assembly|warehouse|logistic/.test(k))
       return svg('<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/>');
     if (/workforce|team|staff|people|agent|employee|train/.test(k))
@@ -4441,11 +4506,25 @@
         }).join("")+'</div>';
       }
       var icon = '<div class="m-card-icon">'+calloutIcon(c.tag, c.title)+'</div>';
+      // link: a MODALS key — the card gets a cue that swaps this pop-up for
+      // that capability/service pop-up, so the project reads as a live index
+      // into the rest of the deck.
+      var linkBtn = "";
+      if (c.link && MODALS[c.link]){
+        var kind = (MODALS[c.link].eyebrow === "Service") ? "service" : "capability";
+        linkBtn = '<button type="button" class="m-card-link" data-cap-link="'+c.link+'">Explore this '+kind+
+          ' <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>';
+      }
       return '<div class="m-card">'+icon+'<div class="tag">'+c.tag+'</div><h4>'+c.title+'</h4>'+
-             '<div class="m-card-d">'+c.desc+'</div>'+sp+'</div>';
+             '<div class="m-card-d">'+c.desc+'</div>'+sp+linkBtn+'</div>';
     }).join("");
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
+    var quoteBlock = d.quote
+      ? '<div class="m-block"><div class="m-sec-label">'+(d.quoteLabel||'In Practice')+'</div>'+
+        '<blockquote class="m-quote"><p>'+d.quote.text+'</p>'+
+        (d.quote.attr ? '<cite>'+d.quote.attr+'</cite>' : '')+'</blockquote></div>'
+      : '';
     var statsBlock = stats ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
     var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
@@ -4484,6 +4563,7 @@
         '<div class="m-creds">'+creds+'</div>'+
       '</div>'+
       overviewBlock+
+      quoteBlock+
       statsBlock+
       calloutsBlock+
       '<div class="m-cta">'+
@@ -4893,6 +4973,10 @@
     if (open){ var pk = open.getAttribute("data-project-open"); renderProject(pk, true); modal.scrollTop = 0; modalClose.focus(); writeHash(pk.toLowerCase()); return; }
     // In Action: Back from a project detail to the project list.
     if (e.target.closest("[data-inaction-back]")){ renderInActionList(); modalClose.focus(); writeHash("projects"); return; }
+
+    // Project -> capability cross-link: swap in that capability/service pop-up.
+    var capLink = e.target.closest("[data-cap-link]");
+    if (capLink){ switchModal(capLink.getAttribute("data-cap-link")); return; }
 
     // Credential chip: route to where that claim is listed in the deck.
     var credChip = e.target.closest("[data-cred]");
