@@ -1,5 +1,5 @@
 /* Envision PWA service worker */
-const CACHE = "envision-pwa-v3";
+const CACHE = "envision-pwa-v4";
 
 /* Minimal shell precache for installability only. No images, no large assets. */
 const PRECACHE = [
@@ -50,9 +50,12 @@ self.addEventListener("fetch", function (event) {
 
   event.respondWith(
     fetch(request).then(function (response) {
-      if (response && response.ok) {
+      /* Only cache full 200 responses — Cache.put() rejects partial (206)
+         responses, which would surface as unhandled promise rejections. */
+      if (response && response.status === 200) {
         var copy = response.clone();
-        caches.open(CACHE).then(function (cache) { cache.put(request, copy); });
+        caches.open(CACHE).then(function (cache) { cache.put(request, copy); })
+          .catch(function () { /* quota exceeded or opaque put failure — ignore */ });
       }
       return response;
     }).catch(function () {

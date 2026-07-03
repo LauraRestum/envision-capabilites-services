@@ -783,8 +783,10 @@
     document.removeEventListener("keydown", onKeydown, true);
     // Drop any keyboard-inset lift so the launcher sits at its normal anchor.
     root.style.setProperty("--ec-kb", "0px");
-    var done = function(){ panel.hidden = true; };
-    // Wait out the transition, then hide.
+    // Wait out the transition, then hide — unless the panel was re-opened
+    // during the 220ms window, in which case hiding it would leave an
+    // "open" but invisible panel.
+    var done = function(){ if (!opened) panel.hidden = true; };
     setTimeout(done, 220);
     if (!(opts && opts.silent)){
       // Return focus to the launcher unless the deck took focus (e.g. a modal).
