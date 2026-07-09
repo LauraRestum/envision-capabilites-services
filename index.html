@@ -2063,6 +2063,14 @@
   body.presentation .nav-menu .navlink{font-size:11.5px;padding:11px 13px}
   body.presentation .nav-menu{top:calc(48px + env(safe-area-inset-top) + 6px)}
   body.presentation{cursor:default}
+  /* Present mode: each slide's content is pinned to a fixed design width and
+     scaled as one canvas to fit the screen exactly — same layout on every
+     monitor and at every browser zoom, and nothing to scroll. The hero slide
+     is already full-bleed and is left alone. */
+  body.presentation .slide.fit-slide{
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
 </style>
 <!-- Capabilities concierge styles (self-hosted, no external request) -->
 <link rel="stylesheet" href="/assistant/concierge.css">
@@ -3019,7 +3027,7 @@
       calloutLabel:"What's under Employment",
       callouts:[
         {tag:"Engineering",title:"Envision Workforce Innovation Center",desc:"Re-engineers the work itself: accessible workstations, adapted tooling, and assistive technology that turn complex manufacturing and professional roles into roles a person who is blind can run start to finish.",img:"images/envision-workforce-team-member-headset.jpg",cover:true,imgAlt:"An Envision team member wearing a headset working at an accessible workstation"},
-        {tag:"Development",title:"Level Up and Pathways",desc:"Structured career development that starts with teens and carries through to working adults, building the skills, credentials, and confidence that lead to real jobs, not placements.",img:"images/envision-pathways-culinary-student.jpg",cover:true,imgPos:"center 30%",imgAlt:"A culinary arts student in a Butler Community College chef uniform standing in a commercial kitchen"},
+        {tag:"Development",title:"Level Up and Pathways",desc:"Structured career development that starts with teens and carries through to working adults, building the skills, credentials, and confidence that lead to real jobs, not placements.",img:"IMG_0522-2.jpg",cover:true,imgAlt:"An Envision participant wearing a head-worn assistive technology device"},
         {tag:"Readiness",title:"Workforce Readiness Bootcamp",desc:"A concentrated program that takes a person from interested to job-ready: interviewing, workplace technology, and the day-one skills employers actually screen for.",img:"images/envision-workforce-readiness-classroom.jpg",cover:true,imgAlt:"A workforce readiness class watching a Creating a Workforce for All presentation"},
         {tag:"Training",title:"Job readiness and assistive technology training",desc:"One-on-one instruction in screen readers, magnification, and adaptive workplace tools, matched to the specific role a team member is stepping into.",img:"images/envision-assistive-technology-training-tablet.jpg",cover:true,imgAlt:"An Envision specialist giving one-on-one assistive technology instruction on a tablet"}
       ]
@@ -3038,6 +3046,7 @@
       callouts:[
         {tag:"Clinical",title:"Envision Vision Rehabilitation Center",desc:"Clinician-led low vision evaluations, occupational therapy, and orientation and mobility training, with referring physicians sending patients here for care they cannot get from a standard eye exam.",img:"images/envision-vision-rehab-magnifier-training.jpg",cover:true,imgAlt:"An Envision staff member helping a client use a lighted magnifier"},
         {tag:"Independence",title:"Training for Independence Program",desc:"Immersive training inside Esther's Place, a fully functional training apartment where people practice cooking, medication management, laundry, and home organization until it is routine. Runs as TIP for adults and SKIP for older adults newly adjusting to vision loss.",img:"images/envision-independent-living-cooking-class.jpg",cover:true,imgAlt:"Three participants practicing cooking skills together in a training kitchen"},
+        {tag:"Cooking",title:"Adaptive Cooking Classes",desc:"In line with Training for Independence: a six-session adaptive cooking course covering the fundamentals — prep work, stovetop, and oven cooking — in a fully adaptable kitchen at the Envision Bistro, inside NICHE, WSU's culinary school. Classes are usually taught by a local professional restaurant chef, and the course closes with a celebration tasting and awards ceremony.",img:"images/envision-adaptive-cooking-class.jpg",cover:true,imgPos:"center 30%",imgAlt:"A cooking class participant in a chef's coat and hat with a cutting board of fresh vegetables in the adaptable teaching kitchen"},
         {tag:"Daily living",title:"Assistive technology training and the Everyday Store",desc:"Hands-on instruction in magnifiers, screen readers, and adaptive devices, paired with a storefront stocked with the labeled, tactile, and talking products that make daily tasks practical.",img:"images/envision-everyday-store-magnifier-demo.jpg",cover:true,imgAlt:"An Envision team member demonstrating a handheld video magnifier in the Everyday Store"}
       ]
     },
@@ -5161,11 +5170,80 @@
   document.addEventListener("fullscreenchange", function(){
     document.body.classList.toggle("presentation", !!document.fullscreenElement);
     updateFsIcon();
+    scheduleFit();
   });
   document.addEventListener("webkitfullscreenchange", function(){
     document.body.classList.toggle("presentation", !!(document.fullscreenElement || document.webkitFullscreenElement));
     updateFsIcon();
+    scheduleFit();
   });
+
+  /* ---- Present-mode fit: scale every slide to the screen ----
+     In presentation (fullscreen) mode each slide's content wrapper is laid
+     out at a fixed design width, measured, and transform-scaled so the whole
+     slide fits the viewport exactly — the PowerPoint model. The visitor sees
+     the same arrangement on a laptop, a conference wall, or a zoomed browser,
+     and never has to scroll a slide. */
+  var FIT_DESIGN_W = 1440;
+  function fitContentOf(slide){
+    for (var i = 0; i < slide.children.length; i++){
+      var el = slide.children[i];
+      if (el.classList.contains("wrap") || el.classList.contains("mw")) return el;
+    }
+    return null;
+  }
+  function clearFit(){
+    slides.forEach(function(slide){
+      var c = fitContentOf(slide);
+      if (!c) return;
+      slide.classList.remove("fit-slide");
+      c.style.width = ""; c.style.maxWidth = ""; c.style.minHeight = "";
+      c.style.height = ""; c.style.flex = ""; c.style.margin = "";
+      c.style.transform = ""; c.style.transformOrigin = "";
+    });
+  }
+  function fitSlides(){
+    if (!document.body.classList.contains("presentation")){ clearFit(); return; }
+    slides.forEach(function(slide){
+      if (slide.classList.contains("hero-slide")) return;
+      var c = fitContentOf(slide);
+      if (!c) return;
+      slide.classList.add("fit-slide");
+      // Pin the canvas to the design width, then measure its natural height.
+      c.style.width = FIT_DESIGN_W + "px";
+      c.style.maxWidth = "none";
+      c.style.minHeight = "0";
+      c.style.height = "auto";
+      c.style.flex = "none";
+      c.style.margin = "0";
+      c.style.transform = "none";
+      var cs = getComputedStyle(slide);
+      var availW = slide.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      var availH = slide.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var h = c.scrollHeight;
+      if (availW <= 0 || availH <= 0 || h <= 0) return;
+      var s = Math.min(availW / FIT_DESIGN_W, availH / h);
+      c.style.transformOrigin = "center center";
+      c.style.transform = "scale(" + s + ")";
+    });
+  }
+  var fitTimer = null;
+  function scheduleFit(){
+    clearTimeout(fitTimer);
+    // Two passes: right away, and again once the fullscreen reflow, web
+    // fonts, and any lazy-loaded images inside the slides have settled.
+    requestAnimationFrame(fitSlides);
+    fitTimer = setTimeout(fitSlides, 450);
+  }
+  window.addEventListener("resize", function(){
+    if (document.body.classList.contains("presentation")) scheduleFit();
+  });
+  // Lazy images that finish loading while presenting can change a slide's
+  // natural height — refit when they land.
+  document.addEventListener("load", function(e){
+    if (e.target && e.target.tagName === "IMG" &&
+        document.body.classList.contains("presentation")) scheduleFit();
+  }, true);
 
   document.addEventListener("keydown", function(e){
     // Don't hijack keys while the visitor is typing in a field (e.g. the
