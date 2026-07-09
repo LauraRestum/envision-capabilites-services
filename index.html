@@ -389,12 +389,14 @@
     color:var(--text-soft);
   }
 
-  /* Act 2: Campus cards */
+  /* Act 2: Campus cards. Scoped under .campus-grid — the Contact slide's
+     footer cards reuse the .campus-card class name but are a different
+     component (see .campus-footer), so neither may style the other. */
   .campus-grid{
     display:grid;grid-template-columns:1fr 1fr;
     gap:14px;margin-top:10px;
   }
-  .campus-card{
+  .campus-grid .campus-card{
     border:1px solid var(--rule-light);border-radius:8px;
     overflow:hidden;background:var(--bg-light);
     display:flex;flex-direction:column;
@@ -901,7 +903,9 @@
   @media (max-width:900px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:560px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:1fr}}
 
-  /* The "Current Projects" portal card (6th block in the Proof grid) */
+  /* Clickable portal cards in the Proof grid — the Current Projects portal,
+     plus the two contract-vehicle cards that link out to their detail sites. */
+  a.proof-card{display:block;color:inherit;text-decoration:none}
   .proof-card--action{cursor:pointer;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s}
   .proof-card--action:hover{
     border-color:var(--navy);transform:translateY(-2px);
@@ -915,6 +919,11 @@
   }
   .proof-card--action:hover .proj-cue svg{transform:translateX(3px)}
   .proj-cue svg{transition:transform .2s}
+
+  /* Stacked card — two related channels sharing one Proof grid cell
+     (Kansas State Use over Texas WorkQuest) */
+  .proof-card--stack .stack-item + .stack-item{margin-top:16px;padding-top:16px;border-top:1px solid var(--rule-light)}
+  .proof-card--stack .t-m{margin-top:10px;padding-top:0;border-top:0}
   .proj-jump{
     color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;
   }
@@ -1201,9 +1210,9 @@
   .tl-item b{color:var(--navy);font-weight:800;margin-right:7px}
 
   /* ---------- Mission pillars slide ---------- */
-  .mission-slide{padding:0;overflow:hidden;display:flex}
+  .mission-slide{padding:0;overflow-y:auto;display:flex}
   .mission-slide .mw{
-    max-width:1560px;margin:0 auto;width:100%;height:100%;
+    max-width:1560px;margin:0 auto;width:100%;min-height:100%;height:auto;
     display:flex;flex-direction:column;
     padding:clamp(14px,2.6vh,34px) clamp(20px,4vw,72px);
     gap:clamp(10px,1.8vh,22px);
@@ -1400,8 +1409,6 @@
     margin:0;
   }
   @media (max-width:1024px){
-    .mission-slide{overflow-y:auto}
-    .mission-slide .mw{height:auto;min-height:100%}
     .ms-stats{grid-template-columns:repeat(2,1fr)}
     .ms-stat:nth-child(3){border-left:0}
     .ms-emp-top{flex-direction:column;align-items:center;text-align:center}
@@ -1438,8 +1445,10 @@
   .contact-block .ti{font-size:14px;font-weight:600;color:var(--text-soft);margin:4px 0 12px}
   .contact-block .ct{font-size:14px;font-weight:600;color:var(--navy);line-height:1.7}
   .campus-footer{margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.6vw,32px);width:100%;max-width:760px;margin-left:auto;margin-right:auto}
-  .campus-card{display:flex;flex-direction:column;gap:10px}
-  .campus-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block}
+  .campus-footer .campus-card{display:flex;flex-direction:column;gap:10px}
+  /* height:auto beats the img height="…" attribute — with a definite attribute
+     height the aspect-ratio crop is ignored and the photo renders full-height. */
+  .campus-footer .campus-card img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block}
   .campus-card__addr{font-size:12.5px;line-height:1.6;color:var(--text-soft);text-align:center}
   @media (max-width:768px){.campus-footer{grid-template-columns:1fr}}
 
@@ -2560,12 +2569,13 @@
               <div class="t-d">Envision is affiliated with the National Industries for the Blind. AbilityOne is the federal program that designates certain products as mandatory-source from approved nonprofit manufacturers. SKILCRAFT-branded Envision products in the federal catalog include trash bags, seal-closure bags, VISI-BELTs, and print services.</div>
               <div class="t-m">88% of Envision's combined Direct Labor is performed by people who are blind or have low vision. Exceeds AbilityOne's 75% threshold.</div>
             </div>
-            <div class="proof-card">
+            <a class="proof-card proof-card--action" href="tls.html" target="_blank" rel="noopener" aria-label="Open the TLS contract vehicle detail site">
               <div class="tag">Prime Vendor</div>
               <div class="t-h">DLA Prime Vendor</div>
-              <div class="t-d">$198 million in combined contract capacity across two active 5-year contracts. IDIQ stands for Indefinite Delivery, Indefinite Quantity, the federal contract type that lets agencies order from a pre-set ceiling without re-bidding.</div>
-              <div class="t-m">ABOBSC TLS: $150M, 5-year. H2F: $48M, 5-year. Each ships Envision SKUs.</div>
-            </div>
+              <div class="t-d">Envision holds the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150 million, 5-year IDIQ. IDIQ stands for Indefinite Delivery, Indefinite Quantity, the federal contract type that lets agencies order from a pre-set ceiling without re-bidding.</div>
+              <div class="t-m">ABOBSC TLS: $150M, 5-year. $198M combined DLA capacity with H2F. Each ships Envision SKUs.</div>
+              <div class="proj-cue">View the TLS contract vehicle <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            </a>
             <div class="proof-card" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
               <div class="tag">Base Supply</div>
               <div class="t-h">Base Supply Centers</div>
@@ -2573,18 +2583,26 @@
               <div class="t-m">Pre-approved AbilityOne pricing. No competitive bid cycle required. GPC and IMPAC cards accepted.</div>
               <div class="bsc-cue">View network map <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             </div>
-            <div class="proof-card">
-              <div class="tag">State</div>
-              <div class="t-h">Kansas State Use Program</div>
-              <div class="t-d">The Wichita Campus is the verified Kansas State Use participant. State agencies can procure Wichita-manufactured product through the mandatory-source channel.</div>
-              <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--wichita">Wichita</span></div>
+            <div class="proof-card proof-card--stack">
+              <div class="tag">State Use Programs</div>
+              <div class="stack-item">
+                <div class="t-h">Kansas State Use Program</div>
+                <div class="t-d">The Wichita Campus is the verified Kansas State Use participant. State agencies can procure Wichita-manufactured product through the mandatory-source channel.</div>
+                <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--wichita">Wichita</span></div>
+              </div>
+              <div class="stack-item">
+                <div class="t-h">Texas WorkQuest (State Use)</div>
+                <div class="t-d">The Dallas Campus is an authorized WorkQuest (formerly TIBH Industries) participant under the State of Texas State Use Program. Texas agencies procure Dallas-manufactured product through the mandatory-source channel.</div>
+                <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--dallas">Dallas</span></div>
+              </div>
             </div>
-            <div class="proof-card">
-              <div class="tag">State</div>
-              <div class="t-h">Texas WorkQuest (State Use)</div>
-              <div class="t-d">The Dallas Campus is an authorized WorkQuest (formerly TIBH Industries) participant under the State of Texas State Use Program. Texas agencies procure Dallas-manufactured product, including embossed Texas Seal portfolios and high-visibility safety apparel, through the mandatory-source channel.</div>
-              <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--dallas">Dallas</span></div>
-            </div>
+            <a class="proof-card proof-card--action" href="https://envision-h2f.vercel.app" target="_blank" rel="noopener" aria-label="Open the H2F program detail site">
+              <div class="tag">Contract Vehicle</div>
+              <div class="t-h">H2F &mdash; Holistic Health &amp; Fitness</div>
+              <div class="t-d">Envision is the dedicated contract support for the DLA Holistic Health &amp; Fitness program — one accountable channel from RFQ to delivery for every branch of the force. Kits and NSN line items are assembled and repackaged in Wichita and ship through DLA direct to units, CONUS and OCONUS.</div>
+              <div class="t-m">H2F: $48M, 5-year IDIQ. Open to all DoW branches and federal agencies.</div>
+              <div class="proj-cue">Visit the H2F program site <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            </a>
             <div class="proof-card proof-card--action" data-inaction role="button" tabindex="0" aria-label="Open Envision in Action: current projects">
               <div class="tag">Envision in Action</div>
               <div class="t-h">Current Projects</div>
@@ -2604,8 +2622,8 @@
           <p class="subhead">TAA, Berry, Buy American, ISO 9001:2015, and decades of continuous U.S. manufacturing. These are the qualifications federal and military buyers require. Partnering with Envision means the qualifications are already in place. The compliance work is done. The door is open.</p>
           <div class="cred-grid">
             <div class="cred">
-              <div class="c-h">ISO 9001:2015 <span class="loc-chip loc-chip--dallas">Dallas</span></div>
-              <div class="c-d">The ISO 9001:2015 quality system operates across both the Wichita and Dallas campuses. Dallas Campus certificate CERT-0145812. Intertek, ANAB-accredited. Registered facility: 1801 Valley View Lane, Farmers Branch, TX. Decision 18 Feb 2025. Valid until 25 Apr 2028. <strong>Scope: Manufacture, Assembly and Fulfillment Services for Government, Military, and Commercial Applications.</strong> QA Lab material and dimensional validation against gauge, strength, and spec, system-wide.</div>
+              <div class="c-h">ISO 9001:2015 <span class="loc-chip loc-chip--wichita">Wichita</span> <span class="loc-chip loc-chip--dallas">Dallas</span></div>
+              <div class="c-d">The ISO 9001:2015 quality system operates across both campuses, each under its own Intertek, ANAB-accredited registration. <strong>Wichita Campus: certificate CERT-0145394</strong> &mdash; 2301 S. Water Street, Wichita, KS. Certified since 2008. Valid until 18 Apr 2029. Scope: manufacture of plastic bags, small items, and printing services. <strong>Dallas Campus: certificate CERT-0145812</strong> &mdash; 1801 Valley View Lane, Farmers Branch, TX. Valid until 25 Apr 2028. Scope: manufacture, assembly and fulfillment services for government, military, and commercial applications. QA Lab material and dimensional validation against gauge, strength, and spec, system-wide.</div>
             </div>
             <div class="cred">
               <div class="c-h">Berry Amendment</div>
@@ -2712,7 +2730,12 @@
               </a>
               <a class="doc-link" href="0145394_ENG_Envision.pdf" target="_blank" rel="noopener" data-doc>
                 <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
-                <span class="doc-txt"><span class="doc-name">ISO 9001:2015 Certificate</span><span class="doc-meta">PDF · CERT-0145812, Dallas</span></span>
+                <span class="doc-txt"><span class="doc-name">ISO 9001:2015 &mdash; Wichita</span><span class="doc-meta">PDF · CERT-0145394</span></span>
+                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+              </a>
+              <a class="doc-link" href="#" data-doc>
+                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-txt"><span class="doc-name">ISO 9001:2015 &mdash; Dallas</span><span class="doc-meta">PDF · CERT-0145812</span></span>
                 <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
               </a>
               <a class="doc-link" href="#" data-doc>
@@ -2996,7 +3019,7 @@
       calloutLabel:"What's under Employment",
       callouts:[
         {tag:"Engineering",title:"Envision Workforce Innovation Center",desc:"Re-engineers the work itself: accessible workstations, adapted tooling, and assistive technology that turn complex manufacturing and professional roles into roles a person who is blind can run start to finish.",img:"images/envision-workforce-team-member-headset.jpg",cover:true,imgAlt:"An Envision team member wearing a headset working at an accessible workstation"},
-        {tag:"Development",title:"Level Up and Pathways",desc:"Structured career development that starts with teens and carries through to working adults, building the skills, credentials, and confidence that lead to real jobs, not placements.",img:"IMG_0522-2.jpg",cover:true,imgAlt:"An Envision participant wearing a head-worn assistive technology device"},
+        {tag:"Development",title:"Level Up and Pathways",desc:"Structured career development that starts with teens and carries through to working adults, building the skills, credentials, and confidence that lead to real jobs, not placements.",img:"images/envision-pathways-culinary-student.jpg",cover:true,imgPos:"center 30%",imgAlt:"A culinary arts student in a Butler Community College chef uniform standing in a commercial kitchen"},
         {tag:"Readiness",title:"Workforce Readiness Bootcamp",desc:"A concentrated program that takes a person from interested to job-ready: interviewing, workplace technology, and the day-one skills employers actually screen for.",img:"images/envision-workforce-readiness-classroom.jpg",cover:true,imgAlt:"A workforce readiness class watching a Creating a Workforce for All presentation"},
         {tag:"Training",title:"Job readiness and assistive technology training",desc:"One-on-one instruction in screen readers, magnification, and adaptive workplace tools, matched to the specific role a team member is stepping into.",img:"images/envision-assistive-technology-training-tablet.jpg",cover:true,imgAlt:"An Envision specialist giving one-on-one assistive technology instruction on a tablet"}
       ]
@@ -3032,7 +3055,7 @@
       callouts:[
         {tag:"Early childhood",title:"Envision Child Development Center",desc:"Integrated classrooms where children who are blind or have low vision learn alongside sighted peers from the earliest years, in facilities built for exactly that.",img:"images/envision-child-development-center-kids.jpg",cover:true,imgAlt:"Two smiling children with backpacks outside the Envision Child Development Center"},
         {tag:"Youth",title:"Level Up",desc:"College and career readiness for teens: academic skills, workplace exposure, and assistive technology fluency before they ever hit a job market.",img:"images/envision-level-up-training-lab.jpg",cover:true,imgAlt:"Two young adults smiling at a workstation in an Envision training lab"},
-        {tag:"Professional",title:"Grand Rounds and the Envision Conference",desc:"Continuing education that draws the clinicians, occupational therapists, orientation and mobility specialists, and researchers who make up the vision-rehabilitation field, and home to the Envision Oculus Award.",img:"EVSVSA26-08.jpg",cover:true,imgAlt:"An Envision researcher presenting vision-science findings at the Envision Conference"}
+        {tag:"Professional",title:"Grand Rounds and the Envision Conference",desc:"Continuing education that draws the clinicians, occupational therapists, orientation and mobility specialists, and researchers who make up the vision-rehabilitation field, and home to the Envision Oculus Award.",img:"images/envision-conference-grand-rounds-speaker.jpg",cover:true,imgAlt:"Dr. Fletcher speaking at a lectern during an Envision professional education event"}
       ]
     },
     "mission-research":{
@@ -3049,13 +3072,13 @@
       callouts:[
         {tag:"Published",title:"Peer-reviewed research",desc:"Original science on how people with vision loss perceive, navigate, and work, published in peer-reviewed outlets including PLOS rather than in-house white papers.",img:"images/envision-research-perception-experiment.jpg",cover:true,imgAlt:"A vision-science perception experiment in progress at the Envision Research Institute"},
         {tag:"Fellowships",title:"Post-doctoral fellowships",desc:"A working lab where post-doctoral researchers launch careers in vision science, keeping specialized talent inside the field and inside Envision's orbit.",img:"EVSVSA26-02.jpg",cover:true,imgPos:"center 22%",imgAlt:"A presenter speaking at the Envision Conference"},
-        {tag:"Partnerships",title:"University and industry partnerships",desc:"Collaborative projects with university labs and industry partners that move findings out of the journal and into tools, treatments, and workplaces.",noPhoto:true}
+        {tag:"Partnerships",title:"University and industry partnerships",desc:"Collaborative projects with university labs and industry partners that move findings out of the journal and into tools, treatments, and workplaces.",img:"images/envision-research-wsu-vr-partnership.jpg",cover:true,imgAlt:"A researcher fitting a vision-research headset on a Wichita State University engineering partner"}
       ]
     },
     "mission-outreach":{
       label:"Our Mission", eyebrow:"Our Mission", title:"Outreach",
-      img:"Envision program participants, families, and staff gathered together at a campus event",
-      imgSrc:"levelup-group-2026.jpg", imgPos:"center 42%",
+      img:"An Envision Arts Center instructor and artist comparing tactile ceramic pieces in the studio",
+      imgSrc:"images/envision-arts-center-studio-session.jpg", imgPos:"center 22%",
       summary:"Standing you can measure in longevity and reach.",
       creds:[],
       overview:[
@@ -3064,11 +3087,11 @@
       stats:[],
       calloutLabel:"What's under Outreach",
       callouts:[
-        {tag:"Camps",title:"Heather's Camp and Heather's Camp Teenies",desc:"More than two decades of summer camp for kids who are blind or have low vision, drawing campers from multiple states, with a dedicated day-camp session for campers as young as five.",noPhoto:true},
+        {tag:"Camps",title:"Heather's Camp and Heather's Camp Teenies",desc:"More than two decades of summer camp for kids who are blind or have low vision, drawing campers from multiple states, with a dedicated day-camp session for campers as young as five.",img:"images/envision-heathers-camp-kayaking.jpg",cover:true,imgAlt:"Two Heather's Camp campers in life jackets kayaking on a lake"},
         {tag:"Community",title:"Youth clubs and peer support groups",desc:"Monthly, year-round programming: support groups for adults and families, youth clubs, and social events that mean no one adjusts to vision loss alone.",img:"images/envision-peer-support-braille-guide-dog.jpg",cover:true,imgAlt:"Two young women reading a braille book together with a guide dog resting nearby"},
         {tag:"Events",title:"White Cane Day Walk",desc:"An annual public walk that puts hundreds of community members, sponsors, and families behind one banner and makes Envision's community leadership visible.",img:"images/envision-white-cane-day-walk.jpg",cover:true,imgPos:"center 60%",imgAlt:"Community members behind a White Cane Day Walk banner"},
         {tag:"Education",title:"School and community speaker engagements",desc:"Envision teams in classrooms and civic groups running white cane demonstrations, healthy-vision education, and empathy-building sessions, the region's go-to resource on vision loss.",img:"images/envision-white-cane-demonstration.jpg",cover:true,imgAlt:"A blindfolded participant practicing a street crossing with a white cane during an empathy demonstration"},
-        {tag:"Arts",title:"Envision Arts Center",desc:"A studio and gallery in one, showing work by world-renowned artists and building monthly rotating exhibitions through community partnerships, with programming that spans visual art, dance, and music.",noPhoto:true},
+        {tag:"Arts",title:"Envision Arts Center",desc:"A studio and gallery in one, showing work by world-renowned artists and building monthly rotating exhibitions through community partnerships, with programming that spans visual art, dance, and music.",img:"images/envision-arts-center-tactile-exhibition.jpg",cover:true,imgAlt:"Guests exploring touchable tactile artwork at an Envision Arts Center exhibition"},
         {tag:"Advocacy",title:"Policymaker partnerships",desc:"A seat at the table with local and federal policymakers on the issues that affect people who are blind or have low vision, earned over decades of showing up.",noPhoto:true}
       ]
     },
@@ -4378,8 +4401,12 @@
       imgSrc:"images/envision-dallas-warehouse-aisle.jpg", imgPos:"center"
     },
     h2f:{
+      /* Moved off the In Action grid: H2F now lives as a contract-vehicle
+         card on the Proof slide, linked to the dedicated H2F site. Data stays
+         so the #h2f deep link and capability cross-references keep working. */
+      hidden:true,
       label:"Envision in Action",
-      eyebrow:"Current Project",
+      eyebrow:"Contract Vehicle",
       status:"Active", statusClass:"active",
       title:"H2F",
       location:"Wichita",

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TLS | Envision Gateway</title>
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta name="description" content="Envision is the prime vendor on the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150M, 5-year IDIQ. Pre-cleared, pre-priced product for federal and military buyers.">
+  <meta name="theme-color" content="#00081e">
+  <meta property="og:title" content="TLS | Envision Gateway">
+  <meta property="og:description" content="Envision is the prime vendor on the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150M, 5-year IDIQ.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #003087;
+      --blue-dark: #001852;
+      --blue-deeper: #000d2e;
+      --blue-deepest: #00081e;
+      --blue-mid: #004bb5;
+      --green: #78BE21;
+      --green-bright: #8FD42A;
+      --green-deep: #4d7a16;
+      --paper: #f5f1e8;
+      --white: #ffffff;
+      --ink: #001852;
+      --rule-light: rgba(0,24,82,0.12);
+      --text-on-dark-2: rgba(255,255,255,0.78);
+      --border: rgba(255,255,255,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      background: var(--blue-deepest);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ==================================================
+       FRAME — top + bottom HUD bars
+    ================================================== */
+    .frame-top, .frame-bottom {
+      position: fixed;
+      left: 0; right: 0;
+      height: 28px;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--blue-deepest);
+    }
+    .frame-top { top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .frame-bottom { bottom: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+    .frame-pulse { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--green); }
+    .pulse-dot {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(120,190,33,0.7);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .frame-divider { color: var(--green); }
+    @media (max-width: 720px) { .frame-top span:nth-child(2), .frame-bottom span:nth-child(2) { display: none; } }
+
+    /* ==================================================
+       NAV
+    ================================================== */
+    nav {
+      position: fixed;
+      top: 28px; left: 0; right: 0;
+      z-index: 80;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1.5rem;
+      background: rgba(0,8,30,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .logo .dot { color: var(--green); }
+    .logo .program { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; color: var(--text-on-dark-2); }
+    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-on-dark-2);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links .nav-cta {
+      color: var(--blue-dark);
+      background: var(--green);
+      padding: 0.55rem 1rem;
+      border-radius: 1px;
+      font-weight: 700;
+    }
+    .nav-links .nav-cta:hover { color: var(--blue-dark); opacity: 0.9; }
+    @media (max-width: 860px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+    /* ==================================================
+       HERO
+    ================================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      padding: 8rem 1.5rem 5rem;
+      overflow: hidden;
+      background: var(--blue-deepest);
+    }
+    .hero-glow {
+      position: absolute;
+      top: 30%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1100px; height: 1100px;
+      background: radial-gradient(circle, rgba(0,75,181,0.4) 0%, rgba(0,48,135,0.18) 30%, transparent 65%);
+      pointer-events: none;
+      filter: blur(40px);
+    }
+    .hero-radar {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px; height: 900px;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+    .hero-radar circle { fill: none; stroke: var(--green); stroke-width: 1; }
+    .hero-radar .ring-1 { animation: ringExpand 4s ease-out infinite; }
+    .hero-radar .ring-2 { animation: ringExpand 4s ease-out 1s infinite; }
+    .hero-radar .ring-3 { animation: ringExpand 4s ease-out 2s infinite; }
+    @keyframes ringExpand {
+      0% { r: 100; opacity: 0.6; }
+      100% { r: 440; opacity: 0; }
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 3;
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 4rem;
+      align-items: stretch;
+    }
+    @media (max-width: 1100px) { .hero-inner { grid-template-columns: 1fr; } }
+
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 2rem;
+    }
+    .hero-tag .bar { width: 32px; height: 1px; background: var(--green); }
+    .hero-tag .meta { color: var(--white); font-weight: 600; }
+
+    h1 {
+      font-size: clamp(2.5rem, 6.5vw, 5.2rem);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+    h1 .accent { color: var(--green); }
+    h1 .small {
+      display: block;
+      font-size: 0.34em;
+      font-weight: 600;
+      letter-spacing: 0;
+      color: var(--white);
+      margin-top: 1.25rem;
+      line-height: 1.45;
+      max-width: 520px;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 1.5rem; }
+    .btn-primary {
+      background: var(--green);
+      color: var(--blue-dark);
+      padding: 1rem 1.75rem;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border-radius: 1px;
+      transition: opacity 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .btn-primary::after { content: '→'; transition: transform 0.2s; }
+    .btn-primary:hover { opacity: 0.92; box-shadow: 0 0 28px rgba(120,190,33,0.4); }
+    .btn-primary:hover::after { transform: translateX(4px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--white);
+      padding: 1rem 1.75rem;
+      font-weight: 600;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border-radius: 1px;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+
+    /* Contract at a Glance card */
+    .glance-card {
+      background: var(--blue-deepest);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .glance-card::before, .glance-card::after { content: ''; position: absolute; width: 28px; height: 28px; }
+    .glance-card::before { top: -1px; left: -1px; border-top: 3px solid var(--green); border-left: 3px solid var(--green); }
+    .glance-card::after { bottom: -1px; right: -1px; border-bottom: 3px solid var(--green); border-right: 3px solid var(--green); }
+    .glance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      background: rgba(120,190,33,0.08);
+    }
+    .glance-eyebrow { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); }
+    .glance-program { font-size: 0.95rem; font-weight: 800; letter-spacing: 0.16em; }
+    .glance-body { padding: 0.75rem 1.75rem; flex: 1; }
+    .glance-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1.25rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .glance-line:last-child { border-bottom: none; }
+    .glance-label { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-on-dark-2); flex: none; }
+    .glance-value { font-size: 0.8rem; font-weight: 700; text-align: right; }
+    .glance-sub { color: var(--green); }
+    .glance-footer { padding: 1.1rem 1.75rem; border-top: 1px solid rgba(255,255,255,0.15); }
+    .glance-tag { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); }
+
+    /* What ships strip */
+    .ships-strip {
+      position: relative;
+      z-index: 3;
+      max-width: 1320px;
+      margin: 4rem auto 0;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      padding: 1.75rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .ships-header { display: flex; align-items: baseline; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .ships-eyebrow { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); }
+    .ships-title { font-size: 0.82rem; font-weight: 700; }
+    .ships-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .ship-tag {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.55rem 0.9rem;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 1px;
+      color: var(--text-on-dark-2);
+    }
+
+    /* ==================================================
+       SHARED SECTION CHROME
+    ================================================== */
+    .container { max-width: 1320px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 6rem 0; }
+    .section-marker {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-deep);
+      margin-bottom: 1.75rem;
+    }
+    .section-marker .bar { width: 32px; height: 1px; background: currentColor; }
+    .section-marker .meta { margin-left: auto; font-weight: 600; opacity: 0.7; }
+    .section-marker.on-dark { color: var(--green); }
+    h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.25rem; }
+    h2 .accent { color: var(--green-deep); }
+    .on-dark h2 .accent { color: var(--green); }
+    .lede { font-size: 0.95rem; max-width: 62ch; }
+
+    .on-light { background: var(--paper); color: var(--ink); }
+    .on-light .lede { color: rgba(0,24,82,0.8); }
+
+    /* Vehicle cards */
+    .vehicle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3rem; }
+    @media (max-width: 900px) { .vehicle-grid { grid-template-columns: 1fr; } }
+    .vehicle-card {
+      background: var(--white);
+      border: 1px solid var(--rule-light);
+      border-top: 3px solid var(--green);
+      border-radius: 2px;
+      padding: 2rem 1.75rem;
+    }
+    .vehicle-card .k { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-deep); margin-bottom: 0.9rem; }
+    .vehicle-card h3 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 0.75rem; }
+    .vehicle-card p { font-size: 0.82rem; line-height: 1.65; color: rgba(0,24,82,0.82); }
+    .vehicle-card p + p { margin-top: 0.75rem; }
+
+    /* Stats band */
+    .stats-section { background: var(--blue-deeper); position: relative; overflow: hidden; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); margin-top: 3rem; }
+    @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat { background: var(--blue-deeper); padding: 1.75rem 1.5rem; }
+    .stat-n { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; color: var(--green); line-height: 1; }
+    .stat-l { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin: 0.7rem 0 0.45rem; }
+    .stat-c { font-size: 0.74rem; line-height: 1.55; color: var(--text-on-dark-2); }
+
+    /* Network section */
+    .network-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3.5rem; align-items: start; margin-top: 2.5rem; }
+    @media (max-width: 900px) { .network-grid { grid-template-columns: 1fr; } }
+    .network-copy p { font-size: 0.88rem; line-height: 1.7; color: rgba(0,24,82,0.85); }
+    .network-copy p + p { margin-top: 1rem; }
+    .network-list { display: flex; flex-direction: column; gap: 1rem; }
+    .network-item {
+      display: flex;
+      gap: 1rem;
+      align-items: baseline;
+      background: var(--white);
+      border: 1px solid var(--rule-light);
+      border-left: 3px solid var(--green);
+      border-radius: 2px;
+      padding: 1.1rem 1.35rem;
+    }
+    .network-item .n { font-weight: 800; font-size: 1.05rem; color: var(--green-deep); flex: none; min-width: 84px; }
+    .network-item .c { font-size: 0.8rem; line-height: 1.55; color: rgba(0,24,82,0.85); }
+
+    /* Compliance strip */
+    .compliance-section { background: var(--blue-deepest); }
+    .cred-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3rem; }
+    @media (max-width: 900px) { .cred-grid { grid-template-columns: 1fr; } }
+    .cred {
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 2px;
+      padding: 1.75rem 1.5rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .cred .k { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 0.8rem; }
+    .cred p { font-size: 0.78rem; line-height: 1.65; color: var(--text-on-dark-2); }
+
+    /* Contact */
+    .contact-section { background: var(--blue-deeper); }
+    .contact-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: start; }
+    @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-content > p { font-size: 0.9rem; line-height: 1.7; color: var(--text-on-dark-2); max-width: 56ch; }
+    .quick-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 2.25rem; }
+    .quick-link { display: flex; flex-direction: column; gap: 0.3rem; border-left: 2px solid var(--green); padding-left: 1.1rem; }
+    .quick-link .label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); }
+    .quick-link span:last-child { font-size: 0.85rem; font-weight: 600; }
+    .contact-card {
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 2px;
+      padding: 2rem 1.9rem;
+      background: rgba(255,255,255,0.03);
+      position: relative;
+    }
+    .contact-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 28px; height: 28px; border-top: 3px solid var(--green); border-left: 3px solid var(--green); }
+    .contact-card-meta { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 1.1rem; }
+    .contact-name { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.01em; }
+    .contact-title { font-size: 0.78rem; color: var(--text-on-dark-2); margin: 0.4rem 0 1.4rem; line-height: 1.5; }
+    .contact-detail {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.78rem;
+    }
+    .contact-detail .field { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; color: var(--green); }
+    .contact-detail .value { font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+    a.contact-detail:hover .value { color: var(--green); }
+
+    /* Footer */
+    footer { background: var(--blue-deepest); border-top: 1px solid rgba(255,255,255,0.1); padding: 3.5rem 1.5rem 2rem; }
+    .footer-grid { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; }
+    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand p { font-size: 0.74rem; line-height: 1.7; color: var(--text-on-dark-2); margin-top: 1rem; max-width: 44ch; }
+    .footer-col h5 { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 0.85rem; }
+    .footer-col p { font-size: 0.76rem; line-height: 1.75; color: var(--text-on-dark-2); }
+    .footer-col a { border-bottom: 1px solid currentColor; }
+    .footer-col a:hover { color: var(--green); }
+    .footer-meta {
+      max-width: 1320px;
+      margin: 2.75rem auto 0;
+      padding-top: 1.4rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-on-dark-2);
+    }
+    .footer-meta .creds { display: flex; gap: 1.25rem; flex-wrap: wrap; color: var(--green); }
+
+    /* Reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .hero-radar .ring-1, .hero-radar .ring-2, .hero-radar .ring-3, .pulse-dot { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HUD FRAME -->
+  <div class="frame-top">
+    <span><span class="frame-pulse"><span class="pulse-dot"></span> CHANNEL // ACTIVE</span></span>
+    <span>ABOBSC TLS <span class="frame-divider">/</span> DLA TROOP SUPPORT PRIME VENDOR</span>
+    <span>PRE-CLEARED // PRE-PRICED</span>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#top" class="logo">ENVISION<span class="dot">&bull;</span><span class="program">TLS.GATEWAY</span></a>
+    <div class="nav-links">
+      <a href="#vehicle">The Vehicle</a>
+      <a href="#numbers">By the Numbers</a>
+      <a href="#network">The Network</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#contact">Contact</a>
+      <a href="./#proof" class="nav-cta">Capabilities Deck</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <svg class="hero-radar" viewBox="0 0 900 900">
+      <circle cx="450" cy="450" r="100" class="ring-1"/>
+      <circle cx="450" cy="450" r="100" class="ring-2"/>
+      <circle cx="450" cy="450" r="100" class="ring-3"/>
+      <circle cx="450" cy="450" r="3" fill="#78BE21"/>
+    </svg>
+
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">
+          <span class="bar"></span>
+          <span>// CONTRACT BRIEF</span>
+          <span class="meta">001 / 006</span>
+        </div>
+
+        <h1>
+          Stocked.<br>
+          Cleared.<br>
+          Ready to <span class="accent">order.</span>
+          <span class="small">Envision is the prime vendor on the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150 million, 5-year IDIQ that keeps Envision-made product moving to federal and military buyers with the qualification work already done.</span>
+        </h1>
+
+        <div class="hero-actions">
+          <a href="#vehicle" class="btn-primary">View the Vehicle</a>
+          <a href="mailto:Robert.Burke@envisionus.com" class="btn-ghost">Contact Channel Lead</a>
+        </div>
+      </div>
+
+      <div class="glance-card">
+        <div class="glance-header">
+          <span class="glance-eyebrow">Contract at a Glance</span>
+          <span class="glance-program">TLS</span>
+        </div>
+        <div class="glance-body">
+          <div class="glance-line">
+            <span class="glance-label">Vehicle</span>
+            <span class="glance-value">ABOBSC Tailored Logistics Support</span>
+          </div>
+          <div class="glance-line">
+            <span class="glance-label">Administered By</span>
+            <span class="glance-value">DLA Troop Support</span>
+          </div>
+          <div class="glance-line">
+            <span class="glance-label">Prime Vendor</span>
+            <span class="glance-value">Envision</span>
+          </div>
+          <div class="glance-line">
+            <span class="glance-label">Contract Type</span>
+            <span class="glance-value">IDIQ &mdash; 5-Year</span>
+          </div>
+          <div class="glance-line">
+            <span class="glance-label">Ceiling</span>
+            <span class="glance-value">$150M</span>
+          </div>
+          <div class="glance-line">
+            <span class="glance-label">Pricing</span>
+            <span class="glance-value">DLA Fair &amp; Reasonable</span>
+          </div>
+          <div class="glance-line">
+            <span class="glance-label">Payment</span>
+            <span class="glance-value">GPC <span class="glance-sub">&middot;</span> IMPAC Accepted</span>
+          </div>
+          <div class="glance-line">
+            <span class="glance-label">Provider Status</span>
+            <span class="glance-value">AbilityOne <span class="glance-sub">&middot;</span> NIB Affiliated</span>
+          </div>
+        </div>
+        <div class="glance-footer">
+          <span class="glance-tag">The qualification work is already done.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ships-strip">
+      <div class="ships-header">
+        <span class="ships-eyebrow">What Moves Through the Vehicle</span>
+        <span class="ships-title">Envision SKUs, on the shelf and on contract.</span>
+      </div>
+      <div class="ships-grid">
+        <span class="ship-tag">SKILCRAFT product lines</span>
+        <span class="ship-tag">Trash &amp; seal-closure bags</span>
+        <span class="ship-tag">VISI-BELTs &amp; reflective gear</span>
+        <span class="ship-tag">Safety apparel &amp; PPE</span>
+        <span class="ship-tag">Office supplies</span>
+        <span class="ship-tag">Janitorial &amp; sanitation</span>
+        <span class="ship-tag">Individual equipment</span>
+        <span class="ship-tag">Print services</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE VEHICLE — LIGHT -->
+  <section class="on-light" id="vehicle">
+    <div class="container">
+      <div class="section-marker">
+        <span class="bar"></span>
+        <span>SECTION 02 // THE VEHICLE</span>
+        <span class="meta">02 / 06</span>
+      </div>
+      <h2>A pre-set ceiling. <span class="accent">No re-bidding.</span></h2>
+      <p class="lede">IDIQ stands for Indefinite Delivery, Indefinite Quantity — the federal contract type that lets agencies order from a pre-set ceiling without running a new competition for every purchase. The ABOBSC TLS contract puts $150 million of that capacity behind Envision-made product.</p>
+
+      <div class="vehicle-grid">
+        <div class="vehicle-card reveal">
+          <div class="k">// 01 · The Contract</div>
+          <h3>$150M, 5-year IDIQ</h3>
+          <p>Envision is the prime vendor on the AbilityOne Base Supply Center Tailored Logistics Support contract, administered by DLA Troop Support. Ordering runs against a pre-approved ceiling, so product moves at the speed of the requirement — not the speed of a bid cycle.</p>
+        </div>
+        <div class="vehicle-card reveal">
+          <div class="k">// 02 · The Pricing</div>
+          <h3>Reviewed and approved</h3>
+          <p>All pricing on the vehicle is considered fair and reasonable by DLA Troop Support, and Base Supply Center purchases carry pre-approved AbilityOne pricing. GPC and IMPAC cards are accepted.</p>
+        </div>
+        <div class="vehicle-card reveal">
+          <div class="k">// 03 · The Capacity</div>
+          <h3>$198M combined with H2F</h3>
+          <p>TLS is one of two active 5-year DLA prime vendor contracts Envision holds — $150M on ABOBSC TLS and $48M on the Holistic Health &amp; Fitness (H2F) program — for $198 million in combined contract capacity. Each ships Envision SKUs.</p>
+          <p><a href="https://envision-h2f.vercel.app" target="_blank" rel="noopener" style="font-weight:700;color:var(--green-deep);border-bottom:1px solid currentColor;">Visit the H2F gateway &rarr;</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BY THE NUMBERS — DARK -->
+  <section class="stats-section" id="numbers">
+    <div class="container">
+      <div class="section-marker on-dark">
+        <span class="bar"></span>
+        <span>SECTION 03 // BY THE NUMBERS</span>
+        <span class="meta">03 / 06</span>
+      </div>
+      <h2>The channel, <span class="accent">quantified.</span></h2>
+
+      <div class="stats-grid">
+        <div class="stat reveal">
+          <div class="stat-n">$150M</div>
+          <div class="stat-l">Contract Ceiling</div>
+          <div class="stat-c">ABOBSC TLS, a 5-year IDIQ with DLA Troop Support.</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-n">$198M</div>
+          <div class="stat-l">Combined DLA Capacity</div>
+          <div class="stat-c">Across Envision's two active 5-year prime vendor contracts, TLS and H2F.</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-n">16</div>
+          <div class="stat-l">Envision-Operated BSCs</div>
+          <div class="stat-c">Base Supply Center locations across 10 states, serving Air Force, Army, Space Force, and Navy.</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-n">155K+</div>
+          <div class="stat-l">Square Feet</div>
+          <div class="stat-c">Combined retail and warehouse space across the Envision BSC footprint.</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-n">160+</div>
+          <div class="stat-l">BSCs in the Network</div>
+          <div class="stat-c">The AbilityOne Base Supply Center network Envision's stores belong to.</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-n">14</div>
+          <div class="stat-l">Countries Served</div>
+          <div class="stat-c">The reach of the AbilityOne BSC network worldwide.</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-n">88%</div>
+          <div class="stat-l">BVI Direct Labor</div>
+          <div class="stat-c">Envision's combined Direct Labor performed by people who are blind or have low vision — well above AbilityOne's 75% threshold.</div>
+        </div>
+        <div class="stat reveal">
+          <div class="stat-n">100%</div>
+          <div class="stat-l">Pricing Reviewed</div>
+          <div class="stat-c">All pricing considered fair and reasonable by DLA Troop Support.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE NETWORK — LIGHT -->
+  <section class="on-light" id="network">
+    <div class="container">
+      <div class="section-marker">
+        <span class="bar"></span>
+        <span>SECTION 04 // THE NETWORK</span>
+        <span class="meta">04 / 06</span>
+      </div>
+      <h2>The retail face of the <span class="accent">channel.</span></h2>
+
+      <div class="network-grid">
+        <div class="network-copy">
+          <p>Envision's Base Supply Centers are where the TLS vehicle meets the customer — 16 Envision-operated locations across 10 states, part of the AbilityOne BSC network spanning 160+ bases in 14 countries.</p>
+          <p>Stores stock office supplies, janitorial, safety apparel, and SKILCRAFT product lines for active-duty personnel and federal buyers, with Envision-manufactured products flowing through the channel from our U.S. campuses in Wichita, Kansas and Dallas, Texas.</p>
+          <p>Pre-approved AbilityOne pricing means no competitive bid cycle is required, and GPC and IMPAC cards are accepted at the counter.</p>
+        </div>
+        <div class="network-list">
+          <div class="network-item reveal"><span class="n">16 / 10</span><span class="c">Envision-operated Base Supply Centers, across 10 states.</span></div>
+          <div class="network-item reveal"><span class="n">4</span><span class="c">Service branches served on base: Air Force, Army, Space Force, and Navy.</span></div>
+          <div class="network-item reveal"><span class="n">155K+</span><span class="c">Square feet of combined retail and warehouse space.</span></div>
+          <div class="network-item reveal"><span class="n">0</span><span class="c">Competitive bid cycles required — pricing is pre-approved through AbilityOne.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE — DARK -->
+  <section class="compliance-section" id="compliance">
+    <div class="container">
+      <div class="section-marker on-dark">
+        <span class="bar"></span>
+        <span>SECTION 05 // COMPLIANCE</span>
+        <span class="meta">05 / 06</span>
+      </div>
+      <h2>The credentials are the door. <span class="accent">We've already opened it.</span></h2>
+      <p class="lede" style="color:var(--text-on-dark-2)">Everything on the vehicle ships from an AbilityOne provider on an authorized federal channel, with the compliance work done before an order is ever placed.</p>
+
+      <div class="cred-grid">
+        <div class="cred reveal">
+          <div class="k">// AbilityOne Provider</div>
+          <p>Envision is affiliated with National Industries for the Blind. 88% of combined Direct Labor is performed by people who are blind or have low vision — well above the program's 75% threshold.</p>
+        </div>
+        <div class="cred reveal">
+          <div class="k">// Sourcing Compliance</div>
+          <p>TAA, Berry Amendment, and Buy American compliant across Envision's federal-channel production, from decades of continuous U.S. manufacturing.</p>
+        </div>
+        <div class="cred reveal">
+          <div class="k">// ISO 9001:2015</div>
+          <p>Quality runs on ISO 9001:2015 across both campuses, each under its own Intertek, ANAB-accredited registration &mdash; Wichita (CERT-0145394) and Dallas (CERT-0145812).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT — DARK -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-content">
+          <div class="section-marker on-dark">
+            <span class="bar"></span>
+            <span>SECTION 06 // CHANNEL CONTACT</span>
+            <span class="meta">// AVAILABLE</span>
+          </div>
+          <h2>Channel <span class="accent">point of contact.</span></h2>
+          <p>Envision is the prime vendor on the ABOBSC Tailored Logistics Support contract with DLA Troop Support, keeping pre-cleared, pre-priced Envision product available to federal and military buyers through the Base Supply Center network.</p>
+
+          <div class="quick-links">
+            <div class="quick-link">
+              <span class="label">// Program Reference</span>
+              <span><a href="https://www.dla.mil/Troop-Support/Construction-and-Equipment/AbilityOne-TLSP/" target="_blank" rel="noopener" style="border-bottom:1px solid currentColor;">DLA AbilityOne TLS Program</a></span>
+            </div>
+            <div class="quick-link">
+              <span class="label">// Pricing</span>
+              <span>Fair &amp; reasonable, per DLA Troop Support</span>
+            </div>
+            <div class="quick-link">
+              <span class="label">// Payment</span>
+              <span>GPC + IMPAC accepted</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-meta">
+            <span>// Channel Lead</span>
+          </div>
+          <div class="contact-name">Robert Burke</div>
+          <div class="contact-title">Vice President, Strategic Partnerships<br>Business Development &amp; Sales</div>
+          <a href="mailto:Robert.Burke@envisionus.com" class="contact-detail">
+            <span class="field">// EMAIL</span>
+            <span class="value">Robert.Burke@envisionus.com</span>
+          </a>
+          <a href="tel:+17573752988" class="contact-detail">
+            <span class="field">// PHONE</span>
+            <span class="value">(757) 375-2988</span>
+          </a>
+          <div class="contact-detail">
+            <span class="field">// ORG</span>
+            <span class="value">Envision</span>
+          </div>
+          <div class="contact-detail">
+            <span class="field">// SCOPE</span>
+            <span class="value">ABOBSC TLS Prime Vendor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo">ENVISION<span class="dot">&bull;</span><span class="program">TLS.GATEWAY</span></a>
+        <p>Envision is the prime vendor on the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support, shipping Envision-made SKUs from its U.S. campuses through the Base Supply Center network.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Campuses</h5>
+        <p>2301 S. Water Street<br>Wichita, KS 67213<br><br>1801 Valley View Lane<br>Farmers Branch, TX 75234</p>
+      </div>
+      <div class="footer-col">
+        <h5>Active Vehicle</h5>
+        <p><a href="https://www.dla.mil/Troop-Support/Construction-and-Equipment/AbilityOne-TLSP/" target="_blank" rel="noopener">DLA AbilityOne TLS Program</a><br>$150M &middot; 5-Year IDIQ</p>
+      </div>
+      <div class="footer-col">
+        <h5>More From Envision</h5>
+        <p><a href="./#proof">Capabilities &amp; Services Deck</a><br><a href="https://envision-h2f.vercel.app" target="_blank" rel="noopener">H2F Gateway</a></p>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <div class="creds">
+        <span>// DLA PRIME VENDOR</span>
+        <span>// ABILITYONE PROVIDER</span>
+        <span>// FAIR &amp; REASONABLE PRICING</span>
+      </div>
+      <span>&copy; ENVISION // ALL RIGHTS RESERVED</span>
+    </div>
+  </footer>
+
+  <!-- BOTTOM HUD FRAME -->
+  <div class="frame-bottom">
+    <span><span class="frame-pulse"><span class="pulse-dot"></span> CHANNEL // NOMINAL</span></span>
+    <span>ABOBSC TLS // $150M &middot; 5-YEAR IDIQ <span class="frame-divider">/</span> DLA TROOP SUPPORT</span>
+    <span>PRE-CLEARED // PRE-PRICED</span>
+  </div>
+
+  <script>
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('is-visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
