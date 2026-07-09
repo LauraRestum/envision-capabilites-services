@@ -22,6 +22,17 @@ default). Style is the green-tinted `.m-card-icon` box.
   `m-card-photo` inside project callouts. (`m-card-ph` is still fine for the
   product-catalog cards, which genuinely await product photography.)
 
+## Program videos on callout cards
+
+Any callout entry (in the `MODALS` mission/capability pop-ups or in `PROJECTS`)
+can carry a `video:"https://youtu.be/..."` field (YouTube, Instagram Reels, or
+any external URL). It renders a green "Watch the video" link with a play icon
+(`videoLinkHTML()`, styled `.m-card-link.m-card-video`) that opens the video in
+a new tab. For more than one video on a card, use
+`videos:[{url:"...",label:"Heather's Camp"},...]` — each renders as
+"Watch: <label>". Strip share-tracking params (`?si=`, `?igsh=`) from pasted
+links before adding them.
+
 ### Timelines — keep evergreen, hide what's over
 
 Project copy should stay evergreen. Avoid timeline language that ages and goes
