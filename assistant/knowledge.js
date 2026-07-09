@@ -147,7 +147,7 @@ window.ENVISION_INTENTS = [
     label: "Dallas Campus",
     triggers: ["dallas", "texas", "dfw", "farmers branch", "dallas capabilities",
       "what is in dallas", "valley view", "75234", "dallas campus"],
-    answer: "The Dallas campus (1801 Valley View Lane, Farmers Branch) runs textile and apparel (Berry-compliant military gear and ANSI high-visibility), binders and document covers, marker assembly, secure document services including IRS mailrooms, and fulfillment with 23 dock doors. It holds the ISO 9001:2015 registration and is the Texas WorkQuest participant. 235,000 square feet, 145 team members.",
+    answer: "The Dallas campus (1801 Valley View Lane, Farmers Branch) runs textile and apparel (Berry-compliant military gear and ANSI high-visibility), binders and document covers, marker assembly, secure document services including IRS mailrooms, and fulfillment with 23 dock doors. It holds its own ISO 9001:2015 registration (CERT-0145812) and is the Texas WorkQuest participant. 235,000 square feet, 145 team members.",
     next: {action:"section", target:"Capabilities", label:"Browse capabilities"},
     contact: "tuttle",
     source: "Campuses, Dallas"
@@ -329,7 +329,7 @@ window.ENVISION_INTENTS = [
     triggers: ["quality", "qa", "quality assurance", "inspection", "iso lab", "dimensional",
       "gauge", "calibration", "dcma", "alternate release", "quality lab", "metrology",
       "quality control"],
-    answer: "Quality runs on ISO 9001:2015 across both campuses, registered at Dallas, with material and dimensional validation against gauge, strength, and spec in our on-site Quality Labs. We hold federal compliance credentials across every capability and operate under the DCMA Alternate Release Program out of Dallas.",
+    answer: "Quality runs on ISO 9001:2015 across both campuses, each under its own Intertek registration — Wichita holds certificate CERT-0145394 and Dallas holds CERT-0145812 — with material and dimensional validation against gauge, strength, and spec in our on-site Quality Labs. We hold federal compliance credentials across every capability and operate under the DCMA Alternate Release Program out of Dallas.",
     next: {action:"modal", target:"quality", label:"Explore Quality Assurance & Compliance"},
     contact: "tuttle",
     source: "Services, Quality Assurance & Compliance"
@@ -363,7 +363,7 @@ window.ENVISION_INTENTS = [
     label: "DLA Prime Vendor",
     triggers: ["dla", "prime vendor", "idiq", "troop support", "defense logistics",
       "abobsc", "h2f", "contract capacity", "ceiling"],
-    answer: "Envision is a DLA Prime Vendor with 198 million dollars in combined contract capacity across two active 5-year IDIQ contracts. The ABOBSC TLS contract carries a 150 million dollar ceiling and H2F carries 48 million, and each ships Envision SKUs. All pricing is considered fair and reasonable by DLA Troop Support.",
+    answer: "Envision is a DLA Prime Vendor with 198 million dollars in combined contract capacity across two active 5-year IDIQ contracts. The ABOBSC TLS contract carries a 150 million dollar ceiling and H2F carries 48 million, and each ships Envision SKUs. All pricing is considered fair and reasonable by DLA Troop Support. Both contract vehicles have dedicated detail sites, linked from the contract-vehicle cards on the Proof slide.",
     next: {action:"section", target:"Proof", label:"See our federal channels"},
     contact: "zahr",
     source: "Proof"
@@ -417,7 +417,7 @@ window.ENVISION_INTENTS = [
       "compliance letter", "documents"],
     /* NOTE: the deck's document links are placeholders (href="#"). Swap in the
        real files in index.html before promising downloads. */
-    answer: "Our document library includes the Capabilities Statement, the ISO 9001:2015 certificate (CERT-0145812, Dallas), and the Berry and TAA compliance letter. You will find them in the Compliance section of the deck.",
+    answer: "Our document library includes the Capabilities Statement, the ISO 9001:2015 certificates for both campuses (CERT-0145394, Wichita; CERT-0145812, Dallas), and the Berry and TAA compliance letter. You will find them in the Compliance section of the deck.",
     next: {action:"section", target:"Compliance", label:"Open the document library"},
     contact: "zahr",
     source: "Compliance, Document Library"
