@@ -1834,14 +1834,17 @@
     /* Hero was built desktop-first (text confined to the left 40vw over a
        side-lit image). On phones that column collapses to ~150px and the
        headline looks zoomed. Let the copy use the full width and darken the
-       whole frame behind it instead. */
+       whole frame behind it instead. The scrim never thins below 0.72: the
+       copy block can start as high as ~15% of the frame on small phones, so a
+       lighter mid-stop puts the subhead on the bright warehouse aisle at
+       under 4.5:1. */
     .hero{padding:clamp(28px,6vh,56px) 20px;justify-content:flex-end}
     .hero-inner{max-width:none;width:100%}
     .hero .overlay{
       background:linear-gradient(180deg,
         rgba(0,24,82,0.78) 0%,
-        rgba(0,24,82,0.42) 42%,
-        rgba(0,24,82,0.82) 100%);
+        rgba(0,24,82,0.72) 42%,
+        rgba(0,24,82,0.86) 100%);
     }
     h1.hero-h{font-size:clamp(2rem,8.5vw,2.7rem)}
     .hero .subhead{font-size:clamp(1rem,4.2vw,1.16rem)}
