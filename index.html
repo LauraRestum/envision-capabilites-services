@@ -1490,6 +1490,19 @@
   .bcard-row a{color:var(--green);font-weight:700;text-decoration:none;border-bottom:1px solid var(--green-dim)}
   .bcard-row a:hover{color:var(--navy);border-bottom-color:var(--navy)}
 
+  /* Contact slide: one centered composition. The header, contact cards, and
+     campus footer all balance around the same midline, and the contact-card
+     rail matches the campus-footer rail (760px) so the two rows read as one
+     column. Card text stays left-aligned inside the cards. */
+  .slide--contact .wrap{text-align:center}
+  .slide--contact .eyebrow{justify-content:center}
+  .slide--contact .subhead{margin-left:auto;margin-right:auto}
+  .slide--contact .key-contacts{max-width:760px;margin-top:36px}
+  .slide--contact .general-contacts-label{text-align:center}
+  .slide--contact .general-contacts-grid{gap:clamp(18px,2.6vw,32px)}
+  .slide--contact .bcard{max-width:none;text-align:left}
+  .slide--contact .campus-footer{margin-top:40px}
+
   /* Clickable campus address (contact slide footer) */
   .campus-card__addr a{color:var(--navy);font-weight:600;text-decoration:underline;text-underline-offset:2px;transition:color .15s}
   .campus-card__addr a:hover{color:var(--green)}
@@ -2761,7 +2774,7 @@
       </section>
 
       <!-- SLIDE 10: CTA -->
-      <section class="slide" data-name="Contact">
+      <section class="slide slide--contact" data-name="Contact">
         <div class="wrap center">
           <div class="eyebrow">Envision · Capabilities &amp; Services</div>
           <h2 class="sec-h">Get in Touch</h2>
