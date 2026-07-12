@@ -901,10 +901,17 @@
   }
 
   /* ---------- Envision In Action ---------- */
-  /* Pin the Proof grid to a balanced 2 rows of 3 (6 cards incl. In Action) */
-  .slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(3,1fr)}
-  @media (max-width:900px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(2,1fr)}}
-  @media (max-width:560px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:1fr}}
+  /* Pin the channel grids (Proof + Vehicles, 3 cards each) to one row of 3 */
+  .slide[data-name="Proof"] .proof-grid,
+  .slide[data-name="Vehicles"] .proof-grid{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:900px){
+    .slide[data-name="Proof"] .proof-grid,
+    .slide[data-name="Vehicles"] .proof-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:560px){
+    .slide[data-name="Proof"] .proof-grid,
+    .slide[data-name="Vehicles"] .proof-grid{grid-template-columns:1fr}
+  }
 
   /* Clickable portal cards in the Proof grid — the Current Projects portal,
      plus the two contract-vehicle cards that link out to their detail sites. */
@@ -2080,6 +2087,56 @@
   .fs-wipe.cover{transform:scaleX(1)}
   .fs-wipe.exit{transform-origin:right center;transform:scaleX(0)}
 
+  /* ---------- "More below" scroll cue ----------
+     Slides scroll (overflow-y:auto) but nothing ever said so. This pill
+     appears over any slide whose content runs past the fold, and hides once
+     the visitor has scrolled to the bottom. Presentation mode scales slides
+     to fit (fitSlides), so the cue is windowed-mode only. */
+  .scroll-cue{
+    position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--navy);color:#fff;border:0;border-radius:999px;
+    font-family:var(--sans);font-size:11px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    padding:10px 18px;cursor:pointer;
+    box-shadow:0 4px 18px rgba(0,24,82,0.30);
+    opacity:.94;transition:opacity .2s,background .2s;
+  }
+  .scroll-cue:hover{opacity:1;background:var(--blue-mid,#1f5fc0)}
+  .scroll-cue:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .scroll-cue svg{display:block;animation:cue-bob 1.6s ease-in-out infinite}
+  .scroll-cue[hidden]{display:none}
+  body.presentation .scroll-cue{display:none}
+  @keyframes cue-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+  @media (prefers-reduced-motion: reduce){.scroll-cue svg{animation:none}}
+
+  /* ---------- Height-constrained screens ----------
+     Typical 16:9 laptops and conference screens (≤ ~980px tall): compact the
+     two densest slides so each fits one screen with nothing below the fold.
+     Taller monitors and width-constrained (mobile) layouts are untouched. */
+  @media (min-width:701px) and (max-height:980px){
+    .campus-slide{padding-top:clamp(12px,1.8vh,24px);padding-bottom:clamp(12px,1.8vh,24px)}
+    .campus-photo img{height:clamp(140px,21vh,240px);object-fit:cover}
+    .combined-band .cb-cell{padding:9px 14px}
+    .campus-body{padding:10px 16px}
+    .fed-band{padding:11px clamp(16px,2vw,24px)}
+    .mission-slide .mw{
+      padding-top:clamp(8px,1.4vh,18px);padding-bottom:clamp(8px,1.4vh,18px);
+      gap:clamp(8px,1.3vh,16px);
+    }
+    .slide--compliance .cred-grid{margin-top:18px;gap:10px}
+    .slide--compliance .cred{padding:15px 18px}
+    .slide--compliance .cred .c-d{line-height:1.55}
+  }
+  /* Shorter still (e.g. 1366×768 laptops): tighten the channel cards so the
+     Proof and Vehicles slides keep fitting one screen. */
+  @media (min-width:701px) and (max-height:820px){
+    .proof-grid{margin-top:18px}
+    .proof-card{padding:18px 18px}
+    .proof-card .t-d{font-size:13px;line-height:1.55}
+    .callout-box{margin-top:14px;padding:14px 18px}
+  }
+
   /* ---------- Presentation mode (fullscreen) ---------- */
   :fullscreen .deck{height:100vh}
   :-webkit-full-screen .deck{height:100vh}
@@ -2596,7 +2653,7 @@
       <section class="slide" data-name="Proof">
         <div class="wrap">
           <div class="eyebrow">Federal &amp; State Channels</div>
-          <h2 class="sec-h">Mandatory source. Prime vendor. <span class="bsc-link" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">Base supply.</span></h2>
+          <h2 class="sec-h">Mandatory source. State use. <span class="bsc-link" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">Base supply.</span></h2>
           <p class="subhead">Envision is an active, pre-cleared source across federal and state channels. The qualification work is already done. Every channel below is live, and all pricing has been reviewed and approved.</p>
           <div class="proof-grid">
             <div class="proof-card">
@@ -2605,13 +2662,6 @@
               <div class="t-d">Envision is affiliated with the National Industries for the Blind. AbilityOne is the federal program that designates certain products as mandatory-source from approved nonprofit manufacturers. SKILCRAFT-branded Envision products in the federal catalog include trash bags, seal-closure bags, VISI-BELTs, and print services.</div>
               <div class="t-m">88% of Envision's combined Direct Labor is performed by people who are blind or have low vision. Exceeds AbilityOne's 75% threshold.</div>
             </div>
-            <a class="proof-card proof-card--action" href="tls.html" target="_blank" rel="noopener" aria-label="Open the TLS contract vehicle detail site">
-              <div class="tag">Prime Vendor</div>
-              <div class="t-h">DLA Prime Vendor</div>
-              <div class="t-d">Envision holds the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150 million, 5-year IDIQ. IDIQ stands for Indefinite Delivery, Indefinite Quantity, the federal contract type that lets agencies order from a pre-set ceiling without re-bidding.</div>
-              <div class="t-m">ABOBSC TLS: $150M, 5-year. $198M combined DLA capacity with H2F. Each ships Envision SKUs.</div>
-              <div class="proj-cue">View the TLS contract vehicle <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-            </a>
             <div class="proof-card" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
               <div class="tag">Base Supply</div>
               <div class="t-h">Base Supply Centers</div>
@@ -2632,6 +2682,24 @@
                 <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--dallas">Dallas</span></div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: CONTRACT VEHICLES (second beat of Federal & State Channels) -->
+      <section class="slide" data-name="Vehicles">
+        <div class="wrap">
+          <div class="eyebrow">Federal &amp; State Channels</div>
+          <h2 class="sec-h">Prime vendor. Pre-set ceilings. <span class="accent">No re-bidding.</span></h2>
+          <p class="subhead">Envision holds two dedicated contract vehicles with DLA Troop Support. Agencies order Envision-made product against a pre-competed ceiling, with no new bid cycle — and Envision in Action is the live view of the work those channels feed.</p>
+          <div class="proof-grid">
+            <a class="proof-card proof-card--action" href="tls.html" target="_blank" rel="noopener" aria-label="Open the TLS contract vehicle detail site">
+              <div class="tag">Prime Vendor</div>
+              <div class="t-h">DLA Prime Vendor</div>
+              <div class="t-d">Envision holds the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150 million, 5-year IDIQ. IDIQ stands for Indefinite Delivery, Indefinite Quantity, the federal contract type that lets agencies order from a pre-set ceiling without re-bidding.</div>
+              <div class="t-m">ABOBSC TLS: $150M, 5-year. $198M combined DLA capacity with H2F. Each ships Envision SKUs.</div>
+              <div class="proj-cue">View the TLS contract vehicle <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            </a>
             <a class="proof-card proof-card--action" href="https://envision-h2f.vercel.app" target="_blank" rel="noopener" aria-label="Open the H2F program detail site">
               <div class="tag">Contract Vehicle</div>
               <div class="t-h">H2F &mdash; Holistic Health &amp; Fitness</div>
@@ -2650,16 +2718,16 @@
         </div>
       </section>
 
-      <!-- SLIDE 9: COMPLIANCE + PROCUREMENT ACCESS -->
+      <!-- SLIDE 10: COMPLIANCE — the credentials wall -->
       <section class="slide slide--compliance" data-name="Compliance">
         <div class="wrap">
-          <div class="eyebrow">Compliance + Procurement Access</div>
+          <div class="eyebrow">Compliance</div>
           <h2 class="sec-h">The credentials are the door. We've already opened it.</h2>
-          <p class="subhead">TAA, Berry, Buy American, ISO 9001:2015, and decades of continuous U.S. manufacturing. These are the qualifications federal and military buyers require. Partnering with Envision means the qualifications are already in place. The compliance work is done. The door is open.</p>
+          <p class="subhead">TAA, Berry, Buy American, ISO 9001:2015, and decades of continuous U.S. manufacturing &mdash; the qualifications federal and military buyers require are already in place.</p>
           <div class="cred-grid">
             <div class="cred">
               <div class="c-h">ISO 9001:2015 <span class="loc-chip loc-chip--wichita">Wichita</span> <span class="loc-chip loc-chip--dallas">Dallas</span></div>
-              <div class="c-d">The ISO 9001:2015 quality system operates across both campuses, each under its own Intertek, ANAB-accredited registration. <strong>Wichita Campus: certificate CERT-0145394</strong> &mdash; 2301 S. Water Street, Wichita, KS. Certified since 2008. Valid until 18 Apr 2029. Scope: manufacture of plastic bags, small items, and printing services. <strong>Dallas Campus: certificate CERT-0145812</strong> &mdash; 1801 Valley View Lane, Farmers Branch, TX. Valid until 25 Apr 2028. Scope: manufacture, assembly and fulfillment services for government, military, and commercial applications. QA Lab material and dimensional validation against gauge, strength, and spec, system-wide.</div>
+              <div class="c-d">The ISO 9001:2015 quality system operates across both campuses, each under its own Intertek, ANAB-accredited registration. <strong>Wichita Campus: certificate CERT-0145394</strong> &mdash; certified since 2008, valid until 18 Apr 2029. Scope: plastic bags, small items, and printing services. <strong>Dallas Campus: certificate CERT-0145812</strong> &mdash; valid until 25 Apr 2028. Scope: manufacture, assembly and fulfillment for government, military, and commercial applications. QA Lab material and dimensional validation against gauge, strength, and spec, system-wide.</div>
             </div>
             <div class="cred">
               <div class="c-h">Berry Amendment</div>
@@ -2682,6 +2750,15 @@
               <div class="c-d">AbilityOne mandatory-source participant nationally. Kansas State Use participant out of <span class="loc-chip loc-chip--wichita">Wichita</span> and Texas WorkQuest (State Use) participant out of <span class="loc-chip loc-chip--dallas">Dallas</span>.</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 11: PROCUREMENT ACCESS — registrations + document library -->
+      <section class="slide" data-name="Registrations">
+        <div class="wrap center">
+          <div class="eyebrow">Procurement Access</div>
+          <h2 class="sec-h">Registered, verified, and <span class="accent">ready to order.</span></h2>
+          <p class="subhead">Every Envision operating entity is active in SAM.gov, with the CAGE, DUNS, and UEI codes buyers need &mdash; and the supporting documents are one click away.</p>
           <!-- Federal registrations by campus. Real <button> pills, single-open
                accordion, ARIA-wired so the panel is announced to screen readers. -->
           <div class="reg-bar">
@@ -2784,7 +2861,7 @@
         </div>
       </section>
 
-      <!-- SLIDE 10: CTA -->
+      <!-- SLIDE 12: CTA -->
       <section class="slide slide--contact" data-name="Contact">
         <div class="wrap center">
           <div class="eyebrow">Envision · Capabilities &amp; Services</div>
@@ -2839,6 +2916,13 @@
       </section>
 
     </div>
+
+    <!-- "More below" cue: shown by updateScrollCue() whenever the current
+         slide's content runs past the fold (windowed mode only). -->
+    <button class="scroll-cue" id="scrollCue" type="button" aria-label="Scroll down to see the rest of this slide" hidden>
+      More below
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg>
+    </button>
   </div>
 
   <!-- ===================== BACK BUTTON ===================== -->
@@ -2964,8 +3048,8 @@
     {name:"Capabilities",count:1},
     {name:"Services",    count:1},
     {name:"Innovation",  count:1},
-    {name:"Proof",       count:1},
-    {name:"Compliance",  count:1},
+    {name:"Proof",       count:2},
+    {name:"Compliance",  count:2},
     {name:"Contact",     count:1}
   ];
 
@@ -4834,7 +4918,7 @@
     if (!r) return;
     if (r.type === "project"){
       if (modalOpen()) closeModal();
-      var ph = slideIndexByName("Proof");
+      var ph = slideIndexByName("Vehicles");
       showBack(idx);
       if (ph >= 0 && ph !== idx) go(ph);
       openInAction();
@@ -4846,7 +4930,7 @@
     }
     if (r.type === "projects"){
       if (modalOpen()) closeModal();
-      var ph2 = slideIndexByName("Proof");
+      var ph2 = slideIndexByName("Vehicles");
       showBack(idx);
       if (ph2 >= 0 && ph2 !== idx) go(ph2);
       openInAction();
@@ -5109,6 +5193,7 @@
     resetSlideDisclosures();
     var cur = slides[idx];
     if (cur) cur.scrollTop = 0;
+    updateScrollCue();
     writeHash(slideSlugForIdx(idx));
   }
   function go(n){
@@ -5215,11 +5300,13 @@
     document.body.classList.toggle("presentation", !!document.fullscreenElement);
     updateFsIcon();
     scheduleFit();
+    updateScrollCue();
   });
   document.addEventListener("webkitfullscreenchange", function(){
     document.body.classList.toggle("presentation", !!(document.fullscreenElement || document.webkitFullscreenElement));
     updateFsIcon();
     scheduleFit();
+    updateScrollCue();
   });
 
   /* ---- Present-mode fit: scale every slide to the screen ----
@@ -5289,6 +5376,37 @@
         document.body.classList.contains("presentation")) scheduleFit();
   }, true);
 
+  /* ---- "More below" scroll cue ----
+     Windowed slides scroll, but nothing signals that content continues past
+     the fold. Show the cue whenever the current slide still has content
+     below the viewport; hide it once the visitor reaches the bottom.
+     Presentation mode scales slides to fit, so the cue never shows there. */
+  var scrollCue = document.getElementById("scrollCue");
+  function updateScrollCue(){
+    var s = slides[idx];
+    if (!s || s.classList.contains("hero-slide") ||
+        document.body.classList.contains("presentation")){
+      scrollCue.hidden = true;
+      return;
+    }
+    scrollCue.hidden = (s.scrollHeight - s.clientHeight - s.scrollTop) <= 24;
+  }
+  function scrollCurrentSlide(dir){
+    var s = slides[idx];
+    if (s) s.scrollBy({top: dir * Math.round(s.clientHeight * 0.75), behavior:"smooth"});
+  }
+  scrollCue.addEventListener("click", function(){ scrollCurrentSlide(1); });
+  slides.forEach(function(s){
+    s.addEventListener("scroll", function(){
+      if (s === slides[idx]) updateScrollCue();
+    }, {passive:true});
+  });
+  window.addEventListener("resize", updateScrollCue);
+  // Lazy images landing on the current slide can push content past the fold.
+  document.addEventListener("load", function(e){
+    if (e.target && e.target.tagName === "IMG") updateScrollCue();
+  }, true);
+
   document.addEventListener("keydown", function(e){
     // Don't hijack keys while the visitor is typing in a field (e.g. the
     // concierge input). Otherwise Space advances a slide instead of inserting
@@ -5329,6 +5447,22 @@
     }
     if (e.key === "ArrowRight" || e.key === " " || e.key === "Spacebar"){ e.preventDefault(); linear(idx + 1); }
     else if (e.key === "ArrowLeft"){ e.preventDefault(); linear(idx - 1); }
+    // Down/Up scroll within a slide that runs past the fold (windowed mode);
+    // once there's nothing left to scroll they advance/rewind the deck.
+    else if (e.key === "ArrowDown"){
+      e.preventDefault();
+      var sd = slides[idx];
+      if (sd && !document.body.classList.contains("presentation") &&
+          (sd.scrollHeight - sd.clientHeight - sd.scrollTop) > 4){ scrollCurrentSlide(1); }
+      else linear(idx + 1);
+    }
+    else if (e.key === "ArrowUp"){
+      e.preventDefault();
+      var su = slides[idx];
+      if (su && !document.body.classList.contains("presentation") &&
+          su.scrollTop > 4){ scrollCurrentSlide(-1); }
+      else linear(idx - 1);
+    }
     else if (e.key === "f" || e.key === "F"){ toggleFs(); }
     else if (e.key >= "0" && e.key <= "9"){
       // 1-9 = sections 1-9; 0 = section 10, so all ten sections are reachable.
