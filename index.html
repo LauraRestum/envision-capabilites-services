@@ -901,17 +901,10 @@
   }
 
   /* ---------- Envision In Action ---------- */
-  /* Pin the channel grids (Proof + Vehicles, 3 cards each) to one row of 3 */
-  .slide[data-name="Proof"] .proof-grid,
-  .slide[data-name="Vehicles"] .proof-grid{grid-template-columns:repeat(3,1fr)}
-  @media (max-width:900px){
-    .slide[data-name="Proof"] .proof-grid,
-    .slide[data-name="Vehicles"] .proof-grid{grid-template-columns:repeat(2,1fr)}
-  }
-  @media (max-width:560px){
-    .slide[data-name="Proof"] .proof-grid,
-    .slide[data-name="Vehicles"] .proof-grid{grid-template-columns:1fr}
-  }
+  /* Pin the Proof grid to a balanced 2 rows of 3 (6 cards incl. In Action) */
+  .slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:900px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.slide[data-name="Proof"] .proof-grid{grid-template-columns:1fr}}
 
   /* Clickable portal cards in the Proof grid — the Current Projects portal,
      plus the two contract-vehicle cards that link out to their detail sites. */
@@ -2129,7 +2122,7 @@
     .slide--compliance .cred .c-d{line-height:1.55}
   }
   /* Shorter still (e.g. 1366×768 laptops): tighten the channel cards so the
-     Proof and Vehicles slides keep fitting one screen. */
+     dense Proof and Compliance slides need as little scrolling as possible. */
   @media (min-width:701px) and (max-height:820px){
     .proof-grid{margin-top:18px}
     .proof-card{padding:18px 18px}
@@ -2653,7 +2646,7 @@
       <section class="slide" data-name="Proof">
         <div class="wrap">
           <div class="eyebrow">Federal &amp; State Channels</div>
-          <h2 class="sec-h">Mandatory source. State use. <span class="bsc-link" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">Base supply.</span></h2>
+          <h2 class="sec-h">Mandatory source. Prime vendor. <span class="bsc-link" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">Base supply.</span></h2>
           <p class="subhead">Envision is an active, pre-cleared source across federal and state channels. The qualification work is already done. Every channel below is live, and all pricing has been reviewed and approved.</p>
           <div class="proof-grid">
             <div class="proof-card">
@@ -2662,6 +2655,13 @@
               <div class="t-d">Envision is affiliated with the National Industries for the Blind. AbilityOne is the federal program that designates certain products as mandatory-source from approved nonprofit manufacturers. SKILCRAFT-branded Envision products in the federal catalog include trash bags, seal-closure bags, VISI-BELTs, and print services.</div>
               <div class="t-m">88% of Envision's combined Direct Labor is performed by people who are blind or have low vision. Exceeds AbilityOne's 75% threshold.</div>
             </div>
+            <a class="proof-card proof-card--action" href="tls.html" target="_blank" rel="noopener" aria-label="Open the TLS contract vehicle detail site">
+              <div class="tag">Prime Vendor</div>
+              <div class="t-h">DLA Prime Vendor</div>
+              <div class="t-d">Envision holds the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150 million, 5-year IDIQ. IDIQ stands for Indefinite Delivery, Indefinite Quantity, the federal contract type that lets agencies order from a pre-set ceiling without re-bidding.</div>
+              <div class="t-m">ABOBSC TLS: $150M, 5-year. $198M combined DLA capacity with H2F. Each ships Envision SKUs.</div>
+              <div class="proj-cue">View the TLS contract vehicle <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            </a>
             <div class="proof-card" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
               <div class="tag">Base Supply</div>
               <div class="t-h">Base Supply Centers</div>
@@ -2682,24 +2682,6 @@
                 <div class="t-m">Active mandatory source. <span class="loc-chip loc-chip--dallas">Dallas</span></div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 9: CONTRACT VEHICLES (second beat of Federal & State Channels) -->
-      <section class="slide" data-name="Vehicles">
-        <div class="wrap">
-          <div class="eyebrow">Federal &amp; State Channels</div>
-          <h2 class="sec-h">Prime vendor. Pre-set ceilings. <span class="accent">No re-bidding.</span></h2>
-          <p class="subhead">Envision holds two dedicated contract vehicles with DLA Troop Support. Agencies order Envision-made product against a pre-competed ceiling, with no new bid cycle — and Envision in Action is the live view of the work those channels feed.</p>
-          <div class="proof-grid">
-            <a class="proof-card proof-card--action" href="tls.html" target="_blank" rel="noopener" aria-label="Open the TLS contract vehicle detail site">
-              <div class="tag">Prime Vendor</div>
-              <div class="t-h">DLA Prime Vendor</div>
-              <div class="t-d">Envision holds the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $150 million, 5-year IDIQ. IDIQ stands for Indefinite Delivery, Indefinite Quantity, the federal contract type that lets agencies order from a pre-set ceiling without re-bidding.</div>
-              <div class="t-m">ABOBSC TLS: $150M, 5-year. $198M combined DLA capacity with H2F. Each ships Envision SKUs.</div>
-              <div class="proj-cue">View the TLS contract vehicle <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-            </a>
             <a class="proof-card proof-card--action" href="https://envision-h2f.vercel.app" target="_blank" rel="noopener" aria-label="Open the H2F program detail site">
               <div class="tag">Contract Vehicle</div>
               <div class="t-h">H2F &mdash; Holistic Health &amp; Fitness</div>
@@ -2718,10 +2700,10 @@
         </div>
       </section>
 
-      <!-- SLIDE 10: COMPLIANCE — the credentials wall -->
+      <!-- SLIDE 9: COMPLIANCE + PROCUREMENT ACCESS -->
       <section class="slide slide--compliance" data-name="Compliance">
         <div class="wrap">
-          <div class="eyebrow">Compliance</div>
+          <div class="eyebrow">Compliance + Procurement Access</div>
           <h2 class="sec-h">The credentials are the door. We've already opened it.</h2>
           <p class="subhead">TAA, Berry, Buy American, ISO 9001:2015, and decades of continuous U.S. manufacturing &mdash; the qualifications federal and military buyers require are already in place.</p>
           <div class="cred-grid">
@@ -2750,15 +2732,6 @@
               <div class="c-d">AbilityOne mandatory-source participant nationally. Kansas State Use participant out of <span class="loc-chip loc-chip--wichita">Wichita</span> and Texas WorkQuest (State Use) participant out of <span class="loc-chip loc-chip--dallas">Dallas</span>.</div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 11: PROCUREMENT ACCESS — registrations + document library -->
-      <section class="slide" data-name="Registrations">
-        <div class="wrap center">
-          <div class="eyebrow">Procurement Access</div>
-          <h2 class="sec-h">Registered, verified, and <span class="accent">ready to order.</span></h2>
-          <p class="subhead">Every Envision operating entity is active in SAM.gov, with the CAGE, DUNS, and UEI codes buyers need &mdash; and the supporting documents are one click away.</p>
           <!-- Federal registrations by campus. Real <button> pills, single-open
                accordion, ARIA-wired so the panel is announced to screen readers. -->
           <div class="reg-bar">
@@ -2861,7 +2834,7 @@
         </div>
       </section>
 
-      <!-- SLIDE 12: CTA -->
+      <!-- SLIDE 10: CTA -->
       <section class="slide slide--contact" data-name="Contact">
         <div class="wrap center">
           <div class="eyebrow">Envision · Capabilities &amp; Services</div>
@@ -3048,8 +3021,8 @@
     {name:"Capabilities",count:1},
     {name:"Services",    count:1},
     {name:"Innovation",  count:1},
-    {name:"Proof",       count:2},
-    {name:"Compliance",  count:2},
+    {name:"Proof",       count:1},
+    {name:"Compliance",  count:1},
     {name:"Contact",     count:1}
   ];
 
@@ -4918,7 +4891,7 @@
     if (!r) return;
     if (r.type === "project"){
       if (modalOpen()) closeModal();
-      var ph = slideIndexByName("Vehicles");
+      var ph = slideIndexByName("Proof");
       showBack(idx);
       if (ph >= 0 && ph !== idx) go(ph);
       openInAction();
@@ -4930,7 +4903,7 @@
     }
     if (r.type === "projects"){
       if (modalOpen()) closeModal();
-      var ph2 = slideIndexByName("Vehicles");
+      var ph2 = slideIndexByName("Proof");
       showBack(idx);
       if (ph2 >= 0 && ph2 !== idx) go(ph2);
       openInAction();
