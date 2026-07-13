@@ -30,7 +30,9 @@ any external URL). It renders a green "Watch the video" link with a play icon
 (`videoLinkHTML()`, styled `.m-card-link.m-card-video`) that opens the video in
 a new tab. For more than one video on a card, use
 `videos:[{url:"...",label:"Heather's Camp"},...]` — each renders as
-"Watch: <label>". Strip share-tracking params (`?si=`, `?igsh=`) from pasted
+"Watch: <label>". A `cta` field replaces the link text entirely (e.g.
+`videos:[{url:"...",cta:"Explore Esther's Place"}]`) for links that aren't
+"watch"-framed. Strip share-tracking params (`?si=`, `?igsh=`) from pasted
 links before adding them.
 
 ### Timelines — keep evergreen, hide what's over
