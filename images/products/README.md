@@ -9,6 +9,9 @@ Polymer & Film callouts:
 - `acu-trousers.webp` — OCP combat trousers (Army Combat Uniform line)
 - `molle-etool-pouch.jpg` — OCP MOLLE / ETOOL carrier pouch
 - `thank-you-bag.jpg` — imprintable "Thank You" T-shirt bag
+- `safety-vest-class2.jpg` — ANSI/ISEA 107 Class 2 hi-vis mesh vest, front/back
+  (wired into the Textile & Apparel and Reflective Safety Systems callouts;
+  original PNG in `_source/safety-vest-class2.png`)
 
 The subfolders below hold the additional product photography uploaded for each
 line — alternate angles and SKU shots — ready to be selected and wired in.
