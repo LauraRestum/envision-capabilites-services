@@ -3131,7 +3131,7 @@
       calloutLabel:"What's under Rehabilitation",
       callouts:[
         {tag:"Clinical",title:"Envision Vision Rehabilitation Center",desc:"Clinician-led low vision evaluations, occupational therapy, and orientation and mobility training, with referring physicians sending patients here for care that goes beyond a standard eye exam.",img:"images/envision-vision-rehab-magnifier-training.jpg",cover:true,imgAlt:"An Envision staff member helping a client use a lighted magnifier"},
-        {tag:"Independence",title:"Training for Independence",desc:"Immersive training inside two fully functional apartments, Esther's Place in Farmers Branch and Independence Boulevard in Wichita, where people practice cooking, medication management, laundry, and home organization until it is routine. Programs run as TIP for adults and SKIP for adults 55 and older who are newly adjusting to vision loss.",img:"images/envision-esthers-place-training-apartment.jpg",cover:true,imgAlt:"An instructor showing a participant the adaptive devices on a nightstand in the Esther's Place training apartment",video:"https://www.instagram.com/reel/DU_SNrjkfsZ/"},
+        {tag:"Independence",title:"Training for Independence",desc:"Immersive training inside two fully functional apartments, Esther's Place in Farmers Branch and Independence Boulevard in Wichita, where people practice cooking, medication management, laundry, and home organization until it is routine. Programs run as TIP for adults and SKIP for adults 55 and older who are newly adjusting to vision loss.",img:"images/envision-esthers-place-training-apartment.jpg",cover:true,imgAlt:"An instructor showing a participant the adaptive devices on a nightstand in the Esther's Place training apartment",videos:[{url:"https://www.instagram.com/reel/DU_SNrjkfsZ/",cta:"Explore Esther's Place"}]},
         {tag:"Cooking",title:"Adaptive Cooking Classes",desc:"A six-session adaptive cooking course covering prep work, stovetop, and oven cooking in a fully adaptable kitchen at the Envision Bistro inside NICHE, Wichita State's culinary school. Classes are usually taught by a professional chef and close with a celebration tasting.",img:"images/envision-adaptive-cooking-class.jpg",cover:true,imgPos:"center 30%",imgAlt:"A cooking class participant in a chef's coat and hat with a cutting board of fresh vegetables in the adaptable teaching kitchen"},
         {tag:"Daily living",title:"Assistive technology training",desc:"Hands-on instruction in magnifiers, screen readers, and adaptive devices, matched to the way a person actually lives and works.",img:"images/envision-assistive-technology-training-tablet.jpg",cover:true,imgAlt:"An Envision specialist giving one-on-one assistive technology instruction on a tablet"},
         {tag:"Storefront",title:"The Everyday Store",desc:"A storefront stocked with labeled, tactile, and talking products that make daily tasks practical, with magnifiers, adaptive devices, and everyday tools to try hands-on.",img:"images/envision-everyday-store-magnifier-demo.jpg",cover:true,imgAlt:"An Envision team member demonstrating a handheld video magnifier in the Everyday Store"}
@@ -4120,13 +4120,14 @@
   // video: an external URL (e.g. YouTube or Instagram) on a callout entry
   // renders a "Watch the video" link on the card, opening in a new tab.
   // For more than one video on a card, use videos:[{url,label},...] — each
-  // renders as "Watch: <label>".
+  // renders as "Watch: <label>". A cta field replaces the link text entirely
+  // (e.g. videos:[{url,cta:"Explore Esther's Place"}]).
   function videoLinkHTML(c){
     var list = c.videos || (c.video ? [{url:c.video}] : []);
     return list.map(function(v){
       return '<a class="m-card-link m-card-video" href="'+escAttr(v.url)+'" target="_blank" rel="noopener">'+
         '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>'+
-        (v.label ? 'Watch: '+v.label : 'Watch the video')+'</a>';
+        (v.cta ? v.cta : v.label ? 'Watch: '+v.label : 'Watch the video')+'</a>';
     }).join("");
   }
 
