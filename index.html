@@ -987,6 +987,38 @@
   .inaction-back svg{transition:transform .2s}
   .inaction-back:hover svg{transform:translateX(-3px)}
 
+  /* Gateway screen shown before the Current Projects list (dark modal surface) */
+  .ia-gate{max-width:540px;margin:0 auto;padding:64px 6px 20px;text-align:center}
+  .ia-gate .m-card-icon{margin:0 auto 20px}
+  .ia-gate .m-eyebrow{
+    font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--green);margin-bottom:14px;
+  }
+  .ia-gate h2{
+    font-weight:800;font-size:clamp(1.6rem,2.8vw,2.2rem);letter-spacing:-0.02em;
+    color:var(--text-light);margin-bottom:14px;
+  }
+  .ia-gate-note{font-size:15px;line-height:1.7;color:var(--text-muted);margin-bottom:26px}
+  .ia-gate-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+  .ia-gate-input{
+    flex:1 1 220px;max-width:280px;padding:12px 16px;font:inherit;font-size:15px;
+    color:var(--text-light);background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.28);border-radius:8px;outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .ia-gate-input::placeholder{color:rgba(240,244,255,0.5)}
+  .ia-gate-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(120,190,33,0.22)}
+  .ia-gate-err{display:none;font-size:13px;font-weight:600;color:#ff9e8f;margin-bottom:8px}
+  .ia-gate.is-err .ia-gate-err{display:block}
+  .ia-gate.is-err .ia-gate-input{border-color:#ff9e8f}
+  .ia-gate-contact{
+    margin-top:30px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.14);
+    font-size:14.5px;line-height:1.7;color:var(--text-muted);
+  }
+  .ia-gate-contact strong{color:var(--text-light)}
+  .ia-gate-contact a{color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+  .ia-gate-contact a:hover,.ia-gate-contact a:focus-visible{color:#a8e457}
+
   /* ---------- Compliance: balanced 2 rows of 3 ---------- */
   .slide--compliance .cred-grid{grid-template-columns:repeat(3,1fr)}
 
@@ -4368,7 +4400,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 111 · 2026-07-27";
+  var BUILD_REV = "rev 112 · 2026-07-30";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -4612,9 +4644,62 @@
     return svg('<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>');
   }
 
+  /* ---------- In Action gateway ----------
+     A surface-level password gate in front of the Current Projects section,
+     to preserve the privacy of the businesses and organizations we serve.
+     Unlocking is remembered for the browser session only. */
+  var IA_GATE_PASS = "envision";
+  var iaGateOk = false;
+  function iaUnlocked(){
+    if (iaGateOk) return true;
+    try{ if (sessionStorage.getItem("iaGateOk") === "1"){ iaGateOk = true; return true; } }catch(e){}
+    return false;
+  }
+  function iaUnlock(){
+    iaGateOk = true;
+    try{ sessionStorage.setItem("iaGateOk","1"); }catch(e){}
+  }
+  function renderInActionGate(nextKey){
+    modalLabel.textContent = "Envision in Action";
+    modalInner.innerHTML =
+      '<div class="ia-gate">'+
+        '<div class="m-card-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#78BE21" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.4"/></svg></div>'+
+        '<div class="m-eyebrow">Envision in Action</div>'+
+        '<h2>Current Projects</h2>'+
+        '<p class="ia-gate-note">To preserve the privacy of the businesses and organizations we serve, this section requires a gateway password.</p>'+
+        '<form class="ia-gate-form" data-ia-gate-form>'+
+          '<input class="ia-gate-input" type="password" name="ia-gate-pass" placeholder="Gateway password" aria-label="Gateway password" autocomplete="off" autocapitalize="off" spellcheck="false">'+
+          '<button class="btn-primary" type="submit">Enter</button>'+
+        '</form>'+
+        '<div class="ia-gate-err" role="alert">That password isn\'t right — please try again.</div>'+
+        '<p class="ia-gate-contact">To learn more about the current projects on our floor, contact <strong>Sebastian Zahr</strong> at <a href="mailto:sebastian.zahr@envisionus.com">sebastian.zahr@envisionus.com</a>.</p>'+
+      '</div>';
+    var gate = modalInner.querySelector(".ia-gate");
+    var form = modalInner.querySelector("[data-ia-gate-form]");
+    var input = form.querySelector(".ia-gate-input");
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      if (input.value.trim().toLowerCase() === IA_GATE_PASS){
+        iaUnlock();
+        if (nextKey && PROJECTS[nextKey]) renderProject(nextKey, true);
+        else renderInActionList();
+        modal.scrollTop = 0;
+        modalClose.focus();
+      } else {
+        gate.classList.add("is-err");
+        input.value = "";
+        input.focus();
+      }
+    });
+    input.addEventListener("input", function(){ gate.classList.remove("is-err"); });
+    modal.scrollTop = 0;
+    setTimeout(function(){ input.focus(); }, 60);
+  }
+
   function renderProject(key, fromList){
     var d = PROJECTS[key];
     if (!d) return;
+    if (!iaUnlocked()){ renderInActionGate(key); return; }
     modalLabel.textContent = d.label;
 
     var creds = (d.creds||[]).map(function(c){ return '<button type="button" class="m-cred m-cred--link" data-cred="'+c+'">'+c+'</button>'; }).join("");
@@ -4693,6 +4778,7 @@
 
   // The In Action landing view: every project as a clickable little block.
   function renderInActionList(){
+    if (!iaUnlocked()){ renderInActionGate(); return; }
     modalLabel.textContent = "Envision in Action";
     var blocks = PROJECT_ORDER.map(function(key){
       var d = PROJECTS[key];
