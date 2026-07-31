@@ -2291,9 +2291,60 @@
   .a1-maplink:hover svg{transform:translateX(3px)}
   .a1-maplink:focus-visible{outline:2px solid var(--bsc-lime);outline-offset:3px;border-radius:3px}
   .a1-foot{
-    margin-top:clamp(22px,2.6vw,34px);padding-top:18px;border-top:1px solid var(--bsc-bd);
+    margin-top:18px;padding-top:18px;border-top:1px solid var(--bsc-bd);
     font-size:12.5px;line-height:1.6;color:var(--bsc-dim);
   }
+
+  /* ---------- Online Base Supply Center call to action ----------
+     The buy step for anyone the 16 physical stores cannot reach. Shared by the
+     two dark overlays (map modal and explainer), where it closes the loop from
+     how the channel works to where you order; `.xp-inline` is the light-theme
+     version for the Base Supply channel card in the Proof section.
+     Naming: the link points at envisionxpress.com, but in copy it is always
+     "the online Base Supply Center", never a separate brand name. */
+  .xp-cta{
+    border:1px solid rgba(184,224,74,0.38);border-radius:12px;
+    background:rgba(184,224,74,0.06);padding:16px 18px;
+  }
+  .xp-cta-k{
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--bsc-lime);margin-bottom:7px;
+  }
+  .xp-cta-h{
+    font-size:15px;font-weight:800;letter-spacing:-0.01em;line-height:1.3;
+    color:var(--bsc-white);
+  }
+  .xp-cta-d{font-size:12.5px;line-height:1.55;color:var(--bsc-dim);margin-top:7px}
+  .xp-btn{
+    margin-top:14px;display:inline-flex;align-items:center;gap:8px;
+    background:var(--bsc-lime);color:#0a1f0a;text-decoration:none;
+    border-radius:999px;padding:11px 18px;
+    font-family:var(--sans);font-size:12px;font-weight:800;
+    letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+    transition:filter .18s,transform .18s;
+  }
+  .xp-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .xp-btn:focus-visible{outline:2px solid var(--bsc-lime);outline-offset:3px}
+  /* Wide band under the explainer's two columns */
+  .xp-cta--band{
+    margin-top:clamp(22px,2.6vw,34px);
+    display:flex;align-items:center;gap:clamp(16px,2.4vw,32px);
+  }
+  .xp-cta--band .xp-cta-txt{flex:1 1 auto;min-width:0}
+  .xp-cta--band .xp-btn{margin-top:0;flex:0 0 auto}
+  @media (max-width:720px){
+    .xp-cta--band{flex-direction:column;align-items:flex-start}
+    .xp-cta--band .xp-btn{margin-top:4px;white-space:normal}
+  }
+  /* Light theme: the Base Supply card in the Proof grid */
+  .xp-inline{
+    margin-top:14px;display:inline-flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--green-ink);text-decoration:none;
+    border-bottom:1px solid rgba(76,124,15,0.35);padding-bottom:2px;
+  }
+  .xp-inline:hover{color:var(--navy);border-bottom-color:var(--navy)}
+  .xp-inline:focus-visible{outline:2px solid var(--green-ink);outline-offset:3px}
 
   /* ---------- Fullscreen wipe transition ---------- */
   .fs-wipe{
@@ -2898,7 +2949,10 @@
               <div class="tag">Base Supply</div>
               <div class="t-h">Base Supply Centers</div>
               <div class="t-d">16 Envision-operated locations across 10 states, serving Air Force, Army, Space Force, and Navy. Part of the AbilityOne BSC network spanning 160+ bases in 14 countries. Orders are accepted from any installation, CONUS or OCONUS.</div>
-              <div class="t-m">DLA Troop Support fair &amp; reasonableness pricing determination. Requisition via G-Invoicing, MIPR, or MILSTRIP.</div>
+              <div class="t-m">DLA Troop Support fair &amp; reasonableness pricing determination. Requisition via G-Invoicing, MIPR, or MILSTRIP. Buyers who are not near a store order from the online Base Supply Center, shipped worldwide including APO and FPO addresses.</div>
+              <a class="xp-inline" href="https://envisionxpress.com" target="_blank" rel="noopener">Shop the online Base Supply Center
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+              </a>
               <div class="bsc-cue">View network map <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             </div>
             <div class="proof-card proof-card--stack">
@@ -3195,6 +3249,16 @@
           </div>
         </div>
         <div class="bsc-sec">
+          <div class="bsc-eyebrow">Buy Online</div>
+          <div class="xp-cta">
+            <div class="xp-cta-h">Not near one of the 16 stores? Order from the online Base Supply Center.</div>
+            <p class="xp-cta-d">Military, government, and tax-exempt buyers order the same channel online. Ships worldwide, including APO and FPO addresses.</p>
+            <a class="xp-btn" href="https://envisionxpress.com" target="_blank" rel="noopener">Shop the online Base Supply Center
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="bsc-sec">
           <div class="bsc-eyebrow">The Program Behind It</div>
           <p style="margin-bottom:14px">Base Supply Centers are one output of the federal AbilityOne Program. The history and the chain of authority are one click away.</p>
           <button class="a1-cue a1-cue--dark" type="button" data-a1 aria-haspopup="dialog">Learn more about AbilityOne
@@ -3356,6 +3420,18 @@
 
           </div>
         </div>
+      </div>
+
+      <!-- Closes the loop: how the program works, then where you buy. -->
+      <div class="xp-cta xp-cta--band">
+        <div class="xp-cta-txt">
+          <div class="xp-cta-k">Where you buy</div>
+          <div class="xp-cta-h">The online Base Supply Center.</div>
+          <p class="xp-cta-d">Military, government, and tax-exempt buyers who are not near one of the 16 store locations order the same channel online. Ships worldwide, including APO and FPO addresses.</p>
+        </div>
+        <a class="xp-btn" href="https://envisionxpress.com" target="_blank" rel="noopener">Shop the online Base Supply Center
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+        </a>
       </div>
 
       <div class="a1-foot">
@@ -6374,9 +6450,14 @@
   window.EnvisionBSC = { open: openBsc, close: closeBsc, isOpen: isOpen };
 
   // Cross-link delegation (capture phase so it wins over deck/panel handlers).
+  // A real link inside a trigger (the online Base Supply Center CTA on the
+  // Base Supply card) owns its own click: let it navigate, not open the map.
+  function onOwnLink(e){
+    return !!(e.target.closest && e.target.closest("a[href]"));
+  }
   function handleTrigger(e){
     var t = e.target.closest ? e.target.closest("[data-bsc]") : null;
-    if (!t) return;
+    if (!t || onOwnLink(e)) return;
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "keydown"){
@@ -6386,7 +6467,7 @@
   }
   document.addEventListener("click", handleTrigger, true);
   document.addEventListener("keydown", function(e){
-    if (isOpen()) return;
+    if (isOpen() || onOwnLink(e)) return;
     var t = e.target.closest ? e.target.closest("[data-bsc]") : null;
     if (t && (e.key === "Enter" || e.key === " " || e.key === "Spacebar")){
       e.preventDefault(); e.stopPropagation(); openBsc(t);

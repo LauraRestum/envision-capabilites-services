@@ -29,6 +29,17 @@ Write it out: **people who are blind or have low vision**. Never "BVI" and never
 tight for the full phrase (a four-across stat band, for example), shorten the
 label and carry the phrase in the line underneath rather than abbreviating it.
 
+## The online store is "the Base Supply Center"
+
+The `envisionxpress.com` CTA (`.xp-cta` in the two dark overlays, `.xp-inline`
+on the Base Supply channel card) links to that domain, but in copy it is always
+**the online Base Supply Center**. Do not introduce a separate product or brand
+name for it in headings, buttons, or body text.
+
+It exists for military, government, and tax-exempt buyers who are not near one
+of the 16 physical store locations, and it ships worldwide including APO and FPO
+addresses. Keep that framing wherever the CTA appears.
+
 ## AbilityOne explainer overlay
 
 The AbilityOne program's history and chain of authority live in one dedicated
