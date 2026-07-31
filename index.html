@@ -2057,6 +2057,33 @@
   .bsc-legend span{display:flex;align-items:center;gap:8px}
   .bsc-legend .lg-dot{width:11px;height:11px;border-radius:50%;background:var(--bsc-lime)}
   .bsc-legend .lg-sq{width:13px;height:13px;border-radius:3px;background:rgba(184,224,74,0.16);border:1px solid rgba(184,224,74,0.45)}
+  /* Give the dark overlays a visible scrollbar. With overlay scrollbars (the
+     macOS default) a panel that runs past the fold looks like it simply ends,
+     which is why a scrollable map read as a stuck one. */
+  .bsc-map-panel,.bsc-info-panel,.a1-scroll{
+    scrollbar-width:thin;scrollbar-color:rgba(184,224,74,0.4) transparent;
+  }
+  .bsc-map-panel::-webkit-scrollbar,
+  .bsc-info-panel::-webkit-scrollbar,
+  .a1-scroll::-webkit-scrollbar{width:9px}
+  .bsc-map-panel::-webkit-scrollbar-track,
+  .bsc-info-panel::-webkit-scrollbar-track,
+  .a1-scroll::-webkit-scrollbar-track{background:transparent}
+  .bsc-map-panel::-webkit-scrollbar-thumb,
+  .bsc-info-panel::-webkit-scrollbar-thumb,
+  .a1-scroll::-webkit-scrollbar-thumb{
+    background:rgba(184,224,74,0.32);border-radius:999px;
+    border:2px solid transparent;background-clip:padding-box;
+  }
+  .bsc-map-panel:hover::-webkit-scrollbar-thumb,
+  .bsc-info-panel:hover::-webkit-scrollbar-thumb,
+  .a1-scroll:hover::-webkit-scrollbar-thumb{background:rgba(184,224,74,0.5);background-clip:padding-box}
+
+  .bsc-map-foot{
+    display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;
+    margin-top:16px;padding-top:16px;border-top:1px solid var(--bsc-bd);
+  }
+  .bsc-map-foot-t{font-size:13px;color:var(--bsc-dim)}
   .bsc-info-panel{
     flex:0 0 40%;max-width:40%;padding:clamp(22px,2.4vw,38px);
     overflow-y:auto;
@@ -2096,9 +2123,22 @@
     content:'';position:absolute;left:0;top:0.5em;
     width:10px;height:2px;background:var(--bsc-lime);
   }
+  /* Short windows (laptops, half-height browsers): tighten the map column so
+     the legend and the AbilityOne line stay above the fold instead of adding
+     a scroll for the last 60px. */
+  @media (min-width:961px) and (max-height:860px){
+    .bsc-map-panel{padding-top:clamp(14px,1.8vw,26px);padding-bottom:clamp(14px,1.8vw,26px)}
+    .bsc-headcap{margin-bottom:14px}
+    .bsc-legend{margin-top:12px}
+    .bsc-map-foot{margin-top:12px;padding-top:12px}
+  }
   @media (max-width:960px){
-    .bsc-body{flex-direction:column;overflow-y:auto}
-    .bsc-map-panel,.bsc-info-panel{flex:1 1 auto;max-width:100%}
+    .bsc-body{flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+    /* Stacked, the body is the one scroller and each panel must contribute its
+       full height. With a flexible basis the panels shrink to fit instead and
+       turn into squashed inner scrollers: the map gets clipped and the column
+       behind it never moves, which reads as "the map will not scroll". */
+    .bsc-map-panel,.bsc-info-panel{flex:none;max-width:100%;overflow:visible}
     .bsc-shell{max-height:100%}
   }
 
@@ -3222,6 +3262,14 @@
         <div class="bsc-legend">
           <span><i class="lg-dot"></i> Envision-operated location</span>
           <span><i class="lg-sq"></i> State with active BSC</span>
+        </div>
+        <!-- Same trigger as the one closing the info panel, kept in reach of the
+             map itself so the program explainer is never a scroll away. -->
+        <div class="bsc-map-foot">
+          <span class="bsc-map-foot-t">Part of the federal AbilityOne Program.</span>
+          <button class="a1-cue a1-cue--dark" type="button" data-a1 aria-haspopup="dialog">Learn more about AbilityOne
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
         </div>
       </div>
       <div class="bsc-info-panel">
