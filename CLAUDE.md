@@ -22,6 +22,32 @@ default). Style is the green-tinted `.m-card-icon` box.
   `m-card-photo` inside project callouts. (`m-card-ph` is still fine for the
   product-catalog cards, which genuinely await product photography.)
 
+## Referring to people who are blind or have low vision
+
+Write it out: **people who are blind or have low vision**. Never "BVI" and never
+"visually impaired," in copy, labels, stat cards, or chips. Where a label is too
+tight for the full phrase (a four-across stat band, for example), shorten the
+label and carry the phrase in the line underneath rather than abbreviating it.
+
+## AbilityOne explainer overlay
+
+The AbilityOne program's history and chain of authority live in one dedicated
+overlay (`#a1Modal`), not in the Proof section or the Base Supply Center map.
+Both of those stay about the channel; each carries only a small "Learn more
+about AbilityOne" trigger (`[data-a1]`).
+
+- It holds two visual components: a timeline of eras (each panel collapsed to a
+  single line by default, `.a1-era-btn` toggling `aria-expanded` and the body's
+  `hidden`) and a top-down authority tree ending on Envision's highlighted node
+  (`.a1-node--env`).
+- The explainer and the map modal **swap, they never stack**. Each exposes its
+  own open/close bridge (`window.EnvisionBSC`), so opening one closes the other,
+  and closing the explainer hands back to the map when that is where it came
+  from. Any new dark overlay must be added to the `anyDeckOverlayOpen()` id list
+  and the `trapTabWithin` list, or the deck behind it will stay focusable.
+- Keep the copy minimal and business-first: one line visible, the detail behind
+  the expand.
+
 ## Program videos on callout cards
 
 Any callout entry (in the `MODALS` mission/capability pop-ups or in `PROJECTS`)
