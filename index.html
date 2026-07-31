@@ -391,6 +391,9 @@
     font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     color:var(--text-soft);
   }
+  /* Qualifier under a number the label alone cannot carry, kept off the
+     uppercase label line so the four cells stay one line each. */
+  .cb-note{font-size:10.5px;line-height:1.35;color:var(--text-soft);margin-top:6px}
 
   /* Act 2: Campus cards. Scoped under .campus-grid — the Contact slide's
      footer cards reuse the .campus-card class name but are a different
@@ -2099,6 +2102,250 @@
     .bsc-shell{max-height:100%}
   }
 
+  /* ---------- AbilityOne explainer ----------
+     The Proof section and the map stay about the channel. The program's
+     history and chain of authority live here instead, one click away, so
+     neither surface has to carry them. Same dark navy shell as the map modal
+     (one overlay system, two subjects) and the same overlay contract: only one
+     of the two is ever on screen. */
+  .a1-cue{
+    margin-top:16px;display:inline-flex;align-items:center;gap:7px;
+    background:none;border:0;padding:0;cursor:pointer;
+    font-family:var(--sans);font-size:12px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--green-ink);
+  }
+  .a1-cue svg{transition:transform .2s}
+  .a1-cue:hover svg{transform:translateX(3px)}
+  .a1-cue:focus-visible{outline:2px solid var(--green-ink);outline-offset:3px;border-radius:3px}
+  /* Same control on the dark map modal, where the bright brand green reads */
+  .a1-cue--dark{color:var(--bsc-lime);margin-top:0}
+  .a1-cue--dark:focus-visible{outline-color:var(--bsc-lime)}
+
+  .a1-backdrop{
+    position:fixed;inset:0;background:rgba(6,21,48,0.72);
+    backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:110;
+  }
+  .a1-backdrop.is-open{opacity:1;pointer-events:auto}
+  .a1-modal{
+    position:fixed;inset:0;z-index:120;display:flex;
+    align-items:center;justify-content:center;
+    padding:clamp(16px,3vw,48px);pointer-events:none;
+  }
+  .a1-shell{
+    position:relative;width:100%;max-width:1180px;max-height:100%;
+    background:var(--bsc-deep);border:1px solid var(--bsc-bd);
+    border-radius:20px;overflow:hidden;
+    font-family:var(--sans);color:var(--bsc-white);
+    opacity:0;transform:scale(0.96);
+    transition:opacity .32s ease,transform .32s cubic-bezier(0.22,1,0.36,1);
+    display:flex;flex-direction:column;
+  }
+  .a1-modal.is-open{pointer-events:auto}
+  .a1-modal.is-open .a1-shell{opacity:1;transform:scale(1)}
+  @media (prefers-reduced-motion:reduce){.a1-shell{transition:opacity .2s ease}}
+  .a1-close{
+    position:absolute;top:16px;right:16px;z-index:6;
+    width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,0.06);border:1px solid var(--bsc-bd);
+    color:var(--bsc-white);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .18s,border-color .18s,color .18s;
+  }
+  .a1-close:hover{background:rgba(184,224,74,0.14);border-color:var(--bsc-lime);color:var(--bsc-lime)}
+  .a1-close:focus-visible{outline:2px solid var(--bsc-lime);outline-offset:2px}
+  .a1-scroll{overflow-y:auto;padding:clamp(24px,3vw,44px);min-height:0}
+  .a1-eyebrow{
+    font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--bsc-lime);margin-bottom:12px;
+  }
+  .a1-head{max-width:760px;margin-bottom:clamp(22px,2.6vw,34px);padding-right:44px}
+  .a1-head h2{
+    font-family:var(--sans);font-weight:800;
+    font-size:clamp(1.4rem,2.1vw,2rem);letter-spacing:-0.02em;
+    line-height:1.12;color:var(--bsc-white);margin-bottom:10px;
+  }
+  .a1-head p{font-size:14.5px;line-height:1.55;color:var(--bsc-dim)}
+
+  .a1-grid{display:grid;grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr);gap:clamp(22px,3vw,40px)}
+  @media (max-width:1000px){.a1-grid{grid-template-columns:1fr;gap:32px}}
+  .a1-col-h{
+    font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--bsc-white);opacity:.62;
+    padding-bottom:10px;margin-bottom:18px;border-bottom:1px solid var(--bsc-bd);
+  }
+
+  /* Timeline: one rail, three eras, each a single line until it is opened. */
+  .a1-timeline{position:relative;padding-left:26px}
+  .a1-timeline::before{
+    content:'';position:absolute;left:4px;top:6px;bottom:6px;width:1px;
+    background:linear-gradient(180deg,rgba(184,224,74,0.55),rgba(184,224,74,0.12));
+  }
+  .a1-era + .a1-era{margin-top:10px}
+  .a1-era{position:relative}
+  .a1-era::before{
+    content:'';position:absolute;left:-26px;top:19px;
+    width:9px;height:9px;border-radius:50%;
+    background:var(--bsc-deep);border:1.5px solid var(--bsc-lime);
+  }
+  .a1-era.is-open::before{background:var(--bsc-lime)}
+  .a1-era-btn{
+    width:100%;display:flex;align-items:flex-start;gap:12px;
+    background:rgba(255,255,255,0.03);border:1px solid var(--bsc-bd);
+    border-radius:10px;padding:14px 16px;
+    font-family:var(--sans);color:var(--bsc-white);text-align:left;cursor:pointer;
+    transition:border-color .18s,background .18s;
+  }
+  .a1-era-btn:hover{border-color:rgba(184,224,74,0.45);background:rgba(255,255,255,0.05)}
+  .a1-era-btn:focus-visible{outline:2px solid var(--bsc-lime);outline-offset:2px}
+  .a1-era-txt{flex:1 1 auto;min-width:0;display:block}
+  .a1-era-year,.a1-era-title,.a1-era-line{display:block}
+  .a1-era-year{
+    font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--bsc-lime);margin-bottom:5px;
+  }
+  .a1-era-title{font-size:15.5px;font-weight:800;letter-spacing:-0.01em;line-height:1.25}
+  .a1-era-line{font-size:13px;line-height:1.45;color:var(--bsc-dim);margin-top:5px}
+  .a1-era-chev{
+    flex:0 0 auto;margin-top:2px;color:var(--bsc-lime);
+    transition:transform .22s ease;
+  }
+  .a1-era-btn[aria-expanded="true"] .a1-era-chev{transform:rotate(180deg)}
+  .a1-era-body{padding:14px 16px 4px;font-size:13.5px;line-height:1.62;color:var(--bsc-dim)}
+  .a1-era-body[hidden]{display:none}
+  .a1-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .a1-chips span{
+    background:rgba(255,255,255,0.04);border:1px solid var(--bsc-bd);
+    border-radius:999px;padding:5px 11px;font-size:11.5px;color:var(--bsc-white);
+  }
+
+  /* Tree: one spine, top to bottom, with the outputs branching off the
+     Commission and Envision's node called out at the delivery end. */
+  .a1-tree{display:flex;flex-direction:column}
+  .a1-node{
+    background:rgba(255,255,255,0.03);border:1px solid var(--bsc-bd);
+    border-radius:11px;padding:14px 16px;
+  }
+  .a1-node-k{
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--bsc-lime);margin-bottom:6px;
+  }
+  .a1-node-h{font-size:15px;font-weight:800;letter-spacing:-0.01em;line-height:1.25;color:var(--bsc-white)}
+  .a1-node-d{font-size:12.5px;line-height:1.5;color:var(--bsc-dim);margin-top:6px}
+  .a1-node--env{
+    border-color:var(--bsc-lime);background:rgba(184,224,74,0.10);
+    box-shadow:0 0 0 1px rgba(184,224,74,0.28),0 0 26px rgba(184,224,74,0.16);
+  }
+  .a1-node--env .a1-node-h{font-size:17px}
+  .a1-node--env .a1-node-d{color:var(--bsc-white)}
+  .a1-flag{
+    display:inline-block;margin-bottom:8px;
+    background:var(--bsc-lime);color:#0a1f0a;border-radius:999px;
+    padding:4px 10px;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  }
+  .a1-link{
+    position:relative;height:34px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .a1-link::before{
+    content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;
+    background:rgba(184,224,74,0.5);
+  }
+  .a1-link--dash::before{
+    background:none;border-left:1px dashed rgba(184,224,74,0.5);
+  }
+  .a1-link-lab{
+    position:relative;background:var(--bsc-deep);
+    padding:0 9px;font-size:10px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:rgba(232,236,245,0.66);
+  }
+  .a1-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .a1-split--tie{position:relative;padding-top:0}
+  .a1-branch{
+    border:1px dashed rgba(184,224,74,0.38);border-radius:12px;
+    padding:14px 16px;background:rgba(184,224,74,0.04);
+  }
+  .a1-branch-k{
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--bsc-lime);margin-bottom:12px;
+  }
+  .a1-outs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:640px){.a1-outs,.a1-split{grid-template-columns:1fr}}
+  .a1-out{
+    background:rgba(255,255,255,0.03);border:1px solid var(--bsc-bd);
+    border-radius:10px;padding:13px 14px;
+  }
+  .a1-out-h{font-size:13.5px;font-weight:800;letter-spacing:-0.01em;color:var(--bsc-white)}
+  .a1-out-d{font-size:12.5px;line-height:1.5;color:var(--bsc-dim);margin-top:6px}
+  .a1-out-note{
+    margin-top:10px;padding-top:10px;border-top:1px solid var(--bsc-bd);
+    font-size:12px;line-height:1.55;color:var(--bsc-white);
+  }
+  .a1-maplink{
+    margin-top:10px;display:inline-flex;align-items:center;gap:7px;
+    background:none;border:0;padding:0;cursor:pointer;
+    font-family:var(--sans);font-size:11px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--bsc-lime);
+  }
+  .a1-maplink svg{transition:transform .2s}
+  .a1-maplink:hover svg{transform:translateX(3px)}
+  .a1-maplink:focus-visible{outline:2px solid var(--bsc-lime);outline-offset:3px;border-radius:3px}
+  .a1-foot{
+    margin-top:18px;padding-top:18px;border-top:1px solid var(--bsc-bd);
+    font-size:12.5px;line-height:1.6;color:var(--bsc-dim);
+  }
+
+  /* ---------- Online Base Supply Center call to action ----------
+     The buy step for anyone the 16 physical stores cannot reach. Shared by the
+     two dark overlays (map modal and explainer), where it closes the loop from
+     how the channel works to where you order; `.xp-inline` is the light-theme
+     version for the Base Supply channel card in the Proof section.
+     Naming: the link points at envisionxpress.com, but in copy it is always
+     "the online Base Supply Center", never a separate brand name. */
+  .xp-cta{
+    border:1px solid rgba(184,224,74,0.38);border-radius:12px;
+    background:rgba(184,224,74,0.06);padding:16px 18px;
+  }
+  .xp-cta-k{
+    font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--bsc-lime);margin-bottom:7px;
+  }
+  .xp-cta-h{
+    font-size:15px;font-weight:800;letter-spacing:-0.01em;line-height:1.3;
+    color:var(--bsc-white);
+  }
+  .xp-cta-d{font-size:12.5px;line-height:1.55;color:var(--bsc-dim);margin-top:7px}
+  .xp-btn{
+    margin-top:14px;display:inline-flex;align-items:center;gap:8px;
+    background:var(--bsc-lime);color:#0a1f0a;text-decoration:none;
+    border-radius:999px;padding:11px 18px;
+    font-family:var(--sans);font-size:12px;font-weight:800;
+    letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+    transition:filter .18s,transform .18s;
+  }
+  .xp-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .xp-btn:focus-visible{outline:2px solid var(--bsc-lime);outline-offset:3px}
+  /* Wide band under the explainer's two columns */
+  .xp-cta--band{
+    margin-top:clamp(22px,2.6vw,34px);
+    display:flex;align-items:center;gap:clamp(16px,2.4vw,32px);
+  }
+  .xp-cta--band .xp-cta-txt{flex:1 1 auto;min-width:0}
+  .xp-cta--band .xp-btn{margin-top:0;flex:0 0 auto}
+  @media (max-width:720px){
+    .xp-cta--band{flex-direction:column;align-items:flex-start}
+    .xp-cta--band .xp-btn{margin-top:4px;white-space:normal}
+  }
+  /* Light theme: the Base Supply card in the Proof grid */
+  .xp-inline{
+    margin-top:14px;display:inline-flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--green-ink);text-decoration:none;
+    border-bottom:1px solid rgba(76,124,15,0.35);padding-bottom:2px;
+  }
+  .xp-inline:hover{color:var(--navy);border-bottom-color:var(--navy)}
+  .xp-inline:focus-visible{outline:2px solid var(--green-ink);outline-offset:3px}
+
   /* ---------- Fullscreen wipe transition ---------- */
   .fs-wipe{
     position:fixed;inset:0;z-index:9999;pointer-events:none;
@@ -2277,8 +2524,9 @@
               <div class="cb-num">460</div>
             </div>
             <div class="cb-cell">
-              <div class="cb-lab">BVI Direct Labor</div>
+              <div class="cb-lab">Direct Labor</div>
               <div class="cb-num">88<span class="cb-unit">%</span></div>
+              <div class="cb-note">Performed by people who are blind or have low vision</div>
             </div>
             <div class="cb-cell">
               <div class="cb-lab">U.S. manufacturing</div>
@@ -2416,7 +2664,7 @@
             <div class="ms-emp-proof">
               <div class="ms-emp-proof-stats">
                 <div class="ms-emp-proof-stat"><div class="num">Decades</div><div class="lab">U.S. manufacturing</div><div class="ctx">Continuous American production across the Envision system.</div></div>
-                <div class="ms-emp-proof-stat"><div class="num">88%</div><div class="lab">BVI Direct Labor</div><div class="ctx">Envision's combined Direct Labor performed by team members who are blind or have low vision. Substantially exceeds AbilityOne's 75% threshold.</div></div>
+                <div class="ms-emp-proof-stat"><div class="num">88%</div><div class="lab">Direct Labor</div><div class="ctx">Envision's combined Direct Labor performed by team members who are blind or have low vision. Substantially exceeds AbilityOne's 75% threshold.</div></div>
                 <div class="ms-emp-proof-stat"><div class="num">4M+</div><div class="lab">Employment hours</div><div class="ctx">Provided to people who are blind or have low vision since 1980. The reason our retention runs above industry average.</div></div>
               </div>
             </div>
@@ -2686,6 +2934,9 @@
               <div class="t-h">AbilityOne</div>
               <div class="t-d">Envision is affiliated with the National Industries for the Blind. AbilityOne is the federal program that designates certain products as mandatory-source from approved nonprofit manufacturers. SKILCRAFT-branded Envision products in the federal catalog include trash bags, seal-closure bags, VISI-BELTs, and print services.</div>
               <div class="t-m">88% of Envision's combined Direct Labor is performed by people who are blind or have low vision. Exceeds AbilityOne's 75% threshold.</div>
+              <button class="a1-cue" type="button" data-a1 aria-haspopup="dialog">Learn more about AbilityOne
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
             </div>
             <a class="proof-card proof-card--action" href="tls.html" target="_blank" rel="noopener" aria-label="Open the TLS contract vehicle detail site">
               <div class="tag">Prime Vendor</div>
@@ -2697,8 +2948,11 @@
             <div class="proof-card" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
               <div class="tag">Base Supply</div>
               <div class="t-h">Base Supply Centers</div>
-              <div class="t-d">16 Envision-operated locations across 10 states, serving Air Force, Army, Space Force, and Navy. Part of the AbilityOne BSC network spanning 160+ bases in 14 countries — and orders are accepted from any installation, CONUS or OCONUS.</div>
-              <div class="t-m">DLA Troop Support fair &amp; reasonableness pricing determination. Requisition via G-Invoicing, MIPR, or MILSTRIP.</div>
+              <div class="t-d">16 Envision-operated locations across 10 states, serving Air Force, Army, Space Force, and Navy. Part of the AbilityOne BSC network spanning 160+ bases in 14 countries. Orders are accepted from any installation, CONUS or OCONUS.</div>
+              <div class="t-m">DLA Troop Support fair &amp; reasonableness pricing determination. Requisition via G-Invoicing, MIPR, or MILSTRIP. Buyers who are not near a store order from the online Base Supply Center, shipped worldwide including APO and FPO addresses.</div>
+              <a class="xp-inline" href="https://envisionxpress.com" target="_blank" rel="noopener">Shop the online Base Supply Center
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+              </a>
               <div class="bsc-cue">View network map <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             </div>
             <div class="proof-card proof-card--stack">
@@ -2980,7 +3234,7 @@
             <div class="bsc-statblk"><div class="n">16</div><div class="c">Envision-operated stores</div></div>
             <div class="bsc-statblk"><div class="n">10</div><div class="c">States across U.S.</div></div>
           </div>
-          <p>Envision's Base Supply Centers are the retail face of the AbilityOne BSC program inside Envision's footprint &mdash; 16 locations with more than 155,000 sq ft of combined retail and warehouse space. Stores stock office supplies, janitorial, safety apparel, and SKILCRAFT product lines for active-duty personnel and federal buyers. Envision-manufactured products flow through this channel from our U.S. campuses.</p>
+          <p>Envision's Base Supply Centers are the retail face of the AbilityOne BSC program inside Envision's footprint: 16 locations with more than 155,000 sq ft of combined retail and warehouse space. Stores stock office supplies, janitorial, safety apparel, and SKILCRAFT product lines for active-duty personnel and federal buyers. Envision-manufactured products flow through this channel from our U.S. campuses.</p>
         </div>
         <div class="bsc-sec">
           <div class="bsc-eyebrow">What's Sold</div>
@@ -2994,6 +3248,194 @@
             <span>Trash &amp; seal closure bags</span>
           </div>
         </div>
+        <div class="bsc-sec">
+          <div class="bsc-eyebrow">Buy Online</div>
+          <div class="xp-cta">
+            <div class="xp-cta-h">Not near one of the 16 stores? Order from the online Base Supply Center.</div>
+            <p class="xp-cta-d">Military, government, and tax-exempt buyers order the same channel online. Ships worldwide, including APO and FPO addresses.</p>
+            <a class="xp-btn" href="https://envisionxpress.com" target="_blank" rel="noopener">Shop the online Base Supply Center
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="bsc-sec">
+          <div class="bsc-eyebrow">The Program Behind It</div>
+          <p style="margin-bottom:14px">Base Supply Centers are one output of the federal AbilityOne Program. The history and the chain of authority are one click away.</p>
+          <button class="a1-cue a1-cue--dark" type="button" data-a1 aria-haspopup="dialog">Learn more about AbilityOne
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ABILITYONE EXPLAINER ===================== -->
+<div class="a1-backdrop" id="a1Backdrop"></div>
+<div class="a1-modal" id="a1Modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="The AbilityOne Program explained">
+  <div class="a1-shell">
+    <button class="a1-close" id="a1Close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="a1-scroll">
+      <div class="a1-head">
+        <div class="a1-eyebrow">AbilityOne Explained</div>
+        <h2>A federal buying channel, and where Envision sits in it.</h2>
+        <p>Where the program came from, and how authority flows from the President to the shelf. Open any panel for detail.</p>
+      </div>
+
+      <div class="a1-grid">
+        <!-- Component 1: history, one line per era until opened -->
+        <div>
+          <div class="a1-col-h">How it got here</div>
+          <div class="a1-timeline">
+
+            <div class="a1-era" data-a1-era>
+              <button class="a1-era-btn" type="button" id="a1EraBtn-1938" aria-expanded="false" aria-controls="a1Era-1938">
+                <span class="a1-era-txt">
+                  <span class="a1-era-year">1938</span>
+                  <span class="a1-era-title">Wagner-O'Day Act</span>
+                  <span class="a1-era-line">Congress opens federal purchasing to nonprofits employing people who are blind.</span>
+                </span>
+                <svg class="a1-era-chev" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="a1-era-body" id="a1Era-1938" role="region" aria-labelledby="a1EraBtn-1938" hidden>
+                Federal agencies were directed to buy specified products from nonprofit agencies employing people who are blind. It created a purchasing channel, not a subsidy: agencies got supplies they already needed, and the work behind them was real production work. National Industries for the Blind was formed to coordinate supply across the participating agencies.
+                <div class="a1-chips">
+                  <span>Products only</span>
+                  <span>NIB formed</span>
+                  <span>Mandatory purchasing begins</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="a1-era" data-a1-era>
+              <button class="a1-era-btn" type="button" id="a1EraBtn-1971" aria-expanded="false" aria-controls="a1Era-1971">
+                <span class="a1-era-txt">
+                  <span class="a1-era-year">1971</span>
+                  <span class="a1-era-title">Javits Amendment</span>
+                  <span class="a1-era-line">The program expands to people with other significant disabilities, and to services.</span>
+                </span>
+                <svg class="a1-era-chev" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="a1-era-body" id="a1Era-1971" role="region" aria-labelledby="a1EraBtn-1971" hidden>
+                Senator Jacob Javits amended the act to cover people with significant disabilities beyond blindness, and to include services alongside products. A second central nonprofit agency was added to serve the newly eligible agencies, and the federal customer base widened from supply items to full service contracts.
+                <div class="a1-chips">
+                  <span>Services added</span>
+                  <span>Second central nonprofit agency</span>
+                  <span>Wider eligibility</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="a1-era" data-a1-era>
+              <button class="a1-era-btn" type="button" id="a1EraBtn-now" aria-expanded="false" aria-controls="a1Era-now">
+                <span class="a1-era-txt">
+                  <span class="a1-era-year">Modern era</span>
+                  <span class="a1-era-title">The AbilityOne Program</span>
+                  <span class="a1-era-line">One federal program, two central nonprofit agencies, one mandatory-source list.</span>
+                </span>
+                <svg class="a1-era-chev" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="a1-era-body" id="a1Era-now" role="region" aria-labelledby="a1EraBtn-now" hidden>
+                The program runs today as AbilityOne, overseen by the U.S. AbilityOne Commission. Items and services on the Procurement List are a mandatory source for federal agencies, so a qualified buyer purchases them from a participating nonprofit agency instead of running a separate competition. For Envision, that means manufacturing, services, and Base Supply Centers sitting on a channel federal buyers already use every day.
+                <div class="a1-chips">
+                  <span>Mandatory source</span>
+                  <span>Procurement List</span>
+                  <span>Base Supply Centers</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Component 2: chain of authority, President down to Envision -->
+        <div>
+          <div class="a1-col-h">How the work flows</div>
+          <div class="a1-tree">
+
+            <div class="a1-node">
+              <div class="a1-node-k">Appointing authority</div>
+              <div class="a1-node-h">The President</div>
+              <div class="a1-node-d">Names every member of the Commission.</div>
+            </div>
+
+            <div class="a1-link"><span class="a1-link-lab">appoints</span></div>
+
+            <div class="a1-node">
+              <div class="a1-node-k">Oversight</div>
+              <div class="a1-node-h">U.S. AbilityOne Commission</div>
+              <div class="a1-node-d">Fifteen presidential appointees set program policy and decide what goes on the Procurement List.</div>
+              <div class="a1-chips">
+                <span>11 federal agency officials</span>
+                <span>4 private citizens</span>
+              </div>
+            </div>
+
+            <div class="a1-link a1-link--dash"><span class="a1-link-lab">produces</span></div>
+
+            <div class="a1-branch">
+              <div class="a1-branch-k">What the Commission puts in market</div>
+              <div class="a1-outs">
+                <div class="a1-out">
+                  <div class="a1-out-h">Procurement List</div>
+                  <div class="a1-out-d">The products and services federal agencies are required to buy through the program. Mandatory source, so no separate competition to win.</div>
+                </div>
+                <div class="a1-out">
+                  <div class="a1-out-h">Base Supply Centers</div>
+                  <div class="a1-out-d">Supply stores operating on federal installations, stocked from the program.</div>
+                  <div class="a1-out-note">Base Supply Centers in Envision's footprint are operated by Envision and staffed by people who are blind or have low vision. For a commercial partner, a BSC is shelf access to DoD buyers without a separate contract competition.</div>
+                  <button class="a1-maplink" type="button" data-a1-map>View the network map
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="a1-link"><span class="a1-link-lab">designates</span></div>
+
+            <div class="a1-split">
+              <div class="a1-node">
+                <div class="a1-node-k">Central nonprofit agency</div>
+                <div class="a1-node-h">National Industries for the Blind</div>
+                <div class="a1-node-d">Serves agencies employing people who are blind or have low vision. Envision is an NIB affiliate.</div>
+              </div>
+              <div class="a1-node">
+                <div class="a1-node-k">Central nonprofit agency</div>
+                <div class="a1-node-h">SourceAmerica</div>
+                <div class="a1-node-d">Serves agencies employing people with other significant disabilities.</div>
+              </div>
+            </div>
+
+            <div class="a1-split">
+              <div class="a1-link"><span class="a1-link-lab">affiliates</span></div>
+            </div>
+
+            <div class="a1-node a1-node--env">
+              <span class="a1-flag">Where Envision sits</span>
+              <div class="a1-node-h">Envision</div>
+              <div class="a1-node-d">An NIB-affiliated agency, and the one that delivers the work: manufacturing, fulfillment, contact center, and 16 Base Supply Centers on federal installations.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Closes the loop: how the program works, then where you buy. -->
+      <div class="xp-cta xp-cta--band">
+        <div class="xp-cta-txt">
+          <div class="xp-cta-k">Where you buy</div>
+          <div class="xp-cta-h">The online Base Supply Center.</div>
+          <p class="xp-cta-d">Military, government, and tax-exempt buyers who are not near one of the 16 store locations order the same channel online. Ships worldwide, including APO and FPO addresses.</p>
+        </div>
+        <a class="xp-btn" href="https://envisionxpress.com" target="_blank" rel="noopener">Shop the online Base Supply Center
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+        </a>
+      </div>
+
+      <div class="a1-foot">
+        Bottom line for a commercial partner: the qualification, the pricing determination, and the buying channel are already in place. Product moves through them without a new competition.
       </div>
     </div>
   </div>
@@ -3987,25 +4429,25 @@
       label:"Services", eyebrow:"Service", title:"Accessibility Services",
       location:"Wichita",
       summary:"ADA Title II consulting, WCAG-aligned audits, training, and user testing. Lived-experience expertise on every engagement.",
-      creds:["ADA Title II","WCAG 2.1 AA","Lived experience","BVI testing pool"],
+      creds:["ADA Title II","WCAG 2.1 AA","Lived experience","Testing with people who are blind or have low vision"],
       overview:[
         "Accessibility consulting and audit services delivered with <strong>lived-experience expertise</strong>.",
         "<strong>ADA Title II</strong> compliance scope-of-work for public entities, with deadline-driven planning.",
         "<strong>WCAG 2.1 AA</strong>-aligned assessments and prioritized remediation plans.",
-        "User testing with a <strong>BVI participant pool</strong> running screen-reader and assistive-tech scenarios."
+        "User testing with a <strong>participant pool of people who are blind or have low vision</strong> running screen-reader and assistive-tech scenarios."
       ],
       statLabel:"The Numbers Behind the Service",
       stats:[
         {num:"2.1 AA",label:"WCAG aligned",ctx:"Assessment and remediation methodology."},
         {num:"Title II",label:"ADA scope",ctx:"Public-entity compliance focus."},
-        {num:"BVI",label:"Test pool",ctx:"Real users, real assistive technology, every engagement."}
+        {num:"In-house",label:"Test pool",ctx:"People who are blind or have low vision, on their own assistive technology, every engagement."}
       ],
       calloutLabel:"Service Lines",
       callouts:[
         {tag:"Service",title:"ADA Title II consulting",desc:"Public-entity compliance, scope-of-work, deadline-driven planning.",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>'},
         {tag:"Service",title:"WCAG audit",desc:"WCAG 2.1 AA aligned assessment, prioritized remediation plan.",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><path d="m8 11 2 2 4-4"/></svg>'},
         {tag:"Service",title:"Training",desc:"Custom training for procurement teams, content authors, developers.",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>'},
-        {tag:"Service",title:"User testing with BVI participants",desc:"Screen-reader and assistive-tech scenarios.",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'}
+        {tag:"Service",title:"User testing with people who are blind or have low vision",desc:"Screen-reader and assistive-tech scenarios.",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'}
       ],
       img:"User testing or training context, 4:3",
       imgSrc:"images/Envision-Day_01-0989.jpg",
@@ -4298,7 +4740,7 @@
      always recomputed from what is actually on screen. */
   var deckEl = document.querySelector(".deck");
   function anyDeckOverlayOpen(){
-    var ids = ["modal", "bscModal", "lbModal", "vidModal"];
+    var ids = ["modal", "bscModal", "a1Modal", "lbModal", "vidModal"];
     for (var i = 0; i < ids.length; i++){
       var n = document.getElementById(ids[i]);
       if (n && n.classList.contains("is-open")) return true;
@@ -4337,7 +4779,7 @@
       else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     });
   }
-  ["modal","bscModal","lbModal","vidModal"].forEach(function(id){
+  ["modal","bscModal","a1Modal","lbModal","vidModal"].forEach(function(id){
     var el = document.getElementById(id);
     if (el) trapTabWithin(el);
   });
@@ -6003,10 +6445,19 @@
     };
   }
 
+  // Handoff contract for the AbilityOne explainer: the two dark overlays swap
+  // rather than stack, so whichever one opens can close the other first.
+  window.EnvisionBSC = { open: openBsc, close: closeBsc, isOpen: isOpen };
+
   // Cross-link delegation (capture phase so it wins over deck/panel handlers).
+  // A real link inside a trigger (the online Base Supply Center CTA on the
+  // Base Supply card) owns its own click: let it navigate, not open the map.
+  function onOwnLink(e){
+    return !!(e.target.closest && e.target.closest("a[href]"));
+  }
   function handleTrigger(e){
     var t = e.target.closest ? e.target.closest("[data-bsc]") : null;
-    if (!t) return;
+    if (!t || onOwnLink(e)) return;
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "keydown"){
@@ -6016,7 +6467,7 @@
   }
   document.addEventListener("click", handleTrigger, true);
   document.addEventListener("keydown", function(e){
-    if (isOpen()) return;
+    if (isOpen() || onOwnLink(e)) return;
     var t = e.target.closest ? e.target.closest("[data-bsc]") : null;
     if (t && (e.key === "Enter" || e.key === " " || e.key === "Spacebar")){
       e.preventDefault(); e.stopPropagation(); openBsc(t);
@@ -6032,6 +6483,127 @@
       closeBsc();
     } else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                e.key === " " || e.key === "Spacebar"){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  }, true);
+})();
+</script>
+<script>
+/* AbilityOne explainer overlay.
+   Same overlay contract as the map modal: backdrop + shell, body scroll lock,
+   focus return, and __envSyncOverlay so the deck behind goes inert. The two
+   dark overlays swap instead of stacking: opening this from inside the map
+   closes the map, and closing it puts the map back where the visitor left it.
+   Eras start collapsed on every open so the panel always reads the same way. */
+(function(){
+  var backdrop = document.getElementById("a1Backdrop");
+  var modal    = document.getElementById("a1Modal");
+  var closeBtn = document.getElementById("a1Close");
+  if (!backdrop || !modal || !closeBtn) return;
+  var scroller   = modal.querySelector(".a1-scroll");
+  var panelModal = document.getElementById("modal");
+  var returnFocus = null;
+  var reopenMap = false;
+
+  function isOpen(){ return modal.classList.contains("is-open"); }
+  function syncOverlay(){ if (window.__envSyncOverlay) window.__envSyncOverlay(); }
+
+  function dismissPeers(){
+    if (window.EnvisionDeck && window.EnvisionDeck.closeMenu) window.EnvisionDeck.closeMenu();
+    if (window.EnvisionConcierge && window.EnvisionConcierge.close) window.EnvisionConcierge.close();
+    if (window.EnvisionBSC && window.EnvisionBSC.close) window.EnvisionBSC.close();
+  }
+
+  var eraBtns = Array.prototype.slice.call(modal.querySelectorAll(".a1-era-btn"));
+  function setEra(btn, open){
+    var body = document.getElementById(btn.getAttribute("aria-controls"));
+    var era  = btn.closest(".a1-era");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (body) body.hidden = !open;
+    if (era) era.classList.toggle("is-open", open);
+  }
+  eraBtns.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      setEra(btn, btn.getAttribute("aria-expanded") !== "true");
+    });
+  });
+  function collapseEras(){ eraBtns.forEach(function(btn){ setEra(btn, false); }); }
+
+  function openA1(trigger){
+    if (isOpen()) return;
+    // Opened from inside the map: hand off now, hand back on close.
+    reopenMap = !!(trigger && trigger.closest && trigger.closest("#bscModal"));
+    returnFocus = trigger || document.activeElement;
+    collapseEras();
+    dismissPeers();
+    if (scroller) scroller.scrollTop = 0;
+    backdrop.classList.add("is-open");
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    closeBtn.focus();
+    syncOverlay();
+  }
+
+  /* Returns the element focus was borrowed from. Pass "silent" when the caller
+     is about to open another overlay and will place focus itself. */
+  function closeA1(mode){
+    if (!isOpen()) return null;
+    var back = returnFocus, toMap = reopenMap;
+    modal.classList.remove("is-open");
+    backdrop.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow =
+      panelModal && panelModal.classList.contains("is-open") ? "hidden" : "";
+    returnFocus = null;
+    reopenMap = false;
+    syncOverlay();
+    if (mode === "silent") return back;
+    if (toMap && window.EnvisionBSC && window.EnvisionBSC.open){
+      window.EnvisionBSC.open(back);
+      return back;
+    }
+    if (back && back.focus) back.focus();
+    return back;
+  }
+
+  closeBtn.addEventListener("click", function(){ closeA1(); });
+  backdrop.addEventListener("click", function(){ closeA1(); });
+  modal.addEventListener("click", function(e){
+    if (e.target === modal) closeA1();
+  });
+
+  // Trigger delegation (capture phase so it wins over deck/panel handlers).
+  // Triggers are real buttons, so Enter and Space already arrive as clicks.
+  document.addEventListener("click", function(e){
+    var t = e.target.closest ? e.target.closest("[data-a1]") : null;
+    if (!t) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openA1(t);
+  }, true);
+
+  // The one cross-link out: close this, open the map, and do not bounce back.
+  document.addEventListener("click", function(e){
+    var t = e.target.closest ? e.target.closest("[data-a1-map]") : null;
+    if (!t) return;
+    e.preventDefault();
+    e.stopPropagation();
+    // Focus goes back to whatever opened the explainer, not to this link:
+    // the link is inside the panel that is closing.
+    var origin = closeA1("silent");
+    if (window.EnvisionBSC && window.EnvisionBSC.open) window.EnvisionBSC.open(origin || null);
+  }, true);
+
+  // ESC and key isolation while the explainer is open.
+  document.addEventListener("keydown", function(e){
+    if (!isOpen()) return;
+    if (e.key === "Escape"){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      closeA1();
+    } else if (e.key === "ArrowRight" || e.key === "ArrowLeft"){
       e.preventDefault();
       e.stopImmediatePropagation();
     }

@@ -15,6 +15,8 @@ request is Google Fonts (loaded with `preconnect`).
 - Section progress bar with hover tooltips
 - Capability and service drawers with expandable cards
 - Base Supply Center network map modal
+- AbilityOne explainer overlay: program timeline plus a chain-of-authority
+  tree, opened from the AbilityOne channel card or from the map modal
 
 ## Structure
 
