@@ -58,6 +58,13 @@ about AbilityOne" trigger (`[data-a1]`).
   and the `trapTabWithin` list, or the deck behind it will stay focusable.
 - Keep the copy minimal and business-first: one line visible, the detail behind
   the expand.
+- The workforce fact lives at the top of the map pop-up's info column
+  (`.bsc-qual`), not in the Proof section and not in the explainer. Keep it to
+  the fact itself, that every store is operated by Envision and staffed by
+  people who are blind or have low vision, with no framing sentence
+  attached. The explainer must not repeat the line. It carries the deeper
+  employment story instead, through the eras (employment as the qualification,
+  then the 75% direct-labor ratio) and Envision's node (88% against that 75%).
 
 ## Program videos on callout cards
 

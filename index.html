@@ -1906,6 +1906,14 @@
     margin-top:14px;font-size:11px;font-weight:700;letter-spacing:.16em;
     text-transform:uppercase;color:var(--green-ink);display:flex;align-items:center;gap:6px;
   }
+  /* The workforce fact, stated plainly at the top of the map pop-up: who
+     operates the stores and who staffs them, with no framing sentence after
+     it. Map modal only, and not repeated in the AbilityOne explainer. */
+  .bsc-qual{
+    margin-top:-4px;margin-bottom:18px;padding-left:12px;
+    border-left:2px solid var(--bsc-lime);
+    font-size:13px;line-height:1.55;font-weight:600;color:var(--bsc-white);
+  }
 
   /* ---------- Base Supply Center map modal ---------- */
   :root{
@@ -2278,6 +2286,11 @@
   }
   .a1-node--env .a1-node-h{font-size:17px}
   .a1-node--env .a1-node-d{color:var(--bsc-white)}
+  .a1-node-stat{
+    margin-top:11px;padding-top:11px;border-top:1px solid rgba(255,255,255,0.16);
+    font-size:12.5px;line-height:1.5;color:var(--bsc-white);
+  }
+  .a1-node-stat strong{color:var(--bsc-lime);font-weight:800;font-size:14px}
   .a1-flag{
     display:inline-block;margin-bottom:8px;
     background:var(--bsc-lime);color:#0a1f0a;border-radius:999px;
@@ -3276,6 +3289,7 @@
         <div class="bsc-sec">
           <div class="bsc-eyebrow">Network Scale</div>
           <h3>A federal procurement channel customers already use every day.</h3>
+          <div class="bsc-qual">Every store is operated by Envision and staffed by people who are blind or have low vision.</div>
           <div class="bsc-statgrid">
             <div class="bsc-statblk"><div class="n">160+</div><div class="c">BSCs in the AbilityOne network</div></div>
             <div class="bsc-statblk"><div class="n">14</div><div class="c">Countries served</div></div>
@@ -3348,11 +3362,11 @@
                 <svg class="a1-era-chev" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
               </button>
               <div class="a1-era-body" id="a1Era-1938" role="region" aria-labelledby="a1EraBtn-1938" hidden>
-                Federal agencies were directed to buy specified products from nonprofit agencies employing people who are blind. It created a purchasing channel, not a subsidy: agencies got supplies they already needed, and the work behind them was real production work. National Industries for the Blind was formed to coordinate supply across the participating agencies.
+                Federal agencies were directed to buy specified products from nonprofit agencies employing people who are blind. Employment was the qualification from the first day: an agency earned the channel by doing the work, not by asking for relief. National Industries for the Blind was formed to coordinate supply across the participating agencies.
                 <div class="a1-chips">
                   <span>Products only</span>
                   <span>NIB formed</span>
-                  <span>Mandatory purchasing begins</span>
+                  <span>Employment is the qualification</span>
                 </div>
               </div>
             </div>
@@ -3367,7 +3381,7 @@
                 <svg class="a1-era-chev" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
               </button>
               <div class="a1-era-body" id="a1Era-1971" role="region" aria-labelledby="a1EraBtn-1971" hidden>
-                Senator Jacob Javits amended the act to cover people with significant disabilities beyond blindness, and to include services alongside products. A second central nonprofit agency was added to serve the newly eligible agencies, and the federal customer base widened from supply items to full service contracts.
+                Senator Jacob Javits amended the act to cover people with significant disabilities beyond blindness, and to include services alongside products. The qualification did not change, only who it covered: agencies still earned the channel through the people they employed. A second central nonprofit agency was added to serve the newly eligible agencies, and the customer base widened from supply items to full service contracts.
                 <div class="a1-chips">
                   <span>Services added</span>
                   <span>Second central nonprofit agency</span>
@@ -3386,11 +3400,11 @@
                 <svg class="a1-era-chev" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
               </button>
               <div class="a1-era-body" id="a1Era-now" role="region" aria-labelledby="a1EraBtn-now" hidden>
-                The program runs today as AbilityOne, overseen by the U.S. AbilityOne Commission. Items and services on the Procurement List are a mandatory source for federal agencies, so a qualified buyer purchases them from a participating nonprofit agency instead of running a separate competition. For Envision, that means manufacturing, services, and Base Supply Centers sitting on a channel federal buyers already use every day.
+                The program runs today as AbilityOne, overseen by the U.S. AbilityOne Commission. Items and services on the Procurement List are a mandatory source for federal agencies, so a qualified buyer purchases them from a participating nonprofit agency instead of running a separate competition. The qualification is now a measured one: at least 75% of an agency's direct labor hours must be performed by people who are blind or have significant disabilities. The ratio is reported and audited, not assumed.
                 <div class="a1-chips">
                   <span>Mandatory source</span>
                   <span>Procurement List</span>
-                  <span>Base Supply Centers</span>
+                  <span>75% direct labor requirement</span>
                 </div>
               </div>
             </div>
@@ -3433,7 +3447,7 @@
                 <div class="a1-out">
                   <div class="a1-out-h">Base Supply Centers</div>
                   <div class="a1-out-d">Supply stores operating on federal installations, stocked from the program.</div>
-                  <div class="a1-out-note">Base Supply Centers in Envision's footprint are operated by Envision and staffed by people who are blind or have low vision. For a commercial partner, a BSC is shelf access to DoD buyers without a separate contract competition.</div>
+                  <div class="a1-out-note">For a commercial partner, a BSC is shelf access to DoD buyers without a separate contract competition.</div>
                   <button class="a1-maplink" type="button" data-a1-map>View the network map
                     <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                   </button>
@@ -3464,6 +3478,7 @@
               <span class="a1-flag">Where Envision sits</span>
               <div class="a1-node-h">Envision</div>
               <div class="a1-node-d">An NIB-affiliated agency, and the one that delivers the work: manufacturing, fulfillment, contact center, and 16 Base Supply Centers on federal installations.</div>
+              <div class="a1-node-stat"><strong>88%</strong> of Envision's combined direct labor is performed by people who are blind or have low vision, against the program's 75% requirement.</div>
             </div>
 
           </div>
