@@ -1571,9 +1571,20 @@
     transform:translateY(100%);
     transition:transform .45s cubic-bezier(0.4,0,0.2,1);
     z-index:100;overflow-y:auto;overflow-x:hidden;color:var(--text-light);
-    -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+    overscroll-behavior:contain;
   }
   .modal.is-open{transform:translateY(0)}
+  /* Same visible scrollbar the map/AbilityOne overlays carry. With overlay
+     scrollbars (the macOS default) a pop-up that runs past the fold looks
+     like it simply ends, which reads as "the panel will not scroll". */
+  .modal{scrollbar-width:thin;scrollbar-color:rgba(120,190,33,0.4) transparent}
+  .modal::-webkit-scrollbar{width:9px}
+  .modal::-webkit-scrollbar-track{background:transparent}
+  .modal::-webkit-scrollbar-thumb{
+    background:rgba(120,190,33,0.32);border-radius:999px;
+    border:2px solid transparent;background-clip:padding-box;
+  }
+  .modal:hover::-webkit-scrollbar-thumb{background:rgba(120,190,33,0.5);background-clip:padding-box}
   .modal-topbar{
     position:sticky;top:0;z-index:5;
     background:rgba(0,13,46,0.92);backdrop-filter:blur(10px);
@@ -6034,6 +6045,20 @@
       // own shortcuts (f for fullscreen, 1-9 for section jumps, arrows/space)
       // never act on the slides hidden behind any open overlay.
       if (e.key === "Escape"){ if (modalOpen()) closeModal(); }
+      else if (modalOpen() &&
+               (e.key === "ArrowDown" || e.key === "ArrowUp" ||
+                e.key === "PageDown" || e.key === "PageUp" ||
+                e.key === " " || e.key === "Spacebar")){
+        // Scroll the detail pop-up from anywhere. Once focus drifts to the
+        // body (a click on the pop-up's own text does it), these keys have no
+        // scroll target — the body is overflow:hidden — and they silently die,
+        // which reads as "the panel will not scroll".
+        e.preventDefault();
+        var mStep = (e.key === "ArrowDown" || e.key === "ArrowUp") ? 0.4 : 0.85;
+        var mDir = (e.key === "ArrowUp" || e.key === "PageUp" ||
+                    ((e.key === " " || e.key === "Spacebar") && e.shiftKey)) ? -1 : 1;
+        modal.scrollBy({top: mDir * Math.round(modal.clientHeight * mStep), behavior:"smooth"});
+      }
       else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                e.key === " " || e.key === "Spacebar"){ e.preventDefault(); }
       return;
