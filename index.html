@@ -1608,7 +1608,7 @@
 
   .m-sec-label{
     font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--green);margin-bottom:16px;
+    color:var(--green);margin:0 0 16px;
   }
   .m-summary{
     display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;
@@ -2501,7 +2501,7 @@
 <div class="deck">
 
   <!-- ===================== TOP NAV ===================== -->
-  <nav class="topnav">
+  <nav class="topnav" id="nav" aria-label="Main">
     <div class="nav-brand"><img class="brand-logo" src="images/Envision_PrimaryFullColor_RBG.png" alt="Envision" width="1875" height="417" decoding="async"><span class="brand-section">Capabilities &amp; Services</span></div>
     <div class="nav-links" id="navLinks"></div>
     <div class="nav-tools">
@@ -2523,10 +2523,10 @@
   </nav>
 
   <!-- Section menu (hamburger) — shown when the inline nav links are hidden -->
-  <div class="nav-menu" id="navMenu" role="menu" aria-label="Sections" hidden></div>
+  <div class="nav-menu" id="navMenu" role="group" aria-label="Sections" hidden></div>
 
   <!-- ===================== STAGE ===================== -->
-  <div class="stage" role="main">
+  <div class="stage" role="main" id="main" tabindex="-1">
     <noscript>
       <p style="margin:24px auto;max-width:640px;padding:14px 18px;border:1px solid #d7deeb;border-radius:8px;background:#fff;color:#061530;font:500 14px/1.5 Montserrat,system-ui,sans-serif">
         This presentation needs JavaScript to run. Please enable JavaScript, or contact Envision at
@@ -3156,7 +3156,7 @@
           <!-- Document quick-links. Replace each href="#" with the real PDF/URL once uploaded. -->
           <div class="doc-links">
             <div class="doc-links-head">
-              <div class="m-sec-label">Document Library</div>
+              <h3 class="m-sec-label">Document Library</h3>
             </div>
             <div class="doc-grid">
               <a class="doc-link" href="#" data-doc>
@@ -3615,7 +3615,6 @@
     var b = document.createElement("button");
     b.className = "navlink";
     b.type = "button";
-    b.setAttribute("role","menuitem");
     b.textContent = s.name;
     b.addEventListener("click", function(){ closeMenu(); jumpToSection(i); });
     navMenu.appendChild(b);
@@ -4753,22 +4752,22 @@
 
     var equipmentBlock = "";
     if (d.equipment && d.equipment.length){
-      equipmentBlock = '<div class="m-block"><div class="m-sec-label">Equipment &amp; Machinery</div>'+renderCatList(d.equipment, 'View machines')+'</div>';
+      equipmentBlock = '<div class="m-block"><h3 class="m-sec-label">Equipment &amp; Machinery</h3>'+renderCatList(d.equipment, 'View machines')+'</div>';
     }
 
     var catalogsBlock = "";
     if (d.catalogs && d.catalogs.length){
-      catalogsBlock = '<div class="m-block"><div class="m-sec-label">Product Catalog</div>'+renderCatList(d.catalogs, 'View catalog')+'</div>';
+      catalogsBlock = '<div class="m-block"><h3 class="m-sec-label">Product Catalog</h3>'+renderCatList(d.catalogs, 'View catalog')+'</div>';
     }
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
 
     var overviewBlock = (d.overview && d.overview.length)
-      ? '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>' : '';
+      ? '<div class="m-block"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>' : '';
     var statsBlock = (d.stats && d.stats.length)
-      ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
+      ? '<div class="m-block"><h3 class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</h3><div class="m-stats">'+stats+'</div></div>' : '';
     var calloutsBlock = (d.callouts && d.callouts.length)
-      ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>' : '';
+      ? '<div class="m-block"><h3 class="m-sec-label">'+(d.calloutLabel||'Details')+'</h3><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>' : '';
 
     // inAction: points this capability/service at the current project that
     // proves it (the reverse of a project card's data-cap-link). Clicking it
@@ -4776,7 +4775,7 @@
     var proofBlock = "";
     if (d.inAction && PROJECTS[d.inAction.project] && !PROJECTS[d.inAction.project].hidden){
       var pj = PROJECTS[d.inAction.project];
-      proofBlock = '<div class="m-block"><div class="m-sec-label">In Action</div>'+
+      proofBlock = '<div class="m-block"><h3 class="m-sec-label">In Action</h3>'+
         '<button type="button" class="m-proof" data-project-open="'+d.inAction.project+'">'+
           '<span class="mp-body"><span class="mp-title">'+pj.title+'</span>'+
           '<span class="mp-text">'+d.inAction.text+'</span></span>'+
@@ -5255,8 +5254,8 @@
     }).join("");
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
-    var statsBlock = stats ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
-    var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
+    var statsBlock = stats ? '<div class="m-block"><h3 class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</h3><div class="m-stats">'+stats+'</div></div>' : '';
+    var calloutsBlock = callouts ? '<div class="m-block"><h3 class="m-sec-label">'+(d.calloutLabel||'Details')+'</h3><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
     var topBanner = '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
@@ -5270,7 +5269,7 @@
     var vidLabel = d.videoLabel || ('Play video: '+d.title);
     var overviewBlock = d.video
       ? '<div class="m-block m-block--video">'+
-          '<div class="m-overview-main"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
+          '<div class="m-overview-main"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>'+
           '<button type="button" class="m-video-card" data-video="'+d.video+'" data-video-label="'+escAttr(vidLabel)+'" aria-label="'+escAttr(vidLabel)+'">'+
             '<span class="m-video-poster"'+
               (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;)"' : '')+'>'+
@@ -5279,7 +5278,7 @@
             '<span class="m-video-card-cap">'+vidLabel+'</span>'+
           '</button>'+
         '</div>'
-      : '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>';
+      : '<div class="m-block"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>';
 
     modalInner.innerHTML =
       backBar+
@@ -5332,7 +5331,7 @@
           '<p class="m-one">A live look at the work moving through our campuses, from first prototype to full production run. Select a project to see what we\'re building and the capabilities behind it.</p>'+
         '</div>'+
       '</div>'+
-      '<div class="m-block"><div class="m-sec-label">Current Projects</div>'+
+      '<div class="m-block"><h3 class="m-sec-label">Current Projects</h3>'+
         '<div class="inaction-grid">'+blocks+'</div>'+
       '</div>'+
       '<div class="m-cta">'+
