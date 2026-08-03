@@ -2492,6 +2492,15 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
+  /* ---------- Focus not obscured (WCAG 2.4.11) ----------
+     The nav sits in flow today, but scroll targets and focused elements
+     keep clearance from the top edge of every scroll container so no
+     future fixed chrome can cover them. Scroll-padding has no effect on
+     static rendering. */
+  html{scroll-padding-top:4.5rem}
+  .slide{scroll-padding-top:1rem}
+  :target, [tabindex="-1"]:focus{scroll-margin-top:4.5rem}
+
   /* ---------- Motion safety (WCAG 2.3.3) ----------
      OS-level reduced motion kills every animation and transition in one
      pass. Placed last so it wins the cascade. The Ken Burns frames need
