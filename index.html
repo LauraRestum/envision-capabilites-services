@@ -2497,6 +2497,16 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
+  /* ---------- House focus ring (WCAG 2.4.7), keyboard-only ----------
+     Default ring for anything without a curated focus style (today that is
+     the plain links on the white contact cards, which fell back to the UA
+     ring). Brand green on the dark surfaces; ink green on the white card
+     zones where #78BE21 would miss the 3:1 UI floor. Curated component
+     rings keep winning on specificity. */
+  :focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .topnav :focus-visible, .nav-menu :focus-visible,
+  .bcard :focus-visible, .campus-footer :focus-visible{outline-color:var(--green-ink)}
+
   /* ---------- Screen-reader-only utility ---------- */
   .visually-hidden{
     position:absolute;width:1px;height:1px;padding:0;margin:-1px;
