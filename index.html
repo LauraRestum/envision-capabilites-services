@@ -2497,6 +2497,12 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
+  /* ---------- Screen-reader-only utility ---------- */
+  .visually-hidden{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+
   /* ---------- Focus not obscured (WCAG 2.4.11) ----------
      The nav sits in flow today, but scroll targets and focused elements
      keep clearance from the top edge of every scroll container so no
@@ -6477,6 +6483,26 @@
     svg.appendChild(markerG);
 
     aspect.appendChild(svg);
+
+    // Text alternative for the map (WCAG 1.1.1): the same locations as a
+    // screen-reader-only list, generated from the same data so it can never
+    // drift out of sync with the markers.
+    var srList = document.createElement("div");
+    srList.className = "visually-hidden";
+    var srHead = document.createElement("h3");
+    srHead.textContent = "All Base Supply Center locations";
+    srList.appendChild(srHead);
+    var srUl = document.createElement("ul");
+    BSC_MAP.bases.forEach(function(b){
+      var info = BASE_INFO[b.name] || {full:b.name};
+      var li = document.createElement("li");
+      li.textContent = info.full +
+        (info.city ? ", " + info.city : "") +
+        (info.branch ? " (" + info.branch + ")" : "");
+      srUl.appendChild(li);
+    });
+    srList.appendChild(srUl);
+    aspect.appendChild(srList);
 
     // Tooltip element shared by hover, tap, and keyboard focus.
     tipEl = document.createElement("div");
