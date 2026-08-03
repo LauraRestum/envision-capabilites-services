@@ -1,6 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-env-theme="dark">
 <head>
+<script>(function(){try{
+  var p = JSON.parse(localStorage.getItem('env-a11y') || '{}');
+  var t = p.theme;
+  if (t !== 'light' && t !== 'hc') t = 'dark';
+  var r = document.documentElement;
+  r.setAttribute('data-env-theme', t);
+  ['zoom','lines','paras','underline','motion','readable','cursor'].forEach(function(k){
+    if (p[k]) r.setAttribute('data-env-' + k, p[k]);
+  });
+}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Envision | Capabilities &amp; Services</title>
@@ -2584,6 +2594,83 @@
     }
     .hero .kb-frame{animation:none !important;opacity:0}
     .hero .kb-frame:nth-child(1){opacity:1}
+  }
+
+  /* ---------- Themes (user-invoked only; dark is the shipped default) ----
+     Components never change between themes; only the tokens swap, plus a
+     handful of surface overrides where a photo or gradient backdrop needs a
+     matching wash. Verified anchors, light: text #002855 on #f4f7fb 13.6:1,
+     muted #53565A 7.0:1, green text #457010 5.2:1, error #9E3000 6.6:1.
+     High contrast: white on black 21:1, green #78BE21 on black 8.4:1. */
+  html[data-env-theme="light"]{
+    --bg-dark:#f4f7fb;
+    --text-light:#002855;
+    --text-muted:#53565A;
+    --text-faint:rgba(0,40,85,0.72);
+    --border-dark:rgba(0,40,85,0.14);
+    --border-mid:rgba(0,40,85,0.26);
+    --green:#457010;          /* text and fills hold 3:1+ on the light ground */
+    --green-bright:#2f4d0b;
+    --error-soft:#9E3000;
+  }
+  html[data-env-theme="light"] .image-bg{
+    background:linear-gradient(135deg,#e7edf7 0%,#f4f7fb 55%,var(--bg-light) 100%);
+  }
+  html[data-env-theme="light"] .hero .overlay{
+    background:linear-gradient(90deg,rgba(244,247,251,0.96) 0%,rgba(244,247,251,0.94) 36%,rgba(244,247,251,0.75) 50%,rgba(244,247,251,0.25) 66%);
+  }
+  html[data-env-theme="light"] .skip-link,
+  html[data-env-theme="light"] .btn-primary,
+  html[data-env-theme="light"] .reg-pill[aria-expanded="true"]{background:#78BE21;border-color:#78BE21}
+  html[data-env-theme="light"] .hero h1{color:var(--text-light)}
+  html[data-env-theme="light"] .hero .subhead{color:var(--text-muted)}
+  html[data-env-theme="light"] .atag{
+    color:var(--text-light);
+    border-color:rgba(0,40,85,0.42);
+  }
+  html[data-env-theme="light"] .modal,
+  html[data-env-theme="light"] .a1-shell,
+  html[data-env-theme="light"] .bsc-shell{
+    --bsc-deep:#ffffff;--bsc-panel:#eef2f9;--bsc-bg:#f4f7fb;
+    --bsc-white:#002855;--bsc-dim:#53565A;--bsc-bd:rgba(0,40,85,0.16);
+    --bsc-lime:#457010;--bsc-lime-ink:#ffffff;
+  }
+
+  html[data-env-theme="hc"]{
+    --navy:#000000;
+    --blue:#41B6E6;
+    --blue-mid:#41B6E6;
+    --bg-light:#000000;
+    --bg-tint:#000000;
+    --bg-dark:#000000;
+    --text-dark:#ffffff;
+    --text-mid:#ffffff;
+    --text-soft:#ffffff;
+    --text-light:#ffffff;
+    --text-muted:#ffffff;
+    --text-faint:#ffffff;
+    --rule-light:#ffffff;
+    --border-dark:#ffffff;
+    --border-mid:#ffffff;
+    --green:#78BE21;
+    --green-ink:#78BE21;
+    --green-dim:rgba(120,190,33,0.25);
+    --green-bright:#a8e457;
+    --error-soft:#FF6B3D;
+    --bsc-bg:#000000;--bsc-deep:#000000;--bsc-panel:#000000;
+    --bsc-white:#ffffff;--bsc-dim:#ffffff;--bsc-bd:#ffffff;
+    --bsc-lime:#B8E04A;--bsc-lime-ink:#000000;
+  }
+  html[data-env-theme="hc"] *{backdrop-filter:none !important;text-shadow:none !important}
+  html[data-env-theme="hc"] img{opacity:1 !important}
+  html[data-env-theme="hc"] a{text-decoration:underline}
+  html[data-env-theme="hc"] .image-bg{background:#000000}
+  html[data-env-theme="hc"] .nav-brand .brand-section{color:#ffffff;border-color:#ffffff;background:#000000}
+  html[data-env-theme="hc"] .nav-brand .brand-logo{background:#ffffff;border-radius:4px;padding:2px 5px}
+  html[data-env-theme="hc"] .hero .subhead,
+  html[data-env-theme="hc"] .atag{color:#ffffff}
+  html[data-env-theme="hc"] .hero .overlay{
+    background:linear-gradient(90deg,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.95) 36%,rgba(0,0,0,0.8) 50%,rgba(0,0,0,0.35) 66%);
   }
 </style>
 <!-- Capabilities concierge styles (self-hosted, no external request) -->

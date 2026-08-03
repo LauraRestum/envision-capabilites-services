@@ -310,3 +310,22 @@ body.env-overlay-open .ec-panel{ display: none !important; }
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
+
+/* High-contrast theme (user-invoked via the deck accessibility panel). */
+html[data-env-theme="hc"] .env-concierge{
+  --ec-navy: #000000; --ec-blue: #000000; --ec-green: #78BE21;
+  --ec-ink: #ffffff; --ec-mid: #ffffff; --ec-soft: #ffffff;
+  --ec-rule: #ffffff; --ec-tint: #000000; --ec-shadow: none;
+}
+html[data-env-theme="hc"] .ec-panel,
+html[data-env-theme="hc"] .ec-log,
+html[data-env-theme="hc"] .ec-form,
+html[data-env-theme="hc"] .ec-msg-bot .ec-bubble,
+html[data-env-theme="hc"] .ec-chip,
+html[data-env-theme="hc"] .ec-input{ background: #000000; color: #ffffff; }
+html[data-env-theme="hc"] .ec-panel{ border: 1px solid #ffffff; }
+html[data-env-theme="hc"] .ec-chip,
+html[data-env-theme="hc"] .ec-input,
+html[data-env-theme="hc"] .ec-send,
+html[data-env-theme="hc"] .ec-msg-user .ec-bubble{ border: 1px solid #ffffff; }
+html[data-env-theme="hc"] .ec-launcher{ background: #000000; color: #ffffff; border: 1px solid #ffffff; }
