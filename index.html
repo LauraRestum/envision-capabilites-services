@@ -7,7 +7,7 @@
   if (t !== 'dark' && t !== 'light' && t !== 'hc') t = 'std';
   var r = document.documentElement;
   r.setAttribute('data-env-theme', t);
-  ['zoom','lines','paras','underline','motion','readable','cursor'].forEach(function(k){
+  ['zoom','lines','paras','underline','motion','readable','cursor','zoomlens'].forEach(function(k){
     if (p[k]) r.setAttribute('data-env-' + k, p[k]);
   });
 }catch(e){}})();</script>
@@ -3600,6 +3600,7 @@
       <button type="button" data-toggle="motion" data-on="reduce" aria-pressed="false">Reduce motion</button>
       <button type="button" data-toggle="readable" aria-pressed="false">Readable text</button>
       <button type="button" data-toggle="cursor" aria-pressed="false">Large cursor</button>
+      <button type="button" data-toggle="zoomlens" aria-pressed="false">Zoom cursor</button>
     </div>
     <div class="a11y-foot">
       <button class="a11y-reset" id="a11yReset" type="button">Reset all</button>
@@ -7293,7 +7294,7 @@
 
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(prefs)); }catch(e){} }
   function apply(){
-    ["theme","zoom","lines","paras","underline","motion","readable","cursor"].forEach(function(k){
+    ["theme","zoom","lines","paras","underline","motion","readable","cursor","zoomlens"].forEach(function(k){
       if (prefs[k]) root.setAttribute("data-env-" + k, prefs[k]);
       else root.removeAttribute("data-env-" + k);
     });
@@ -7361,6 +7362,54 @@
   }
   trigger.addEventListener("click", open);
   apply();
+
+  /* Zoom cursor: full-page magnification that follows the pointer (and
+     keyboard focus). Percent-based transform-origin means the point under
+     the cursor maps exactly to itself, so the page appears to magnify
+     around wherever the visitor points. Toggled via data-env-zoomlens,
+     which the anti-flash script also restores pre-paint. */
+  (function(){
+    var LENS_SCALE = 1.8;
+    var active = false, raf = null, ox = 50, oy = 50;
+    function paint(){
+      raf = null;
+      if (!active) return;
+      document.body.style.transformOrigin = ox + "% " + oy + "%";
+    }
+    function setOrigin(xPct, yPct){
+      ox = Math.max(0, Math.min(100, xPct));
+      oy = Math.max(0, Math.min(100, yPct));
+      if (!raf) raf = requestAnimationFrame(paint);
+    }
+    function onMove(e){
+      setOrigin(e.clientX / window.innerWidth * 100, e.clientY / window.innerHeight * 100);
+    }
+    function onFocus(e){
+      var t = e.target;
+      if (!t || !t.getBoundingClientRect) return;
+      var r = t.getBoundingClientRect();
+      if (!r.width && !r.height) return;
+      setOrigin((r.left + r.width / 2) / window.innerWidth * 100,
+                (r.top + r.height / 2) / window.innerHeight * 100);
+    }
+    function sync(){
+      var on = root.getAttribute("data-env-zoomlens") === "on";
+      if (on && !active){
+        active = true;
+        document.addEventListener("mousemove", onMove, { passive: true });
+        document.addEventListener("focusin", onFocus);
+      } else if (!on && active){
+        active = false;
+        if (raf){ cancelAnimationFrame(raf); raf = null; }
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("focusin", onFocus);
+      }
+      document.body.style.transform = on ? "scale(" + LENS_SCALE + ")" : "";
+      if (!on) document.body.style.transformOrigin = "";
+    }
+    new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-env-zoomlens"] });
+    sync();
+  })();
 })();
 </script>
 <script>
