@@ -311,6 +311,21 @@ body.env-overlay-open .ec-panel{ display: none !important; }
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
+/* Dark theme (user-invoked via the deck accessibility panel): the panel's
+   hardcoded white surfaces follow the deck onto dark navy. */
+html[data-env-theme="dark"] .env-concierge{
+  --ec-ink: #f0f4ff; --ec-mid: rgba(240,244,255,0.85); --ec-soft: rgba(240,244,255,0.68);
+  --ec-rule: rgba(255,255,255,0.16); --ec-tint: #0a1f44;
+}
+html[data-env-theme="dark"] .ec-panel,
+html[data-env-theme="dark"] .ec-form,
+html[data-env-theme="dark"] .ec-msg-bot .ec-bubble,
+html[data-env-theme="dark"] .ec-chip,
+html[data-env-theme="dark"] .ec-input{ background: #03102e; color: #f0f4ff; }
+html[data-env-theme="dark"] .ec-panel{ border: 1px solid rgba(255,255,255,0.16); }
+html[data-env-theme="dark"] .ec-chip,
+html[data-env-theme="dark"] .ec-input{ border-color: rgba(255,255,255,0.3); }
+
 /* High-contrast theme (user-invoked via the deck accessibility panel). */
 html[data-env-theme="hc"] .env-concierge{
   --ec-navy: #000000; --ec-blue: #000000; --ec-green: #78BE21;

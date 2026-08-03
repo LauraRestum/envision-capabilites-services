@@ -22,9 +22,13 @@ alternative fit invisibly. Placeholder text in the In Action gate measures
 
 - **File / selector:** `index.html` — token `--text-soft: #6b7a96` (`:root`),
   used as text color by `.navlink` (nav links), `.campus-card-sub`,
-  `.campus-photo-note`, `.cb-num .cb-unit`, `.cb-label`, `.cb-note`,
+  `.campus-photo-note`, `.cb-lab`, `.cb-num .cb-unit`, `.cb-note`,
   `.tile-sub`, `.toc-tile-sub`, `.doc-link-sub`, `.general-contacts-label`,
-  and other 10.5–14px captions on the white and `--bg-tint` slide surfaces.
+  `.proof-card .t-m`, `.bcard-title`, `.campus-card__addr`, and other
+  10.5–14px captions on the white and `--bg-tint` slide surfaces. An
+  axe-core sweep across every slide confirms the full list (26 nodes on
+  the campus, proof, and contact slides); every one inherits the same
+  token, so the one-line token fix clears them all.
 - **What fails:** normal-size text below the contrast minimum.
 - **Measured vs required:** 4.33:1 on `#ffffff`, 4.07:1 on `#f6f8fc` —
   required 4.5:1 (these run 10.5–14px, so the 3:1 large-text allowance does
