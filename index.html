@@ -2497,6 +2497,24 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
+  /* ---------- Skip links (WCAG 2.4.1) ----------
+     Off-screen until keyboard focus lands on them; styled as the house
+     pill (brand green fill, navy text, 7.3:1). */
+  .skip-link{
+    position:absolute;left:1rem;top:-100px;z-index:200;
+    background:var(--green);color:var(--navy);
+    padding:0.7rem 1.4rem;font:700 0.75rem var(--sans);
+    letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;
+    border-radius:2px;transition:top 0.15s;
+  }
+  .skip-link:focus{top:1rem}
+  .skip-link:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+  /* ---------- Footer landmark ----------
+     Fixed corner container; empty until the accessibility trigger mounts,
+     so it paints nothing by default. */
+  .site-footer{position:fixed;left:14px;bottom:12px;z-index:90}
+
   /* ---------- House focus ring (WCAG 2.4.7), keyboard-only ----------
      Default ring for anything without a curated focus style (today that is
      the plain links on the white contact cards, which fell back to the UA
@@ -2542,6 +2560,10 @@
 <link rel="stylesheet" href="/assistant/concierge.css">
 </head>
 <body>
+<!-- Skip links: first focusable elements, invisible until keyboard focus. -->
+<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#nav">Skip to navigation</a>
+<a class="skip-link" href="#site-footer">Skip to footer</a>
 <div class="fs-wipe" id="fsWipe" aria-hidden="true"></div>
 <div class="deck">
 
@@ -3301,6 +3323,9 @@
   <!-- ===================== BOTTOM PROGRESS ===================== -->
   <div class="progress"><div class="bar" id="progressBar"></div></div>
 </div>
+
+<!-- ===================== FOOTER (landmark; holds the accessibility trigger) ===================== -->
+<footer class="site-footer" id="site-footer" tabindex="-1" aria-label="Accessibility and site options"></footer>
 
 <!-- ===================== MODAL LAYER ===================== -->
 <div class="modal-backdrop" id="modalBackdrop"></div>
