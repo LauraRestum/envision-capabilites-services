@@ -456,6 +456,7 @@
       '</header>' +
       '<div class="ec-log" id="ecLog" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" ' +
         'aria-label="Conversation with the Envision concierge"></div>' +
+      '<div class="ec-sr-only" role="status" aria-live="polite" id="ecStatus"></div>' +
       '<form class="ec-form" id="ecForm">' +
         '<label class="ec-sr-only" for="ecInput">Type your question for the Envision concierge</label>' +
         '<textarea class="ec-input" id="ecInput" rows="1" autocomplete="off" ' +
@@ -508,6 +509,7 @@
     wrap.appendChild(el("div", "ec-bubble", esc(text)));
     log.appendChild(wrap);
     scrollLog();
+    if (typeof announceStatus === "function") announceStatus("Response ready", 250);
     return wrap;
   }
 
@@ -578,6 +580,7 @@
     if (typeof fn !== "function"){
       addBotBubble("I could not open that view just now, but I can still point you to the right person.");
       addContactCard(resolveContact(null));
+      announceStatus("Error. Try again.", 250);
       return;
     }
     // Opening a deck modal / section takes over the screen, so close the
@@ -708,6 +711,7 @@
   function handleQuery(text){
     text = (text || "").trim();
     if (!text) return;
+    announceStatus("Thinking");
     addUserMessage(text);
     // Granular questions reach the catalog first; everything else stays with
     // the authored intents.
@@ -802,6 +806,15 @@
   closeBtn.addEventListener("click", function(){ closePanel(); });
 
   var errEl = root.querySelector("#ecErr");
+  var statusEl = root.querySelector("#ecStatus");
+  var statusTimer = null;
+  // One announcement per response: immediate for "Thinking", debounced for
+  // completion so multi-bubble answers never flood a screen reader.
+  function announceStatus(msg, defer){
+    if (statusTimer){ clearTimeout(statusTimer); statusTimer = null; }
+    if (defer){ statusTimer = setTimeout(function(){ statusEl.textContent = msg; statusTimer = null; }, defer); }
+    else { statusEl.textContent = msg; }
+  }
   function setFieldError(msg){
     if (msg){
       input.setAttribute("aria-invalid", "true");
