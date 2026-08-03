@@ -1025,6 +1025,10 @@
   }
   .ia-gate-input::placeholder{color:rgba(240,244,255,0.5)}
   .ia-gate-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(120,190,33,0.22)}
+  /* This input auto-focuses when the gate opens; its focus indicator is the
+     curated green border + shadow ring above, exactly as it always rendered.
+     Suppress the global default ring so the on-open look is unchanged. */
+  .ia-gate-input:focus-visible{outline:none}
   .ia-gate-err{display:none;font-size:13px;font-weight:600;color:var(--error-soft);margin-bottom:8px}
   .ia-gate.is-err .ia-gate-err{display:block}
   .ia-gate.is-err .ia-gate-input{border-color:var(--error-soft)}
