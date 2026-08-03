@@ -2497,6 +2497,36 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
+  /* ---------- Touch targets (WCAG 2.5.5 house standard) ----------
+     Coarse pointers only: the artwork never grows, the hit area does,
+     through invisible ::after overlays. Expansion is capped where
+     neighbors sit close (inline link rows) so areas do not overlap.
+     Tooltip pseudos on .atag out-rank the overlay while hovered, which
+     is harmless because the tap has already landed. */
+  @media (pointer:coarse){
+    /* Only statically-positioned controls gain position:relative; the
+       fixed/absolute ones (scroll cue, back button, overlay closers,
+       skip links) are already positioned ancestors for their ::after. */
+    .icbtn, .m-close, .navlink, .install-btn,
+    .reg-pill, .inv-action-link, .xp-btn, .xp-inline, .a1-cue,
+    .a1-maplink, .a1-era-btn, .atag,
+    .bcard a, .campus-card__addr a, .ia-gate-contact a,
+    .m-card-link, .bsc-link{position:relative}
+    .icbtn::after, .m-close::after, .bsc-close::after, .a1-close::after,
+    .lb-close::after, .vid-close::after, .backbtn::after,
+    .scroll-cue::after, .navlink::after, .install-btn::after,
+    .reg-pill::after, .inv-action-link::after, .xp-btn::after,
+    .xp-inline::after, .a1-era-btn::after, .atag::after{
+      content:"";position:absolute;inset:-6px;
+    }
+    .a1-cue::after, .a1-maplink::after{content:"";position:absolute;inset:-10px}
+    .bcard a::after, .campus-card__addr a::after, .ia-gate-contact a::after,
+    .m-card-link::after, .bsc-link::after, .skip-link::after{
+      content:"";position:absolute;inset:-4px;
+    }
+    .bsc-hit{r:22px}
+  }
+
   /* ---------- Skip links (WCAG 2.4.1) ----------
      Off-screen until keyboard focus lands on them; styled as the house
      pill (brand green fill, navy text, 7.3:1). */

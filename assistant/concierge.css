@@ -286,6 +286,14 @@ body.env-overlay-open .ec-panel{ display: none !important; }
   .ec-chip, .ec-bubble, .ec-contact, .ec-input{ border: 1px solid CanvasText; }
 }
 
+/* Touch targets: invisible hit-area expansion on coarse pointers only. */
+@media (pointer: coarse){
+  .ec-head-close, .ec-chip, .ec-send{ position: relative; }
+  .ec-head-close::after, .ec-chip::after, .ec-send::after{
+    content: ""; position: absolute; inset: -5px;
+  }
+}
+
 /* Field error: hidden until an invalid submit, then announced via role=alert.
    #9E3000 is the verified light-ground error tone (6.8:1 on white). */
 .ec-error[hidden]{ display: none; }
