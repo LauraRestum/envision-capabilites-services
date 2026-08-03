@@ -3288,7 +3288,7 @@
 
 <!-- ===================== MODAL LAYER ===================== -->
 <div class="modal-backdrop" id="modalBackdrop"></div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalLabel">
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-labelledby="modalLabel">
   <div class="modal-topbar">
     <span class="m-label" id="modalLabel"></span>
     <button class="m-close" id="modalClose" type="button">
@@ -3301,7 +3301,7 @@
 
 <!-- ===================== BASE SUPPLY CENTER MAP MODAL ===================== -->
 <div class="bsc-backdrop" id="bscBackdrop"></div>
-<div class="bsc-modal" id="bscModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Base Supply Center network">
+<div class="bsc-modal" id="bscModal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="Base Supply Center network">
   <div class="bsc-shell">
     <button class="bsc-close" id="bscClose" type="button" aria-label="Close">
       <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -3374,7 +3374,7 @@
 
 <!-- ===================== ABILITYONE EXPLAINER ===================== -->
 <div class="a1-backdrop" id="a1Backdrop"></div>
-<div class="a1-modal" id="a1Modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="The AbilityOne Program explained">
+<div class="a1-modal" id="a1Modal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="The AbilityOne Program explained">
   <div class="a1-shell">
     <button class="a1-close" id="a1Close" type="button" aria-label="Close">
       <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -3546,7 +3546,7 @@
 
 <!-- ===================== CAMPUS LOCATION LIGHTBOX ===================== -->
 <div class="lb-backdrop" id="lbBackdrop"></div>
-<div class="lb-modal" id="lbModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Campus location">
+<div class="lb-modal" id="lbModal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="Campus location">
   <button class="lb-close" id="lbClose" type="button" aria-label="Close">
     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </button>
@@ -3560,7 +3560,7 @@
 </div>
 
 <div class="vid-backdrop" id="vidBackdrop"></div>
-<div class="vid-modal" id="vidModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Video player">
+<div class="vid-modal" id="vidModal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="Video player">
   <button class="vid-close" id="vidClose" type="button" aria-label="Close video">
     <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </button>
@@ -4924,6 +4924,7 @@
     dismissPeers();
     modalBackdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
     modalClose.focus();
@@ -4933,6 +4934,7 @@
   function closeModal(){
     if (!modalOpen()) return;
     modal.classList.remove("is-open");
+    modal.inert = true;
     modalBackdrop.classList.remove("is-open");
     modal.setAttribute("aria-hidden","true");
     document.body.style.overflow = "";
@@ -5421,6 +5423,7 @@
     dismissPeers();
     modalBackdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
     modalClose.focus();
@@ -6548,6 +6551,7 @@
     dismissPeers();
     backdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     closeBtn.focus();
@@ -6558,6 +6562,7 @@
   function closeBsc(){
     if (!isOpen()) return;
     modal.classList.remove("is-open");
+    modal.inert = true;
     backdrop.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow =
@@ -6681,6 +6686,7 @@
     if (scroller) scroller.scrollTop = 0;
     backdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     closeBtn.focus();
@@ -6693,6 +6699,7 @@
     if (!isOpen()) return null;
     var back = returnFocus, toMap = reopenMap;
     modal.classList.remove("is-open");
+    modal.inert = true;
     backdrop.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow =
@@ -6785,6 +6792,7 @@
       dismissPeers();
       backdrop.classList.add("is-open");
       modal.classList.add("is-open");
+      modal.inert = false;
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
       closeBtn.focus();
@@ -6794,6 +6802,7 @@
     function closeLb(){
       if (!isOpen()) return;
       modal.classList.remove("is-open");
+      modal.inert = true;
       backdrop.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
       document.body.style.overflow =
@@ -6880,6 +6889,7 @@
       dismissPeers();
       backdrop.classList.add("is-open");
       modal.classList.add("is-open");
+      modal.inert = false;
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
       closeBtn.focus();
@@ -6889,6 +6899,7 @@
     function closeVid(){
       if (!isOpen()) return;
       modal.classList.remove("is-open");
+      modal.inert = true;
       backdrop.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
       frame.innerHTML = "";
