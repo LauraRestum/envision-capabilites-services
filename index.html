@@ -2492,6 +2492,21 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
+  /* ---------- Motion safety (WCAG 2.3.3) ----------
+     OS-level reduced motion kills every animation and transition in one
+     pass. Placed last so it wins the cascade. The Ken Burns frames need
+     their own line: their base opacity is 0, so simply stopping the cycle
+     would blank the hero. Frame 1 stays up as a static image instead. */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *, *::before, *::after{
+      animation-duration:0.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.01ms !important;
+    }
+    .hero .kb-frame{animation:none !important;opacity:0}
+    .hero .kb-frame:nth-child(1){opacity:1}
+  }
 </style>
 <!-- Capabilities concierge styles (self-hosted, no external request) -->
 <link rel="stylesheet" href="/assistant/concierge.css">
@@ -3553,6 +3568,11 @@
   /* Editable-target guard: global key handlers must never act while the
      visitor types in a field (the concierge input, or any future form).
      Shared on window so every later script block applies the same test. */
+  /* Reduced-motion users get instant programmatic scrolls (CSS scroll-behavior
+     cannot reach JS scrollBy/scrollIntoView calls). */
+  function scrollMode(){
+    return (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ? "auto" : "smooth";
+  }
   function editableTarget(t){
     if (!t) return false;
     var tag = (t.tagName || "").toLowerCase();
@@ -5520,7 +5540,7 @@
           if (lab && /equipment|machinery/i.test(lab.textContent)){
             var first = blocks[b].querySelector("details.m-catalog");
             if (first) first.open = true;
-            blocks[b].scrollIntoView({ behavior:"smooth", block:"center" });
+            blocks[b].scrollIntoView({ behavior:scrollMode(), block:"center" });
             break;
           }
         }
@@ -5595,7 +5615,7 @@
     setTimeout(function(){ el.classList.remove("cred-flash"); }, 2200);
   }
   function scrollInModal(el){
-    if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    if (el) el.scrollIntoView({behavior:scrollMode(), block:"center"});
   }
   function switchModal(key){
     if (!MODALS[key]) return;
@@ -5615,7 +5635,7 @@
         var h = cards[i].querySelector(".c-h");
         if (h && h.textContent.toLowerCase().indexOf(match.toLowerCase()) >= 0){ target = cards[i]; break; }
       }
-      if (target){ target.scrollIntoView({behavior:"smooth", block:"center"}); credFlash(target); }
+      if (target){ target.scrollIntoView({behavior:scrollMode(), block:"center"}); credFlash(target); }
     }, 90);
   }
   function credToCatalog(key){
@@ -6011,7 +6031,7 @@
   }
   function scrollCurrentSlide(dir){
     var s = slides[idx];
-    if (s) s.scrollBy({top: dir * Math.round(s.clientHeight * 0.75), behavior:"smooth"});
+    if (s) s.scrollBy({top: dir * Math.round(s.clientHeight * 0.75), behavior:scrollMode()});
   }
   scrollCue.addEventListener("click", function(){ scrollCurrentSlide(1); });
   slides.forEach(function(s){
@@ -6068,7 +6088,7 @@
         var mStep = (e.key === "ArrowDown" || e.key === "ArrowUp") ? 0.4 : 0.85;
         var mDir = (e.key === "ArrowUp" || e.key === "PageUp" ||
                     ((e.key === " " || e.key === "Spacebar") && e.shiftKey)) ? -1 : 1;
-        modal.scrollBy({top: mDir * Math.round(modal.clientHeight * mStep), behavior:"smooth"});
+        modal.scrollBy({top: mDir * Math.round(modal.clientHeight * mStep), behavior:scrollMode()});
       }
       else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                e.key === " " || e.key === "Spacebar"){ e.preventDefault(); }
