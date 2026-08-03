@@ -73,7 +73,19 @@ alternative fit invisibly. Placeholder text in the In Action gate measures
   (tables may stay at 14px if treated as data, at your call). This reflows
   cards and tables, hence flagged rather than fixed.
 
-## 4. Focus ring color on the mixed-surface slides (advisory)
+## 4. PWA install button label
+
+- **File / selector:** `index.html` — `.install-btn` (nav; hidden unless the
+  browser offers PWA install, so it escapes most viewing sessions but is the
+  one failure Lighthouse reports when visible).
+- **What fails:** 11px uppercase label below the contrast minimum.
+- **Measured vs required:** white `#fff` on brand Green `#78BE21` = **2.29:1**
+  vs 4.5:1.
+- **WCAG:** 1.4.3 Contrast (Minimum).
+- **Smallest on-brand fix:** switch the label to Navy `#001852` (7.33:1),
+  matching `.btn-primary`, which already pairs navy text on the green fill.
+
+## 5. Focus ring color on the mixed-surface slides (advisory)
 
 - **File / selector:** `index.html` — curated rings on dark-surface
   components use `--green: #78BE21`; the global default ring added in this
