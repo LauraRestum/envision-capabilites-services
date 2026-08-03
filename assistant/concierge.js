@@ -456,12 +456,14 @@
       '</header>' +
       '<div class="ec-log" id="ecLog" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" ' +
         'aria-label="Conversation with the Envision concierge"></div>' +
+      '<div class="ec-sr-only" role="status" aria-live="polite" id="ecStatus"></div>' +
       '<form class="ec-form" id="ecForm">' +
         '<label class="ec-sr-only" for="ecInput">Type your question for the Envision concierge</label>' +
         '<textarea class="ec-input" id="ecInput" rows="1" autocomplete="off" ' +
-          'enterkeyhint="send" ' +
+          'enterkeyhint="send" aria-required="true" aria-describedby="ecErr" ' +
           'placeholder="Ask about a product or who to call"></textarea>' +
         '<button class="ec-send" id="ecSend" type="submit" aria-label="Send message">' + SVG.send + '</button>' +
+        '<span class="ec-error" id="ecErr" role="alert" hidden></span>' +
       '</form>' +
     '</section>';
   document.body.appendChild(root);
@@ -507,6 +509,7 @@
     wrap.appendChild(el("div", "ec-bubble", esc(text)));
     log.appendChild(wrap);
     scrollLog();
+    if (typeof announceStatus === "function") announceStatus("Response ready", 250);
     return wrap;
   }
 
@@ -577,6 +580,7 @@
     if (typeof fn !== "function"){
       addBotBubble("I could not open that view just now, but I can still point you to the right person.");
       addContactCard(resolveContact(null));
+      announceStatus("Error. Try again.", 250);
       return;
     }
     // Opening a deck modal / section takes over the screen, so close the
@@ -707,6 +711,7 @@
   function handleQuery(text){
     text = (text || "").trim();
     if (!text) return;
+    announceStatus("Thinking");
     addUserMessage(text);
     // Granular questions reach the catalog first; everything else stays with
     // the authored intents.
@@ -800,13 +805,44 @@
   launcher.addEventListener("click", openPanel);
   closeBtn.addEventListener("click", function(){ closePanel(); });
 
+  var errEl = root.querySelector("#ecErr");
+  var statusEl = root.querySelector("#ecStatus");
+  var statusTimer = null;
+  // One announcement per response: immediate for "Thinking", debounced for
+  // completion so multi-bubble answers never flood a screen reader.
+  function announceStatus(msg, defer){
+    if (statusTimer){ clearTimeout(statusTimer); statusTimer = null; }
+    if (defer){ statusTimer = setTimeout(function(){ statusEl.textContent = msg; statusTimer = null; }, defer); }
+    else { statusEl.textContent = msg; }
+  }
+  function setFieldError(msg){
+    if (msg){
+      input.setAttribute("aria-invalid", "true");
+      errEl.textContent = msg;
+      errEl.hidden = false;
+    } else {
+      input.removeAttribute("aria-invalid");
+      errEl.textContent = "";
+      errEl.hidden = true;
+    }
+  }
+
   form.addEventListener("submit", function(e){
     e.preventDefault();
     var text = input.value;
+    if (!text.trim()){
+      // Empty Enter was a silent no-op; identify the error in text instead.
+      setFieldError("Type a question first, then press Send.");
+      input.focus();
+      return;
+    }
+    setFieldError(null);
     input.value = "";
     autosize();
     syncSend();
     handleQuery(text);
+    // Focus never leaves the field on submit, so the visitor can keep typing.
+    input.focus();
   });
 
   // Enter sends, Shift+Enter makes a newline. `isComposing` guards an IME: a
@@ -827,7 +863,7 @@
   // never a dead, silent no-op (the disabled style already existed; nothing
   // ever toggled it).
   function syncSend(){ sendBtn.disabled = !input.value.trim(); }
-  input.addEventListener("input", function(){ autosize(); syncSend(); });
+  input.addEventListener("input", function(){ autosize(); syncSend(); if (input.value.trim()) setFieldError(null); });
   syncSend();
 
   /* ------------------------------------------------------------------ *

@@ -1,6 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-env-theme="dark">
 <head>
+<script>(function(){try{
+  var p = JSON.parse(localStorage.getItem('env-a11y') || '{}');
+  var t = p.theme;
+  if (t !== 'light' && t !== 'hc') t = 'dark';
+  var r = document.documentElement;
+  r.setAttribute('data-env-theme', t);
+  ['zoom','lines','paras','underline','motion','readable','cursor'].forEach(function(k){
+    if (p[k]) r.setAttribute('data-env-' + k, p[k]);
+  });
+}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Envision | Capabilities &amp; Services</title>
@@ -79,6 +89,10 @@
     /* Dark theme (modals only) */
     --bg-dark:#000d2e;
     --text-light:#f0f4ff;
+    --white:#fff;          /* pure white: text/strokes on dark surfaces */
+    --green-bright:#a8e457;/* hover lift of --green on dark */
+    --green-press:#5f9b18; /* pressed/hover fill of --green buttons */
+    --error-soft:#ff9e8f;  /* error text on dark surfaces */
     --text-muted:rgba(255,255,255,0.95);
     --text-faint:rgba(255,255,255,0.72);
     --border-dark:rgba(255,255,255,0.08);
@@ -170,17 +184,17 @@
   .install-btn{
     display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;
     background:var(--green);border:1px solid var(--green);border-radius:6px;cursor:pointer;
-    color:#fff;font-family:var(--sans);font-weight:700;font-size:11px;
+    color:var(--white);font-family:var(--sans);font-weight:700;font-size:11px;
     letter-spacing:.1em;text-transform:uppercase;
     transition:background .18s,border-color .18s;
   }
-  .install-btn:hover{background:#5f9b18;border-color:#5f9b18}
+  .install-btn:hover{background:var(--green-press);border-color:var(--green-press)}
   .install-btn:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
   .install-btn svg{width:15px;height:15px}
   .install-btn[hidden]{display:none}
   .ios-hint{
     position:fixed;top:calc(64px + env(safe-area-inset-top) + 10px);right:12px;z-index:90;
-    max-width:264px;background:var(--navy);color:#fff;font-family:var(--sans);
+    max-width:264px;background:var(--navy);color:var(--white);font-family:var(--sans);
     font-weight:500;font-size:13px;line-height:1.45;
     padding:12px 14px;border-radius:8px;box-shadow:0 10px 30px rgba(0,24,82,0.35);
   }
@@ -268,7 +282,7 @@
     background:linear-gradient(90deg,rgba(0,24,82,1) 0%,rgba(0,24,82,1) 36%,rgba(0,24,82,0.62) 50%,rgba(0,24,82,0) 66%);
   }
   .hero-inner{position:relative;z-index:2;max-width:min(460px,40vw);margin:0;width:100%}
-  .hero h1{color:#fff}
+  .hero h1{color:var(--white)}
   .hero .subhead{color:rgba(240,244,255,0.86);max-width:64ch;font-size:clamp(1.05rem,1.5vw,1.32rem)}
   /* On the navy hero overlay the bright brand green is the accessible one (7.3:1) */
   .hero .eyebrow{color:var(--green)}
@@ -424,7 +438,7 @@
   .campus-zoom{
     position:absolute;bottom:10px;right:10px;z-index:2;pointer-events:none;
     display:flex;align-items:center;gap:4px;
-    background:#fff;color:var(--navy);
+    background:var(--bg-light);color:var(--navy);
     font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
     padding:3px 6px;border-radius:3px;
     box-shadow:0 1px 2px rgba(0,24,82,0.1);
@@ -432,11 +446,11 @@
   }
   .campus-zoom svg{width:9px;height:9px;stroke:var(--green-ink);transition:stroke .18s}
   .campus-photo:hover .campus-zoom,
-  .campus-photo:focus-visible .campus-zoom{background:var(--green);color:#fff}
+  .campus-photo:focus-visible .campus-zoom{background:var(--green);color:var(--white)}
   .campus-photo:hover .campus-zoom svg,
-  .campus-photo:focus-visible .campus-zoom svg{stroke:#fff}
+  .campus-photo:focus-visible .campus-zoom svg{stroke:var(--white)}
   .campus-photo-tag{
-    position:absolute;top:12px;left:12px;background:#fff;color:var(--navy);
+    position:absolute;top:12px;left:12px;background:var(--bg-light);color:var(--navy);
     font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
     padding:5px 9px;border-radius:3px;
     box-shadow:0 1px 2px rgba(0,24,82,0.08);
@@ -513,7 +527,7 @@
   }
   .lb-addr{
     display:inline-block;font-family:var(--sans);font-size:15px;font-weight:700;
-    color:#fff;text-decoration:none;padding-bottom:2px;
+    color:var(--white);text-decoration:none;padding-bottom:2px;
     border-bottom:1px solid rgba(255,255,255,0.35);
     transition:color .15s,border-color .15s;
   }
@@ -523,7 +537,7 @@
     position:fixed;top:clamp(12px,2.5vw,28px);right:clamp(12px,2.5vw,28px);z-index:6;
     width:42px;height:42px;border-radius:50%;
     background:rgba(255,255,255,0.08);border:1px solid var(--bsc-bd);
-    color:#fff;cursor:pointer;
+    color:var(--white);cursor:pointer;
     display:flex;align-items:center;justify-content:center;
     transition:background .18s,border-color .18s,color .18s;
   }
@@ -552,7 +566,7 @@
   .m-video-poster{
     position:relative;display:block;width:100%;aspect-ratio:9/16;
     border:1px solid var(--border-mid);border-radius:10px;overflow:hidden;
-    background:linear-gradient(135deg,#001852 0%,#003087 50%,#000d2e 100%);
+    background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 50%,var(--bg-dark) 100%);
     background-size:cover;background-position:center;
     transition:border-color .2s ease,transform .2s cubic-bezier(0.22,1,0.36,1);
   }
@@ -621,7 +635,7 @@
     position:fixed;top:clamp(12px,2.5vw,28px);right:clamp(12px,2.5vw,28px);z-index:6;
     width:42px;height:42px;border-radius:50%;
     background:rgba(255,255,255,0.08);border:1px solid var(--bsc-bd);
-    color:#fff;cursor:pointer;
+    color:var(--white);cursor:pointer;
     display:flex;align-items:center;justify-content:center;
     transition:background .18s,border-color .18s,color .18s;
   }
@@ -642,7 +656,7 @@
 
   /* Act 3: Federal infrastructure band */
   .fed-band{
-    margin-top:10px;background:var(--navy);color:#fff;
+    margin-top:10px;background:var(--navy);color:var(--white);
     border-radius:8px;overflow:hidden;
     padding:14px clamp(18px,2.2vw,28px);
     display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;
@@ -652,12 +666,12 @@
     color:var(--green);
   }
   .fed-band-head{
-    font-weight:800;font-size:1rem;line-height:1.3;color:#fff;
+    font-weight:800;font-size:1rem;line-height:1.3;color:var(--white);
     margin-top:6px;max-width:18ch;letter-spacing:-0.015em;
   }
   .fed-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
   .fed-stat .num{
-    font-weight:800;font-size:clamp(1.2rem,1.7vw,1.55rem);color:#fff;
+    font-weight:800;font-size:clamp(1.2rem,1.7vw,1.55rem);color:var(--white);
     line-height:1;letter-spacing:-0.02em;
   }
   .fed-stat .lab{
@@ -767,7 +781,7 @@
     box-shadow:0 8px 22px rgba(0,24,82,0.16);opacity:.4;
     transition:background .18s,color .18s,transform .18s,opacity .18s;
   }
-  .backbtn:hover{background:var(--navy);color:#fff;transform:translateY(-2px);opacity:1}
+  .backbtn:hover{background:var(--navy);color:var(--white);transform:translateY(-2px);opacity:1}
   .backbtn:focus-visible{outline:2px solid var(--green-ink);outline-offset:2px}
   .backbtn[hidden]{display:none}
 
@@ -850,34 +864,34 @@
     margin-top:22px;background:var(--navy);border-radius:6px;padding:22px 24px;
     color:rgba(255,255,255,0.95);font-size:14.5px;line-height:1.65;
   }
-  .callout-box strong{color:#fff;font-weight:700}
+  .callout-box strong{color:var(--white);font-weight:700}
 
   /* ---------- Compliance: campus federal-registration bar ---------- */
   .reg-bar{
     margin-top:22px;background:var(--navy);border-radius:6px;
-    padding:20px 24px;color:#fff;
+    padding:20px 24px;color:var(--white);
   }
   .reg-bar-row{display:flex;align-items:center;flex-wrap:wrap;gap:14px 18px}
-  .reg-bar-label{font-size:14.5px;font-weight:700;color:#fff}
+  .reg-bar-label{font-size:14.5px;font-weight:700;color:var(--white)}
   .reg-tabs{display:flex;flex-wrap:wrap;gap:10px}
   .reg-pill{
     display:inline-flex;align-items:center;gap:8px;
     font:inherit;font-size:13.5px;font-weight:700;letter-spacing:.04em;
-    color:#fff;cursor:pointer;
+    color:var(--white);cursor:pointer;
     background:rgba(255,255,255,0.10);
     border:1.5px solid rgba(255,255,255,0.6);
     border-radius:999px;padding:8px 16px;
     transition:background .18s,border-color .18s,color .18s;
   }
   .reg-pill .reg-chev{width:13px;height:13px;flex:none;transition:transform .2s}
-  .reg-pill:hover{background:rgba(255,255,255,0.2);border-color:#fff}
+  .reg-pill:hover{background:rgba(255,255,255,0.2);border-color:var(--white)}
   .reg-pill[aria-expanded="true"]{background:var(--green);border-color:var(--green);color:var(--navy)}
   .reg-pill[aria-expanded="true"] .reg-chev{transform:rotate(180deg)}
   .reg-pill:focus-visible{outline:3px solid var(--green);outline-offset:3px}
-  .reg-pill[aria-expanded="true"]:focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .reg-pill[aria-expanded="true"]:focus-visible{outline:3px solid var(--white);outline-offset:3px}
   .reg-status{
     margin-left:auto;display:inline-flex;align-items:center;gap:8px;
-    font-size:13px;font-weight:700;color:#fff;
+    font-size:13px;font-weight:700;color:var(--white);
   }
   .reg-status-dot{
     width:9px;height:9px;border-radius:50%;background:var(--green);flex:none;
@@ -885,15 +899,15 @@
   }
   .reg-panel{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.2)}
   .reg-panel[hidden]{display:none}
-  .reg-panel-h{font-size:13.5px;font-weight:700;color:#fff;margin:0 0 12px}
+  .reg-panel-h{font-size:13.5px;font-weight:700;color:var(--white);margin:0 0 12px}
   .reg-entities{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
   .reg-entity{
     background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);
     border-radius:6px;padding:14px 16px;
   }
-  .reg-entity-name{font-size:13.5px;font-weight:700;color:#fff;margin-bottom:9px}
+  .reg-entity-name{font-size:13.5px;font-weight:700;color:var(--white);margin-bottom:9px}
   .reg-codes{display:flex;flex-wrap:wrap;gap:7px 20px}
-  .reg-code{white-space:nowrap;font-size:13px;line-height:1.5;color:#fff;font-weight:600}
+  .reg-code{white-space:nowrap;font-size:13px;line-height:1.5;color:var(--white);font-weight:600}
   .reg-code-k{
     color:rgba(255,255,255,0.72);font-weight:700;font-size:10.5px;
     letter-spacing:.06em;text-transform:uppercase;margin-right:6px;
@@ -931,7 +945,7 @@
   .proof-card--stack .stack-item + .stack-item{margin-top:16px;padding-top:16px;border-top:1px solid var(--rule-light)}
   .proof-card--stack .t-m{margin-top:10px;padding-top:0;border-top:0}
   .proj-jump{
-    color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;
+    color:var(--white);font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;
   }
   .proj-jump:hover,.proj-jump:focus-visible{color:var(--green)}
 
@@ -968,7 +982,7 @@
   /* Partner-logo covers: a real <img> (not a CSS background, which some
      browser modes strip) showing the whole mark on white, never cropped */
   .inaction-thumb--logo{
-    background:#fff;display:flex;align-items:center;justify-content:center;
+    background:var(--bg-light);display:flex;align-items:center;justify-content:center;
   }
   .inaction-logo-img{width:100%;height:100%;object-fit:contain;display:block}
   .inaction-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;gap:0}
@@ -1011,16 +1025,20 @@
   }
   .ia-gate-input::placeholder{color:rgba(240,244,255,0.5)}
   .ia-gate-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(120,190,33,0.22)}
-  .ia-gate-err{display:none;font-size:13px;font-weight:600;color:#ff9e8f;margin-bottom:8px}
+  /* This input auto-focuses when the gate opens; its focus indicator is the
+     curated green border + shadow ring above, exactly as it always rendered.
+     Suppress the global default ring so the on-open look is unchanged. */
+  .ia-gate-input:focus-visible{outline:none}
+  .ia-gate-err{display:none;font-size:13px;font-weight:600;color:var(--error-soft);margin-bottom:8px}
   .ia-gate.is-err .ia-gate-err{display:block}
-  .ia-gate.is-err .ia-gate-input{border-color:#ff9e8f}
+  .ia-gate.is-err .ia-gate-input{border-color:var(--error-soft)}
   .ia-gate-contact{
     margin-top:30px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.14);
     font-size:14.5px;line-height:1.7;color:var(--text-muted);
   }
   .ia-gate-contact strong{color:var(--text-light)}
   .ia-gate-contact a{color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:3px}
-  .ia-gate-contact a:hover,.ia-gate-contact a:focus-visible{color:#a8e457}
+  .ia-gate-contact a:hover,.ia-gate-contact a:focus-visible{color:var(--green-bright)}
 
   /* ---------- Compliance: balanced 2 rows of 3 ---------- */
   .slide--compliance .cred-grid{grid-template-columns:repeat(3,1fr)}
@@ -1044,13 +1062,13 @@
     padding:15px 16px;transition:border-color .2s,transform .2s,box-shadow .2s,background .2s;
   }
   .doc-link:hover{
-    border-color:var(--navy);transform:translateY(-2px);background:#fff;
+    border-color:var(--navy);transform:translateY(-2px);background:var(--bg-light);
     box-shadow:0 12px 24px rgba(0,24,82,0.08);
   }
   .doc-link:focus-visible{outline:2px solid var(--green-ink);outline-offset:2px}
   .doc-ic{
     flex:none;width:40px;height:40px;border-radius:6px;display:flex;align-items:center;
-    justify-content:center;background:var(--navy);color:#fff;
+    justify-content:center;background:var(--navy);color:var(--white);
   }
   .doc-txt{display:flex;flex-direction:column;min-width:0;flex:1}
   .doc-name{font-size:14px;font-weight:700;color:var(--text-dark);line-height:1.3}
@@ -1096,7 +1114,7 @@
     padding:14px clamp(18px,2vw,24px);
     font-size:13.5px;line-height:1.5;
   }
-  .slide--innovation .inv-banner-bar strong{color:#fff;font-weight:700}
+  .slide--innovation .inv-banner-bar strong{color:var(--white);font-weight:700}
 
   /* Section heading for the capability grid */
   .slide--innovation .inv-secline{
@@ -1137,7 +1155,7 @@
   .slide--innovation .proof-card .t-m{margin-top:12px;padding-top:12px;font-size:12px;line-height:1.5}
   .slide--innovation .proof-card--navy{background:var(--navy);border-color:var(--navy)}
   .slide--innovation .proof-card--navy .tag{color:var(--green)}
-  .slide--innovation .proof-card--navy .t-h{color:#fff}
+  .slide--innovation .proof-card--navy .t-h{color:var(--white)}
   .slide--innovation .proof-card--navy .t-d{color:rgba(255,255,255,0.86)}
   .slide--innovation .proof-card--navy .t-m{
     color:rgba(255,255,255,0.72);border-top-color:rgba(255,255,255,0.18);
@@ -1158,7 +1176,7 @@
   /* Small CTA in the navy bar that opens the Envision in Action pop-up */
   .slide--innovation .inv-action-link{
     margin-top:12px;display:inline-flex;align-items:center;gap:7px;
-    background:var(--green);color:#fff;border:none;border-radius:6px;
+    background:var(--green);color:var(--white);border:none;border-radius:6px;
     padding:8px 14px;font-size:12px;font-weight:700;letter-spacing:.05em;
     text-transform:uppercase;cursor:pointer;font-family:inherit;
     transition:transform .2s,box-shadow .2s;
@@ -1166,7 +1184,7 @@
   .slide--innovation .inv-action-link:hover{
     transform:translateY(-2px);box-shadow:0 10px 22px rgba(120,190,33,0.32);
   }
-  .slide--innovation .inv-action-link:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .slide--innovation .inv-action-link:focus-visible{outline:2px solid var(--white);outline-offset:2px}
   .slide--innovation .inv-action-link svg{transition:transform .2s}
   .slide--innovation .inv-action-link:hover svg{transform:translateX(3px)}
 
@@ -1292,14 +1310,14 @@
   }
   .ms-employment .ms-emp-icon svg{
     width:clamp(38px,3.6vw,56px);height:clamp(38px,3.6vw,56px);
-    stroke:#fff;fill:none;stroke-width:1.6;
+    stroke:var(--white);fill:none;stroke-width:1.6;
     stroke-linecap:round;stroke-linejoin:round;
   }
   .ms-employment .ms-emp-content{
     flex:1;display:flex;flex-direction:column;
   }
   .ms-employment .ms-emp-title{
-    color:#fff;font-weight:800;text-transform:uppercase;
+    color:var(--white);font-weight:800;text-transform:uppercase;
     font-size:clamp(19px,1.9vw,30px);letter-spacing:.14em;
     margin-bottom:clamp(6px,1vh,10px);
   }
@@ -1318,7 +1336,7 @@
   .ms-employment .ms-emp-bullets li{
     position:relative;padding-left:20px;
     font-size:clamp(13px,0.98vw,16px);line-height:1.45;
-    color:#fff;font-weight:500;
+    color:var(--white);font-weight:500;
   }
   .ms-employment .ms-emp-bullets li strong{font-weight:700}
   .ms-employment .ms-emp-bullets li::before{
@@ -1363,7 +1381,7 @@
   }
   .ms-col{
     display:flex;flex-direction:column;
-    background:#fff;border:0.5px solid var(--rule-light);
+    background:var(--bg-light);border:0.5px solid var(--rule-light);
     border-radius:10px;overflow:hidden;
     box-shadow:0 1px 3px rgba(0,24,82,0.05);
     transition:transform .2s,box-shadow .2s;
@@ -1381,11 +1399,11 @@
   }
   .ms-head svg{
     width:clamp(22px,2vw,32px);height:clamp(22px,2vw,32px);
-    stroke:#fff;fill:none;stroke-width:1.6;
+    stroke:var(--white);fill:none;stroke-width:1.6;
     stroke-linecap:round;stroke-linejoin:round;
   }
   .ms-head .nm{
-    color:#fff;font-weight:800;text-align:center;
+    color:var(--white);font-weight:800;text-align:center;
     font-size:clamp(12px,1vw,16px);letter-spacing:.1em;text-transform:uppercase;
   }
   .ms-body{
@@ -1418,7 +1436,7 @@
     position:absolute;top:9px;right:10px;z-index:2;
     display:inline-flex;align-items:center;justify-content:center;
     width:20px;height:20px;border-radius:999px;
-    background:rgba(255,255,255,0.14);color:#fff;
+    background:rgba(255,255,255,0.14);color:var(--white);
     opacity:.6;transition:opacity .2s,background .2s;pointer-events:none;
   }
   .ms-more-cue svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
@@ -1442,7 +1460,7 @@
     padding:clamp(12px,1.8vh,20px) clamp(20px,3vw,48px);
   }
   .ms-band__quote p{
-    color:#fff;font-style:italic;font-weight:400;text-align:center;
+    color:var(--white);font-style:italic;font-weight:400;text-align:center;
     font-size:clamp(0.9rem,1.25vw,1.25rem);line-height:1.45;max-width:64ch;
     margin:0;
   }
@@ -1513,7 +1531,7 @@
   .dtree-result.is-visible{opacity:1;transform:translateY(0);pointer-events:auto;height:auto;overflow:visible}
 
   /* Business card */
-  .bcard{display:flex;border-radius:8px;border:1px solid var(--rule-light);background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(0,24,82,0.06);max-width:360px}
+  .bcard{display:flex;border-radius:8px;border:1px solid var(--rule-light);background:var(--bg-light);overflow:hidden;box-shadow:0 2px 8px rgba(0,24,82,0.06);max-width:360px}
   .bcard-accent{width:5px;flex-shrink:0;background:var(--green)}
   .bcard-body{padding:20px 24px;flex:1}
   .bcard-dept{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--green-ink);margin-bottom:10px}
@@ -1608,7 +1626,7 @@
 
   .m-sec-label{
     font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--green);margin-bottom:16px;
+    color:var(--green);margin:0 0 16px;
   }
   .m-summary{
     display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;
@@ -1695,7 +1713,7 @@
   .m-card-ph .ph-note{font-size:12px;color:var(--text-muted);max-width:34ch;line-height:1.5}
   .m-card-photo{
     aspect-ratio:4/3;width:100%;margin-bottom:16px;
-    background:#fff;border:1px solid var(--border-dark);
+    background:var(--bg-light);border:1px solid var(--border-dark);
     border-radius:4px;overflow:hidden;
   }
   .m-card-photo img{width:100%;height:100%;object-fit:contain;display:block}
@@ -1767,13 +1785,13 @@
   }
   /* Light-surface variants (used on light slides). Full opacity: these 10px
      labels need 4.5:1, which dimming would break. */
-  .loc-chip--wichita{color:#003087}
+  .loc-chip--wichita{color:var(--blue)}
   .loc-chip--dallas{color:var(--green-ink)}
   /* Dark-surface variants (used inside modals) - extra subtle */
   .modal .loc-chip,
   .m-summary .loc-chip{opacity:.55}
   .modal .loc-chip--wichita{color:#7fa3ff}
-  .modal .loc-chip--dallas{color:#a8e457}
+  .modal .loc-chip--dallas{color:var(--green-bright)}
 
   /* ---------- Catalog disclosure (collapsible inside modals) ---------- */
   .m-catalog{
@@ -1838,7 +1856,7 @@
   }
   .m-cta p{font-size:15px;line-height:1.65;color:var(--text-muted);max-width:52ch;margin:0 auto 24px}
 
-  .image-bg{background:linear-gradient(135deg,#001852 0%,#003087 50%,#000d2e 100%)}
+  .image-bg{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 50%,var(--bg-dark) 100%)}
   img.ph-img{width:100%;height:100%;object-fit:cover;display:block}
 
   /* ---------- Bottom progress bar ---------- */
@@ -1905,7 +1923,7 @@
   .bsc-link:focus-visible{outline:2px solid var(--green-ink);outline-offset:2px}
   /* Inside the dark modal theme the bright brand green is the accessible one */
   .modal .bsc-link{color:var(--green);border-bottom-color:rgba(120,190,33,0.6)}
-  .modal .bsc-link:hover,.modal .bsc-link:focus-visible{color:#a8e457;border-bottom-color:var(--green)}
+  .modal .bsc-link:hover,.modal .bsc-link:focus-visible{color:var(--green-bright);border-bottom-color:var(--green)}
   .modal .bsc-link:focus-visible{outline-color:var(--green)}
   .proof-card[data-bsc]{cursor:pointer;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s}
   .proof-card[data-bsc]:hover{
@@ -1930,6 +1948,7 @@
   :root{
     --bsc-bg:#0A1F44;--bsc-deep:#061530;--bsc-panel:#122a55;
     --bsc-lime:#B8E04A;--bsc-white:#E8ECF5;--bsc-dim:#E2E7F1;
+    --bsc-lime-ink:#0a1f0a;
     --bsc-bd:rgba(255,255,255,0.08);
   }
   .bsc-backdrop{
@@ -2066,7 +2085,7 @@
   }
   .bsc-lbl:hover,
   .bsc-lbl.is-active{
-    background:#103063;border-color:var(--bsc-lime);color:#fff;
+    background:#103063;border-color:var(--bsc-lime);color:var(--white);
     box-shadow:0 0 0 1px rgba(184,224,74,0.45),0 0 13px rgba(184,224,74,0.5);
   }
   .bsc-legend{
@@ -2304,7 +2323,7 @@
   .a1-node-stat strong{color:var(--bsc-lime);font-weight:800;font-size:14px}
   .a1-flag{
     display:inline-block;margin-bottom:8px;
-    background:var(--bsc-lime);color:#0a1f0a;border-radius:999px;
+    background:var(--bsc-lime);color:var(--bsc-lime-ink);border-radius:999px;
     padding:4px 10px;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
   }
   .a1-link{
@@ -2381,7 +2400,7 @@
   .xp-cta-d{font-size:12.5px;line-height:1.55;color:var(--bsc-dim);margin-top:7px}
   .xp-btn{
     margin-top:14px;display:inline-flex;align-items:center;gap:8px;
-    background:var(--bsc-lime);color:#0a1f0a;text-decoration:none;
+    background:var(--bsc-lime);color:var(--bsc-lime-ink);text-decoration:none;
     border-radius:999px;padding:11px 18px;
     font-family:var(--sans);font-size:12px;font-weight:800;
     letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
@@ -2431,7 +2450,7 @@
   .scroll-cue{
     position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;
     display:inline-flex;align-items:center;gap:8px;
-    background:var(--navy);color:#fff;border:0;border-radius:999px;
+    background:var(--navy);color:var(--white);border:0;border-radius:999px;
     font-family:var(--sans);font-size:11px;font-weight:700;
     letter-spacing:.14em;text-transform:uppercase;
     padding:10px 18px;cursor:pointer;
@@ -2492,43 +2511,289 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
+  /* ---------- Touch targets (WCAG 2.5.5 house standard) ----------
+     Coarse pointers only: the artwork never grows, the hit area does,
+     through invisible ::after overlays. Expansion is capped where
+     neighbors sit close (inline link rows) so areas do not overlap.
+     Tooltip pseudos on .atag out-rank the overlay while hovered, which
+     is harmless because the tap has already landed. */
+  @media (pointer:coarse){
+    /* Only statically-positioned controls gain position:relative; the
+       fixed/absolute ones (scroll cue, back button, overlay closers,
+       skip links) are already positioned ancestors for their ::after. */
+    .icbtn, .m-close, .navlink, .install-btn,
+    .reg-pill, .inv-action-link, .xp-btn, .xp-inline, .a1-cue,
+    .a1-maplink, .a1-era-btn, .atag,
+    .bcard a, .campus-card__addr a, .ia-gate-contact a,
+    .m-card-link, .bsc-link{position:relative}
+    .icbtn::after, .m-close::after, .bsc-close::after, .a1-close::after,
+    .lb-close::after, .vid-close::after, .backbtn::after,
+    .scroll-cue::after, .navlink::after, .install-btn::after,
+    .reg-pill::after, .inv-action-link::after, .xp-btn::after,
+    .xp-inline::after, .a1-era-btn::after, .atag::after{
+      content:"";position:absolute;inset:-6px;
+    }
+    .a1-cue::after, .a1-maplink::after{content:"";position:absolute;inset:-10px}
+    .bcard a::after, .campus-card__addr a::after, .ia-gate-contact a::after,
+    .m-card-link::after, .bsc-link::after, .skip-link::after{
+      content:"";position:absolute;inset:-4px;
+    }
+    .bsc-hit{r:22px}
+  }
+
+  /* ---------- Skip links (WCAG 2.4.1) ----------
+     Off-screen until keyboard focus lands on them; styled as the house
+     pill (brand green fill, navy text, 7.3:1). */
+  .skip-link{
+    position:absolute;left:1rem;top:-100px;z-index:200;
+    background:var(--green);color:var(--navy);
+    padding:0.7rem 1.4rem;font:700 0.75rem var(--sans);
+    letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;
+    border-radius:2px;transition:top 0.15s;
+  }
+  .skip-link:focus{top:1rem}
+  .skip-link:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+  /* ---------- Footer landmark ----------
+     Fixed above the concierge launcher, clear of the centered scroll cue
+     and the left-corner back button. Paints nothing but its one button. */
+  .site-footer{
+    position:fixed;right:clamp(14px,2.5vw,26px);
+    bottom:calc(80px + env(safe-area-inset-bottom));
+    z-index:90;display:flex;justify-content:flex-end;
+  }
+
+  /* ---------- House focus ring (WCAG 2.4.7), keyboard-only ----------
+     Default ring for anything without a curated focus style (today that is
+     the plain links on the white contact cards, which fell back to the UA
+     ring). Brand green on the dark surfaces; ink green on the white card
+     zones where #78BE21 would miss the 3:1 UI floor. Curated component
+     rings keep winning on specificity. */
+  :focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .topnav :focus-visible, .nav-menu :focus-visible,
+  .bcard :focus-visible, .campus-footer :focus-visible{outline-color:var(--green-ink)}
+
+  /* ---------- Screen-reader-only utility ---------- */
+  .visually-hidden{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+
+  /* ---------- Focus not obscured (WCAG 2.4.11) ----------
+     The nav sits in flow today, but scroll targets and focused elements
+     keep clearance from the top edge of every scroll container so no
+     future fixed chrome can cover them. Scroll-padding has no effect on
+     static rendering. */
+  html{scroll-padding-top:4.5rem}
+  .slide{scroll-padding-top:1rem}
+  :target, [tabindex="-1"]:focus{scroll-margin-top:4.5rem}
+
+  /* ---------- Motion safety (WCAG 2.3.3) ----------
+     OS-level reduced motion kills every animation and transition in one
+     pass. Placed last so it wins the cascade. The Ken Burns frames need
+     their own line: their base opacity is 0, so simply stopping the cycle
+     would blank the hero. Frame 1 stays up as a static image instead. */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *, *::before, *::after{
+      animation-duration:0.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.01ms !important;
+    }
+    .hero .kb-frame{animation:none !important;opacity:0}
+    .hero .kb-frame:nth-child(1){opacity:1}
+  }
+
+  /* ---------- Envision accessibility panel ---------- */
+  .a11y-trigger{
+    background:var(--bg-dark);border:1px solid var(--border-mid);color:var(--text-muted);
+    font:600 0.68rem var(--sans);letter-spacing:0.18em;text-transform:uppercase;
+    padding:0.55rem 1.1rem;border-radius:2px;cursor:pointer;
+  }
+  .a11y-trigger:hover,.a11y-trigger:focus-visible{color:var(--text-light);border-color:var(--green)}
+  html[data-env-theme="hc"] .a11y-trigger{border-color:var(--white);color:var(--white)}
+  .a11y-overlay{
+    position:fixed;inset:0;z-index:300;background:rgba(0,5,20,0.6);
+    display:flex;align-items:center;justify-content:center;padding:1.5rem;
+  }
+  .a11y-overlay[hidden]{display:none}
+  .a11y-dialog{
+    background:var(--bg-dark);border:1px solid var(--border-mid);border-radius:2px;
+    padding:2rem;width:min(460px,100%);max-height:90vh;overflow-y:auto;
+    font-family:var(--sans);color:var(--text-light);
+  }
+  .a11y-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+  .a11y-eyebrow{
+    font:700 0.68rem var(--sans);letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--green);
+  }
+  .a11y-close{
+    background:none;border:0;color:var(--text-light);font-size:1.6rem;
+    min-width:44px;min-height:44px;cursor:pointer;
+  }
+  .a11y-group{margin-bottom:1.25rem}
+  .a11y-label{
+    display:block;font:700 0.62rem var(--sans);letter-spacing:0.2em;
+    text-transform:uppercase;color:var(--green);margin-bottom:0.6rem;
+  }
+  .a11y-group button{
+    background:transparent;border:1px solid var(--border-mid);color:var(--text-light);
+    font:600 0.78rem var(--sans);padding:0.6rem 1rem;margin:0 0.4rem 0.4rem 0;
+    border-radius:2px;min-height:44px;cursor:pointer;
+  }
+  .a11y-group button[aria-pressed="true"]{background:var(--green);color:var(--navy);border-color:var(--green)}
+  html[data-env-theme="light"] .a11y-group button[aria-pressed="true"]{background:#78BE21;border-color:#78BE21;color:#001852}
+  html[data-env-theme="hc"] .a11y-group button[aria-pressed="true"]{color:#000}
+  .a11y-foot{display:flex;justify-content:space-between;margin-top:1.5rem}
+  .a11y-reset{
+    background:none;border:0;color:var(--text-muted);text-decoration:underline;
+    font:600 0.78rem var(--sans);cursor:pointer;min-height:44px;
+  }
+  .a11y-done{
+    background:var(--green);color:var(--navy);border:0;border-radius:2px;
+    font:700 0.78rem var(--sans);padding:0.6rem 1.6rem;min-height:44px;cursor:pointer;
+  }
+  html[data-env-theme="light"] .a11y-done{background:#78BE21;color:#001852}
+  html[data-env-theme="hc"] .a11y-done{color:#000}
+
+  /* Panel preference effects */
+  html[data-env-zoom="2"] body{zoom:1.125}
+  html[data-env-zoom="3"] body{zoom:1.25}
+  html[data-env-zoom="4"] body{zoom:1.4}
+  html[data-env-lines="wide"] body{line-height:1.95}
+  html[data-env-paras="wide"] p{margin-bottom:2em}
+  html[data-env-underline="on"] a{text-decoration:underline !important}
+  html[data-env-readable="on"] body{font-weight:500;letter-spacing:0.012em;word-spacing:0.08em;line-height:1.85}
+  html[data-env-cursor="on"],html[data-env-cursor="on"] *{
+    cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M6 2l24 14-11 2 6 12-5 3-6-12-8 8z' fill='%23fff' stroke='%23001852' stroke-width='2'/%3E%3C/svg%3E") 4 2,auto !important;
+  }
+  /* Panel-toggle reduced motion mirrors the OS guard. */
+  html[data-env-motion="reduce"]{scroll-behavior:auto}
+  html[data-env-motion="reduce"] *,html[data-env-motion="reduce"] *::before,html[data-env-motion="reduce"] *::after{
+    animation-duration:0.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important;
+  }
+  html[data-env-motion="reduce"] .hero .kb-frame{animation:none !important;opacity:0}
+  html[data-env-motion="reduce"] .hero .kb-frame:nth-child(1){opacity:1}
+
+  /* ---------- Themes (user-invoked only; dark is the shipped default) ----
+     Components never change between themes; only the tokens swap, plus a
+     handful of surface overrides where a photo or gradient backdrop needs a
+     matching wash. Verified anchors, light: text #002855 on #f4f7fb 13.6:1,
+     muted #53565A 7.0:1, green text #457010 5.2:1, error #9E3000 6.6:1.
+     High contrast: white on black 21:1, green #78BE21 on black 8.4:1. */
+  html[data-env-theme="light"]{
+    --bg-dark:#f4f7fb;
+    --text-light:#002855;
+    --text-muted:#53565A;
+    --text-faint:rgba(0,40,85,0.72);
+    --border-dark:rgba(0,40,85,0.14);
+    --border-mid:rgba(0,40,85,0.26);
+    --green:#457010;          /* text and fills hold 3:1+ on the light ground */
+    --green-bright:#2f4d0b;
+    --error-soft:#9E3000;
+  }
+  html[data-env-theme="light"] .image-bg{
+    background:linear-gradient(135deg,#e7edf7 0%,#f4f7fb 55%,var(--bg-light) 100%);
+  }
+  html[data-env-theme="light"] .hero .overlay{
+    background:linear-gradient(90deg,rgba(244,247,251,0.96) 0%,rgba(244,247,251,0.94) 36%,rgba(244,247,251,0.75) 50%,rgba(244,247,251,0.25) 66%);
+  }
+  html[data-env-theme="light"] .skip-link,
+  html[data-env-theme="light"] .btn-primary,
+  html[data-env-theme="light"] .reg-pill[aria-expanded="true"]{background:#78BE21;border-color:#78BE21}
+  html[data-env-theme="light"] .hero h1{color:var(--text-light)}
+  html[data-env-theme="light"] .hero .subhead{color:var(--text-muted)}
+  html[data-env-theme="light"] .atag{
+    color:var(--text-light);
+    border-color:rgba(0,40,85,0.42);
+  }
+  html[data-env-theme="light"] .modal,
+  html[data-env-theme="light"] .a1-shell,
+  html[data-env-theme="light"] .bsc-shell{
+    --bsc-deep:#ffffff;--bsc-panel:#eef2f9;--bsc-bg:#f4f7fb;
+    --bsc-white:#002855;--bsc-dim:#53565A;--bsc-bd:rgba(0,40,85,0.16);
+    --bsc-lime:#457010;--bsc-lime-ink:#ffffff;
+  }
+
+  html[data-env-theme="hc"]{
+    --navy:#000000;
+    --blue:#41B6E6;
+    --blue-mid:#41B6E6;
+    --bg-light:#000000;
+    --bg-tint:#000000;
+    --bg-dark:#000000;
+    --text-dark:#ffffff;
+    --text-mid:#ffffff;
+    --text-soft:#ffffff;
+    --text-light:#ffffff;
+    --text-muted:#ffffff;
+    --text-faint:#ffffff;
+    --rule-light:#ffffff;
+    --border-dark:#ffffff;
+    --border-mid:#ffffff;
+    --green:#78BE21;
+    --green-ink:#78BE21;
+    --green-dim:rgba(120,190,33,0.25);
+    --green-bright:#a8e457;
+    --error-soft:#FF6B3D;
+    --bsc-bg:#000000;--bsc-deep:#000000;--bsc-panel:#000000;
+    --bsc-white:#ffffff;--bsc-dim:#ffffff;--bsc-bd:#ffffff;
+    --bsc-lime:#B8E04A;--bsc-lime-ink:#000000;
+  }
+  html[data-env-theme="hc"] *{backdrop-filter:none !important;text-shadow:none !important}
+  html[data-env-theme="hc"] img{opacity:1 !important}
+  html[data-env-theme="hc"] a{text-decoration:underline}
+  html[data-env-theme="hc"] .image-bg{background:#000000}
+  html[data-env-theme="hc"] .nav-brand .brand-section{color:#ffffff;border-color:#ffffff;background:#000000}
+  html[data-env-theme="hc"] .nav-brand .brand-logo{background:#ffffff;border-radius:4px;padding:2px 5px}
+  html[data-env-theme="hc"] .hero .subhead,
+  html[data-env-theme="hc"] .atag{color:#ffffff}
+  html[data-env-theme="hc"] .hero .overlay{
+    background:linear-gradient(90deg,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.95) 36%,rgba(0,0,0,0.8) 50%,rgba(0,0,0,0.35) 66%);
+  }
 </style>
 <!-- Capabilities concierge styles (self-hosted, no external request) -->
 <link rel="stylesheet" href="/assistant/concierge.css">
 </head>
 <body>
+<!-- Skip links: first focusable elements, invisible until keyboard focus. -->
+<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#nav">Skip to navigation</a>
+<a class="skip-link" href="#site-footer">Skip to footer</a>
 <div class="fs-wipe" id="fsWipe" aria-hidden="true"></div>
 <div class="deck">
 
   <!-- ===================== TOP NAV ===================== -->
-  <nav class="topnav">
+  <nav class="topnav" id="nav" aria-label="Main">
     <div class="nav-brand"><img class="brand-logo" src="images/Envision_PrimaryFullColor_RBG.png" alt="Envision" width="1875" height="417" decoding="async"><span class="brand-section">Capabilities &amp; Services</span></div>
     <div class="nav-links" id="navLinks"></div>
     <div class="nav-tools">
       <button class="icbtn menu-btn" id="menuBtn" type="button" aria-label="Open section menu" aria-haspopup="true" aria-expanded="false" aria-controls="navMenu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
       </button>
       <button class="icbtn" id="prevBtn" type="button" aria-label="Previous slide">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <button class="icbtn" id="nextBtn" type="button" aria-label="Next slide">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
       <button class="icbtn" id="fsBtn" type="button" aria-label="Toggle fullscreen"><span id="fsIc"></span></button>
       <button class="install-btn" id="installBtn" type="button" aria-label="Install app" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M5 21h14"/></svg>
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M5 21h14"/></svg>
         <span>Install</span>
       </button>
     </div>
   </nav>
 
   <!-- Section menu (hamburger) — shown when the inline nav links are hidden -->
-  <div class="nav-menu" id="navMenu" role="menu" aria-label="Sections" hidden></div>
+  <div class="nav-menu" id="navMenu" role="group" aria-label="Sections" hidden></div>
 
   <!-- ===================== STAGE ===================== -->
-  <div class="stage" role="main">
+  <div class="stage" role="main" id="main" tabindex="-1">
     <noscript>
-      <p style="margin:24px auto;max-width:640px;padding:14px 18px;border:1px solid #d7deeb;border-radius:8px;background:#fff;color:#061530;font:500 14px/1.5 Montserrat,system-ui,sans-serif">
+      <p style="margin:24px auto;max-width:640px;padding:14px 18px;border:1px solid #d7deeb;border-radius:8px;background:var(--bg-light);color:#061530;font:500 14px/1.5 Montserrat,system-ui,sans-serif">
         This presentation needs JavaScript to run. Please enable JavaScript, or contact Envision at
         <a href="tel:+13165223232">(316) 522-3232</a> for a copy of the capabilities deck.
       </p>
@@ -2608,8 +2873,8 @@
                    data-lb-href="https://www.google.com/maps/dir/?api=1&amp;destination=1801+Valley+View+Ln,+Farmers+Branch,+TX+75234"
                    aria-label="Enlarge the Envision, Dallas Campus location image and area map">
                 <img src="images/campus-card-dallas.jpg" alt="Envision, Dallas Campus in Farmers Branch, Texas, shown with a map of the Dallas Fort Worth metroplex locating the campus near I-635, the Dallas North Tollway, and DFW International Airport" width="1600" height="900" loading="lazy" decoding="async">
-                <div class="campus-photo-tag"><span class="accent-dot" style="background:#78BE21"></span>Envision, Dallas Campus</div>
-                <span class="campus-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
+                <div class="campus-photo-tag"><span class="accent-dot" style="background:var(--green)"></span>Envision, Dallas Campus</div>
+                <span class="campus-zoom" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
               </div>
               <div class="campus-body">
                 <div class="campus-head">
@@ -2637,8 +2902,8 @@
                    data-lb-href="https://www.google.com/maps/dir/?api=1&amp;destination=2301+S+Water+St,+Wichita,+KS+67213"
                    aria-label="Enlarge the Envision, Wichita Campus location image and area map">
                 <img src="images/campus-card-wichita.jpg" alt="Envision, Wichita Campus on South Water Street, shown with a map of Wichita locating the campus south of downtown near I-235, Wichita Dwight D. Eisenhower National Airport, and McConnell Air Force Base" width="1600" height="900" loading="lazy" decoding="async">
-                <div class="campus-photo-tag"><span class="accent-dot" style="background:#003087"></span>Envision, Wichita Campus</div>
-                <span class="campus-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
+                <div class="campus-photo-tag"><span class="accent-dot" style="background:var(--blue)"></span>Envision, Wichita Campus</div>
+                <span class="campus-zoom" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 8v6M8 11h6M20 20l-3.5-3.5"/></svg>Tap to enlarge</span>
               </div>
               <div class="campus-body">
                 <div class="campus-head">
@@ -2711,9 +2976,9 @@
 
           <div class="ms-employment" data-modal="mission-employment" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Employment: open detail with programs and proof">
             <div class="ms-emp-top">
-              <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+              <span class="ms-more-cue" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
               <div class="ms-emp-icon">
-                <svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
               </div>
               <div class="ms-emp-content">
                 <div class="ms-emp-title">Employment</div>
@@ -2737,8 +3002,8 @@
           <div class="ms-pillars">
             <div class="ms-col" data-modal="mission-outreach" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Outreach: open detail with programs and community engagement">
               <div class="ms-head">
-                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
-                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span class="ms-more-cue" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <div class="nm">Outreach</div>
               </div>
               <div class="ms-body">
@@ -2752,8 +3017,8 @@
 
             <div class="ms-col" data-modal="mission-rehabilitation" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Rehabilitation: open detail with programs and community engagement">
               <div class="ms-head">
-                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
-                <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg>
+                <span class="ms-more-cue" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg>
                 <div class="nm">Rehabilitation</div>
               </div>
               <div class="ms-body">
@@ -2767,8 +3032,8 @@
 
             <div class="ms-col" data-modal="mission-education" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Education: open detail with programs and community engagement">
               <div class="ms-head">
-                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
-                <svg viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+                <span class="ms-more-cue" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
                 <div class="nm">Education</div>
               </div>
               <div class="ms-body">
@@ -2782,8 +3047,8 @@
 
             <div class="ms-col" data-modal="mission-research" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Research: open detail with programs and community engagement">
               <div class="ms-head">
-                <span class="ms-more-cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
-                <svg viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>
+                <span class="ms-more-cue" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>
                 <div class="nm">Research</div>
               </div>
               <div class="ms-body">
@@ -2903,7 +3168,7 @@
                 <span class="proc-chip">Digital pattern / DAM (partner)</span>
               </div>
             </div>
-            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Spreading and Cutting stage, show machines">
               <div class="proc-head">
                 <div class="proc-name">Spreading &amp; Cutting</div>
@@ -2918,7 +3183,7 @@
                 <span class="proc-chip">Hot Knife Slitting</span>
               </div>
             </div>
-            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Sewing and Construction stage, show machines">
               <div class="proc-head">
                 <div class="proc-name">Sewing &amp; Construction</div>
@@ -2943,7 +3208,7 @@
                 <span class="proc-chip">Belt Feed Laminator</span>
               </div>
             </div>
-            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Reinforcement and Closures stage, show machines">
               <div class="proc-head">
                 <div class="proc-name">Reinforcement &amp; Closures</div>
@@ -2959,7 +3224,7 @@
                 <span class="proc-chip">Snap Install</span>
               </div>
             </div>
-            <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Decoration and Finishing stage, show machines">
               <div class="proc-head">
                 <div class="proc-name">Decoration &amp; Finishing</div>
@@ -2978,7 +3243,7 @@
             <div class="bar-lead">
               <div class="tag">The Envision Difference</div>
               <div class="t-h">Concept to Volume</div>
-              <button class="inv-action-link" type="button" data-inaction aria-label="Open Envision in Action: current projects">See Envision in Action <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              <button class="inv-action-link" type="button" data-inaction aria-label="Open Envision in Action: current projects">See Envision in Action <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
             </div>
             <div class="t-d">The same domestic operation that prototypes your product can manufacture it at scale. Development and full-scale production sit on one floor, on federal-grade quality systems.</div>
             <div class="t-m">No hand-off, and no re-qualification between prototype and production.</div>
@@ -3007,7 +3272,7 @@
               <div class="t-h">DLA Prime Vendor</div>
               <div class="t-d">Envision holds the AbilityOne Base Supply Center (ABOBSC) Tailored Logistics Support contract with DLA Troop Support — a $360 million, 5-year IDIQ. IDIQ stands for Indefinite Delivery, Indefinite Quantity, a federal contract type with a set ceiling and flexible ordering; every purchase over the micro-purchase threshold is competed among the 16 AbilityOne Base Supply Store Operators.</div>
               <div class="t-m">ABOBSC TLS: $360M, 5-year. $408M combined DLA capacity with H2F. Each offers customer-specific items within its individual scope.</div>
-              <div class="proj-cue">View the TLS contract vehicle <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              <div class="proj-cue">View the TLS contract vehicle <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             </a>
             <div class="proof-card" data-bsc role="button" tabindex="0" aria-label="Open the Base Supply Center network map">
               <div class="tag">Base Supply</div>
@@ -3017,7 +3282,7 @@
               <a class="xp-inline" href="https://envisionxpress.com" target="_blank" rel="noopener">Shop the online Base Supply Center
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
               </a>
-              <div class="bsc-cue">View network map <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              <div class="bsc-cue">View network map <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             </div>
             <div class="proof-card proof-card--stack">
               <div class="tag">State Use Programs</div>
@@ -3037,13 +3302,13 @@
               <div class="t-h">H2F &mdash; Holistic Health &amp; Fitness</div>
               <div class="t-d">Envision is the dedicated contract support for the DLA Holistic Health &amp; Fitness program — one accountable channel from RFQ to delivery for every branch of the force. Kits and NSN line items are assembled and repackaged in Wichita and ship through DLA direct to units, CONUS and OCONUS.</div>
               <div class="t-m">H2F: $48M, 5-year IDIQ. Open to all DoW branches and federal agencies.</div>
-              <div class="proj-cue">Visit the H2F program site <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              <div class="proj-cue">Visit the H2F program site <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             </a>
             <div class="proof-card proof-card--action" data-inaction role="button" tabindex="0" aria-label="Open Envision in Action: current projects">
               <div class="tag">Envision in Action</div>
               <div class="t-h">Current Projects</div>
               <div class="t-d">A live look at the programs moving through our campuses, from first prototype to full production run. Step inside to see what we're building.</div>
-              <div class="proj-cue">Explore current projects <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              <div class="proj-cue">Explore current projects <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
             </div>
           </div>
           <div class="callout-box"><strong>All pricing considered fair and reasonable by DLA Troop Support.</strong></div>
@@ -3156,28 +3421,28 @@
           <!-- Document quick-links. Replace each href="#" with the real PDF/URL once uploaded. -->
           <div class="doc-links">
             <div class="doc-links-head">
-              <div class="m-sec-label">Document Library</div>
+              <h3 class="m-sec-label">Document Library</h3>
             </div>
             <div class="doc-grid">
               <a class="doc-link" href="#" data-doc>
-                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-ic"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
                 <span class="doc-txt"><span class="doc-name">Capabilities Statement</span><span class="doc-meta">PDF · one-page overview</span></span>
-                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+                <span class="doc-dl"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
               </a>
               <a class="doc-link" href="0145394_ENG_Envision.pdf" target="_blank" rel="noopener" data-doc>
-                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-ic"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
                 <span class="doc-txt"><span class="doc-name">ISO 9001:2015 &mdash; Wichita</span><span class="doc-meta">PDF · CERT-0145394</span></span>
-                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+                <span class="doc-dl"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
               </a>
               <a class="doc-link" href="#" data-doc>
-                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-ic"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
                 <span class="doc-txt"><span class="doc-name">ISO 9001:2015 &mdash; Dallas</span><span class="doc-meta">PDF · CERT-0145812</span></span>
-                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+                <span class="doc-dl"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
               </a>
               <a class="doc-link" href="#" data-doc>
-                <span class="doc-ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+                <span class="doc-ic"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
                 <span class="doc-txt"><span class="doc-name">Berry &amp; TAA Compliance Letter</span><span class="doc-meta">PDF · sourcing attestation</span></span>
-                <span class="doc-dl"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+                <span class="doc-dl"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
               </a>
             </div>
           </div>
@@ -3250,20 +3515,69 @@
 
   <!-- ===================== BACK BUTTON ===================== -->
   <button class="backbtn" id="backBtn" type="button" aria-label="Back" hidden>
-    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
   </button>
 
   <!-- ===================== BOTTOM PROGRESS ===================== -->
   <div class="progress"><div class="bar" id="progressBar"></div></div>
 </div>
 
+<!-- ===================== FOOTER (landmark; holds the accessibility trigger) ===================== -->
+<footer class="site-footer" id="site-footer" tabindex="-1" aria-label="Accessibility and site options">
+  <button class="a11y-trigger" id="a11yTrigger" type="button" aria-haspopup="dialog">Accessibility</button>
+</footer>
+
+<!-- ===================== ACCESSIBILITY PANEL ===================== -->
+<div class="a11y-overlay" id="a11yOverlay" hidden>
+  <div class="a11y-dialog" role="dialog" aria-modal="true" aria-labelledby="a11yTitle">
+    <div class="a11y-head">
+      <span class="a11y-eyebrow" id="a11yTitle">Accessibility Options</span>
+      <button class="a11y-close" data-a11y-close type="button" aria-label="Close accessibility options">&times;</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gTheme">
+      <span class="a11y-label" id="gTheme">Theme</span>
+      <button type="button" data-set="theme" data-val="dark" aria-pressed="false">Dark</button>
+      <button type="button" data-set="theme" data-val="light" aria-pressed="false">Light</button>
+      <button type="button" data-set="theme" data-val="hc" aria-pressed="false">High contrast</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gZoom">
+      <span class="a11y-label" id="gZoom">Text size</span>
+      <button type="button" data-set="zoom" data-val="1" aria-pressed="false">100%</button>
+      <button type="button" data-set="zoom" data-val="2" aria-pressed="false">112%</button>
+      <button type="button" data-set="zoom" data-val="3" aria-pressed="false">125%</button>
+      <button type="button" data-set="zoom" data-val="4" aria-pressed="false">140%</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gLines">
+      <span class="a11y-label" id="gLines">Line spacing</span>
+      <button type="button" data-set="lines" data-val="normal" aria-pressed="false">Normal</button>
+      <button type="button" data-set="lines" data-val="wide" aria-pressed="false">Wide</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gParas">
+      <span class="a11y-label" id="gParas">Paragraph spacing</span>
+      <button type="button" data-set="paras" data-val="normal" aria-pressed="false">Normal</button>
+      <button type="button" data-set="paras" data-val="wide" aria-pressed="false">Wide</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gPrefs">
+      <span class="a11y-label" id="gPrefs">Preferences</span>
+      <button type="button" data-toggle="underline" aria-pressed="false">Underline links</button>
+      <button type="button" data-toggle="motion" data-on="reduce" aria-pressed="false">Reduce motion</button>
+      <button type="button" data-toggle="readable" aria-pressed="false">Readable text</button>
+      <button type="button" data-toggle="cursor" aria-pressed="false">Large cursor</button>
+    </div>
+    <div class="a11y-foot">
+      <button class="a11y-reset" id="a11yReset" type="button">Reset all</button>
+      <button class="a11y-done" data-a11y-close type="button">Done</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===================== MODAL LAYER ===================== -->
 <div class="modal-backdrop" id="modalBackdrop"></div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalLabel">
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-labelledby="modalLabel">
   <div class="modal-topbar">
     <span class="m-label" id="modalLabel"></span>
     <button class="m-close" id="modalClose" type="button">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
       Close
     </button>
   </div>
@@ -3272,10 +3586,10 @@
 
 <!-- ===================== BASE SUPPLY CENTER MAP MODAL ===================== -->
 <div class="bsc-backdrop" id="bscBackdrop"></div>
-<div class="bsc-modal" id="bscModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Base Supply Center network">
+<div class="bsc-modal" id="bscModal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="Base Supply Center network">
   <div class="bsc-shell">
     <button class="bsc-close" id="bscClose" type="button" aria-label="Close">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
     <div class="bsc-body">
       <div class="bsc-map-panel">
@@ -3345,10 +3659,10 @@
 
 <!-- ===================== ABILITYONE EXPLAINER ===================== -->
 <div class="a1-backdrop" id="a1Backdrop"></div>
-<div class="a1-modal" id="a1Modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="The AbilityOne Program explained">
+<div class="a1-modal" id="a1Modal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="The AbilityOne Program explained">
   <div class="a1-shell">
     <button class="a1-close" id="a1Close" type="button" aria-label="Close">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
     <div class="a1-scroll">
       <div class="a1-head">
@@ -3517,9 +3831,9 @@
 
 <!-- ===================== CAMPUS LOCATION LIGHTBOX ===================== -->
 <div class="lb-backdrop" id="lbBackdrop"></div>
-<div class="lb-modal" id="lbModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Campus location">
+<div class="lb-modal" id="lbModal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="Campus location">
   <button class="lb-close" id="lbClose" type="button" aria-label="Close">
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </button>
   <figure class="lb-figure">
     <img class="lb-img" id="lbImg" alt="" decoding="async">
@@ -3531,9 +3845,9 @@
 </div>
 
 <div class="vid-backdrop" id="vidBackdrop"></div>
-<div class="vid-modal" id="vidModal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Video player">
+<div class="vid-modal" id="vidModal" role="dialog" aria-modal="true" aria-hidden="true" inert aria-label="Video player">
   <button class="vid-close" id="vidClose" type="button" aria-label="Close video">
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </button>
   <figure class="vid-figure">
     <div class="vid-frame" id="vidFrame"></div>
@@ -3549,6 +3863,21 @@
 <script>
 (function(){
   "use strict";
+
+  /* Editable-target guard: global key handlers must never act while the
+     visitor types in a field (the concierge input, or any future form).
+     Shared on window so every later script block applies the same test. */
+  /* Reduced-motion users get instant programmatic scrolls (CSS scroll-behavior
+     cannot reach JS scrollBy/scrollIntoView calls). */
+  function scrollMode(){
+    return (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ? "auto" : "smooth";
+  }
+  function editableTarget(t){
+    if (!t) return false;
+    var tag = (t.tagName || "").toLowerCase();
+    return tag === "input" || tag === "textarea" || tag === "select" || t.isContentEditable === true;
+  }
+  window.__envEditable = editableTarget;
 
   /* Escape a data value for use inside a double-quoted HTML attribute.
      Element content is intentionally injected raw (authored markup like
@@ -3605,7 +3934,6 @@
     var b = document.createElement("button");
     b.className = "navlink";
     b.type = "button";
-    b.setAttribute("role","menuitem");
     b.textContent = s.name;
     b.addEventListener("click", function(){ closeMenu(); jumpToSection(i); });
     navMenu.appendChild(b);
@@ -3643,8 +3971,8 @@
 
   var progressBar = document.getElementById("progressBar");
   var fsIc = document.getElementById("fsIc");
-  var ICON_MAX = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>';
-  var ICON_MIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
+  var ICON_MAX = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>';
+  var ICON_MIN = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
   function updateFsIcon(){ fsIc.innerHTML = document.fullscreenElement ? ICON_MIN : ICON_MAX; }
 
   var MODALS = {
@@ -4626,7 +4954,7 @@
       b.innerHTML =
         '<div class="t-h">'+row[1]+'</div>'+
         '<div class="t-d">'+row[2]+'</div>'+
-        '<div class="t-go">Explore <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>';
+        '<div class="t-go">Explore <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>';
       c.appendChild(b);
     });
   }
@@ -4652,7 +4980,7 @@
       b.setAttribute("data-modal", row[0]);
       b.innerHTML =
         '<span>'+row[1]+'</span>'+
-        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+        '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
       c.appendChild(b);
     });
   }
@@ -4730,7 +5058,7 @@
           '<summary>'+
             '<span>'+cat.title+'&nbsp;&nbsp;'+meta+'</span>'+
             '<span class="cat-toggle">'+toggleLabel+' '+
-              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'+
+              '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'+
             '</span>'+
           '</summary>'+
           '<div class="m-cat-body">'+
@@ -4743,22 +5071,22 @@
 
     var equipmentBlock = "";
     if (d.equipment && d.equipment.length){
-      equipmentBlock = '<div class="m-block"><div class="m-sec-label">Equipment &amp; Machinery</div>'+renderCatList(d.equipment, 'View machines')+'</div>';
+      equipmentBlock = '<div class="m-block"><h3 class="m-sec-label">Equipment &amp; Machinery</h3>'+renderCatList(d.equipment, 'View machines')+'</div>';
     }
 
     var catalogsBlock = "";
     if (d.catalogs && d.catalogs.length){
-      catalogsBlock = '<div class="m-block"><div class="m-sec-label">Product Catalog</div>'+renderCatList(d.catalogs, 'View catalog')+'</div>';
+      catalogsBlock = '<div class="m-block"><h3 class="m-sec-label">Product Catalog</h3>'+renderCatList(d.catalogs, 'View catalog')+'</div>';
     }
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
 
     var overviewBlock = (d.overview && d.overview.length)
-      ? '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>' : '';
+      ? '<div class="m-block"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>' : '';
     var statsBlock = (d.stats && d.stats.length)
-      ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
+      ? '<div class="m-block"><h3 class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</h3><div class="m-stats">'+stats+'</div></div>' : '';
     var calloutsBlock = (d.callouts && d.callouts.length)
-      ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>' : '';
+      ? '<div class="m-block"><h3 class="m-sec-label">'+(d.calloutLabel||'Details')+'</h3><div class="m-callouts">'+callouts+'</div>'+colorStrip+'</div>' : '';
 
     // inAction: points this capability/service at the current project that
     // proves it (the reverse of a project card's data-cap-link). Clicking it
@@ -4766,11 +5094,11 @@
     var proofBlock = "";
     if (d.inAction && PROJECTS[d.inAction.project] && !PROJECTS[d.inAction.project].hidden){
       var pj = PROJECTS[d.inAction.project];
-      proofBlock = '<div class="m-block"><div class="m-sec-label">In Action</div>'+
+      proofBlock = '<div class="m-block"><h3 class="m-sec-label">In Action</h3>'+
         '<button type="button" class="m-proof" data-project-open="'+d.inAction.project+'">'+
           '<span class="mp-body"><span class="mp-title">'+pj.title+'</span>'+
           '<span class="mp-text">'+d.inAction.text+'</span></span>'+
-          '<span class="proj-cue">See the project <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
+          '<span class="proj-cue">See the project <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
         '</button></div>';
     }
 
@@ -4814,7 +5142,7 @@
      always recomputed from what is actually on screen. */
   var deckEl = document.querySelector(".deck");
   function anyDeckOverlayOpen(){
-    var ids = ["modal", "bscModal", "a1Modal", "lbModal", "vidModal"];
+    var ids = ["modal", "bscModal", "a1Modal", "lbModal", "vidModal", "a11yOverlay"];
     for (var i = 0; i < ids.length; i++){
       var n = document.getElementById(ids[i]);
       if (n && n.classList.contains("is-open")) return true;
@@ -4853,7 +5181,7 @@
       else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     });
   }
-  ["modal","bscModal","a1Modal","lbModal","vidModal"].forEach(function(id){
+  ["modal","bscModal","a1Modal","lbModal","vidModal","a11yOverlay"].forEach(function(id){
     var el = document.getElementById(id);
     if (el) trapTabWithin(el);
   });
@@ -4881,6 +5209,7 @@
     dismissPeers();
     modalBackdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
     modalClose.focus();
@@ -4890,6 +5219,7 @@
   function closeModal(){
     if (!modalOpen()) return;
     modal.classList.remove("is-open");
+    modal.inert = true;
     modalBackdrop.classList.remove("is-open");
     modal.setAttribute("aria-hidden","true");
     document.body.style.overflow = "";
@@ -5179,7 +5509,7 @@
     modalLabel.textContent = "Envision in Action";
     modalInner.innerHTML =
       '<div class="ia-gate">'+
-        '<div class="m-card-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#78BE21" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.4"/></svg></div>'+
+        '<div class="m-card-icon"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#78BE21" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.4"/></svg></div>'+
         '<div class="m-eyebrow">Envision in Action</div>'+
         '<h2>Current Projects</h2>'+
         '<p class="ia-gate-note">To preserve the privacy of the businesses and organizations we serve, this section requires a gateway password.</p>'+
@@ -5238,16 +5568,16 @@
       if (c.link && MODALS[c.link]){
         var kind = (MODALS[c.link].eyebrow === "Service") ? "service" : "capability";
         linkBtn = '<button type="button" class="m-card-link" data-cap-link="'+c.link+'">Explore this '+kind+
-          ' <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>';
+          ' <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>';
       }
       return '<div class="m-card">'+icon+'<div class="tag">'+c.tag+'</div><h4>'+c.title+'</h4>'+
              '<div class="m-card-d">'+c.desc+'</div>'+sp+videoLinkHTML(c)+linkBtn+'</div>';
     }).join("");
 
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
-    var statsBlock = stats ? '<div class="m-block"><div class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</div><div class="m-stats">'+stats+'</div></div>' : '';
-    var calloutsBlock = callouts ? '<div class="m-block"><div class="m-sec-label">'+(d.calloutLabel||'Details')+'</div><div class="m-callouts">'+callouts+'</div></div>' : '';
-    var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
+    var statsBlock = stats ? '<div class="m-block"><h3 class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</h3><div class="m-stats">'+stats+'</div></div>' : '';
+    var calloutsBlock = callouts ? '<div class="m-block"><h3 class="m-sec-label">'+(d.calloutLabel||'Details')+'</h3><div class="m-callouts">'+callouts+'</div></div>' : '';
+    var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
     var topBanner = '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
@@ -5260,16 +5590,16 @@
     var vidLabel = d.videoLabel || ('Play video: '+d.title);
     var overviewBlock = d.video
       ? '<div class="m-block m-block--video">'+
-          '<div class="m-overview-main"><div class="m-sec-label">Overview</div>'+overview+'</div>'+
+          '<div class="m-overview-main"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>'+
           '<button type="button" class="m-video-card" data-video="'+d.video+'" data-video-label="'+escAttr(vidLabel)+'" aria-label="'+escAttr(vidLabel)+'">'+
             '<span class="m-video-poster"'+
               (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;)"' : '')+'>'+
-              '<span class="m-video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>'+
+              '<span class="m-video-play" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>'+
             '</span>'+
             '<span class="m-video-card-cap">'+vidLabel+'</span>'+
           '</button>'+
         '</div>'
-      : '<div class="m-block"><div class="m-sec-label">Overview</div>'+overview+'</div>';
+      : '<div class="m-block"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>';
 
     modalInner.innerHTML =
       backBar+
@@ -5309,7 +5639,7 @@
           '<span class="inaction-body">'+
             '<span class="ia-h">'+d.title+'</span>'+
             '<span class="ia-d">'+(d.blurb||d.summary||"")+'</span>'+
-            '<span class="proj-cue">View details <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
+            '<span class="proj-cue">View details <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
           '</span>'+
         '</button>';
     }).join("");
@@ -5322,7 +5652,7 @@
           '<p class="m-one">A live look at the work moving through our campuses, from first prototype to full production run. Select a project to see what we\'re building and the capabilities behind it.</p>'+
         '</div>'+
       '</div>'+
-      '<div class="m-block"><div class="m-sec-label">Current Projects</div>'+
+      '<div class="m-block"><h3 class="m-sec-label">Current Projects</h3>'+
         '<div class="inaction-grid">'+blocks+'</div>'+
       '</div>'+
       '<div class="m-cta">'+
@@ -5378,6 +5708,7 @@
     dismissPeers();
     modalBackdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
     modalClose.focus();
@@ -5511,7 +5842,7 @@
           if (lab && /equipment|machinery/i.test(lab.textContent)){
             var first = blocks[b].querySelector("details.m-catalog");
             if (first) first.open = true;
-            blocks[b].scrollIntoView({ behavior:"smooth", block:"center" });
+            blocks[b].scrollIntoView({ behavior:scrollMode(), block:"center" });
             break;
           }
         }
@@ -5586,7 +5917,7 @@
     setTimeout(function(){ el.classList.remove("cred-flash"); }, 2200);
   }
   function scrollInModal(el){
-    if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    if (el) el.scrollIntoView({behavior:scrollMode(), block:"center"});
   }
   function switchModal(key){
     if (!MODALS[key]) return;
@@ -5606,7 +5937,7 @@
         var h = cards[i].querySelector(".c-h");
         if (h && h.textContent.toLowerCase().indexOf(match.toLowerCase()) >= 0){ target = cards[i]; break; }
       }
-      if (target){ target.scrollIntoView({behavior:"smooth", block:"center"}); credFlash(target); }
+      if (target){ target.scrollIntoView({behavior:scrollMode(), block:"center"}); credFlash(target); }
     }, 90);
   }
   function credToCatalog(key){
@@ -5756,6 +6087,7 @@
   // on the slides: project cards and inline jump links.
   document.getElementById("slides").addEventListener("keydown", function(e){
     if (modalOpen()) return;
+    if (editableTarget(e.target)) return;
     if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
     var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump],.proc-stage,[data-modal]") : null;
     if (!t || t.tagName === "BUTTON" || t.tagName === "A") return;
@@ -6001,7 +6333,7 @@
   }
   function scrollCurrentSlide(dir){
     var s = slides[idx];
-    if (s) s.scrollBy({top: dir * Math.round(s.clientHeight * 0.75), behavior:"smooth"});
+    if (s) s.scrollBy({top: dir * Math.round(s.clientHeight * 0.75), behavior:scrollMode()});
   }
   scrollCue.addEventListener("click", function(){ scrollCurrentSlide(1); });
   slides.forEach(function(s){
@@ -6020,11 +6352,12 @@
     // concierge input). Otherwise Space advances a slide instead of inserting
     // a space, and arrows / F / number keys steal the keystroke mid-sentence.
     var t = e.target;
-    if (t && (t.isContentEditable ||
-              /^(input|textarea|select)$/i.test(t.tagName || "") ||
-              (t.closest && t.closest(".env-concierge")))){
+    if (editableTarget(t) || (t && t.closest && t.closest(".env-concierge"))){
       return;
     }
+    // Modifier combos belong to the browser and OS (Cmd+Arrow history,
+    // Ctrl+F, Alt shortcuts): never treat them as deck navigation.
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
     // Space must keep its native meaning on focused controls (button,
     // summary, link, role=button tiles) — activating them, not advancing
     // the deck. Only hijack Space when nothing interactive has focus.
@@ -6057,7 +6390,7 @@
         var mStep = (e.key === "ArrowDown" || e.key === "ArrowUp") ? 0.4 : 0.85;
         var mDir = (e.key === "ArrowUp" || e.key === "PageUp" ||
                     ((e.key === " " || e.key === "Spacebar") && e.shiftKey)) ? -1 : 1;
-        modal.scrollBy({top: mDir * Math.round(modal.clientHeight * mStep), behavior:"smooth"});
+        modal.scrollBy({top: mDir * Math.round(modal.clientHeight * mStep), behavior:scrollMode()});
       }
       else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                e.key === " " || e.key === "Spacebar"){ e.preventDefault(); }
@@ -6067,6 +6400,10 @@
       if (document.fullscreenElement) document.exitFullscreen();
       return;
     }
+    // Shift+key combos (text selection, Shift+Space in scrollable regions)
+    // are never deck navigation either. Shift+Space inside an open detail
+    // pop-up still scrolls it: that branch runs above, before this guard.
+    if (e.shiftKey) return;
     if (e.key === "ArrowRight" || e.key === " " || e.key === "Spacebar"){ e.preventDefault(); linear(idx + 1); }
     else if (e.key === "ArrowLeft"){ e.preventDefault(); linear(idx - 1); }
     // Down/Up scroll within a slide that runs past the fold (windowed mode);
@@ -6413,6 +6750,7 @@
         g.addEventListener("blur", hideTip);
         g.addEventListener("click", function(e){ toggleBase(e, bb, inf); });
         g.addEventListener("keydown", function(e){
+          if (window.__envEditable && window.__envEditable(e.target)) return;
           if (e.key === "Enter" || e.key === " " || e.key === "Spacebar"){
             e.preventDefault(); toggleBase(e, bb, inf);
           }
@@ -6424,6 +6762,26 @@
     svg.appendChild(markerG);
 
     aspect.appendChild(svg);
+
+    // Text alternative for the map (WCAG 1.1.1): the same locations as a
+    // screen-reader-only list, generated from the same data so it can never
+    // drift out of sync with the markers.
+    var srList = document.createElement("div");
+    srList.className = "visually-hidden";
+    var srHead = document.createElement("h3");
+    srHead.textContent = "All Base Supply Center locations";
+    srList.appendChild(srHead);
+    var srUl = document.createElement("ul");
+    BSC_MAP.bases.forEach(function(b){
+      var info = BASE_INFO[b.name] || {full:b.name};
+      var li = document.createElement("li");
+      li.textContent = info.full +
+        (info.city ? ", " + info.city : "") +
+        (info.branch ? " (" + info.branch + ")" : "");
+      srUl.appendChild(li);
+    });
+    srList.appendChild(srUl);
+    aspect.appendChild(srList);
 
     // Tooltip element shared by hover, tap, and keyboard focus.
     tipEl = document.createElement("div");
@@ -6498,6 +6856,7 @@
     dismissPeers();
     backdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     closeBtn.focus();
@@ -6508,6 +6867,7 @@
   function closeBsc(){
     if (!isOpen()) return;
     modal.classList.remove("is-open");
+    modal.inert = true;
     backdrop.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow =
@@ -6546,16 +6906,18 @@
   function handleTrigger(e){
     var t = e.target.closest ? e.target.closest("[data-bsc]") : null;
     if (!t || onOwnLink(e)) return;
-    e.preventDefault();
-    e.stopPropagation();
     if (e.type === "keydown"){
+      if (window.__envEditable && window.__envEditable(e.target)) return;
       if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
     }
+    e.preventDefault();
+    e.stopPropagation();
     openBsc(t);
   }
   document.addEventListener("click", handleTrigger, true);
   document.addEventListener("keydown", function(e){
     if (isOpen() || onOwnLink(e)) return;
+    if (window.__envEditable && window.__envEditable(e.target)) return;
     var t = e.target.closest ? e.target.closest("[data-bsc]") : null;
     if (t && (e.key === "Enter" || e.key === " " || e.key === "Spacebar")){
       e.preventDefault(); e.stopPropagation(); openBsc(t);
@@ -6571,6 +6933,7 @@
       closeBsc();
     } else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                e.key === " " || e.key === "Spacebar"){
+      if (window.__envEditable && window.__envEditable(e.target)) return;
       e.preventDefault();
       e.stopImmediatePropagation();
     }
@@ -6628,6 +6991,7 @@
     if (scroller) scroller.scrollTop = 0;
     backdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.inert = false;
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     closeBtn.focus();
@@ -6640,6 +7004,7 @@
     if (!isOpen()) return null;
     var back = returnFocus, toMap = reopenMap;
     modal.classList.remove("is-open");
+    modal.inert = true;
     backdrop.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow =
@@ -6692,6 +7057,7 @@
       e.stopImmediatePropagation();
       closeA1();
     } else if (e.key === "ArrowRight" || e.key === "ArrowLeft"){
+      if (window.__envEditable && window.__envEditable(e.target)) return;
       e.preventDefault();
       e.stopImmediatePropagation();
     }
@@ -6731,6 +7097,7 @@
       dismissPeers();
       backdrop.classList.add("is-open");
       modal.classList.add("is-open");
+      modal.inert = false;
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
       closeBtn.focus();
@@ -6740,6 +7107,7 @@
     function closeLb(){
       if (!isOpen()) return;
       modal.classList.remove("is-open");
+      modal.inert = true;
       backdrop.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
       document.body.style.overflow =
@@ -6759,16 +7127,18 @@
     function handleTrigger(e){
       var t = e.target.closest ? e.target.closest("[data-lightbox]") : null;
       if (!t) return;
-      e.preventDefault();
-      e.stopPropagation();
       if (e.type === "keydown"){
+        if (window.__envEditable && window.__envEditable(e.target)) return;
         if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
       }
+      e.preventDefault();
+      e.stopPropagation();
       openLb(t);
     }
     document.addEventListener("click", handleTrigger, true);
     document.addEventListener("keydown", function(e){
       if (isOpen()) return;
+      if (window.__envEditable && window.__envEditable(e.target)) return;
       var t = e.target.closest ? e.target.closest("[data-lightbox]") : null;
       if (t && (e.key === "Enter" || e.key === " " || e.key === "Spacebar")){
         e.preventDefault(); e.stopPropagation(); openLb(t);
@@ -6781,6 +7151,7 @@
         e.preventDefault(); e.stopImmediatePropagation(); closeLb();
       } else if (e.key === "ArrowRight" || e.key === "ArrowLeft" ||
                  e.key === " " || e.key === "Spacebar"){
+        if (window.__envEditable && window.__envEditable(e.target)) return;
         e.preventDefault(); e.stopImmediatePropagation();
       }
     }, true);
@@ -6823,6 +7194,7 @@
       dismissPeers();
       backdrop.classList.add("is-open");
       modal.classList.add("is-open");
+      modal.inert = false;
       modal.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
       closeBtn.focus();
@@ -6832,6 +7204,7 @@
     function closeVid(){
       if (!isOpen()) return;
       modal.classList.remove("is-open");
+      modal.inert = true;
       backdrop.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
       frame.innerHTML = "";
@@ -6864,6 +7237,94 @@
       }
     }, true);
   })();
+</script>
+<script>
+/* Envision accessibility panel. Prefs persist under env-a11y and are restored
+   pre-paint by the anti-flash script in <head>. The overlay joins the deck's
+   overlay contract: it is in the anyDeckOverlayOpen() id list and the
+   trapTabWithin list, so the deck behind goes inert and Tab stays inside. */
+(function(){
+  var KEY = "env-a11y", root = document.documentElement;
+  var trigger = document.getElementById("a11yTrigger");
+  var overlay = document.getElementById("a11yOverlay");
+  if (!trigger || !overlay) return;
+  var dialog = overlay.querySelector(".a11y-dialog");
+  var prefs = {}; try{ prefs = JSON.parse(localStorage.getItem(KEY) || "{}"); }catch(e){}
+  if (!prefs.motion && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    prefs.motion = "reduce"; // reflect the OS setting; saved only if the visitor interacts
+  }
+
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(prefs)); }catch(e){} }
+  function apply(){
+    ["theme","zoom","lines","paras","underline","motion","readable","cursor"].forEach(function(k){
+      if (prefs[k]) root.setAttribute("data-env-" + k, prefs[k]);
+      else root.removeAttribute("data-env-" + k);
+    });
+    if (!root.getAttribute("data-env-theme")) root.setAttribute("data-env-theme", "dark");
+    overlay.querySelectorAll("[data-set]").forEach(function(b){
+      b.setAttribute("aria-pressed", String(prefs[b.dataset.set] === b.dataset.val ||
+        (b.dataset.set === "theme" && !prefs.theme && b.dataset.val === "dark") ||
+        (b.dataset.set === "zoom" && !prefs.zoom && b.dataset.val === "1") ||
+        (b.dataset.set === "lines" && !prefs.lines && b.dataset.val === "normal") ||
+        (b.dataset.set === "paras" && !prefs.paras && b.dataset.val === "normal")));
+    });
+    overlay.querySelectorAll("[data-toggle]").forEach(function(b){
+      var on = b.dataset.on || "on";
+      b.setAttribute("aria-pressed", String(prefs[b.dataset.toggle] === on));
+    });
+  }
+
+  overlay.addEventListener("click", function(e){
+    var set = e.target.closest("[data-set]"), tog = e.target.closest("[data-toggle]");
+    if (set){
+      if (set.dataset.val === "1" || set.dataset.val === "normal" ||
+          (set.dataset.set === "theme" && set.dataset.val === "dark")){
+        delete prefs[set.dataset.set];
+      } else {
+        prefs[set.dataset.set] = set.dataset.val;
+      }
+      save(); apply();
+    }
+    if (tog){
+      var on = tog.dataset.on || "on", k = tog.dataset.toggle;
+      if (prefs[k] === on) delete prefs[k]; else prefs[k] = on;
+      save(); apply();
+    }
+    if (e.target.closest("[data-a11y-close]") || e.target === overlay) close();
+  });
+  document.getElementById("a11yReset").addEventListener("click", function(){
+    prefs = {}; save(); apply();
+  });
+
+  var lastFocus = null;
+  function syncOverlay(){ if (window.__envSyncOverlay) window.__envSyncOverlay(); }
+  function onKeys(e){
+    if (e.key === "Escape"){
+      e.preventDefault(); e.stopImmediatePropagation(); close();
+    }
+  }
+  function open(){
+    if (!overlay.hidden) return;
+    lastFocus = document.activeElement;
+    overlay.hidden = false;
+    overlay.classList.add("is-open");
+    syncOverlay();
+    document.addEventListener("keydown", onKeys, true);
+    var first = dialog.querySelector("button");
+    if (first) first.focus();
+  }
+  function close(){
+    if (overlay.hidden) return;
+    overlay.hidden = true;
+    overlay.classList.remove("is-open");
+    syncOverlay();
+    document.removeEventListener("keydown", onKeys, true);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    lastFocus = null;
+  }
+  trigger.addEventListener("click", open);
+  apply();
+})();
 </script>
 <script>
   /* PWA install control. Hidden entirely when already running standalone. */

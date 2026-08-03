@@ -234,7 +234,7 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 
 /* ---------- Composer ---------- */
 .ec-form{
-  flex: none; display: flex; gap: 8px; align-items: flex-end;
+  flex: none; display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end;
   padding: 11px 12px calc(11px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--ec-rule); background: #fff;
 }
@@ -286,8 +286,46 @@ body.env-overlay-open .ec-panel{ display: none !important; }
   .ec-chip, .ec-bubble, .ec-contact, .ec-input{ border: 1px solid CanvasText; }
 }
 
+/* Touch targets: invisible hit-area expansion on coarse pointers only. */
+@media (pointer: coarse){
+  .ec-head-close, .ec-chip, .ec-send{ position: relative; }
+  .ec-head-close::after, .ec-chip::after, .ec-send::after{
+    content: ""; position: absolute; inset: -5px;
+  }
+}
+
+/* Field error: hidden until an invalid submit, then announced via role=alert.
+   #9E3000 is the verified light-ground error tone (6.8:1 on white). */
+.ec-error[hidden]{ display: none; }
+.ec-error{
+  display: block; flex: 0 0 100%; order: 3;
+  padding: 6px 2px 0;
+  font: 600 12px/1.45 var(--sans, 'Montserrat', sans-serif);
+  color: #9E3000;
+}
+.ec-error::before{ content: "\26A0\FE0E  "; }
+
 /* Screen-reader-only utility */
 .ec-sr-only{
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
+
+/* High-contrast theme (user-invoked via the deck accessibility panel). */
+html[data-env-theme="hc"] .env-concierge{
+  --ec-navy: #000000; --ec-blue: #000000; --ec-green: #78BE21;
+  --ec-ink: #ffffff; --ec-mid: #ffffff; --ec-soft: #ffffff;
+  --ec-rule: #ffffff; --ec-tint: #000000; --ec-shadow: none;
+}
+html[data-env-theme="hc"] .ec-panel,
+html[data-env-theme="hc"] .ec-log,
+html[data-env-theme="hc"] .ec-form,
+html[data-env-theme="hc"] .ec-msg-bot .ec-bubble,
+html[data-env-theme="hc"] .ec-chip,
+html[data-env-theme="hc"] .ec-input{ background: #000000; color: #ffffff; }
+html[data-env-theme="hc"] .ec-panel{ border: 1px solid #ffffff; }
+html[data-env-theme="hc"] .ec-chip,
+html[data-env-theme="hc"] .ec-input,
+html[data-env-theme="hc"] .ec-send,
+html[data-env-theme="hc"] .ec-msg-user .ec-bubble{ border: 1px solid #ffffff; }
+html[data-env-theme="hc"] .ec-launcher{ background: #000000; color: #ffffff; border: 1px solid #ffffff; }
