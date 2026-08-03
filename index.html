@@ -2551,9 +2551,13 @@
   .skip-link:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
 
   /* ---------- Footer landmark ----------
-     Fixed corner container; empty until the accessibility trigger mounts,
-     so it paints nothing by default. */
-  .site-footer{position:fixed;left:14px;bottom:12px;z-index:90}
+     Fixed above the concierge launcher, clear of the centered scroll cue
+     and the left-corner back button. Paints nothing but its one button. */
+  .site-footer{
+    position:fixed;right:clamp(14px,2.5vw,26px);
+    bottom:calc(80px + env(safe-area-inset-bottom));
+    z-index:90;display:flex;justify-content:flex-end;
+  }
 
   /* ---------- House focus ring (WCAG 2.4.7), keyboard-only ----------
      Default ring for anything without a curated focus style (today that is
@@ -2595,6 +2599,79 @@
     .hero .kb-frame{animation:none !important;opacity:0}
     .hero .kb-frame:nth-child(1){opacity:1}
   }
+
+  /* ---------- Envision accessibility panel ---------- */
+  .a11y-trigger{
+    background:var(--bg-dark);border:1px solid var(--border-mid);color:var(--text-muted);
+    font:600 0.68rem var(--sans);letter-spacing:0.18em;text-transform:uppercase;
+    padding:0.55rem 1.1rem;border-radius:2px;cursor:pointer;
+  }
+  .a11y-trigger:hover,.a11y-trigger:focus-visible{color:var(--text-light);border-color:var(--green)}
+  html[data-env-theme="hc"] .a11y-trigger{border-color:var(--white);color:var(--white)}
+  .a11y-overlay{
+    position:fixed;inset:0;z-index:300;background:rgba(0,5,20,0.6);
+    display:flex;align-items:center;justify-content:center;padding:1.5rem;
+  }
+  .a11y-overlay[hidden]{display:none}
+  .a11y-dialog{
+    background:var(--bg-dark);border:1px solid var(--border-mid);border-radius:2px;
+    padding:2rem;width:min(460px,100%);max-height:90vh;overflow-y:auto;
+    font-family:var(--sans);color:var(--text-light);
+  }
+  .a11y-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+  .a11y-eyebrow{
+    font:700 0.68rem var(--sans);letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--green);
+  }
+  .a11y-close{
+    background:none;border:0;color:var(--text-light);font-size:1.6rem;
+    min-width:44px;min-height:44px;cursor:pointer;
+  }
+  .a11y-group{margin-bottom:1.25rem}
+  .a11y-label{
+    display:block;font:700 0.62rem var(--sans);letter-spacing:0.2em;
+    text-transform:uppercase;color:var(--green);margin-bottom:0.6rem;
+  }
+  .a11y-group button{
+    background:transparent;border:1px solid var(--border-mid);color:var(--text-light);
+    font:600 0.78rem var(--sans);padding:0.6rem 1rem;margin:0 0.4rem 0.4rem 0;
+    border-radius:2px;min-height:44px;cursor:pointer;
+  }
+  .a11y-group button[aria-pressed="true"]{background:var(--green);color:var(--navy);border-color:var(--green)}
+  html[data-env-theme="light"] .a11y-group button[aria-pressed="true"]{background:#78BE21;border-color:#78BE21;color:#001852}
+  html[data-env-theme="hc"] .a11y-group button[aria-pressed="true"]{color:#000}
+  .a11y-foot{display:flex;justify-content:space-between;margin-top:1.5rem}
+  .a11y-reset{
+    background:none;border:0;color:var(--text-muted);text-decoration:underline;
+    font:600 0.78rem var(--sans);cursor:pointer;min-height:44px;
+  }
+  .a11y-done{
+    background:var(--green);color:var(--navy);border:0;border-radius:2px;
+    font:700 0.78rem var(--sans);padding:0.6rem 1.6rem;min-height:44px;cursor:pointer;
+  }
+  html[data-env-theme="light"] .a11y-done{background:#78BE21;color:#001852}
+  html[data-env-theme="hc"] .a11y-done{color:#000}
+
+  /* Panel preference effects */
+  html[data-env-zoom="2"] body{zoom:1.125}
+  html[data-env-zoom="3"] body{zoom:1.25}
+  html[data-env-zoom="4"] body{zoom:1.4}
+  html[data-env-lines="wide"] body{line-height:1.95}
+  html[data-env-paras="wide"] p{margin-bottom:2em}
+  html[data-env-underline="on"] a{text-decoration:underline !important}
+  html[data-env-readable="on"] body{font-weight:500;letter-spacing:0.012em;word-spacing:0.08em;line-height:1.85}
+  html[data-env-cursor="on"],html[data-env-cursor="on"] *{
+    cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M6 2l24 14-11 2 6 12-5 3-6-12-8 8z' fill='%23fff' stroke='%23001852' stroke-width='2'/%3E%3C/svg%3E") 4 2,auto !important;
+  }
+  /* Panel-toggle reduced motion mirrors the OS guard. */
+  html[data-env-motion="reduce"]{scroll-behavior:auto}
+  html[data-env-motion="reduce"] *,html[data-env-motion="reduce"] *::before,html[data-env-motion="reduce"] *::after{
+    animation-duration:0.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important;
+  }
+  html[data-env-motion="reduce"] .hero .kb-frame{animation:none !important;opacity:0}
+  html[data-env-motion="reduce"] .hero .kb-frame:nth-child(1){opacity:1}
 
   /* ---------- Themes (user-invoked only; dark is the shipped default) ----
      Components never change between themes; only the tokens swap, plus a
@@ -3442,7 +3519,53 @@
 </div>
 
 <!-- ===================== FOOTER (landmark; holds the accessibility trigger) ===================== -->
-<footer class="site-footer" id="site-footer" tabindex="-1" aria-label="Accessibility and site options"></footer>
+<footer class="site-footer" id="site-footer" tabindex="-1" aria-label="Accessibility and site options">
+  <button class="a11y-trigger" id="a11yTrigger" type="button" aria-haspopup="dialog">Accessibility</button>
+</footer>
+
+<!-- ===================== ACCESSIBILITY PANEL ===================== -->
+<div class="a11y-overlay" id="a11yOverlay" hidden>
+  <div class="a11y-dialog" role="dialog" aria-modal="true" aria-labelledby="a11yTitle">
+    <div class="a11y-head">
+      <span class="a11y-eyebrow" id="a11yTitle">Accessibility Options</span>
+      <button class="a11y-close" data-a11y-close type="button" aria-label="Close accessibility options">&times;</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gTheme">
+      <span class="a11y-label" id="gTheme">Theme</span>
+      <button type="button" data-set="theme" data-val="dark" aria-pressed="false">Dark</button>
+      <button type="button" data-set="theme" data-val="light" aria-pressed="false">Light</button>
+      <button type="button" data-set="theme" data-val="hc" aria-pressed="false">High contrast</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gZoom">
+      <span class="a11y-label" id="gZoom">Text size</span>
+      <button type="button" data-set="zoom" data-val="1" aria-pressed="false">100%</button>
+      <button type="button" data-set="zoom" data-val="2" aria-pressed="false">112%</button>
+      <button type="button" data-set="zoom" data-val="3" aria-pressed="false">125%</button>
+      <button type="button" data-set="zoom" data-val="4" aria-pressed="false">140%</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gLines">
+      <span class="a11y-label" id="gLines">Line spacing</span>
+      <button type="button" data-set="lines" data-val="normal" aria-pressed="false">Normal</button>
+      <button type="button" data-set="lines" data-val="wide" aria-pressed="false">Wide</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gParas">
+      <span class="a11y-label" id="gParas">Paragraph spacing</span>
+      <button type="button" data-set="paras" data-val="normal" aria-pressed="false">Normal</button>
+      <button type="button" data-set="paras" data-val="wide" aria-pressed="false">Wide</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gPrefs">
+      <span class="a11y-label" id="gPrefs">Preferences</span>
+      <button type="button" data-toggle="underline" aria-pressed="false">Underline links</button>
+      <button type="button" data-toggle="motion" data-on="reduce" aria-pressed="false">Reduce motion</button>
+      <button type="button" data-toggle="readable" aria-pressed="false">Readable text</button>
+      <button type="button" data-toggle="cursor" aria-pressed="false">Large cursor</button>
+    </div>
+    <div class="a11y-foot">
+      <button class="a11y-reset" id="a11yReset" type="button">Reset all</button>
+      <button class="a11y-done" data-a11y-close type="button">Done</button>
+    </div>
+  </div>
+</div>
 
 <!-- ===================== MODAL LAYER ===================== -->
 <div class="modal-backdrop" id="modalBackdrop"></div>
@@ -5015,7 +5138,7 @@
      always recomputed from what is actually on screen. */
   var deckEl = document.querySelector(".deck");
   function anyDeckOverlayOpen(){
-    var ids = ["modal", "bscModal", "a1Modal", "lbModal", "vidModal"];
+    var ids = ["modal", "bscModal", "a1Modal", "lbModal", "vidModal", "a11yOverlay"];
     for (var i = 0; i < ids.length; i++){
       var n = document.getElementById(ids[i]);
       if (n && n.classList.contains("is-open")) return true;
@@ -5054,7 +5177,7 @@
       else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     });
   }
-  ["modal","bscModal","a1Modal","lbModal","vidModal"].forEach(function(id){
+  ["modal","bscModal","a1Modal","lbModal","vidModal","a11yOverlay"].forEach(function(id){
     var el = document.getElementById(id);
     if (el) trapTabWithin(el);
   });
@@ -7110,6 +7233,94 @@
       }
     }, true);
   })();
+</script>
+<script>
+/* Envision accessibility panel. Prefs persist under env-a11y and are restored
+   pre-paint by the anti-flash script in <head>. The overlay joins the deck's
+   overlay contract: it is in the anyDeckOverlayOpen() id list and the
+   trapTabWithin list, so the deck behind goes inert and Tab stays inside. */
+(function(){
+  var KEY = "env-a11y", root = document.documentElement;
+  var trigger = document.getElementById("a11yTrigger");
+  var overlay = document.getElementById("a11yOverlay");
+  if (!trigger || !overlay) return;
+  var dialog = overlay.querySelector(".a11y-dialog");
+  var prefs = {}; try{ prefs = JSON.parse(localStorage.getItem(KEY) || "{}"); }catch(e){}
+  if (!prefs.motion && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    prefs.motion = "reduce"; // reflect the OS setting; saved only if the visitor interacts
+  }
+
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(prefs)); }catch(e){} }
+  function apply(){
+    ["theme","zoom","lines","paras","underline","motion","readable","cursor"].forEach(function(k){
+      if (prefs[k]) root.setAttribute("data-env-" + k, prefs[k]);
+      else root.removeAttribute("data-env-" + k);
+    });
+    if (!root.getAttribute("data-env-theme")) root.setAttribute("data-env-theme", "dark");
+    overlay.querySelectorAll("[data-set]").forEach(function(b){
+      b.setAttribute("aria-pressed", String(prefs[b.dataset.set] === b.dataset.val ||
+        (b.dataset.set === "theme" && !prefs.theme && b.dataset.val === "dark") ||
+        (b.dataset.set === "zoom" && !prefs.zoom && b.dataset.val === "1") ||
+        (b.dataset.set === "lines" && !prefs.lines && b.dataset.val === "normal") ||
+        (b.dataset.set === "paras" && !prefs.paras && b.dataset.val === "normal")));
+    });
+    overlay.querySelectorAll("[data-toggle]").forEach(function(b){
+      var on = b.dataset.on || "on";
+      b.setAttribute("aria-pressed", String(prefs[b.dataset.toggle] === on));
+    });
+  }
+
+  overlay.addEventListener("click", function(e){
+    var set = e.target.closest("[data-set]"), tog = e.target.closest("[data-toggle]");
+    if (set){
+      if (set.dataset.val === "1" || set.dataset.val === "normal" ||
+          (set.dataset.set === "theme" && set.dataset.val === "dark")){
+        delete prefs[set.dataset.set];
+      } else {
+        prefs[set.dataset.set] = set.dataset.val;
+      }
+      save(); apply();
+    }
+    if (tog){
+      var on = tog.dataset.on || "on", k = tog.dataset.toggle;
+      if (prefs[k] === on) delete prefs[k]; else prefs[k] = on;
+      save(); apply();
+    }
+    if (e.target.closest("[data-a11y-close]") || e.target === overlay) close();
+  });
+  document.getElementById("a11yReset").addEventListener("click", function(){
+    prefs = {}; save(); apply();
+  });
+
+  var lastFocus = null;
+  function syncOverlay(){ if (window.__envSyncOverlay) window.__envSyncOverlay(); }
+  function onKeys(e){
+    if (e.key === "Escape"){
+      e.preventDefault(); e.stopImmediatePropagation(); close();
+    }
+  }
+  function open(){
+    if (!overlay.hidden) return;
+    lastFocus = document.activeElement;
+    overlay.hidden = false;
+    overlay.classList.add("is-open");
+    syncOverlay();
+    document.addEventListener("keydown", onKeys, true);
+    var first = dialog.querySelector("button");
+    if (first) first.focus();
+  }
+  function close(){
+    if (overlay.hidden) return;
+    overlay.hidden = true;
+    overlay.classList.remove("is-open");
+    syncOverlay();
+    document.removeEventListener("keydown", onKeys, true);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    lastFocus = null;
+  }
+  trigger.addEventListener("click", open);
+  apply();
+})();
 </script>
 <script>
   /* PWA install control. Hidden entirely when already running standalone. */
