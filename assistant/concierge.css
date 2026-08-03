@@ -234,7 +234,7 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 
 /* ---------- Composer ---------- */
 .ec-form{
-  flex: none; display: flex; gap: 8px; align-items: flex-end;
+  flex: none; display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end;
   padding: 11px 12px calc(11px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--ec-rule); background: #fff;
 }
@@ -285,6 +285,17 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 @media (forced-colors: active){
   .ec-chip, .ec-bubble, .ec-contact, .ec-input{ border: 1px solid CanvasText; }
 }
+
+/* Field error: hidden until an invalid submit, then announced via role=alert.
+   #9E3000 is the verified light-ground error tone (6.8:1 on white). */
+.ec-error[hidden]{ display: none; }
+.ec-error{
+  display: block; flex: 0 0 100%; order: 3;
+  padding: 6px 2px 0;
+  font: 600 12px/1.45 var(--sans, 'Montserrat', sans-serif);
+  color: #9E3000;
+}
+.ec-error::before{ content: "\26A0\FE0E  "; }
 
 /* Screen-reader-only utility */
 .ec-sr-only{

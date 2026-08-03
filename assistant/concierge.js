@@ -459,9 +459,10 @@
       '<form class="ec-form" id="ecForm">' +
         '<label class="ec-sr-only" for="ecInput">Type your question for the Envision concierge</label>' +
         '<textarea class="ec-input" id="ecInput" rows="1" autocomplete="off" ' +
-          'enterkeyhint="send" ' +
+          'enterkeyhint="send" aria-required="true" aria-describedby="ecErr" ' +
           'placeholder="Ask about a product or who to call"></textarea>' +
         '<button class="ec-send" id="ecSend" type="submit" aria-label="Send message">' + SVG.send + '</button>' +
+        '<span class="ec-error" id="ecErr" role="alert" hidden></span>' +
       '</form>' +
     '</section>';
   document.body.appendChild(root);
@@ -800,13 +801,35 @@
   launcher.addEventListener("click", openPanel);
   closeBtn.addEventListener("click", function(){ closePanel(); });
 
+  var errEl = root.querySelector("#ecErr");
+  function setFieldError(msg){
+    if (msg){
+      input.setAttribute("aria-invalid", "true");
+      errEl.textContent = msg;
+      errEl.hidden = false;
+    } else {
+      input.removeAttribute("aria-invalid");
+      errEl.textContent = "";
+      errEl.hidden = true;
+    }
+  }
+
   form.addEventListener("submit", function(e){
     e.preventDefault();
     var text = input.value;
+    if (!text.trim()){
+      // Empty Enter was a silent no-op; identify the error in text instead.
+      setFieldError("Type a question first, then press Send.");
+      input.focus();
+      return;
+    }
+    setFieldError(null);
     input.value = "";
     autosize();
     syncSend();
     handleQuery(text);
+    // Focus never leaves the field on submit, so the visitor can keep typing.
+    input.focus();
   });
 
   // Enter sends, Shift+Enter makes a newline. `isComposing` guards an IME: a
@@ -827,7 +850,7 @@
   // never a dead, silent no-op (the disabled style already existed; nothing
   // ever toggled it).
   function syncSend(){ sendBtn.disabled = !input.value.trim(); }
-  input.addEventListener("input", function(){ autosize(); syncSend(); });
+  input.addEventListener("input", function(){ autosize(); syncSend(); if (input.value.trim()) setFieldError(null); });
   syncSend();
 
   /* ------------------------------------------------------------------ *
