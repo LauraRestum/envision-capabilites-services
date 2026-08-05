@@ -16,7 +16,7 @@ shared coordinator:
 | 4 | Campus lightbox | `#lbModal` / `#lbBackdrop` | lightbox IIFE |
 | 5 | Section menu (hamburger) | `#navMenu` | main IIFE |
 | 6 | Concierge chat | `.ec-panel` / `.ec-launcher` | concierge.js |
-| — | Per-slide disclosures | `.reg-pill`/`.reg-panel`, `.proc-stage` | main IIFE |
+| — | Per-slide disclosures | `.reg-pill`/`.reg-panel`, `.proc-more` | main IIFE |
 
 The root problem the audit confirmed: **there was no single source of truth for
 "what overlay owns the screen."** Each system opened and closed in isolation, so
@@ -37,11 +37,12 @@ left expanded keeps its `aria-expanded="true"` / un-`hidden` panel:
 
 - Compliance **registration tabs** (`.reg-pill` / `.reg-panel`) — literally the
   "tabs" in the report.
-- Innovation **process-stage** machine lists (`.proc-stage`).
+- Innovation **process-stage** tooling tails (`.proc-more`, the "N more" button
+  on a stage that carries more machines than the card shows by default).
 
 Expand one, navigate away, return → it is still open.
 
-**Fix:** `resetSlideDisclosures()` collapses every `.reg-pill` and `.proc-stage`
+**Fix:** `resetSlideDisclosures()` collapses every `.reg-pill` and `.proc-more`
 back to closed, called from `render()` — the single choke point every navigation
 passes through. Each slide now opens in its default state every time.
 

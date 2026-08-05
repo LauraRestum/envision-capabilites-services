@@ -1202,53 +1202,84 @@
     .slide--innovation .cred-grid{grid-template-columns:1fr}
   }
 
-  /* The Process: generic textile staged flow, machine lists collapsed by default */
+  /* The Process: generic textile staged flow. Every stage shows its tooling
+     on the card, so the equipment reads without a click. Only a long tail
+     (more than one chip past the first few) is metered behind a per-stage
+     "N more" button, which keeps a 15-machine stage from setting the height
+     of the whole row. `.proc-all` on the section line opens or closes every
+     tail at once for a walkthrough. Both controls are built in script, so
+     with JS off every chip simply renders. */
+  /* Sits next to "The Process" heading, left of the rule, clear of the
+     fixed accessibility and concierge buttons in the bottom-right corner. */
+  .slide--innovation .proc-all{
+    flex:none;display:inline-flex;align-items:center;gap:6px;
+    background:none;border:1px solid var(--rule-light);border-radius:999px;
+    padding:5px 12px;cursor:pointer;font:inherit;
+    font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--green-ink);white-space:nowrap;
+    transition:border-color .2s,background-color .2s;
+  }
+  .slide--innovation .proc-all:hover{border-color:var(--green-ink);background:var(--green-dim)}
+  .slide--innovation .proc-all:focus-visible{outline:2px solid var(--green-ink);outline-offset:2px}
   .slide--innovation .proc-flow{
-    display:flex;align-items:flex-start;gap:6px;margin-top:14px;
+    display:flex;align-items:stretch;gap:6px;margin-top:14px;
   }
   .slide--innovation .proc-stage{
-    flex:1 1 0;min-width:0;
+    flex:1 1 0;min-width:0;display:flex;flex-direction:column;
     background:var(--bg-tint);border:1px solid var(--rule-light);border-radius:6px;
-    padding:14px 16px;cursor:pointer;
-    transition:border-color .2s,box-shadow .2s,transform .2s;
-  }
-  .slide--innovation .proc-stage:hover{
-    border-color:var(--navy);transform:translateY(-2px);
-    box-shadow:0 12px 26px rgba(0,24,82,0.08);
-  }
-  .slide--innovation .proc-stage:focus-visible{outline:2px solid var(--green-ink);outline-offset:2px}
-  .slide--innovation .proc-head{
-    display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+    padding:14px 16px;
   }
   .slide--innovation .proc-name{
     font-weight:700;font-size:14px;line-height:1.25;color:var(--navy);
   }
-  .slide--innovation .proc-chev{
-    flex:none;width:14px;height:14px;color:var(--green-ink);margin-top:1px;
-    transition:transform .25s ease;
-  }
-  .slide--innovation .proc-stage[aria-expanded="true"] .proc-chev{transform:rotate(180deg)}
   .slide--innovation .proc-desc{
     font-size:12px;line-height:1.5;color:var(--text-mid);margin-top:6px;
   }
   .slide--innovation .proc-machines{
-    display:none;flex-wrap:wrap;gap:6px;margin-top:12px;
-    padding-top:12px;border-top:1px solid var(--rule-light);
+    display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;
+    padding-top:12px;border-top:1px solid var(--rule-light);list-style:none;
   }
-  .slide--innovation .proc-stage[aria-expanded="true"] .proc-machines{display:flex}
   .slide--innovation .proc-chip{
-    font-size:11px;font-weight:600;line-height:1.3;color:var(--navy);
+    font-size:12px;font-weight:600;line-height:1.3;color:var(--navy);
     background:var(--bg-light);border:1px solid var(--rule-light);
     border-radius:999px;padding:4px 10px;
   }
+  /* margin-top:auto drops the toggle to the bottom of its card, so the
+     buttons share one baseline across stages of unequal chip counts. */
+  .slide--innovation .proc-more{
+    margin-top:auto;padding:10px 0 0;align-self:flex-start;
+    display:inline-flex;align-items:center;gap:6px;
+    background:none;border:0;cursor:pointer;font:inherit;
+    font-size:12px;font-weight:700;color:var(--green-ink);
+  }
+  .slide--innovation .proc-more:hover{text-decoration:underline}
+  .slide--innovation .proc-more:focus-visible{
+    outline:2px solid var(--green-ink);outline-offset:2px;border-radius:3px;
+  }
+  .slide--innovation .proc-chev{
+    flex:none;width:13px;height:13px;transition:transform .25s ease;
+  }
+  .slide--innovation .proc-more[aria-expanded="true"] .proc-chev,
+  .slide--innovation .proc-all[aria-pressed="true"] .proc-chev{transform:rotate(180deg)}
   .slide--innovation .proc-arrow{
     flex:none;align-self:flex-start;margin-top:24px;
     color:var(--green-ink);display:flex;align-items:center;justify-content:center;
   }
   .slide--innovation .proc-arrow svg{width:18px;height:18px}
+  @media (hover:none) and (pointer:coarse){
+    .slide--innovation .proc-more,
+    .slide--innovation .proc-all{min-height:44px}
+  }
   @media (max-width:880px){
     .slide--innovation .proc-flow{flex-direction:column;align-items:stretch}
     .slide--innovation .proc-arrow{align-self:center;margin-top:0;transform:rotate(90deg)}
+    .slide--innovation .proc-more{margin-top:8px}
+  }
+  /* Below ~360px the heading, the pill, and the rule no longer share a line.
+     Let them wrap and send the pill under the rule rather than off-screen. */
+  @media (max-width:560px){
+    .slide--innovation .inv-secline{flex-wrap:wrap;row-gap:10px}
+    .slide--innovation .inv-secline--proc .proc-all{order:2}
   }
 
   /* ---------- Mission ---------- */
@@ -3154,89 +3185,74 @@
               <div class="c-d">Smart textile integration, including RFID and embedded sensor technologies, and additive manufacturing with advanced 3D printing.</div>
             </div>
           </div>
-          <div class="inv-secline"><h3>The Process</h3></div>
+          <div class="inv-secline inv-secline--proc"><h3>The Process</h3></div>
           <div class="proc-flow">
-            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Digital Pattern and Marker stage, show details">
-              <div class="proc-head">
-                <div class="proc-name">Digital Pattern &amp; Marker</div>
-                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-              </div>
-              <div class="proc-desc">CAD pattern &amp; marker, partner-provided</div>
-              <div class="proc-machines">
-                <span class="proc-chip">Gerber CAD nesting (partner)</span>
-                <span class="proc-chip">Marker optimization (partner)</span>
-                <span class="proc-chip">Digital pattern / DAM (partner)</span>
-              </div>
+            <div class="proc-stage">
+              <h4 class="proc-name">Digital Pattern &amp; Marker</h4>
+              <p class="proc-desc">CAD pattern &amp; marker, partner-provided</p>
+              <ul class="proc-machines">
+                <li class="proc-chip">Gerber CAD nesting (partner)</li>
+                <li class="proc-chip">Marker optimization (partner)</li>
+                <li class="proc-chip">Digital pattern / DAM (partner)</li>
+              </ul>
             </div>
             <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Spreading and Cutting stage, show machines">
-              <div class="proc-head">
-                <div class="proc-name">Spreading &amp; Cutting</div>
-                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-              </div>
-              <div class="proc-desc">Material prep, layup, cut</div>
-              <div class="proc-machines">
-                <span class="proc-chip">Gerber Spreader with Air Table</span>
-                <span class="proc-chip">Gerber Cutting System</span>
-                <span class="proc-chip">Manual Spreading Tables</span>
-                <span class="proc-chip">Manual Cutting Stations</span>
-                <span class="proc-chip">Hot Knife Slitting</span>
-              </div>
+            <div class="proc-stage">
+              <h4 class="proc-name">Spreading &amp; Cutting</h4>
+              <p class="proc-desc">Material prep, layup, cut</p>
+              <ul class="proc-machines">
+                <li class="proc-chip">Gerber Spreader with Air Table</li>
+                <li class="proc-chip">Gerber Cutting System</li>
+                <li class="proc-chip">Manual Spreading Tables</li>
+                <li class="proc-chip">Manual Cutting Stations</li>
+                <li class="proc-chip">Hot Knife Slitting</li>
+              </ul>
             </div>
             <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Sewing and Construction stage, show machines">
-              <div class="proc-head">
-                <div class="proc-name">Sewing &amp; Construction</div>
-                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-              </div>
-              <div class="proc-desc">Joining across stitch types</div>
-              <div class="proc-machines">
-                <span class="proc-chip">Chain Stitch</span>
-                <span class="proc-chip">Lockstitch</span>
-                <span class="proc-chip">Single Needle</span>
-                <span class="proc-chip">Double Needle</span>
-                <span class="proc-chip">Multi-Needle</span>
-                <span class="proc-chip">Programmable (PLC)</span>
-                <span class="proc-chip">Zig-Zag</span>
-                <span class="proc-chip">Merrow</span>
-                <span class="proc-chip">5-Thread Safety Stitch</span>
-                <span class="proc-chip">4-Thread Mock Safety Stitch</span>
-                <span class="proc-chip">3-Thread Sergers</span>
-                <span class="proc-chip">2-Needle Flat Lock</span>
-                <span class="proc-chip">2-3 Needle Topstitch</span>
-                <span class="proc-chip">Coverstitch</span>
-                <span class="proc-chip">Belt Feed Laminator</span>
-              </div>
+            <div class="proc-stage">
+              <h4 class="proc-name">Sewing &amp; Construction</h4>
+              <p class="proc-desc">Joining across stitch types</p>
+              <ul class="proc-machines">
+                <li class="proc-chip">Chain Stitch</li>
+                <li class="proc-chip">Lockstitch</li>
+                <li class="proc-chip">Single Needle</li>
+                <li class="proc-chip">Double Needle</li>
+                <li class="proc-chip">Multi-Needle</li>
+                <li class="proc-chip">Programmable (PLC)</li>
+                <li class="proc-chip">Zig-Zag</li>
+                <li class="proc-chip">Merrow</li>
+                <li class="proc-chip">5-Thread Safety Stitch</li>
+                <li class="proc-chip">4-Thread Mock Safety Stitch</li>
+                <li class="proc-chip">3-Thread Sergers</li>
+                <li class="proc-chip">2-Needle Flat Lock</li>
+                <li class="proc-chip">2-3 Needle Topstitch</li>
+                <li class="proc-chip">Coverstitch</li>
+                <li class="proc-chip">Belt Feed Laminator</li>
+              </ul>
             </div>
             <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Reinforcement and Closures stage, show machines">
-              <div class="proc-head">
-                <div class="proc-name">Reinforcement &amp; Closures</div>
-                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-              </div>
-              <div class="proc-desc">Strength points, hardware</div>
-              <div class="proc-machines">
-                <span class="proc-chip">Bar Tack</span>
-                <span class="proc-chip">Buttonhole</span>
-                <span class="proc-chip">Button Sew</span>
-                <span class="proc-chip">Automatic Belt Loop</span>
-                <span class="proc-chip">Grommet Install</span>
-                <span class="proc-chip">Snap Install</span>
-              </div>
+            <div class="proc-stage">
+              <h4 class="proc-name">Reinforcement &amp; Closures</h4>
+              <p class="proc-desc">Strength points, hardware</p>
+              <ul class="proc-machines">
+                <li class="proc-chip">Bar Tack</li>
+                <li class="proc-chip">Buttonhole</li>
+                <li class="proc-chip">Button Sew</li>
+                <li class="proc-chip">Automatic Belt Loop</li>
+                <li class="proc-chip">Grommet Install</li>
+                <li class="proc-chip">Snap Install</li>
+              </ul>
             </div>
             <div class="proc-arrow" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-            <div class="proc-stage" role="button" tabindex="0" aria-expanded="false" aria-label="Decoration and Finishing stage, show machines">
-              <div class="proc-head">
-                <div class="proc-name">Decoration &amp; Finishing</div>
-                <svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-              </div>
-              <div class="proc-desc">Marking, final finishing</div>
-              <div class="proc-machines">
-                <span class="proc-chip">Heat Transfer Applicators</span>
-                <span class="proc-chip">Pad Print Applicators</span>
-                <span class="proc-chip">Portable Boiler Stations</span>
-                <span class="proc-chip">Semi-Auto Bottom Hemming (Shirts)</span>
-              </div>
+            <div class="proc-stage">
+              <h4 class="proc-name">Decoration &amp; Finishing</h4>
+              <p class="proc-desc">Marking, final finishing</p>
+              <ul class="proc-machines">
+                <li class="proc-chip">Heat Transfer Applicators</li>
+                <li class="proc-chip">Pad Print Applicators</li>
+                <li class="proc-chip">Portable Boiler Stations</li>
+                <li class="proc-chip">Semi-Auto Bottom Hemming (Shirts)</li>
+              </ul>
             </div>
           </div>
           <div class="proof-card proof-card--navy proof-card--bar">
@@ -6048,12 +6064,20 @@
     var doc = e.target.closest("[data-doc]");
     if (doc && doc.getAttribute("href") === "#"){ e.preventDefault(); return; }
 
-    // Process flow: toggle a stage's machine list. Multiple stages can be open.
-    var stage = e.target.closest(".proc-stage");
-    if (stage){
+    // Process flow: reveal the rest of one stage's tooling, or every stage's.
+    var more = e.target.closest(".proc-more");
+    if (more){
       e.stopPropagation();
-      var open = stage.getAttribute("aria-expanded") === "true";
-      stage.setAttribute("aria-expanded", open ? "false" : "true");
+      setProcTail(more, more.getAttribute("aria-expanded") !== "true");
+      return;
+    }
+    var procAll = e.target.closest(".proc-all");
+    if (procAll){
+      e.stopPropagation();
+      var openAll = procAll.getAttribute("aria-pressed") !== "true";
+      Array.prototype.forEach.call(document.querySelectorAll(".proc-more"), function(b){
+        setProcTail(b, openAll);
+      });
       return;
     }
 
@@ -6089,7 +6113,7 @@
     if (modalOpen()) return;
     if (editableTarget(e.target)) return;
     if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
-    var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump],.proc-stage,[data-modal]") : null;
+    var t = e.target.closest ? e.target.closest("[data-inaction],[data-atag-jump],[data-modal]") : null;
     if (!t || t.tagName === "BUTTON" || t.tagName === "A") return;
     e.preventDefault();
     t.click();
@@ -6107,11 +6131,84 @@
       var panel = document.getElementById(p.getAttribute("aria-controls"));
       if (panel) panel.hidden = true;
     });
-    var stages = document.querySelectorAll('.proc-stage[aria-expanded="true"]');
-    Array.prototype.forEach.call(stages, function(s){
-      s.setAttribute("aria-expanded", "false");
-    });
+    var tails = document.querySelectorAll('.proc-more[aria-expanded="true"]');
+    Array.prototype.forEach.call(tails, function(b){ setProcTail(b, false); });
   }
+
+  /* ---------- Innovation: The Process tooling lists ----------
+     Each stage renders its tooling inline; anything past the first
+     PROC_VISIBLE chips is folded behind a "N more" button so the long
+     stages (Sewing carries fifteen machines) don't dictate the height of
+     the row. A tail of one is not worth a click, so those stages just show
+     everything. Counts and controls are derived from the chips themselves
+     rather than written into the markup, so they can't drift when a machine
+     is added, and with scripting off every chip is simply visible. */
+  var PROC_VISIBLE = 4;
+
+  function procStageName(btn){
+    var n = btn.parentNode.querySelector(".proc-name");
+    return n ? n.textContent.replace(/&/g, "and").trim() : "this stage";
+  }
+
+  function setProcTail(btn, open){
+    var extra = btn.parentNode.querySelectorAll(".proc-chip--extra");
+    var name = procStageName(btn);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    Array.prototype.forEach.call(extra, function(c){ c.hidden = !open; });
+    btn.querySelector(".proc-more-txt").textContent = open ? "Show less" : (extra.length + " more");
+    btn.setAttribute("aria-label", open
+      ? "Show less of the " + name + " tooling list"
+      : "Show " + extra.length + " more " + name + " tools");
+    syncProcAll();
+  }
+
+  function syncProcAll(){
+    var all = document.querySelector(".proc-all");
+    if (!all) return;
+    var tails = document.querySelectorAll(".proc-more");
+    var everyOpen = tails.length > 0;
+    Array.prototype.forEach.call(tails, function(b){
+      if (b.getAttribute("aria-expanded") !== "true") everyOpen = false;
+    });
+    all.setAttribute("aria-pressed", everyOpen ? "true" : "false");
+    all.querySelector(".proc-all-txt").textContent =
+      everyOpen ? "Hide extra tooling" : "Show all tooling";
+  }
+
+  function initProcFlow(){
+    var chev = '<svg class="proc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor"' +
+      ' stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M6 9l6 6 6-6"/></svg>';
+    var stages = document.querySelectorAll(".slide--innovation .proc-stage");
+    var built = 0;
+    Array.prototype.forEach.call(stages, function(stage, i){
+      var list = stage.querySelector(".proc-machines");
+      if (!list) return;
+      var chips = list.querySelectorAll(".proc-chip");
+      if (chips.length - PROC_VISIBLE < 2) return;
+      if (!list.id) list.id = "proc-machines-" + (i + 1);
+      for (var j = PROC_VISIBLE; j < chips.length; j++){ chips[j].classList.add("proc-chip--extra"); }
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "proc-more";
+      btn.setAttribute("aria-controls", list.id);
+      btn.innerHTML = '<span class="proc-more-txt"></span>' + chev;
+      stage.appendChild(btn);
+      setProcTail(btn, false);
+      built++;
+    });
+    if (!built) return;
+    var secline = document.querySelector(".slide--innovation .inv-secline--proc");
+    if (secline){
+      var all = document.createElement("button");
+      all.type = "button";
+      all.className = "proc-all";
+      all.innerHTML = '<span class="proc-all-txt">Show all tooling</span>' + chev;
+      secline.appendChild(all);
+    }
+    syncProcAll();
+  }
+  initProcFlow();
 
   function render(){
     slides.forEach(function(s,i){

@@ -22,6 +22,26 @@ default). Style is the green-tinted `.m-card-icon` box.
   `m-card-photo` inside project callouts. (`m-card-ph` is still fine for the
   product-catalog cards, which genuinely await product photography.)
 
+## Innovation slide — "The Process" tooling is visible, not hidden
+
+The equipment under each stage of `.proc-flow` is the proof on that slide, so it
+renders on the card. Do **not** put the whole list back behind a click.
+
+- Each `.proc-stage` shows its first `PROC_VISIBLE` chips (4) inline. Anything
+  past that folds behind a per-stage "N more" button; a tail of only one chip
+  is not worth a click, so those stages just show everything.
+- The "N more" buttons and the section-line "Show all tooling" control are
+  built by `initProcFlow()` from the chips themselves. Add or remove an
+  `<li class="proc-chip">` and the counts follow; never hand-write a count into
+  the markup, and never mark chips `hidden` there (with scripting off, every
+  chip should simply render).
+- Cards are equal height (`align-items:stretch`) with the toggle pushed to the
+  bottom, so the row keeps one baseline no matter how uneven the chip counts
+  are. Keep the representative or branded machines first in each list — those
+  are what shows by default.
+- `resetSlideDisclosures()` collapses every open tail on navigation. Any new
+  per-slide disclosure belongs in that function too.
+
 ## Referring to people who are blind or have low vision
 
 Write it out: **people who are blind or have low vision**. Never "BVI" and never
