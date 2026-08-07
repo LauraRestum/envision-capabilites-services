@@ -36,6 +36,19 @@
                bpo, accessibility, procurement, quality.
                Valid section names: Home, Campuses, Mission, Operations,
                Capabilities, Services, Innovation, Proof, Compliance, Contact.
+     deeper:   OPTIONAL array of authored follow-up layers, the "dig deeper"
+               path. After the main answer the concierge offers each one as
+               a chip under a "Dig deeper" line; tapping it asks the
+               follow-up and gets the focused, one-facet answer. Typing
+               "tell me more" walks the same layers in order. Two shapes:
+                 {label:"...", answer:"...", next:{...}}  // an authored layer
+                 {label:"...", intent:"<intent id>"}      // jump to an intent
+               Everything here obeys the same rule as answer: deck facts
+               only, house style, no em dashes. A layer should UNPACK one
+               facet of the parent answer, not restate all of it.
+     related:  OPTIONAL array of intent ids offered as chips after the
+               answer, so a buyer can sidestep into an adjacent topic
+               without retyping. Keep to 2 or 3; order = display order.
      contact:  OPTIONAL contact id from contacts.js (e.g. "zahr","tuttle").
                If omitted, the engine falls back to the routing map there.
      showContact: OPTIONAL boolean. By default the concierge does NOT attach a
@@ -81,6 +94,15 @@ window.ENVISION_INTENTS = [
       "what do you produce", "range of products"],
     answer: "Envision manufactures across two campuses, 410,000 square feet built for federal scale. On the floor: polymer and film (can liners, medical and specialty bags, sheeting), textile and apparel (Berry-compliant military gear and ANSI high-visibility), reflective safety systems like the VISI-BELT, binders and document covers, and writing instruments, plus fulfillment, kitting, and specialty decoration. On the services side we run print with in-house Braille, the contact center, secure document services, accessibility services, federal procurement, and quality assurance. Tell me what you need and I will take you straight to it.",
     next: {action:"section", target:"Capabilities", label:"Browse all capabilities"},
+    deeper: [
+      {label:"What runs on the manufacturing floor?",
+       answer:"Five product lines plus the value-add floor. Polymer and film out of Wichita (can liners, medical and specialty bags, sheeting), textile and apparel out of Dallas (Berry-compliant military gear and ANSI high-visibility), reflective safety systems including the VISI-BELT, binders and document covers, and writing instruments, with fulfillment, kitting, and specialty decoration rounding out the floor.",
+       next: {action:"section", target:"Capabilities", label:"Browse the manufacturing lines"}},
+      {label:"What runs on the services side?",
+       answer:"Six services: federal-grade print with in-house Braille embossing, the Envision Contact Center, secure document services including IRS mailroom operations, accessibility services, Federal Procurement Services, and quality assurance on ISO 9001:2015 across both campuses.",
+       next: {action:"section", target:"Services", label:"Browse the services"}}
+    ],
+    related: ["campus-capabilities", "how-to-buy"],
     contact: "zahr",
     source: "Capabilities + Services hubs"
   },
@@ -92,6 +114,14 @@ window.ENVISION_INTENTS = [
       "nonprofit", "social enterprise"],
     answer: "Envision is one of the nation's largest employers of people who are blind or have low vision, backed by 90 years of continuous U.S. manufacturing across two campuses. We deliver manufacturing, printing, packaging, and fulfillment for federal, commercial, and state clients, and we run the services that keep each program performing. Business first, mission throughout.",
     next: {action:"section", target:"Mission", label:"See our mission and impact"},
+    deeper: [
+      {label:"How does the mission show up in the work?",
+       answer:"88 percent of our combined direct labor is performed by people who are blind or have low vision, well above the 75 percent AbilityOne threshold. The mission is delivered through real manufacturing and services work, not alongside it. Business first, mission throughout.",
+       next: {action:"section", target:"Mission", label:"See the mission in action"}},
+      {label:"How long has Envision been at this?",
+       answer:"90 years of continuous U.S. manufacturing, now running across two campuses, Wichita and Dallas, totaling 410,000 square feet of climate-controlled industrial space."}
+    ],
+    related: ["capacity-scale", "abilityone"],
     contact: "zahr",
     source: "Hero + Mission"
   },
@@ -103,6 +133,12 @@ window.ENVISION_INTENTS = [
       "capital investment", "how large"],
     answer: "Across Wichita and Dallas we operate 410,000 square feet of climate-controlled industrial space and a combined workforce of 460. Dallas runs 235,000 square feet with 145 team members. Wichita runs 175,000 square feet with 315. 88 percent of our combined direct labor is performed by people who are blind or have low vision. Built for federal scale.",
     next: {action:"section", target:"Campuses", label:"Tour the campuses"},
+    deeper: [
+      {label:"Break that down by campus", intent:"campus-capabilities"},
+      {label:"Who makes up the workforce?",
+       answer:"A combined workforce of 460 people: 315 in Wichita and 145 in Dallas. 88 percent of our combined direct labor is performed by people who are blind or have low vision."}
+    ],
+    related: ["locations", "fulfillment"],
     contact: "zahr",
     source: "Campuses"
   },
@@ -113,6 +149,10 @@ window.ENVISION_INTENTS = [
       "headquarters", "hq", "directions", "map", "campuses", "phone number", "main number"],
     answer: "Envision operates two campuses. The Dallas campus is at 1801 Valley View Lane, Farmers Branch, TX 75234, (214) 821-2375. The Wichita campus is at 2301 S. Water Street, Wichita, KS 67213, (316) 522-3232.",
     next: {action:"section", target:"Campuses", label:"Tour the campuses"},
+    deeper: [
+      {label:"What does each campus run?", intent:"campus-capabilities"}
+    ],
+    related: ["capacity-scale", "base-supply-centers"],
     contact: "zahr",
     source: "Campuses + Contact"
   },
@@ -139,6 +179,11 @@ window.ENVISION_INTENTS = [
       "water street", "67213", "wichita campus"],
     answer: "The Wichita campus (2301 S. Water Street) runs polymer and film manufacturing (can liners, medical and specialty bags, and sheeting), reflective safety systems including the VISI-BELT, pen assembly, federal-grade print with in-house Braille embossing, and accessibility services. It is the verified Kansas State Use participant. 175,000 square feet, 315 team members.",
     next: {action:"section", target:"Capabilities", label:"Browse capabilities"},
+    deeper: [
+      {label:"Wichita's credentials",
+       answer:"Wichita holds its own Intertek ISO 9001:2015 registration, certificate CERT-0145394, and is the verified Kansas State Use participant. Its federal registrations are Envision Industries, CAGE 2A178, and Envision, Inc., CAGE 7A1U0."}
+    ],
+    related: ["campus-dallas", "polymer-film", "print"],
     contact: "tuttle",
     source: "Campuses, Wichita"
   },
@@ -149,6 +194,11 @@ window.ENVISION_INTENTS = [
       "what is in dallas", "valley view", "75234", "dallas campus"],
     answer: "The Dallas campus (1801 Valley View Lane, Farmers Branch) runs textile and apparel (Berry-compliant military gear and ANSI high-visibility), binders and document covers, marker assembly, secure document services including IRS mailrooms, and fulfillment with 23 dock doors. It holds its own ISO 9001:2015 registration (CERT-0145812) and is the Texas WorkQuest participant. 235,000 square feet, 145 team members.",
     next: {action:"section", target:"Capabilities", label:"Browse capabilities"},
+    deeper: [
+      {label:"Dallas's credentials",
+       answer:"Dallas holds its own Intertek ISO 9001:2015 registration, certificate CERT-0145812, operates under the DCMA Alternate Release Program, and is the authorized Texas WorkQuest participant. Its federal registration is CAGE 5A062."}
+    ],
+    related: ["campus-wichita", "military-apparel", "secure-documents"],
     contact: "tuttle",
     source: "Campuses, Dallas"
   },
@@ -163,6 +213,16 @@ window.ENVISION_INTENTS = [
       "body fluid kit", "tidygirl", "va belongings bag", "compostable bag", "liners"],
     answer: "Out of Wichita we convert polyethylene film into finished can liners, medical and specialty bags, and plastic sheeting, in HDPE and LLDPE across a wide range of gauges and sizes. Lines include high-density and low-density can liners, environmentally friendly and compostable options, color-coded medical isolation liners, and specialty bags. Custom sizes, colors, and in-line imprinting are standard. Programs run end to end at the Wichita campus, from sample development through production and pack and ship.",
     next: {action:"modal", target:"plastic", label:"Explore Polymer & Film"},
+    deeper: [
+      {label:"Materials, gauges, and custom runs",
+       answer:"We run HDPE and LLDPE across a wide range of gauges and sizes, from high-density and low-density can liners to color-coded medical isolation liners and plastic sheeting. Custom sizes, colors, and in-line imprinting are standard, not specials.",
+       next: {action:"modal", target:"plastic", label:"See the full catalog"}},
+      {label:"Greener options",
+       answer:"Yes. The line includes environmentally friendly and compostable can liner options alongside the standard HDPE and LLDPE ranges."},
+      {label:"How a program runs",
+       answer:"End to end at the Wichita campus: sample development, then production, then pack and ship, all under the campus's ISO 9001:2015 quality system."}
+    ],
+    related: ["fulfillment", "how-to-buy"],
     contact: "tuttle",
     source: "Capabilities, Polymer & Film (Wichita)"
   },
@@ -174,6 +234,13 @@ window.ENVISION_INTENTS = [
       "cordura", "mag pouch", "tactical gear", "combat uniform"],
     answer: "Our Dallas campus runs heavy sewing operations producing Berry-compliant military gear. Army Combat Uniform trousers on an active multi-station line, MOLLE and ETOOL pouches in Cordura with military hardware, and more. Gerber Paragon CNC cutting feeds the floor, run from partner-supplied digital patterns and markers. Berry and TAA compliant, and authorized under DCMA Alternate Release.",
     next: {action:"modal", target:"textile", label:"Explore Textile & Apparel"},
+    deeper: [
+      {label:"How cutting works",
+       answer:"Gerber Paragon CNC cutting feeds the sewing floor, run from partner-supplied digital patterns and markers, so your existing patterns drop straight into production."},
+      {label:"Compliance on this line",
+       answer:"Berry Amendment and TAA compliant, sewn at the Dallas campus, and authorized under the DCMA Alternate Release Program, so finished goods release without waiting on a government inspector."}
+    ],
+    related: ["hi-vis-apparel", "kitting", "compliance"],
     contact: "tuttle",
     source: "Capabilities, Textile & Apparel (Dallas)"
   },
@@ -185,6 +252,13 @@ window.ENVISION_INTENTS = [
       "safety trousers", "hard hat", "visibility apparel"],
     answer: "We sew ANSI/ISEA 107 Class I, II, and III high-visibility safety apparel in Dallas. Vests, birdseye polyester mesh shirts in regular and tall lengths, and trousers, in sizes through 8X. Fluorescent mesh is layered with micro-prismatic retroreflective tape. Available through AbilityOne and Texas WorkQuest.",
     next: {action:"modal", target:"textile", label:"Explore Textile & Apparel"},
+    deeper: [
+      {label:"Classes and sizes",
+       answer:"ANSI/ISEA 107 Class I, II, and III, in sizes through 8X. The line covers vests, birdseye polyester mesh shirts in regular and tall lengths, and trousers."},
+      {label:"What makes it visible",
+       answer:"Fluorescent mesh layered with micro-prismatic retroreflective tape, sewn in Dallas, so the garment performs day and night."}
+    ],
+    related: ["reflective", "state-use"],
     contact: "tuttle",
     source: "Capabilities, Textile & Apparel (Dallas)"
   },
@@ -209,6 +283,12 @@ window.ENVISION_INTENTS = [
       "retroreflective", "safety belt", "visibility belt", "reflective safety"],
     answer: "Our Wichita campus builds reflective safety systems in house, received as vinyl and nylon on rolls, then sewn, fitted with buckles and hardware, and finished. The flagship is the VISI-BELT, an adjustable 31 to 55 inch reflective belt with 446 feet of visibility, carried in the federal SKILCRAFT catalog and available through the Base Supply Center network.",
     next: {action:"modal", target:"reflective", label:"Explore Reflective Safety Systems"},
+    deeper: [
+      {label:"VISI-BELT specs",
+       answer:"The VISI-BELT adjusts from 31 to 55 inches and delivers 446 feet of visibility. It is carried in the federal SKILCRAFT catalog and available through the Base Supply Center network.",
+       next: {action:"modal", target:"reflective", label:"See the reflective line"}}
+    ],
+    related: ["hi-vis-apparel", "base-supply-centers"],
     contact: "tuttle",
     source: "Capabilities, Reflective Safety Systems (Wichita)"
   },
@@ -220,6 +300,12 @@ window.ENVISION_INTENTS = [
       "texas seal", "folders", "document covers", "presentation folder"],
     answer: "Out of Dallas we produce custom binders, presentation portfolios, and document covers. Vinyl and presentation award binders in portrait and landscape, padded retirement binders, hardcover and custom folders, gold foil-stamped certificate and document covers, and Texas State Seal portfolios. Service-branch foil seals available.",
     next: {action:"modal", target:"binders", label:"Explore Binders & Document Covers"},
+    deeper: [
+      {label:"Formats and finishes",
+       answer:"Vinyl and presentation award binders in portrait and landscape, padded retirement binders, hardcover and custom folders, and gold foil-stamped certificate and document covers. Service-branch foil seals and Texas State Seal portfolios are available.",
+       next: {action:"modal", target:"binders", label:"See the binder catalog"}}
+    ],
+    related: ["writing-instruments", "specialty-decoration"],
     contact: "tuttle",
     source: "Capabilities, Binders & Document Covers (Dallas)"
   },
@@ -231,6 +317,12 @@ window.ENVISION_INTENTS = [
       "marker kit", "writing"],
     answer: "We assemble marker and pen lines. Dry erase, highlighters, and permanent markers in singles, sets, and kits from the Dallas campus, plus pens assembled in Wichita. Available across AbilityOne, Texas WorkQuest, and Kansas State Use catalogs.",
     next: {action:"modal", target:"writing", label:"Explore Writing Instruments"},
+    deeper: [
+      {label:"Lines and formats",
+       answer:"Dry erase markers, highlighters, and permanent markers in singles, sets, and kits assembled in Dallas, plus pens assembled in Wichita. All available across the AbilityOne, Texas WorkQuest, and Kansas State Use catalogs.",
+       next: {action:"modal", target:"writing", label:"See the writing catalog"}}
+    ],
+    related: ["binders", "how-to-buy"],
     contact: "tuttle",
     source: "Capabilities, Writing Instruments (Dallas, Wichita pens)"
   },
@@ -242,6 +334,13 @@ window.ENVISION_INTENTS = [
       "dock", "shipping", "3pl", "logistics", "fulfilment"],
     answer: "We provide pick and pack, MIL-STD-129 compliant packaging and labeling, climate-controlled storage, real-time inventory, and distribution across the Envision system, all on a federal-compliant labor model. Dallas alone has 23 dock doors plus 8 rail-spur doors.",
     next: {action:"modal", target:"fulfillment", label:"Explore Fulfillment & Distribution"},
+    deeper: [
+      {label:"Dock and storage capacity",
+       answer:"Dallas alone runs 23 dock doors plus 8 rail-spur doors, with climate-controlled storage and real-time inventory across the Envision system."},
+      {label:"Federal packaging standards",
+       answer:"Packaging and labeling run MIL-STD-129 compliant on a federal-compliant labor model, so product ships ready for military receiving."}
+    ],
+    related: ["kitting", "secure-documents"],
     contact: "tuttle",
     source: "Capabilities, Fulfillment & Distribution"
   },
@@ -252,6 +351,12 @@ window.ENVISION_INTENTS = [
       "military kit", "value add", "ready to issue", "sub assembly", "hand assembly"],
     answer: "Our kitting and assembly teams build finished, ready-to-issue kits from component parts, including military kit builds, on a federal-compliant labor model. It is value-add work that ships complete.",
     next: {action:"modal", target:"kitting", label:"Explore Kitting & Assembly"},
+    deeper: [
+      {label:"What kinds of kits",
+       answer:"Finished, ready-to-issue kits built from component parts, including military kit builds. Value-add work that ships complete, on a federal-compliant labor model.",
+       next: {action:"modal", target:"kitting", label:"See kitting in detail"}}
+    ],
+    related: ["fulfillment", "specialty-decoration"],
     contact: "tuttle",
     source: "Capabilities, Kitting & Assembly"
   },
@@ -262,6 +367,11 @@ window.ENVISION_INTENTS = [
       "bespoke", "branded", "monogram", "custom product", "logo apparel", "specialty product"],
     answer: "Our Dallas specialty line handles custom decoration and bespoke production. Logo embroidery and heat-transfer logo application on apparel and finished goods, plus specialty product lines built to your specification.",
     next: {action:"modal", target:"specialty", label:"Explore Specialty Products"},
+    deeper: [
+      {label:"Decoration methods",
+       answer:"Logo embroidery and heat-transfer logo application on apparel and finished goods, out of Dallas, plus specialty product lines built to your specification."}
+    ],
+    related: ["military-apparel", "binders"],
     contact: "tuttle",
     source: "Capabilities, Specialty Products (Dallas)"
   },
@@ -275,6 +385,13 @@ window.ENVISION_INTENTS = [
       "soft proof", "print services", "printer"],
     answer: "Our Wichita print service runs web-to-print storefronts with customer-approved templates, instant soft proofs, and configurable approvals, backed by digital and offset production, bindery, and specialty finishing. We also emboss Grade 2 English and Computer Braille in house. Federal-grade commercial print, SKILCRAFT cataloged.",
     next: {action:"modal", target:"printSvc", label:"Explore Print"},
+    deeper: [
+      {label:"How web-to-print works",
+       answer:"Storefronts run on customer-approved templates with instant soft proofs and configurable approvals, backed by digital and offset production, bindery, and specialty finishing in Wichita."},
+      {label:"Braille capability",
+       answer:"We emboss Grade 2 English and Computer Braille in house, so accessible formats ship from the same federal-grade print operation as the rest of the run."}
+    ],
+    related: ["accessibility-services", "secure-documents"],
     contact: "tuttle",
     source: "Services, Print (Wichita)"
   },
@@ -286,6 +403,11 @@ window.ENVISION_INTENTS = [
       "outbound", "customer support", "support center"],
     answer: "The Envision Contact Center delivers bi-locational, multi-channel customer service built for federal and enterprise scale. Phone, email, chat, and digital support from two synchronized sites, Dallas and Wichita, on an AbilityOne-compliant labor model.",
     next: {action:"modal", target:"contact", label:"Explore the Contact Center"},
+    deeper: [
+      {label:"Channels and coverage",
+       answer:"Phone, email, chat, and digital support, delivered from two synchronized sites in Dallas and Wichita on an AbilityOne-compliant labor model, so one site can always carry the other."}
+    ],
+    related: ["secure-documents", "accessibility-services"],
     contact: "zahr",
     source: "Services, Envision Contact Center"
   },
@@ -297,6 +419,13 @@ window.ENVISION_INTENTS = [
       "document destruction", "bpo", "records", "archive", "scan", "mail processing"],
     answer: "Our Dallas secure document services run high-security mailroom operations for federal agencies, including IRS mailroom contracts at the Earle Cabell Federal Building and the IRS Farmers Branch Complex. The work spans high-speed scan, OCR and ICR digitization, encrypted archive, and certified destruction.",
     next: {action:"modal", target:"bpo", label:"Explore Secure Document Services"},
+    deeper: [
+      {label:"The IRS work",
+       answer:"We run high-security mailroom operations for federal agencies, including IRS mailroom contracts at the Earle Cabell Federal Building and the IRS Farmers Branch Complex in Dallas."},
+      {label:"Digitization and destruction",
+       answer:"High-speed scanning with OCR and ICR digitization, encrypted archive, and certified destruction, so the whole document lifecycle stays inside one secure chain."}
+    ],
+    related: ["contact-center", "fulfillment"],
     contact: "zahr",
     source: "Services, Secure Document Services (Dallas)"
   },
@@ -308,6 +437,11 @@ window.ENVISION_INTENTS = [
       "user testing", "digital accessibility", "accessibility consulting"],
     answer: "Our accessibility services deliver ADA Title II consulting, WCAG-aligned audits, training, and user testing, with lived-experience expertise on every engagement. This is accessibility evaluated by people who navigate the world with blindness and vision loss.",
     next: {action:"modal", target:"accessibility", label:"Explore Accessibility Services"},
+    deeper: [
+      {label:"What an engagement covers",
+       answer:"ADA Title II consulting, WCAG-aligned audits, training, and user testing. Every engagement includes lived-experience expertise from people who navigate the world with blindness and vision loss."}
+    ],
+    related: ["print", "contact-center"],
     contact: "zahr",
     source: "Services, Accessibility Services (Wichita)"
   },
@@ -320,6 +454,11 @@ window.ENVISION_INTENTS = [
       "federal market"],
     answer: "Federal Procurement Services is a managed pathway into federal and military procurement. We bring the channel infrastructure, compliance credentials, and procurement intelligence, so manufacturers can sell into government markets without building the federal machinery themselves. Partner products flow through the channels Envision already operates.",
     next: {action:"modal", target:"procurement", label:"Explore Federal Procurement Services"},
+    deeper: [
+      {label:"What Envision brings",
+       answer:"The channel infrastructure, compliance credentials, and procurement intelligence. Your products flow through the federal channels Envision already operates, so you sell into government markets without building the machinery yourself."}
+    ],
+    related: ["how-to-buy", "abilityone"],
     contact: "zahr",
     source: "Services, Federal Procurement Services"
   },
@@ -329,8 +468,15 @@ window.ENVISION_INTENTS = [
     triggers: ["quality", "qa", "quality assurance", "inspection", "iso lab", "dimensional",
       "gauge", "calibration", "dcma", "alternate release", "quality lab", "metrology",
       "quality control"],
-    answer: "Quality runs on ISO 9001:2015 across both campuses, each under its own Intertek registration — Wichita holds certificate CERT-0145394 and Dallas holds CERT-0145812 — with material and dimensional validation against gauge, strength, and spec in our on-site Quality Labs. We hold federal compliance credentials across every capability and operate under the DCMA Alternate Release Program out of Dallas.",
+    answer: "Quality runs on ISO 9001:2015 across both campuses, each under its own Intertek registration. Wichita holds certificate CERT-0145394 and Dallas holds CERT-0145812, with material and dimensional validation against gauge, strength, and spec in our on-site Quality Labs. We hold federal compliance credentials across every capability and operate under the DCMA Alternate Release Program out of Dallas.",
     next: {action:"modal", target:"quality", label:"Explore Quality Assurance & Compliance"},
+    deeper: [
+      {label:"The certificates",
+       answer:"Each campus holds its own Intertek ISO 9001:2015 registration: Wichita is certificate CERT-0145394 and Dallas is CERT-0145812. Dallas also operates under the DCMA Alternate Release Program."},
+      {label:"What the labs verify",
+       answer:"On-site Quality Labs at both campuses run material and dimensional validation against gauge, strength, and spec."}
+    ],
+    related: ["compliance", "registrations"],
     contact: "tuttle",
     source: "Services, Quality Assurance & Compliance"
   },
@@ -344,6 +490,14 @@ window.ENVISION_INTENTS = [
       "how do we work together", "purchasing", "how to order"],
     answer: "Buying from Envision is straightforward because we are already a pre-cleared source across federal and state channels, so the qualification work is done before you start. Order through AbilityOne mandatory source, our DLA Prime Vendor contracts, the Base Supply Center network, the federal NSN catalog, or the Texas WorkQuest and Kansas State Use programs. Tell me your product or agency and I will point you to the right channel.",
     next: {action:"section", target:"Proof", label:"See every channel"},
+    deeper: [
+      {label:"The federal channels",
+       answer:"Four federal routes: AbilityOne mandatory source, DLA Prime Vendor contracts with 198 million dollars in combined capacity, the Base Supply Center network, and the federal NSN catalog.",
+       next: {action:"section", target:"Proof", label:"See the federal channels"}},
+      {label:"The state channels",
+       answer:"Two state routes: Texas WorkQuest through the Dallas campus and Kansas State Use through Wichita. State agencies procure campus-manufactured product through the mandatory-source channel."}
+    ],
+    related: ["abilityone", "dla-prime-vendor", "base-supply-centers"],
     contact: "zahr",
     source: "Proof"
   },
@@ -355,6 +509,13 @@ window.ENVISION_INTENTS = [
       "nonprofit agency", "jwod"],
     answer: "Yes. Envision is an AbilityOne mandatory-source participant nationally, affiliated with National Industries for the Blind. SKILCRAFT-branded Envision products in the federal catalog include trash and seal-closure bags, VISI-BELTs, and print services. 88 percent of our combined direct labor is performed by people who are blind or have low vision, well above the 75 percent AbilityOne threshold.",
     next: {action:"section", target:"Proof", label:"See our federal channels"},
+    deeper: [
+      {label:"Why 88 percent matters",
+       answer:"AbilityOne participation requires 75 percent of direct labor from people who are blind or have low vision. Envision runs at 88 percent of combined direct labor, well above the threshold, so the mandatory-source qualification is never in question."},
+      {label:"SKILCRAFT products",
+       answer:"SKILCRAFT-branded Envision products in the federal catalog include trash and seal-closure bags, VISI-BELTs, and print services."}
+    ],
+    related: ["base-supply-centers", "dla-prime-vendor"],
     contact: "zahr",
     source: "Proof + Compliance"
   },
@@ -365,6 +526,11 @@ window.ENVISION_INTENTS = [
       "abobsc", "h2f", "contract capacity", "ceiling"],
     answer: "Envision is a DLA Prime Vendor with 198 million dollars in combined contract capacity across two active 5-year IDIQ contracts. The ABOBSC TLS contract carries a 150 million dollar ceiling and H2F carries 48 million, and each ships Envision SKUs. All pricing is considered fair and reasonable by DLA Troop Support. Both contract vehicles have dedicated detail sites, linked from the contract-vehicle cards on the Proof slide.",
     next: {action:"section", target:"Proof", label:"See our federal channels"},
+    deeper: [
+      {label:"The two contracts",
+       answer:"Two active 5-year IDIQ contracts: the ABOBSC TLS contract with a 150 million dollar ceiling and H2F at 48 million, 198 million dollars combined. Each ships Envision SKUs, and all pricing is considered fair and reasonable by DLA Troop Support."}
+    ],
+    related: ["abilityone", "how-to-buy"],
     contact: "zahr",
     source: "Proof"
   },
@@ -376,6 +542,12 @@ window.ENVISION_INTENTS = [
       "country of origin", "domestic", "made in usa", "compliant"],
     answer: "The credentials federal and military buyers require are already in place. ISO 9001:2015 across both campuses (Dallas registered, certificate CERT-0145812), Berry Amendment and TAA compliant, Buy American compliant, and authorized under the DCMA Alternate Release Program out of Dallas. The compliance work is done.",
     next: {action:"section", target:"Compliance", label:"Review every credential"},
+    deeper: [
+      {label:"The full credential list",
+       answer:"ISO 9001:2015 across both campuses, Berry Amendment compliant, TAA compliant, Buy American compliant, and DCMA Alternate Release authorized out of Dallas.",
+       next: {action:"section", target:"Compliance", label:"Review every credential"}}
+    ],
+    related: ["quality", "registrations"],
     contact: "zahr",
     source: "Compliance"
   },
@@ -386,6 +558,7 @@ window.ENVISION_INTENTS = [
       "registration codes", "entity", "naics", "sam active", "registrations"],
     answer: "Envision is SAM.gov active, with federal registrations by campus. Wichita (ICT) carries Envision Industries, CAGE 2A178, UEI HC9MYND3ZLW5, and Envision, Inc., CAGE 7A1U0, UEI KEAMG55THMS3. Dallas (DFW) is CAGE 5A062, UEI RPKGK5NASDZ7. The Base Supply Center entity is CAGE 3BLJ3, UEI WC8ZXNHDLKE1.",
     next: {action:"section", target:"Compliance", label:"See all registration codes"},
+    related: ["compliance", "quality"],
     contact: "zahr",
     source: "Compliance"
   },
@@ -396,6 +569,12 @@ window.ENVISION_INTENTS = [
       "gpc", "impac", "base store", "on-base store", "supply center"],
     answer: "Envision operates 16 Base Supply Centers across 10 states, serving Air Force, Army, Space Force, and Navy, as part of the AbilityOne network that spans 160-plus bases. Pricing is pre-approved, so there is no competitive bid cycle, and GPC and IMPAC cards are accepted.",
     next: {action:"bsc", label:"View the network map"},
+    deeper: [
+      {label:"How buying there works",
+       answer:"Pricing is pre-approved, so there is no competitive bid cycle, and GPC and IMPAC cards are accepted. 16 centers across 10 states serve Air Force, Army, Space Force, and Navy.",
+       next: {action:"bsc", label:"Find a center on the map"}}
+    ],
+    related: ["abilityone", "how-to-buy"],
     contact: "zahr",
     source: "Campuses + Proof"
   },
@@ -406,6 +585,7 @@ window.ENVISION_INTENTS = [
       "state contract", "state agency", "state procurement", "state use program"],
     answer: "Both campuses are authorized State Use sources. The Wichita campus is the verified Kansas State Use participant, and the Dallas campus is an authorized Texas WorkQuest participant under the State of Texas State Use Program. State agencies procure campus-manufactured product through the mandatory-source channel.",
     next: {action:"section", target:"Proof", label:"See state channels"},
+    related: ["how-to-buy", "campus-dallas"],
     contact: "zahr",
     source: "Proof"
   },
@@ -419,6 +599,7 @@ window.ENVISION_INTENTS = [
        real files in index.html before promising downloads. */
     answer: "Our document library includes the Capabilities Statement, the ISO 9001:2015 certificates for both campuses (CERT-0145394, Wichita; CERT-0145812, Dallas), and the Berry and TAA compliance letter. You will find them in the Compliance section of the deck.",
     next: {action:"section", target:"Compliance", label:"Open the document library"},
+    related: ["compliance", "quality"],
     contact: "zahr",
     source: "Compliance, Document Library"
   },
@@ -431,6 +612,7 @@ window.ENVISION_INTENTS = [
       "lead time", "turnaround", "moq", "minimum order", "capacity availability",
       "delivery time", "eta", "ship date", "how long"],
     answer: "Pricing and lead times depend on the product, volume, and channel, and all federal-channel pricing is reviewed and approved as fair and reasonable by DLA Troop Support. I do not quote numbers here, but the right person can get you a precise figure for your order.",
+    related: ["how-to-buy", "contact-human"],
     contact: "zahr",
     showContact: true,
     source: "Proof (pricing routes to a human by design)"
@@ -450,13 +632,26 @@ window.ENVISION_INTENTS = [
     source: "Contact"
   },
 
-  /* ---------- Greeting ---------- */
+  /* ---------- Conversational courtesies ---------- */
   {
     id: "greeting",
     label: "Hello",
     triggers: ["hi", "hello", "hey", "good morning", "good afternoon", "start",
       "help", "what can you do", "get started", "howdy"],
     answer: "Welcome. I am the Envision concierge. Ask me what we manufacture, how to buy through our federal and state channels, or who to talk to, and I will take you straight there.",
+    contact: null,
+    source: "—"
+  },
+  {
+    id: "thanks",
+    label: "Thanks",
+    /* Politeness intent: a courteous close should get a courteous reply, not a
+       confused handoff. Listed in the engine's GENERIC_INTENTS so any real
+       question sharing a word with these triggers still wins. */
+    triggers: ["thanks", "thank you", "thankyou", "appreciate it", "awesome",
+      "perfect", "great thanks", "that helps", "very helpful", "cheers",
+      "sounds good", "got it"],
+    answer: "You are welcome. If anything else comes up, ask away, or I can connect you with the right person any time.",
     contact: null,
     source: "—"
   }
