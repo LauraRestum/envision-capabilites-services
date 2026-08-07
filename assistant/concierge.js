@@ -7,8 +7,12 @@
         bundled fuzzy search library. No server. No network. No language
         model. It can only ever return text you authored.
      2. Classifies each query as a confident answer, a qualifying question,
-        or a human handoff, using a tuned confidence threshold.
-     3. Renders a fully keyboard-accessible slide-up chat panel.
+        or a human handoff, using a tuned confidence threshold. Plural
+        folding, a small synonym map, and "tell me more" follow-through make
+        the matching feel smart while every word stays authored.
+     3. Renders a fully keyboard-accessible slide-up chat panel, with a
+        dig-deeper chip layer under each answer and first-party read-aloud
+        (a Listen button per answer plus a read-answers-aloud toggle).
 
    TUNE MATCHING HERE:  see the CONFIG block immediately below.
    ===================================================================== */
@@ -54,7 +58,19 @@
     //   floor: minimum catalog match score to answer at all.
     //   clarifySeparation: if the runner-up (in a DIFFERENT capability area)
     //     is within this ratio, qualify with chips instead of guessing.
-    catalog: { floor: 4, clarifySeparation: 0.25 }
+    catalog: { floor: 4, clarifySeparation: 0.25 },
+    // DIG-DEEPER LAYER. How many unshown authored `deeper` layers and
+    // `related` topics (knowledge.js) ride along as chips after an answer.
+    // Small on purpose; a wall of chips reads as a menu, not a conversation.
+    deeperMax: 3,
+    relatedMax: 2,
+    // Milliseconds the typing indicator shows before a reply renders. Long
+    // enough to read as "thinking", short enough to never feel slow.
+    typingDelay: 380,
+    // localStorage key for the "read answers aloud" preference. Concierge
+    // scoped: this is NOT a deck accessibility-panel pref, so it does not
+    // belong in the panel's anti-flash restore or apply() lists.
+    autoreadKey: "envConciergeAutoread"
   };
 
   // Words too common to carry meaning. Filtering them keeps short function
@@ -63,6 +79,31 @@
   var STOPWORDS = new Set(("a an the you your yours are is am do does did i we me my our " +
     "to of for and or it this that please be us have has had on in at can could would " +
     "will should want need looking got what whats tell show give find me about").split(" "));
+
+  // Buyer vocabulary -> authored trigger vocabulary. Applied at query time
+  // only: each mapped word APPENDS its expansion to the searched text (the
+  // original words stay, so nothing can ever match less than before). Keep
+  // this map small and literal. It is for words buyers genuinely use that the
+  // deck's own copy never would, not a thesaurus.
+  var SYNONYMS = {
+    garbage: "trash", rubbish: "trash", sack: "bag",
+    bin: "can liner",                       // "bin liners" is the same product
+    clothing: "apparel", clothes: "apparel", garment: "apparel",
+    tshirt: "shirt", tee: "shirt",
+    ppe: "safety apparel vest",
+    purchase: "buy", purchasing: "buy",
+    iso9001: "iso 9001",
+    cert: "certificate"
+  };
+  function expandQuery(text){
+    var extra = [];
+    String(text || "").toLowerCase().split(/[^a-z0-9]+/).forEach(function(w){
+      if (!w) return;
+      var hit = SYNONYMS[w] || SYNONYMS[stemTerm(w)];
+      if (hit) extra.push(hit);
+    });
+    return extra.length ? text + " " + extra.join(" ") : text;
+  }
 
   // ------------------------------------------------------------------
   // Guard: degrade gracefully if a dependency failed to load. The deck
@@ -84,9 +125,21 @@
   /* ------------------------------------------------------------------ *
    * 1. SEARCH INDEX                                                     *
    * ------------------------------------------------------------------ */
+  function stemTerm(term){
+    // Conservative plural folding so "vests" finds "vest" and "capabilities"
+    // finds "capability" without a real stemmer. MiniSearch runs processTerm
+    // at index time AND query time, so the two sides always agree. The rules
+    // are deliberately narrow; anything cleverer risks folding distinct
+    // product words together.
+    if (term.length >= 5 && /ies$/.test(term)) return term.slice(0, -3) + "y";
+    if (term.length >= 4 && /s$/.test(term) && !/(ss|us|is)$/.test(term)) return term.slice(0, -1);
+    return term;
+  }
   function processTerm(term){
     term = String(term).toLowerCase().replace(/[^a-z0-9]/g, "");
     if (!term || STOPWORDS.has(term)) return false;
+    term = stemTerm(term);
+    if (STOPWORDS.has(term)) return false;  // "wants" folds to the stopword "want"
     return term;
   }
   var mini = new window.MiniSearch({
@@ -119,19 +172,36 @@
   /* ------------------------------------------------------------------ *
    * 2. CLASSIFY  ·  answer / clarify / handoff                         *
    * ------------------------------------------------------------------ */
-  // Tokens of a query after processing (lowercased, de-punctuated, stopworded).
-  // Used by the coverage guard below.
+  // Conversational filler that should not count AGAINST coverage: "hey do you
+  // make vests" is really just "make vests". These still get searched (so a
+  // bare "hey" greets); they are only excused from the denominator below.
+  var FILLER = new Set(("hey hi hello howdy greetings please thanks thank").split(" "));
+
+  // DISTINCT informative tokens of a query after processing (lowercased,
+  // de-punctuated, stopworded, stemmed, filler excused). Used by the coverage
+  // guard below. Distinct matters: synonym expansion can repeat a word, and a
+  // repeat must not inflate how much of the query an answer has to cover.
   function queryTokens(text){
-    return String(text || "").split(/\s+/).map(processTerm).filter(Boolean);
+    var seen = {}, out = [];
+    String(text || "").split(/\s+/).forEach(function(w){
+      var t = processTerm(w);
+      if (!t || FILLER.has(t) || seen[t]) return;
+      seen[t] = true;
+      out.push(t);
+    });
+    return out;
   }
 
   // The catch-all discovery intents. They should win only when the query is a
   // generic discovery question, and yield to any specific intent that also
   // clears the floor, so a precise product noun routes precisely and a bare
   // "hey" does not steal a real question.
-  var GENERIC_INTENTS = { greeting: true, "capabilities-overview": true };
+  var GENERIC_INTENTS = { greeting: true, "capabilities-overview": true, thanks: true };
 
   function classify(text){
+    // Synonym expansion widens the net; the coverage guard below runs on the
+    // same expanded text, so both sides of the ratio stay consistent.
+    text = expandQuery(text);
     var results = mini.search(text || "");
     if (!results.length) return { type: "handoff" };
 
@@ -152,10 +222,12 @@
 
     // Coverage guard: a confident answer must reflect MOST of what the buyer
     // typed, not one coincidental token in a long off-topic sentence ("I saw a
-    // nice vest yesterday"). results[0].terms is the set of query terms that
-    // actually matched the winning intent.
+    // nice vest yesterday"). queryTerms is the set of QUERY tokens that
+    // actually matched the winning intent; the older `terms` field lists
+    // matched INDEX terms, which double-counts when one query word fuzzily
+    // hits both "vest" and "vests", so it stays only as a fallback.
     var qN = queryTokens(text).length;
-    var matched = (results[0].terms || []).length;
+    var matched = (results[0].queryTerms || results[0].terms || []).length;
     if (qN > 0){
       var need = qN <= 2 ? 1 : Math.ceil(qN * CONFIG.coverageMin);
       if (matched < need) return { type: "handoff" };
@@ -318,7 +390,7 @@
 
   function classifyCatalog(text){
     if (!catMini || !granularSignal(text)) return null;
-    var res = catMini.search(text || "");
+    var res = catMini.search(expandQuery(text || ""));
     if (!res.length || res[0].score < CONFIG.catalog.floor) return null;
     var top = res[0];
     // If a strong runner-up sits in a DIFFERENT capability area, the query is
@@ -432,7 +504,9 @@
     arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
     mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
-    web: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
+    web: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    speaker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>',
+    stopSq: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>'
   };
 
   var root = document.createElement("div");
@@ -450,6 +524,10 @@
           '<span class="ec-head-title" id="ecHeadTitle">Envision Concierge</span>' +
           '<span class="ec-head-sub">Capabilities and services</span>' +
         '</span>' +
+        '<button class="ec-head-voice" id="ecVoice" type="button" aria-pressed="false" ' +
+          'title="Read answers aloud">' + SVG.speaker +
+          '<span class="ec-sr-only">Read answers aloud</span>' +
+        '</button>' +
         '<button class="ec-head-close" id="ecClose" type="button" aria-label="Close concierge">' +
           SVG.close +
         '</button>' +
@@ -471,6 +549,7 @@
   var launcher = root.querySelector("#ecLauncher");
   var panel    = root.querySelector("#ecPanel");
   var closeBtn = root.querySelector("#ecClose");
+  var voiceBtn = root.querySelector("#ecVoice");
   var log      = root.querySelector("#ecLog");
   var form     = root.querySelector("#ecForm");
   var input    = root.querySelector("#ecInput");
@@ -479,6 +558,155 @@
   var opened = false;          // panel currently open
   var started = false;         // greeting has been shown once this session
   var userTurns = 0;           // how many things the visitor has asked this session
+
+  /* ------------------------------------------------------------------ *
+   * 3b. READ ALOUD  ·  first-party speech for concierge answers         *
+   * ------------------------------------------------------------------ *
+   * Built on the browser's own speechSynthesis, exactly like the deck's
+   * click-to-listen mode (never a third-party widget). Two surfaces:
+   *   - a Listen button under every bot answer (tap to hear, tap to stop)
+   *   - the header speaker toggle, which reads each new answer automatically
+   * The toggle persists in localStorage under CONFIG.autoreadKey. When the
+   * deck's own "Read aloud on click" preference is on and the visitor has
+   * never chosen for the concierge, auto-read defaults on to match. With no
+   * speech engine in the browser, every affordance disappears cleanly.
+   * ------------------------------------------------------------------ */
+  var speech = (function(){
+    var ok = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+    if (!ok) return { ok: false, speak: function(){}, stop: function(){} };
+    var synth = window.speechSynthesis;
+    var session = 0, onDoneCb = null;
+    var currentUtterance = null; // held so GC cannot kill it mid-speech
+
+    // Voices load asynchronously in most browsers; prefer a default voice
+    // matching the page language, and re-pick whenever the list arrives.
+    var voice = null;
+    function pickVoice(){
+      var vs = synth.getVoices ? synth.getVoices() : [];
+      var lang = (document.documentElement.lang || "en").toLowerCase();
+      var match = null, def = null;
+      for (var i = 0; i < vs.length; i++){
+        if (!def && vs[i].default) def = vs[i];
+        if ((vs[i].lang || "").toLowerCase().indexOf(lang) === 0){
+          if (vs[i].default){ match = vs[i]; break; }
+          if (!match) match = vs[i];
+        }
+      }
+      voice = match || def || vs[0] || null;
+    }
+    pickVoice();
+    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", pickVoice);
+
+    // Sentence-boundary chunking: several speech engines go silent partway
+    // through one long utterance, and a queue of short ones survives it.
+    function chunkText(text){
+      var parts = String(text).match(/[^.!?]+[.!?]+[\s"')\]]*|[^.!?]+$/g) || [String(text)];
+      var out = [], cur = "";
+      parts.forEach(function(p){
+        while (p.length > 200){
+          if (cur){ out.push(cur); cur = ""; }
+          out.push(p.slice(0, 200)); p = p.slice(200);
+        }
+        if (cur && (cur + p).length > 200){ out.push(cur); cur = p; }
+        else { cur += p; }
+      });
+      if (cur.trim()) out.push(cur);
+      return out;
+    }
+    function finish(){
+      var cb = onDoneCb; onDoneCb = null;
+      if (cb) cb();
+    }
+    function stop(){
+      session++;
+      if (synth.speaking || synth.pending) synth.cancel();
+      finish();
+    }
+    function speak(text, onDone){
+      stop();                              // also releases the previous onDone
+      var id = ++session;
+      onDoneCb = onDone || null;
+      var parts = chunkText(text), i = 0;
+      function next(){
+        if (id !== session) return;
+        if (i >= parts.length){ finish(); return; }
+        var u = new SpeechSynthesisUtterance(parts[i++]);
+        currentUtterance = u;
+        if (voice) u.voice = voice;
+        u.lang = (voice && voice.lang) || document.documentElement.lang || "en-US";
+        u.onend = next;
+        u.onerror = function(ev){
+          var code = ev && ev.error;
+          if (code === "interrupted" || code === "canceled") return; // our own cancel()
+          if (id === session) finish();
+        };
+        synth.speak(u);
+        // Chrome can wedge itself paused across a cancel(); resume() is a
+        // harmless no-op everywhere else.
+        if (synth.paused) synth.resume();
+      }
+      // Chrome drops an utterance queued in the same tick as a cancel().
+      setTimeout(next, 60);
+    }
+    return { ok: true, speak: speak, stop: stop };
+  })();
+
+  var readingBtn = null;       // the Listen button currently in its Stop state
+  function setListenState(btn, on){
+    if (!btn) return;
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.innerHTML = (on ? SVG.stopSq : SVG.speaker) +
+      "<span>" + (on ? "Stop" : "Listen") + "</span>";
+  }
+  function stopReading(){
+    autoQueue.length = 0;
+    speech.stop();             // fires the active onDone, which resets its button
+  }
+  function readAloud(btn, text){
+    if (readingBtn === btn){ stopReading(); return; }
+    autoQueue.length = 0;      // a manual Listen outranks the auto queue
+    if (readingBtn) setListenState(readingBtn, false);
+    readingBtn = btn || null;
+    setListenState(btn, true);
+    speech.speak(text, function(){
+      if (readingBtn === btn){ setListenState(btn, false); readingBtn = null; }
+    });
+  }
+
+  /* Auto-read: with the header toggle on, every new bot bubble queues up and
+     is spoken in arrival order, so a multi-bubble turn reads completely. */
+  var autoQueue = [], autoActive = false;
+  var autoread = false;
+  try {
+    var savedAuto = localStorage.getItem(CONFIG.autoreadKey);
+    if (savedAuto === "on") autoread = true;
+    else if (savedAuto === null &&
+             document.documentElement.getAttribute("data-env-speak") === "on") autoread = true;
+  } catch (e) { /* storage blocked: the toggle still works for the session */ }
+  function queueAutoRead(text){
+    if (!autoread || !speech.ok) return;
+    autoQueue.push(text);
+    if (!autoActive) nextAutoRead();
+  }
+  function nextAutoRead(){
+    var t = autoQueue.shift();
+    if (t == null){ autoActive = false; return; }
+    autoActive = true;
+    speech.speak(t, nextAutoRead);
+  }
+  function setAutoread(on){
+    autoread = !!on;
+    try { localStorage.setItem(CONFIG.autoreadKey, autoread ? "on" : "off"); } catch (e) { /* no-op */ }
+    if (voiceBtn) voiceBtn.setAttribute("aria-pressed", autoread ? "true" : "false");
+    if (autoread){
+      announceStatus("Answers will be read aloud.");
+      // The spoken confirmation doubles as proof the audio path works.
+      speech.speak("Read aloud is on. Answers will be read automatically.");
+    } else {
+      stopReading();
+      announceStatus("Read aloud is off.");
+    }
+  }
 
   /* ------------------------------------------------------------------ *
    * 4. RENDER HELPERS                                                   *
@@ -507,16 +735,48 @@
   function addBotBubble(text){
     var wrap = el("div", "ec-msg ec-msg-bot");
     wrap.appendChild(el("div", "ec-bubble", esc(text)));
+    // Every answer carries its own Listen control (visible, not hover-only,
+    // so it is discoverable by touch). Absent entirely without an engine.
+    if (speech.ok){
+      var tools = el("div", "ec-msg-tools");
+      var listen = el("button", "ec-listen");
+      listen.type = "button";
+      setListenState(listen, false);
+      listen.addEventListener("click", function(){ readAloud(listen, text); });
+      tools.appendChild(listen);
+      wrap.appendChild(tools);
+    }
     log.appendChild(wrap);
     scrollLog();
+    queueAutoRead(text);
     if (typeof announceStatus === "function") announceStatus("Response ready", 250);
     return wrap;
   }
 
-  // A row of tappable chips. `items` = [{label, onClick}].
+  /* Typing indicator: a short beat before each reply so the exchange reads as
+     a conversation, not a database lookup. Purely visual (aria-hidden); the
+     live region already announces "Thinking" and then "Response ready". */
+  function respondSoon(fn){
+    var row = el("div", "ec-msg ec-msg-bot ec-typing-row");
+    row.setAttribute("aria-hidden", "true");
+    row.appendChild(el("div", "ec-bubble ec-typing",
+      "<span></span><span></span><span></span>"));
+    log.appendChild(row);
+    scrollLog();
+    setTimeout(function(){
+      if (row.parentNode) row.parentNode.removeChild(row);
+      fn();
+    }, CONFIG.typingDelay);
+  }
+
+  // A row of tappable chips. `items` = [{label, onClick}]. An optional
+  // opts.label renders a small eyebrow line above the row ("Dig deeper").
   function addChips(items, opts){
     if (!items || !items.length) return;
     var row = el("div", "ec-chips");
+    if (opts && opts.label){
+      row.appendChild(el("div", "ec-chips-label", esc(opts.label)));
+    }
     items.forEach(function(item){
       var chip = el("button", "ec-chip" + (item.primary ? " ec-chip--next" : ""));
       chip.type = "button";
@@ -603,6 +863,112 @@
   /* ------------------------------------------------------------------ *
    * 6. RESPONSE FLOWS                                                   *
    * ------------------------------------------------------------------ */
+
+  /* Conversation memory. The engine never generates text, but it can REMEMBER
+     which authored intent it just answered, so "tell me more" walks that
+     intent's `deeper` layers in order instead of falling to the handoff, and
+     a layer already shown never re-appears as a chip. Session-only. */
+  var lastAnswered = null;      // intent id of the last confident answer
+  var deeperShown = {};         // intent id -> { deeper label: true }
+  function deeperSeen(intentId, label){
+    return !!(deeperShown[intentId] && deeperShown[intentId][label]);
+  }
+  function markDeeper(intentId, label){
+    (deeperShown[intentId] = deeperShown[intentId] || {})[label] = true;
+  }
+
+  // The dig-deeper chip row for an intent: its unshown authored layers first,
+  // then a couple of related topics. Every chip speaks the visitor's side of
+  // the exchange (addUserMessage) so the transcript reads as a conversation.
+  function followupChips(intent){
+    var chips = [], layers = 0;
+    (intent.deeper || []).forEach(function(item){
+      if (layers >= CONFIG.deeperMax || deeperSeen(intent.id, item.label)) return;
+      layers++;
+      chips.push({
+        label: item.label,
+        onClick: function(){
+          addUserMessage(item.label);
+          respondSoon(function(){
+            if (item.intent){
+              markDeeper(intent.id, item.label);
+              var it = byId[item.intent];
+              if (it){ dispatchIntent(it); } else { renderHandoff(); }
+            } else {
+              dispatchDeeper(intent, item);
+            }
+          });
+        }
+      });
+    });
+    var rel = 0;
+    (intent.related || []).forEach(function(id){
+      if (rel >= CONFIG.relatedMax) return;
+      var it = byId[id];
+      if (!it) return;
+      rel++;
+      chips.push({
+        label: it.label,
+        onClick: function(){
+          addUserMessage(it.label);
+          respondSoon(function(){ dispatchIntent(it); });
+        }
+      });
+    });
+    return chips;
+  }
+
+  // One authored layer under an intent: the focused answer, its own optional
+  // next step, then the remaining layers so the visitor can keep digging.
+  function dispatchDeeper(intent, item){
+    markDeeper(intent.id, item.label);
+    lastAnswered = intent.id;
+    addBotBubble(item.answer);
+    if (item.next){ addNextStep({ next: item.next }); }
+    var followups = followupChips(intent);
+    if (followups.length){ addChips(followups, { label: "Keep digging" }); }
+    if (userTurns >= CONFIG.contactAfterQueries){
+      addContactCard(resolveContact(intent));
+    }
+  }
+
+  // "Tell me more" and friends: continue the LAST answered intent one layer
+  // deeper. With no unshown layer left, offer its related topics instead.
+  var MORE_RE = /^(tell me more|more|more please|more info|more information|more details|details|what else|anything else|go deeper|dig deeper|deeper|keep going|continue|elaborate)$/;
+  function isMoreQuery(text){
+    var t = String(text || "").toLowerCase().replace(/[^a-z\s]/g, " ").replace(/\s+/g, " ").trim();
+    return MORE_RE.test(t);
+  }
+  function renderMore(){
+    var intent = lastAnswered ? byId[lastAnswered] : null;
+    if (!intent){
+      addBotBubble("Happy to go deeper. Pick a topic and I will start unpacking it.");
+      offerOpeningChips(null);
+      return;
+    }
+    var nextLayer = null;
+    (intent.deeper || []).some(function(item){
+      if (!deeperSeen(intent.id, item.label)){ nextLayer = item; return true; }
+      return false;
+    });
+    if (nextLayer){
+      if (nextLayer.intent){
+        markDeeper(intent.id, nextLayer.label);
+        var it = byId[nextLayer.intent];
+        if (it){ dispatchIntent(it); return; }
+      } else {
+        dispatchDeeper(intent, nextLayer);
+        return;
+      }
+    }
+    // Depth exhausted: say so honestly, then open the sideways paths and put
+    // the right person one tap away.
+    addBotBubble("That is the full picture I have on " + intent.label + ". A few nearby topics, or I can connect you with the right person.");
+    var chips = followupChips(intent);
+    if (chips.length){ addChips(chips); } else { offerOpeningChips(null); }
+    addContactCard(resolveContact(intent));
+  }
+
   function dispatchIntent(intent){
     if (!intent) return;
     // An intent can itself be a clarifier.
@@ -610,8 +976,13 @@
       renderClarify(intent.clarify.question, intent.clarify.options);
       return;
     }
+    lastAnswered = intent.id;
     addBotBubble(intent.answer);
     var hasNext = addNextStep(intent);
+    // The dig-deeper layer: authored follow-ups and related topics ride along
+    // as chips, so an answer is a landing, never a dead end.
+    var followups = followupChips(intent);
+    if (followups.length){ addChips(followups, { label: "Dig deeper" }); }
     // Only surface a contact card when the visitor is actually after a person:
     // either the intent opts in (showContact, e.g. "talk to a person" or
     // pricing), or they have asked enough questions that handing them a human
@@ -621,9 +992,9 @@
                       userTurns >= CONFIG.contactAfterQueries;
     var contact = wantContact ? resolveContact(intent) : null;
     if (contact){ addContactCard(contact); }
-    // "Never dead-end": if there is neither a next step nor a contact, give
-    // the buyer a way forward.
-    if (!hasNext && !contact){
+    // "Never dead-end": if there is nothing at all to go on with, give the
+    // buyer a way forward.
+    if (!hasNext && !contact && !followups.length){
       offerStartOver();
     }
   }
@@ -635,9 +1006,11 @@
         label: opt.label,
         onClick: function(){
           addUserMessage(opt.label);
-          var it = byId[opt.intent];
-          if (it){ dispatchIntent(it); }
-          else { renderHandoff(); }
+          respondSoon(function(){
+            var it = byId[opt.intent];
+            if (it){ dispatchIntent(it); }
+            else { renderHandoff(); }
+          });
         }
       };
     }));
@@ -663,7 +1036,7 @@
           label: it.label,
           onClick: function(){
             addUserMessage(it.label);
-            dispatchIntent(it);
+            respondSoon(function(){ dispatchIntent(it); });
           }
         };
       });
@@ -675,6 +1048,9 @@
   // full table (the modal) and the right person. Reaching a human is part of
   // the value on a granular question, so the contact rides along here.
   function dispatchCatalog(doc){
+    // Catalog rows carry no authored deeper layers, so "tell me more" after
+    // one should offer the openers rather than dig into a stale intent.
+    lastAnswered = null;
     addBotBubble(summarizeCatalog(doc));
     addChips([{
       label: "Open " + doc.modalTitle,
@@ -691,7 +1067,10 @@
     addChips(options.map(function(doc){
       return {
         label: doc.modalTitle,
-        onClick: function(){ addUserMessage(doc.modalTitle); dispatchCatalog(doc); }
+        onClick: function(){
+          addUserMessage(doc.modalTitle);
+          respondSoon(function(){ dispatchCatalog(doc); });
+        }
       };
     }));
   }
@@ -713,17 +1092,22 @@
     if (!text) return;
     announceStatus("Thinking");
     addUserMessage(text);
-    // Granular questions reach the catalog first; everything else stays with
-    // the authored intents.
-    var cat = classifyCatalog(text);
-    if (cat){
-      if (cat.type === "answer"){ dispatchCatalog(cat.doc); return; }
-      if (cat.type === "clarify"){ renderCatalogClarify(cat.question, cat.options); return; }
-    }
-    var verdict = classify(text);
-    if (verdict.type === "answer"){ dispatchIntent(verdict.intent); }
-    else if (verdict.type === "clarify"){ renderClarify(verdict.question, verdict.options); }
-    else { logMiss(text); renderHandoff(); }
+    respondSoon(function(){
+      // Conversational follow-through first: "tell me more" digs into the
+      // last answer instead of being fuzzy-matched into the wrong intent.
+      if (isMoreQuery(text)){ renderMore(); return; }
+      // Granular questions reach the catalog next; everything else stays with
+      // the authored intents.
+      var cat = classifyCatalog(text);
+      if (cat){
+        if (cat.type === "answer"){ dispatchCatalog(cat.doc); return; }
+        if (cat.type === "clarify"){ renderCatalogClarify(cat.question, cat.options); return; }
+      }
+      var verdict = classify(text);
+      if (verdict.type === "answer"){ dispatchIntent(verdict.intent); }
+      else if (verdict.type === "clarify"){ renderClarify(verdict.question, verdict.options); }
+      else { logMiss(text); renderHandoff(); }
+    });
   }
 
   /* ------------------------------------------------------------------ *
@@ -783,6 +1167,7 @@
   function closePanel(opts){
     if (!opened) return;
     opened = false;
+    stopReading();   // never keep talking under a closed panel
     panel.classList.remove("is-open");
     launcher.setAttribute("aria-expanded", "false");
     document.removeEventListener("keydown", onKeydown, true);
@@ -804,6 +1189,14 @@
    * ------------------------------------------------------------------ */
   launcher.addEventListener("click", openPanel);
   closeBtn.addEventListener("click", function(){ closePanel(); });
+  if (speech.ok){
+    voiceBtn.setAttribute("aria-pressed", autoread ? "true" : "false");
+    voiceBtn.addEventListener("click", function(){ setAutoread(!autoread); });
+  } else if (voiceBtn && voiceBtn.parentNode){
+    // No speech engine in this browser: no read-aloud affordances at all.
+    voiceBtn.parentNode.removeChild(voiceBtn);
+  }
+  window.addEventListener("pagehide", stopReading);
 
   var errEl = root.querySelector("#ecErr");
   var statusEl = root.querySelector("#ecStatus");
@@ -915,6 +1308,7 @@
   function routeVerdict(text){
     text = (text || "").trim();
     if (!text) return "empty";
+    if (isMoreQuery(text)) return "more";
     var cat = classifyCatalog(text);
     if (cat){ return cat.type === "answer" ? "catalog-answer" : "catalog-clarify"; }
     var v = classify(text);
@@ -945,7 +1339,16 @@
       ["black", ["handoff"]],
       ["what do you make", ["answer:capabilities-overview"]],
       ["capabilities", ["answer:capabilities-overview"]],
-      ["who are you", ["answer:company-overview", "clarify"]]
+      ["who are you", ["answer:company-overview", "clarify"]],
+      // Matcher-hardening additions: plural folding, synonym expansion,
+      // conversational follow-through, and the politeness intent.
+      ["garbage bags", ["answer:polymer-film"]],
+      ["bin liners", ["answer:polymer-film"]],
+      ["clothing for the military", ["answer:military-apparel", "clarify"]],
+      ["thanks", ["answer:thanks"]],
+      ["thank you", ["answer:thanks"]],
+      ["tell me more", ["more"]],
+      ["dig deeper", ["more"]]
     ];
     // Known-pending: these want authored clarifier forks (Addendum A section 4,
     // Laura's checkpoint). Reported, not counted, until those land.

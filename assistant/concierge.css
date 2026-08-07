@@ -131,6 +131,24 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 .ec-head-close:hover{ background: rgba(255,255,255,0.22); }
 .ec-head-close svg{ width: 17px; height: 17px; }
 
+/* Header speaker toggle: auto-read every answer. Sits before the close
+   button; when it is the first control after the title it takes the auto
+   margin, and hands it back to close if the button is removed (no speech
+   engine in this browser). aria-pressed carries the state. */
+.ec-head-voice{
+  margin-left: auto; flex: none;
+  width: 34px; height: 34px; border: 0; border-radius: 9px; cursor: pointer;
+  background: rgba(255,255,255,0.10); color: #fff;
+  display: grid; place-items: center;
+  transition: background .15s ease, color .15s ease;
+}
+.ec-head-voice + .ec-head-close{ margin-left: 0; }
+.ec-head-voice:hover{ background: rgba(255,255,255,0.22); }
+.ec-head-voice svg{ width: 17px; height: 17px; }
+.ec-head-voice[aria-pressed="true"]{
+  background: var(--ec-green); color: #07330a;
+}
+
 /* ---------- Message log ---------- */
 .ec-log{
   flex: 1 1 auto; overflow-y: auto; overflow-x: hidden;
@@ -157,6 +175,8 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 }
 
 .ec-msg{ display: flex; max-width: 100%; }
+/* Bot messages stack the bubble over its tools row (the Listen control). */
+.ec-msg-bot{ flex-direction: column; align-items: flex-start; gap: 3px; }
 .ec-bubble{
   font-size: 13.5px; line-height: 1.5; font-weight: 500;
   padding: 11px 14px; border-radius: 14px;
@@ -173,6 +193,36 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 .ec-msg-user{ justify-content: flex-end; }
 .ec-msg-user .ec-bubble{
   background: var(--ec-blue); color: #fff; border-bottom-right-radius: 5px;
+}
+
+/* ---------- Per-answer Listen control ---------- */
+.ec-msg-tools{ display: flex; gap: 6px; padding-left: 4px; }
+.ec-listen{
+  font-family: inherit; font-weight: 700; font-size: 11px; letter-spacing: .02em;
+  color: var(--ec-mid); background: transparent;
+  border: 0; border-radius: 999px; padding: 4px 8px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px; line-height: 1.2;
+  transition: background .15s ease, color .15s ease;
+}
+.ec-listen:hover{ background: #e8edf6; color: var(--ec-blue); }
+.ec-listen svg{ width: 13px; height: 13px; flex: none; }
+.ec-listen[aria-pressed="true"]{ color: var(--ec-blue); background: #e8edf6; }
+
+/* ---------- Typing indicator (aria-hidden, purely visual) ---------- */
+.ec-typing{ display: inline-flex; align-items: center; gap: 5px; padding: 14px; }
+.ec-typing span{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ec-soft);
+  animation: ec-think 1.1s ease-in-out infinite;
+}
+.ec-typing span:nth-child(2){ animation-delay: .18s; }
+.ec-typing span:nth-child(3){ animation-delay: .36s; }
+@keyframes ec-think{
+  0%, 60%, 100%{ opacity: .35; transform: translateY(0); }
+  30%{ opacity: 1; transform: translateY(-3px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .ec-typing span{ animation: none; opacity: .6; }
 }
 
 /* Provenance line under an answer (source label, subtle) */
@@ -209,6 +259,13 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 .ec-chips{
   display: flex; flex-wrap: wrap; gap: 8px;
   padding: 2px 2px 4px;
+}
+/* Eyebrow line over a follow-up chip row ("Dig deeper", "Keep digging"). */
+.ec-chips-label{
+  flex: 0 0 100%;
+  font-size: 10px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ec-soft);
+  padding: 2px 2px 0;
 }
 .ec-chip{
   font-family: inherit; font-weight: 600; font-size: 12.5px;
@@ -267,9 +324,10 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 /* Coarse pointers (touch): grow the header-close and send hit areas to the
    44px minimum so they are reliably tappable, not fiddly. */
 @media (pointer: coarse){
-  .ec-head-close{ width: 40px; height: 40px; }
+  .ec-head-close, .ec-head-voice{ width: 40px; height: 40px; }
   .ec-send{ width: 46px; height: 46px; }
   .ec-chip{ padding: 10px 16px; }
+  .ec-listen{ padding: 8px 12px; }
 }
 
 /* ---------- Focus visibility (accessibility, not optional) ---------- */
@@ -283,13 +341,15 @@ body.env-overlay-open .ec-panel{ display: none !important; }
 
 /* High-contrast / forced colors: keep borders visible */
 @media (forced-colors: active){
-  .ec-chip, .ec-bubble, .ec-contact, .ec-input{ border: 1px solid CanvasText; }
+  .ec-chip, .ec-bubble, .ec-contact, .ec-input, .ec-listen,
+  .ec-head-voice{ border: 1px solid CanvasText; }
 }
 
 /* Touch targets: invisible hit-area expansion on coarse pointers only. */
 @media (pointer: coarse){
-  .ec-head-close, .ec-chip, .ec-send{ position: relative; }
-  .ec-head-close::after, .ec-chip::after, .ec-send::after{
+  .ec-head-close, .ec-head-voice, .ec-chip, .ec-send, .ec-listen{ position: relative; }
+  .ec-head-close::after, .ec-head-voice::after, .ec-chip::after,
+  .ec-send::after, .ec-listen::after{
     content: ""; position: absolute; inset: -5px;
   }
 }
@@ -329,3 +389,9 @@ html[data-env-theme="hc"] .ec-input,
 html[data-env-theme="hc"] .ec-send,
 html[data-env-theme="hc"] .ec-msg-user .ec-bubble{ border: 1px solid #ffffff; }
 html[data-env-theme="hc"] .ec-launcher{ background: #000000; color: #ffffff; border: 1px solid #ffffff; }
+html[data-env-theme="hc"] .ec-listen{ color: #ffffff; background: #000000; border: 1px solid #ffffff; }
+html[data-env-theme="hc"] .ec-listen[aria-pressed="true"],
+html[data-env-theme="hc"] .ec-head-voice[aria-pressed="true"]{
+  background: var(--ec-green); color: #000000;
+}
+html[data-env-theme="hc"] .ec-typing span{ background: #ffffff; }
