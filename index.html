@@ -2716,6 +2716,13 @@
      (300), so playback can be stopped from anywhere. */
   .env-reading{border-radius:2px;box-shadow:0 0 0 3px var(--white),0 0 0 6px var(--green-ink)}
   html[data-env-theme="hc"] .env-reading{box-shadow:0 0 0 3px #000000,0 0 0 6px #78BE21}
+  /* iOS and iPadOS Safari only dispatch click events on elements they deem
+     clickable, and cursor:pointer is the documented opt-in — without this,
+     tapping a paragraph on an iPhone never reaches the engine at all. While
+     the mode is on everything IS clickable, and on desktop the pointer
+     doubles as the mode's affordance. (The large-cursor preference still
+     wins: its rule carries !important.) */
+  html[data-env-speak="on"] body,html[data-env-speak="on"] body *{cursor:pointer}
   .speak-pill{
     position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);
     z-index:250;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
@@ -3627,7 +3634,7 @@
      current slide without needing a pointer. -->
 <div class="speak-pill" id="speakPill" hidden>
   <svg class="speak-pill-ic" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>
-  <span class="speak-pill-txt" id="speakPillTxt">Read aloud is on — click any text to hear it</span>
+  <span class="speak-pill-txt" id="speakPillTxt">Read aloud is on. Click any text to hear it</span>
   <button type="button" id="speakSlideBtn">Read this slide</button>
   <button type="button" id="speakStopBtn">Stop</button>
   <button type="button" class="speak-off" id="speakOffBtn">Turn off</button>
@@ -7496,13 +7503,34 @@
   }
 
   var synth = window.speechSynthesis;
-  var IDLE = "Read aloud is on — click any text to hear it";
-  var BUSY = "Reading — press Escape or Stop to end";
+  var IDLE = "Read aloud is on. Click any text to hear it";
+  var BUSY = "Reading. Press Escape or Stop to end";
+  var FAIL = "No audio? Check that this device's sound is on. A phone's silent switch mutes reading too";
   var BLOCKS = "p,h1,h2,h3,h4,h5,h6,li,figcaption,blockquote,dt,dd,td,th,caption";
   var SKIP = "a,button,input,textarea,select,option,label,summary,audio,video,iframe," +
              "[role='button'],[role='link'],[role='tab'],[contenteditable='true']," +
              "[tabindex]:not([tabindex='-1'])";
   var active = false, session = 0, readingNode = null;
+  var currentUtterance = null; /* held so the browser can't garbage-collect it mid-speech */
+
+  /* Voices load asynchronously in most browsers; prefer a default voice that
+     matches the page language, and re-pick whenever the list arrives. */
+  var voice = null;
+  function pickVoice(){
+    var vs = synth.getVoices ? synth.getVoices() : [];
+    var lang = (root.lang || "en").toLowerCase();
+    var match = null, def = null;
+    for (var i = 0; i < vs.length; i++){
+      if (!def && vs[i].default) def = vs[i];
+      if ((vs[i].lang || "").toLowerCase().indexOf(lang) === 0){
+        if (vs[i].default){ match = vs[i]; break; }
+        if (!match) match = vs[i];
+      }
+    }
+    voice = match || def || vs[0] || null;
+  }
+  pickVoice();
+  if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", pickVoice);
 
   function setLabel(t){ pillTxt.textContent = t; }
   function announce(t){ if (live) live.textContent = t; }
@@ -7533,24 +7561,57 @@
     return out;
   }
 
+  function fail(id){
+    if (id !== session) return;
+    session++;
+    if (synth.speaking || synth.pending) synth.cancel();
+    /* The ring stays on the clicked block: the click registered, the audio is
+       what failed, and the pill says so. The next action clears it. */
+    setLabel(FAIL);
+    announce(FAIL);
+  }
+
+  function speakText(node, text){
+    var wasAudible = synth.speaking || synth.pending;
+    stop();
+    var id = ++session;
+    if (node){ readingNode = node; node.classList.add("env-reading"); }
+    setLabel(BUSY);
+    var parts = chunkText(text), i = 0, started = false;
+    function next(){
+      if (id !== session) return;
+      if (i >= parts.length){ clearHighlight(); setLabel(IDLE); return; }
+      var first = (i === 0);
+      var u = new SpeechSynthesisUtterance(parts[i++]);
+      currentUtterance = u;
+      if (voice) u.voice = voice;
+      u.lang = (voice && voice.lang) || root.lang || "en-US";
+      u.onstart = function(){ started = true; };
+      u.onend = function(){ next(); };
+      u.onerror = function(ev){
+        var code = ev && ev.error;
+        if (code === "interrupted" || code === "canceled") return; /* our own cancel() */
+        fail(id);
+      };
+      synth.speak(u);
+      /* Chrome can wedge itself in a paused state across a cancel();
+         resume() is a harmless no-op everywhere else. */
+      if (synth.paused) synth.resume();
+      if (first){
+        /* Engines with no usable voice can fail without firing any event.
+           If nothing has audibly started, say so instead of sitting silent. */
+        setTimeout(function(){ if (id === session && !started) fail(id); }, 4000);
+      }
+    }
+    /* Chrome drops an utterance queued in the same tick as a cancel(), so
+       when something was already playing, yield one beat before starting. */
+    if (wasAudible) setTimeout(next, 60); else next();
+  }
+
   function speak(node){
     var text = (node.innerText || "").replace(/\s+/g, " ").trim();
     if (!text) return;
-    stop();
-    var id = ++session;
-    readingNode = node;
-    node.classList.add("env-reading");
-    setLabel(BUSY);
-    var parts = chunkText(text), i = 0;
-    (function next(){
-      if (id !== session) return;
-      if (i >= parts.length){ clearHighlight(); setLabel(IDLE); return; }
-      var u = new SpeechSynthesisUtterance(parts[i++]);
-      u.lang = root.lang || "en-US";
-      u.onend = next;
-      u.onerror = function(){ if (id === session) stop(); };
-      synth.speak(u);
-    })();
+    speakText(node, text);
   }
 
   /* The clicked element resolves to the nearest sensible text block: a
@@ -7613,8 +7674,16 @@
     if (on === active) return;
     active = on;
     pill.hidden = !on;
-    if (on){ setLabel(IDLE); announce("Read aloud is on. Click any text to hear it read out loud."); }
-    else { stop(); announce("Read aloud is off."); }
+    if (on){
+      setLabel(IDLE);
+      announce("Read aloud is on. Click any text to hear it read out loud.");
+      /* Spoken confirmation, but only when the mode was switched on by a real
+         interaction: a page-load restore has no user activation, and browsers
+         refuse speech without one. Hearing this line also proves the whole
+         audio path works before the visitor clicks anything. */
+      var ua = navigator.userActivation;
+      if (ua && ua.isActive) speakText(null, "Read aloud is on. Click any text to hear it.");
+    } else { stop(); announce("Read aloud is off."); }
   }
   if (window.MutationObserver){
     new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-env-speak"] });
