@@ -2716,6 +2716,13 @@
      (300), so playback can be stopped from anywhere. */
   .env-reading{border-radius:2px;box-shadow:0 0 0 3px var(--white),0 0 0 6px var(--green-ink)}
   html[data-env-theme="hc"] .env-reading{box-shadow:0 0 0 3px #000000,0 0 0 6px #78BE21}
+  /* iOS and iPadOS Safari only dispatch click events on elements they deem
+     clickable, and cursor:pointer is the documented opt-in — without this,
+     tapping a paragraph on an iPhone never reaches the engine at all. While
+     the mode is on everything IS clickable, and on desktop the pointer
+     doubles as the mode's affordance. (The large-cursor preference still
+     wins: its rule carries !important.) */
+  html[data-env-speak="on"] body,html[data-env-speak="on"] body *{cursor:pointer}
   .speak-pill{
     position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);
     z-index:250;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
@@ -7556,7 +7563,10 @@
 
   function fail(id){
     if (id !== session) return;
-    stop();
+    session++;
+    if (synth.speaking || synth.pending) synth.cancel();
+    /* The ring stays on the clicked block: the click registered, the audio is
+       what failed, and the pill says so. The next action clears it. */
     setLabel(FAIL);
     announce(FAIL);
   }
