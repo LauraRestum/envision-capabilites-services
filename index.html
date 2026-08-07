@@ -7,7 +7,7 @@
   if (t !== 'light' && t !== 'hc') t = 'dark';
   var r = document.documentElement;
   r.setAttribute('data-env-theme', t);
-  ['zoom','lines','paras','underline','motion','readable','cursor'].forEach(function(k){
+  ['zoom','lines','paras','underline','motion','readable','cursor','speak'].forEach(function(k){
     if (p[k]) r.setAttribute('data-env-' + k, p[k]);
   });
 }catch(e){}})();</script>
@@ -2708,6 +2708,38 @@
   html[data-env-motion="reduce"] .hero .kb-frame{animation:none !important;opacity:0}
   html[data-env-motion="reduce"] .hero .kb-frame:nth-child(1){opacity:1}
 
+  /* ---------- Read aloud (click to listen) ----------
+     The block being spoken carries a two-tone ring (white inner, green-ink
+     outer) so at least one ring holds 3:1 on the light slides and on the
+     dark modal surfaces alike. The pill is the mode's visible state: it sits
+     above every content overlay (250) but under the accessibility panel
+     (300), so playback can be stopped from anywhere. */
+  .env-reading{border-radius:2px;box-shadow:0 0 0 3px var(--white),0 0 0 6px var(--green-ink)}
+  html[data-env-theme="hc"] .env-reading{box-shadow:0 0 0 3px #000000,0 0 0 6px #78BE21}
+  .speak-pill{
+    position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);
+    z-index:250;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+    max-width:min(680px,94vw);padding:8px 10px 8px 16px;
+    background:var(--navy);color:var(--white);border:1px solid rgba(255,255,255,0.28);
+    border-radius:999px;font-family:var(--sans);box-shadow:0 8px 28px rgba(0,10,40,0.35);
+  }
+  .speak-pill[hidden]{display:none}
+  .speak-pill-ic{flex:none;color:var(--green)}
+  html[data-env-theme="light"] .speak-pill-ic{color:#78BE21}
+  .speak-pill-txt{font-size:12.5px;font-weight:600;letter-spacing:.02em}
+  .speak-pill button{
+    background:transparent;border:1px solid rgba(255,255,255,0.4);color:var(--white);
+    font:600 12px var(--sans);padding:0 14px;min-height:44px;border-radius:999px;cursor:pointer;
+  }
+  html[data-env-theme="light"] .speak-pill,
+  html[data-env-theme="light"] .speak-pill button{background:var(--navy);color:#ffffff}
+  .speak-pill button:hover{border-color:var(--green)}
+  .speak-pill button:focus-visible{outline:2px solid #78BE21;outline-offset:2px}
+  .speak-pill .speak-off{background:#78BE21;border-color:#78BE21;color:#001852;font-weight:700}
+  html[data-env-theme="light"] .speak-pill .speak-off{background:#78BE21;color:#001852}
+  html[data-env-theme="hc"] .speak-pill{background:#000000;border-color:#ffffff}
+  html[data-env-theme="hc"] .speak-pill .speak-off{color:#000000}
+
   /* ---------- Themes (user-invoked only; dark is the shipped default) ----
      Components never change between themes; only the tokens swap, plus a
      handful of surface overrides where a photo or gradient backdrop needs a
@@ -3580,6 +3612,7 @@
       <button type="button" data-toggle="motion" data-on="reduce" aria-pressed="false">Reduce motion</button>
       <button type="button" data-toggle="readable" aria-pressed="false">Readable text</button>
       <button type="button" data-toggle="cursor" aria-pressed="false">Large cursor</button>
+      <button type="button" data-toggle="speak" aria-pressed="false">Read aloud on click</button>
     </div>
     <div class="a11y-foot">
       <button class="a11y-reset" id="a11yReset" type="button">Reset all</button>
@@ -3587,6 +3620,19 @@
     </div>
   </div>
 </div>
+
+<!-- ===================== READ ALOUD STATUS PILL =====================
+     Visible whenever the panel's "Read aloud on click" preference is on.
+     Keyboard path to the same capability: "Read this slide" speaks the
+     current slide without needing a pointer. -->
+<div class="speak-pill" id="speakPill" hidden>
+  <svg class="speak-pill-ic" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>
+  <span class="speak-pill-txt" id="speakPillTxt">Read aloud is on — click any text to hear it</span>
+  <button type="button" id="speakSlideBtn">Read this slide</button>
+  <button type="button" id="speakStopBtn">Stop</button>
+  <button type="button" class="speak-off" id="speakOffBtn">Turn off</button>
+</div>
+<span class="visually-hidden" role="status" aria-live="polite" id="speakLive"></span>
 
 <!-- ===================== MODAL LAYER ===================== -->
 <div class="modal-backdrop" id="modalBackdrop"></div>
@@ -7354,7 +7400,7 @@
 
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(prefs)); }catch(e){} }
   function apply(){
-    ["theme","zoom","lines","paras","underline","motion","readable","cursor"].forEach(function(k){
+    ["theme","zoom","lines","paras","underline","motion","readable","cursor","speak"].forEach(function(k){
       if (prefs[k]) root.setAttribute("data-env-" + k, prefs[k]);
       else root.removeAttribute("data-env-" + k);
     });
@@ -7422,6 +7468,159 @@
   }
   trigger.addEventListener("click", open);
   apply();
+})();
+</script>
+<script>
+/* Read aloud (click to listen). The panel's "Read aloud on click" preference
+   sets data-env-speak="on"; this engine then speaks whatever text block the
+   visitor clicks, using the browser's built-in speechSynthesis — first-party,
+   on-device, no overlay widget. Links, buttons, and form fields keep their
+   normal behavior (activating one just stops playback); clicking the block
+   being read stops it, as do Escape and slide navigation. The pill is the
+   mode's visible state and carries the keyboard path ("Read this slide"). */
+(function(){
+  var root = document.documentElement;
+  var pill = document.getElementById("speakPill");
+  var pillTxt = document.getElementById("speakPillTxt");
+  var live = document.getElementById("speakLive");
+  var panelBtn = document.querySelector('#a11yOverlay [data-toggle="speak"]');
+  if (!pill || !pillTxt) return;
+
+  var supported = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  if (!supported){
+    /* No speech engine in this browser: the preference button stays visible
+       but inert and says why, and a stale saved pref can't strand the pill. */
+    if (panelBtn){ panelBtn.disabled = true; panelBtn.textContent = "Read aloud (not supported in this browser)"; }
+    root.removeAttribute("data-env-speak");
+    return;
+  }
+
+  var synth = window.speechSynthesis;
+  var IDLE = "Read aloud is on — click any text to hear it";
+  var BUSY = "Reading — press Escape or Stop to end";
+  var BLOCKS = "p,h1,h2,h3,h4,h5,h6,li,figcaption,blockquote,dt,dd,td,th,caption";
+  var SKIP = "a,button,input,textarea,select,option,label,summary,audio,video,iframe," +
+             "[role='button'],[role='link'],[role='tab'],[contenteditable='true']," +
+             "[tabindex]:not([tabindex='-1'])";
+  var active = false, session = 0, readingNode = null;
+
+  function setLabel(t){ pillTxt.textContent = t; }
+  function announce(t){ if (live) live.textContent = t; }
+  function clearHighlight(){
+    if (readingNode){ readingNode.classList.remove("env-reading"); readingNode = null; }
+  }
+  function stop(){
+    session++;
+    clearHighlight();
+    if (synth.speaking || synth.pending) synth.cancel();
+    setLabel(IDLE);
+  }
+
+  /* Long passages are split at sentence boundaries: several speech engines
+     go silent partway through one long utterance, and a queue survives it. */
+  function chunkText(text){
+    var parts = text.match(/[^.!?]+[.!?]+[\s"')\]]*|[^.!?]+$/g) || [text];
+    var out = [], cur = "";
+    parts.forEach(function(p){
+      while (p.length > 200){
+        if (cur){ out.push(cur); cur = ""; }
+        out.push(p.slice(0, 200)); p = p.slice(200);
+      }
+      if (cur && (cur + p).length > 200){ out.push(cur); cur = p; }
+      else { cur += p; }
+    });
+    if (cur.trim()) out.push(cur);
+    return out;
+  }
+
+  function speak(node){
+    var text = (node.innerText || "").replace(/\s+/g, " ").trim();
+    if (!text) return;
+    stop();
+    var id = ++session;
+    readingNode = node;
+    node.classList.add("env-reading");
+    setLabel(BUSY);
+    var parts = chunkText(text), i = 0;
+    (function next(){
+      if (id !== session) return;
+      if (i >= parts.length){ clearHighlight(); setLabel(IDLE); return; }
+      var u = new SpeechSynthesisUtterance(parts[i++]);
+      u.lang = root.lang || "en-US";
+      u.onend = next;
+      u.onerror = function(){ if (id === session) stop(); };
+      synth.speak(u);
+    })();
+  }
+
+  /* The clicked element resolves to the nearest sensible text block: a
+     paragraph-level ancestor when there is one, otherwise the smallest
+     enclosing element that carries visible text (a whole card, or the slide
+     itself when the click lands on open space). */
+  function pickBlock(t){
+    var b = t.closest(BLOCKS);
+    if (b) return b;
+    var n = t;
+    while (n && n !== document.body){
+      if ((n.innerText || "").trim()) return n;
+      n = n.parentElement;
+    }
+    return null;
+  }
+
+  document.addEventListener("click", function(e){
+    if (!active) return;
+    var t = e.target;
+    if (!t || !t.closest) return;
+    if (t.closest("#speakPill") || t.closest(".a11y-overlay")) return;
+    if (t.closest(SKIP)){
+      /* Controls keep working; activating one ends the current playback. */
+      if (synth.speaking || synth.pending) stop();
+      return;
+    }
+    var block = pickBlock(t);
+    if (!block) return;
+    /* No stopPropagation: document-level housekeeping (like closing the nav
+       menu on an outside click) still runs; interactive elements were already
+       excused above, so nothing else competes for this click. */
+    e.preventDefault();
+    if (block === readingNode){ stop(); return; }
+    speak(block);
+  }, true);
+
+  document.addEventListener("keydown", function(e){
+    if (!active || !(synth.speaking || synth.pending)) return;
+    if (e.key === "Escape"){ stop(); return; }
+    var t = e.target, tag = t && t.tagName ? t.tagName.toLowerCase() : "";
+    if (tag === "input" || tag === "textarea" || tag === "select" || (t && t.isContentEditable)) return;
+    /* Slide navigation keys: let the deck move, but end the old slide's audio. */
+    if (["ArrowLeft","ArrowRight","PageUp","PageDown","Home","End"].indexOf(e.key) >= 0) stop();
+  }, true);
+
+  document.getElementById("speakStopBtn").addEventListener("click", stop);
+  document.getElementById("speakOffBtn").addEventListener("click", function(){
+    /* Route through the panel's own toggle so the preference, its aria-pressed
+       state, and localStorage all stay in sync. */
+    if (panelBtn) panelBtn.click(); else root.removeAttribute("data-env-speak");
+  });
+  document.getElementById("speakSlideBtn").addEventListener("click", function(){
+    var cur = document.querySelector(".slide.current");
+    if (cur) speak(cur);
+  });
+
+  function sync(){
+    var on = root.getAttribute("data-env-speak") === "on";
+    if (on === active) return;
+    active = on;
+    pill.hidden = !on;
+    if (on){ setLabel(IDLE); announce("Read aloud is on. Click any text to hear it read out loud."); }
+    else { stop(); announce("Read aloud is off."); }
+  }
+  if (window.MutationObserver){
+    new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-env-speak"] });
+  }
+  window.addEventListener("pagehide", stop);
+  sync();
 })();
 </script>
 <script>

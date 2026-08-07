@@ -3,6 +3,27 @@
 This is a single self-contained static deck (`index.html`, no build step). All
 styles and scripts are inline. Follow the conventions below when editing.
 
+## Read aloud (click to listen)
+
+The accessibility panel's "Read aloud on click" preference (pref key `speak`,
+applied as `data-env-speak="on"`) turns on a first-party click-to-speech mode
+built on the browser's own `speechSynthesis` — never a third-party overlay
+widget. The engine and its status pill (`#speakPill`) live in their own script
+block right after the panel script.
+
+- Interactive elements (links, buttons, `role="button"` cards, form fields)
+  keep their normal behavior in this mode; activating one stops playback
+  rather than reading it. Only non-interactive text is spoken on click.
+- The pill carries the keyboard path ("Read this slide") plus Stop and
+  Turn off. "Turn off" routes through the panel's own toggle button so the
+  pref, its `aria-pressed` state, and `localStorage` stay in sync — keep it
+  that way rather than clearing the attribute directly.
+- Any new panel preference key must be added in two places: the anti-flash
+  restore list in `<head>` and the panel `apply()` list. `speak` is already
+  in both.
+- The block being read carries `.env-reading` (a white + green-ink two-tone
+  ring that holds 3:1 on the light slides and the dark modals alike).
+
 ## Current Projects ("Envision in Action")
 
 Projects live in the `PROJECTS` object in `index.html`; `PROJECT_ORDER` controls
