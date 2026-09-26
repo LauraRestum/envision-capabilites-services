@@ -120,6 +120,14 @@ a new tab. For more than one video on a card, use
 "watch"-framed. Strip share-tracking params (`?si=`, `?igsh=`) from pasted
 links before adding them.
 
+### Project pipeline link — a second password
+
+A project can carry `pipeline:{url, pass, desc}` (Massif does). It renders a
+"Program Pipeline" block whose link to that shared pipeline site sits behind
+its own password, on top of the Current Projects gateway; unlocking is
+remembered for the browser session (`pipelineBlockHTML()`). Both passwords are
+surface-level: they keep casual visitors out, not a determined one.
+
 ### Timelines — keep evergreen, hide what's over
 
 Project copy should stay evergreen. Avoid timeline language that ages and goes
