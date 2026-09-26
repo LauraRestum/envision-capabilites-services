@@ -1890,6 +1890,20 @@
     height:clamp(200px,30vh,300px);border-radius:6px;
     margin:28px 0 4px;
   }
+  /* Zoomed-out banner (imgZoom): the photo sits smaller, and a blurred,
+     dimmed copy of the same image fills the sides. */
+  .m-topbanner--zoom .image-bg{background-repeat:no-repeat}
+  .m-topbanner--zoom .image-bg::before,
+  .m-topbanner--zoom .image-bg::after{content:"";position:absolute;background-image:inherit}
+  .m-topbanner--zoom .image-bg::before{
+    inset:-24px;background-size:cover;background-position:center;
+    filter:blur(18px) brightness(.55);
+  }
+  .m-topbanner--zoom .image-bg::after{
+    inset:0;background-size:inherit;background-position:inherit;background-repeat:no-repeat;
+  }
+  /* Narrow screens already show most of the photo at full fill. */
+  @media (max-width:700px){.m-topbanner--zoom .image-bg::after{background-size:cover}}
   .m-cta{padding:48px 0 0;text-align:center}
   .m-cta h3{
     font-weight:800;font-size:clamp(1.4rem,2.4vw,2rem);color:var(--text-light);
@@ -5326,7 +5340,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 114 · 2026-09-26";
+  var BUILD_REV = "rev 115 · 2026-09-26";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -5379,7 +5393,7 @@
         {tag:"Quality",title:"One Standard, Sample to Volume",desc:"Production runs under Envision's ISO 9001:2015 quality systems, with every line's status visible to both teams in the shared program pipeline.",specs:[["QMS","ISO 9001:2015"],["Visibility","Shared pipeline"]]}
       ],
       img:"Massif flame-resistant base layer shirt on display with Massif base layer boxes and a tape measure",
-      imgSrc:"images/massif-program-banner.jpg", imgPos:"center 55%"
+      imgSrc:"images/massif-program-banner.jpg", imgPos:"center 55%", imgZoom:0.62
     },
     dallas311:{
       label:"Envision in Action",
@@ -5758,8 +5772,11 @@
     var calloutsBlock = callouts ? '<div class="m-block"><h3 class="m-sec-label">'+(d.calloutLabel||'Details')+'</h3><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
-    var topBanner = '<div class="m-imgbreak m-topbanner"><div class="image-bg"'+
-        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:cover;background-position:'+(d.imgPos||'center')+'"' : '')+
+    // imgZoom (0–1) zooms a banner photo out: the photo is drawn at that
+    // fraction of the banner width, over a blurred copy that fills the edges.
+    var zoom = (d.imgSrc && d.imgZoom > 0 && d.imgZoom < 1) ? d.imgZoom : 0;
+    var topBanner = '<div class="m-imgbreak m-topbanner'+(zoom ? ' m-topbanner--zoom' : '')+'"><div class="image-bg"'+
+        (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:'+(zoom ? Math.round(zoom*100)+'% auto' : 'cover')+';background-position:'+(d.imgPos||'center')+'"' : '')+
         ' role="img" aria-label="'+escAttr(d.img||d.title||'')+'"></div></div>';
 
     // When a project has a video, the Overview block becomes two columns: the
