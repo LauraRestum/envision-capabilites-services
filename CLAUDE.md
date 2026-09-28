@@ -127,13 +127,14 @@ A `PROJECTS` entry's own `video` (not a callout's) opens the in-app player
 (`#vidModal`). It takes a YouTube ID or a path to a video file shipped with the
 deck (`images/<project>/*.mp4`, H.264, sized for web). `videoPoster` overrides
 the card image, and `videoFramePoster` sets the player's own poster frame.
-`gallery:[{stage, src, alt, cap, machine}]` renders the "On the Floor" journey
+`gallery:[{stage, src, alt, cap, machine | place}]` renders the "On the Floor" journey
 rail under the Overview (`floorRailHTML()` / `initFloorRail()`): numbered cards
 in a scroll-snap track, stage pills built from each entry's `stage` (in first-
 seen order) that jump to that stage and light up as the rail scrolls, and a
 progress line. List photos in the order the product moves through the building,
 and name the equipment in `machine` using the same names as the Innovation
-slide's tooling chips. `galleryLabel` / `gallerySub` override the heading and
+slide's tooling chips. A stop that isn't a machine (a store shelf, say) uses
+`place` instead, which renders with a storefront icon. `galleryLabel` / `gallerySub` override the heading and
 the line under it. Every photo needs real alt text. Keep originals out of the
 repo root: resize into `images/<project>/` and remove the raw upload.
 
