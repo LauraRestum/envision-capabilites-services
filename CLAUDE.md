@@ -34,7 +34,8 @@ the order and a project appears in the list automatically once added.
 The "Capabilities Behind It" callout cards must render an **icon**, never a
 photo or photo placeholder. Icons come from `calloutIcon(tag, title)`, which maps
 a capability tag/title to a line SVG (textiles, fulfillment, contact center,
-workforce, public sector, quality, print/design, polymer/film, plus a generic
+workforce, public sector, quality, print/design, polymer/film, retail/Base Supply
+Center, plus a generic
 default). Style is the green-tinted `.m-card-icon` box.
 
 - When a new capability tag is introduced, add a matching branch to
