@@ -1898,6 +1898,10 @@
     height:clamp(200px,30vh,300px);border-radius:6px;
     margin:28px 0 4px;
   }
+  /* Taller banner (imgTall) for a photo whose subject needs more height
+     than the default strip, filled edge to edge rather than zoomed out. */
+  .m-topbanner--tall{height:clamp(240px,42vh,400px)}
+  @media (max-width:700px){.m-topbanner--tall{height:clamp(180px,28vh,240px)}}
   /* Zoomed-out banner (imgZoom): the photo sits smaller, and a blurred,
      dimmed copy of the same image fills the sides. */
   .m-topbanner--zoom .image-bg{background-repeat:no-repeat}
@@ -5348,7 +5352,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 118 · 2026-09-28";
+  var BUILD_REV = "rev 119 · 2026-09-28";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -5417,7 +5421,7 @@
         {tag:"Retail",title:"Sold at Base Supply Centers",desc:"Massif products are sold at Envision's Base Supply Centers, which are operated by Envision and staffed by people who are blind or have low vision, closing the loop from raw material to customer.",specs:[["Channel","Base Supply Centers"],["Loop","Make, fulfill, sell"]]}
       ],
       img:"Massif flame-resistant base layer shirt on display with Massif base layer boxes and a tape measure",
-      imgSrc:"images/massif-program-banner.jpg", imgPos:"center 55%", imgZoom:0.62
+      imgSrc:"images/massif/massif-banner-shirt.jpg", imgPos:"center 50%", imgTall:true
     },
     dallas311:{
       label:"Envision in Action",
@@ -5809,7 +5813,7 @@
     // imgZoom (0–1) zooms a banner photo out: the photo is drawn at that
     // fraction of the banner width, over a blurred copy that fills the edges.
     var zoom = (d.imgSrc && d.imgZoom > 0 && d.imgZoom < 1) ? d.imgZoom : 0;
-    var topBanner = '<div class="m-imgbreak m-topbanner'+(zoom ? ' m-topbanner--zoom' : '')+'"><div class="image-bg"'+
+    var topBanner = '<div class="m-imgbreak m-topbanner'+(zoom ? ' m-topbanner--zoom' : '')+(d.imgTall ? ' m-topbanner--tall' : '')+'"><div class="image-bg"'+
         (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;);background-size:'+(zoom ? Math.round(zoom*100)+'% auto' : 'cover')+';background-position:'+(d.imgPos||'center')+'"' : '')+
         ' role="img" aria-label="'+escAttr(d.img||d.title||'')+'"></div></div>';
 
