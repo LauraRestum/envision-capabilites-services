@@ -5933,7 +5933,7 @@
     if (track.scrollWidth - track.clientWidth < 8) return;
     btn.hidden = false;
     var SPEED = 38;                 // px per second
-    var inView = false, hovering = false, focused = false, paused = false, stopped = false;
+    var inView = false, hovering = false, focused = false, paused = false, stopped = false, touching = false;
     var raf = 0, last = 0, pos = track.scrollLeft, holdUntil = 0, returning = false, atEnd = false;
 
     function setPaused(v){
@@ -5953,7 +5953,7 @@
       btn.hidden = true;
       io.disconnect();
     }
-    function running(){ return inView && !hovering && !focused && !paused && !stopped; }
+    function running(){ return inView && !hovering && !focused && !paused && !stopped && !touching; }
     function tick(now){
       raf = 0;
       if (!document.body.contains(track)){ io.disconnect(); return; }
@@ -6001,10 +6001,26 @@
     Array.prototype.forEach.call(rail.querySelectorAll("[data-floor-dir],[data-floor-stage]"), function(b){
       b.addEventListener("click", stopForGood);
     });
-    track.addEventListener("wheel", stopForGood, {passive:true});
-    track.addEventListener("touchstart", stopForGood, {passive:true});
+    // Only sideways intent counts: a vertical page scroll that starts on the
+    // rail (common on phones) must not kill the drift.
+    track.addEventListener("wheel", function(e){
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) stopForGood();
+    }, {passive:true});
     track.addEventListener("keydown", stopForGood);
-    track.addEventListener("pointerdown", stopForGood);
+    track.addEventListener("pointerdown", function(e){ if (e.pointerType === "mouse") stopForGood(); });
+    var t0 = null;
+    track.addEventListener("touchstart", function(e){
+      var t = e.touches[0]; t0 = {x: t.clientX, y: t.clientY};
+      touching = true;
+    }, {passive:true});
+    track.addEventListener("touchmove", function(e){
+      if (!t0) return;
+      var t = e.touches[0], dx = Math.abs(t.clientX - t0.x), dy = Math.abs(t.clientY - t0.y);
+      if (dx > 10 && dx > dy){ t0 = null; stopForGood(); }
+    }, {passive:true});
+    function touchEnd(){ t0 = null; touching = false; tick.kick(); }
+    track.addEventListener("touchend", touchEnd, {passive:true});
+    track.addEventListener("touchcancel", touchEnd, {passive:true});
   }
 
   function renderProject(key, fromList){
