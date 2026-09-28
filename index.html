@@ -5408,7 +5408,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 122 · 2026-09-28";
+  var BUILD_REV = "rev 123 · 2026-09-28";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -5452,7 +5452,7 @@
       videoPoster:"images/massif/packing-station-massif-cartons.jpg",
       videoFramePoster:"images/massif/massif-teaser-poster.jpg",
       galleryLabel:"On the Floor",
-      gallerySub:"Raw material to shipment, at the Dallas Campus.",
+      gallerySub:"From raw material in Dallas to the hands of warfighters.",
       gallery:[
         {stage:"Innovation Lab",src:"images/innovation-prototyping-lab.jpg",alt:"Envision Innovation and Prototyping Laboratory, with the Implementation Shop and Quality Assurance and Test Laboratory beyond",cap:"Pattern engineering and first article",machine:"Innovation &amp; Prototyping Laboratory, with the QA and Test Lab"},
         {stage:"Cut",src:"images/massif/cutting-room-spreader-table.jpg",alt:"Operator loading marker paper on a long spreader table in the Dallas cutting room",cap:"Spreading and marker layout",machine:"Gerber Spreader with Air Table"},
@@ -5461,7 +5461,8 @@
         {stage:"Fulfillment",src:"images/massif/qa-inspection-table.jpg",alt:"Quality inspector checking a finished base layer garment at a long inspection table, with packed Massif cartons beside her on the Dallas floor",cap:"QA inspection before packing",machine:"Inspection table, ISO 9001:2015 quality system"},
         {stage:"Fulfillment",src:"images/massif/packing-station-massif-cartons.jpg",alt:"Team member in a safety vest kitting and packing Massif base layer cartons at a fulfillment station",cap:"Kitting and packing Massif cartons",machine:"Kitting and packing station"},
         {stage:"Shipping",src:"images/massif/warehouse-pallet-jack-walkway.jpg",alt:"Team member pulling a pallet jack along a yellow-lined safety walkway toward the warehouse floor",cap:"Moving product to the warehouse",machine:"Pallet jack on a marked safety walkway"},
-        {stage:"Shipping",src:"images/massif/warehouse-racking-forklift-aisle.jpg",alt:"Warehouse aisle with stocked pallet racking and a reach forklift",cap:"Staged in the warehouse, ready to ship",machine:"Reach forklift and pallet racking"}
+        {stage:"Shipping",src:"images/massif/warehouse-racking-forklift-aisle.jpg",alt:"Warehouse aisle with stocked pallet racking and a reach forklift",cap:"Staged in the warehouse, ready to ship",machine:"Reach forklift and pallet racking"},
+        {stage:"Retail",src:"images/massif/base-supply-center-aisle.jpg",alt:"Uniformed service member walking a Base Supply Center aisle beside an Envision team member and her guide dog, past shelves of base layers and apparel",cap:"Into the hands of warfighters",place:"Sold in retail stores and at Envision's Base Supply Centers, operated by Envision and staffed by people who are blind or have low vision"}
       ],
       pipeline:{
         url:"https://massif-envision-portal.vercel.app",
@@ -5830,6 +5831,7 @@
     var stages = [];
     g.forEach(function(x){ if (x.stage && stages.indexOf(x.stage) < 0) stages.push(x.stage); });
     var gear = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>';
+    var store = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M5 12v9h14v-9"/><path d="M10 21v-5h4v5"/></svg>';
     var arrow = function(dir){ return '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="'+(dir < 0 ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6')+'"/></svg>'; };
     var pad = function(n){ return (n < 10 ? '0' : '')+n; };
     var pills = stages.length > 1
@@ -5845,6 +5847,7 @@
           (x.stage ? '<span class="m-floor-stage">'+x.stage+'</span>' : '')+
           '<span class="m-floor-title">'+(x.cap||'')+'</span>'+
           (x.machine ? '<span class="m-floor-machine">'+gear+'<span><span class="visually-hidden">Equipment: </span>'+x.machine+'</span></span>' : '')+
+          (x.place ? '<span class="m-floor-machine">'+store+'<span><span class="visually-hidden">Where: </span>'+x.place+'</span></span>' : '')+
         '</figcaption></figure></li>';
     }).join("");
     return '<div class="m-block m-floor" data-floor>'+
