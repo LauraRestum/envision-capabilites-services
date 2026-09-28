@@ -5408,7 +5408,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 120 · 2026-09-28";
+  var BUILD_REV = "rev 121 · 2026-09-28";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -5452,14 +5452,15 @@
       videoPoster:"images/massif/packing-station-massif-cartons.jpg",
       videoFramePoster:"images/massif/massif-teaser-poster.jpg",
       galleryLabel:"On the Floor",
-      gallerySub:"Raw material to ship, at the Dallas Campus.",
+      gallerySub:"Raw material to shipment, at the Dallas Campus.",
       gallery:[
         {stage:"Cut",src:"images/massif/cutting-room-spreader-table.jpg",alt:"Operator loading marker paper on a long spreader table in the Dallas cutting room",cap:"Spreading and marker layout",machine:"Gerber Spreader with Air Table"},
         {stage:"Cut",src:"images/massif/cutting-room-gerber-paragon.jpg",alt:"Operator at the controls of a Gerber Paragon CNC cutter with a roll of fabric on the table",cap:"CNC cutting from digital patterns",machine:"Gerber Paragon CNC Cutter"},
         {stage:"Sew",src:"images/massif/sewing-floor-juki.jpg",alt:"Sewing operator guiding a black base layer garment through a Juki industrial sewing machine on the Dallas sewing floor",cap:"Sewing on the Dallas floor",machine:"Juki single-needle lockstitch"},
-        {stage:"Kit &amp; Pack",src:"images/massif/packing-station-massif-cartons.jpg",alt:"Team member in a safety vest kitting and packing Massif base layer cartons at a fulfillment station",cap:"Kitting and packing Massif cartons",machine:"Kitting and packing station"},
-        {stage:"Warehouse",src:"images/massif/warehouse-pallet-jack-walkway.jpg",alt:"Team member pulling a pallet jack along a yellow-lined safety walkway toward the warehouse floor",cap:"Moving product to the warehouse",machine:"Pallet jack on a marked safety walkway"},
-        {stage:"Warehouse",src:"images/massif/warehouse-racking-forklift-aisle.jpg",alt:"Warehouse aisle with stocked pallet racking and a reach forklift",cap:"Staged in the warehouse, ready to ship",machine:"Reach forklift and pallet racking"}
+        {stage:"Fulfillment",src:"images/massif/qa-inspection-table.jpg",alt:"Quality inspector checking a finished base layer garment at a long inspection table, with packed Massif cartons beside her on the Dallas floor",cap:"QA inspection before packing",machine:"Inspection table, ISO 9001:2015 quality system"},
+        {stage:"Fulfillment",src:"images/massif/packing-station-massif-cartons.jpg",alt:"Team member in a safety vest kitting and packing Massif base layer cartons at a fulfillment station",cap:"Kitting and packing Massif cartons",machine:"Kitting and packing station"},
+        {stage:"Shipping",src:"images/massif/warehouse-pallet-jack-walkway.jpg",alt:"Team member pulling a pallet jack along a yellow-lined safety walkway toward the warehouse floor",cap:"Moving product to the warehouse",machine:"Pallet jack on a marked safety walkway"},
+        {stage:"Shipping",src:"images/massif/warehouse-racking-forklift-aisle.jpg",alt:"Warehouse aisle with stocked pallet racking and a reach forklift",cap:"Staged in the warehouse, ready to ship",machine:"Reach forklift and pallet racking"}
       ],
       pipeline:{
         url:"https://massif-envision-portal.vercel.app",
