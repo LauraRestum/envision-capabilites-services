@@ -34,7 +34,8 @@ the order and a project appears in the list automatically once added.
 The "Capabilities Behind It" callout cards must render an **icon**, never a
 photo or photo placeholder. Icons come from `calloutIcon(tag, title)`, which maps
 a capability tag/title to a line SVG (textiles, fulfillment, contact center,
-workforce, public sector, quality, print/design, polymer/film, plus a generic
+workforce, public sector, quality, print/design, polymer/film, retail/Base Supply
+Center, plus a generic
 default). Style is the green-tinted `.m-card-icon` box.
 
 - When a new capability tag is introduced, add a matching branch to
@@ -119,6 +120,16 @@ a new tab. For more than one video on a card, use
 `videos:[{url:"...",cta:"Explore Esther's Place"}]`) for links that aren't
 "watch"-framed. Strip share-tracking params (`?si=`, `?igsh=`) from pasted
 links before adding them.
+
+### Project video card and photo strip
+
+A `PROJECTS` entry's own `video` (not a callout's) opens the in-app player
+(`#vidModal`). It takes a YouTube ID or a path to a video file shipped with the
+deck (`images/<project>/*.mp4`, H.264, sized for web). `videoPoster` overrides
+the card image, and `videoFramePoster` sets the player's own poster frame.
+`gallery:[{src, alt, cap}]` renders an "On the Floor" photo strip under the
+Overview; every photo needs real alt text. Keep originals out of the repo root:
+resize into `images/<project>/` and remove the raw upload.
 
 ### Project pipeline link — a second password
 

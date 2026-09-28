@@ -630,7 +630,15 @@
     border:1px solid var(--bsc-bd);border-radius:10px;overflow:hidden;
     background:#000;
   }
-  .vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vid-frame iframe,
+  .vid-frame video{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vid-frame video{object-fit:contain;background:#000}
+  /* Project photo strip ("On the Floor"): real photos of the work, in the
+     order the product moves through the building. */
+  .m-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0;padding:0;list-style:none}
+  .m-gallery figure{margin:0}
+  .m-gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:1px solid var(--bsc-bd)}
+  .m-gallery figcaption{font-size:.8rem;line-height:1.35;margin-top:6px;opacity:.85}
   .vid-close{
     position:fixed;top:clamp(12px,2.5vw,28px);right:clamp(12px,2.5vw,28px);z-index:6;
     width:42px;height:42px;border-radius:50%;
@@ -5340,7 +5348,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 115 · 2026-09-26";
+  var BUILD_REV = "rev 117 · 2026-09-28";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -5354,9 +5362,12 @@
   var PROJECT_ORDER = ["h2f","massif","dallas311","oncor","texaslions","handwarmers","va"];
   var PROJECTS = {
     massif:{
-      /* Draft copy pulled from the shared Massif program pipeline; to be
-         reviewed with the team. The flight suit pant program is moving to
-         another production partner and is intentionally not listed here.
+      /* Scoped to the one active line, the Inversion base layer shirt, and
+         told as a raw-material-to-retail-shelf story. Other Massif styles are
+         named only as SKUs being looked at, not as work under way.
+         video: the teaser, slowed to half speed from the original upload and
+         served from the deck; the card uses the packing-station photo as its
+         poster. gallery: floor photos in the order the shirt moves.
          pipeline: a second, project-level password in front of the link to
          the shared pipeline site (see pipelineBlockHTML). */
       label:"Envision in Action",
@@ -5364,33 +5375,45 @@
       status:"In Production", statusClass:"shipping",
       title:"Massif",
       location:"Dallas",
-      blurb:"Flame-resistant base layers and outerwear for Massif, carried from tech pack through first article and into full production on Envision's textile floor.",
+      blurb:"Massif's Inversion flame-resistant base layer shirt, made in Dallas and sold on the shelves of Envision's Base Supply Centers.",
       logo:LOGO_DATA.massif,
       logoFile:"images/logos/massif.png",
       thumb:"images/massif-program-banner.jpg",
-      summary:"Envision is a production partner to Massif, maker of flame-resistant apparel for military and industrial crews. Every Massif line moves through one shared program pathway, from tech pack and sample approval through pattern engineering and first article validation to a live production run, with both teams working from the same program pipeline.",
-      creds:["Flame-Resistant Apparel","Cut &amp; Sew","Shared Program Pipeline"],
+      summary:"Envision builds Massif's Inversion flame-resistant base layer shirt. Raw material arrives in Dallas and leaves as a finished shirt, moves through fulfillment, and lands on a retail shelf, often one of Envision's own Base Supply Centers. Our workforce makes it, helps fulfill it, and helps sell it. The only step we don't handle is making the fabric.",
+      creds:["Flame-Resistant Apparel","Cut &amp; Sew","Base Supply Centers"],
       overview:[
-        "<strong>The program.</strong> Envision builds flame-resistant apparel lines for Massif: Inversion base layers, PCU Level 2 layers, the Advanced Quarter Zip Combat Shirt, and the Flamestretch, Hotjohns, and Cool Knit families in development.",
-        "<strong>What we're making.</strong> Inversion lightweight tees, short and long sleeve, are in full production. Inversion crews and bottoms in men's midweight and women's lightweight, the PCU Level 2 pullover and pant, and the Advanced Quarter Zip Combat Shirt are accepted and moving toward production. Flamestretch, Hotjohns, and Cool Knit styles are quoted.",
-        "<strong>The Envision build.</strong> Each line follows the same eight phases: tech pack, sample approval, quote, pattern engineering, material delivery, first article validation, ramp up, and production run live. Patterns, cutting, and sewing run on the Envision textile floor, so a line moves from approved sample to volume without changing hands."
+        "<strong>The line.</strong> Envision produces the Massif Inversion flame-resistant base layer shirt, short sleeve and long sleeve, in full production at the Dallas Campus.",
+        "<strong>Raw material to retail shelf.</strong> Material arrives in Dallas and moves through eight program phases, worked side by side with Massif: tech pack, sample approval, quote, pattern engineering, material delivery, first article validation, ramp up, and production run live. The finished shirt moves through fulfillment and onto retail shelves, including Envision's Base Supply Centers, where Massif products are sold.",
+        "<strong>Why it matters.</strong> The Base Supply Center that stocks the shirt anchors another Envision workforce of people who are blind or have low vision on the installation it serves. From raw material to the customer, Envision is involved at almost every step of the chain.",
+        "<strong>Looking ahead.</strong> Envision and Massif are also looking at additional SKUs to produce in Dallas, including Inversion midweight crews and bottoms, the PCU Level 2 pullover and pant, and the Advanced Quarter Zip Combat Shirt."
+      ],
+      video:"images/massif/massif-teaser.mp4",
+      videoLabel:"Watch the Massif teaser",
+      videoPoster:"images/massif/packing-station-massif-cartons.jpg",
+      videoFramePoster:"images/massif/massif-teaser-poster.jpg",
+      gallery:[
+        {src:"images/massif/cutting-room-spreader-table.jpg",alt:"Operator loading marker paper on a long spreader table in the Dallas cutting room",cap:"Spreading in the cutting room"},
+        {src:"images/massif/cutting-room-gerber-paragon.jpg",alt:"Operator at the controls of a Gerber Paragon CNC cutter with a roll of fabric on the table",cap:"CNC cutting on the Gerber Paragon"},
+        {src:"images/massif/packing-station-massif-cartons.jpg",alt:"Team member in a safety vest packing Massif base layer cartons at a fulfillment station",cap:"Packing Massif cartons"},
+        {src:"images/massif/warehouse-racking-forklift-aisle.jpg",alt:"Warehouse aisle with stocked pallet racking and a reach forklift",cap:"Staged in the warehouse"},
+        {src:"images/massif/warehouse-pallet-jack-walkway.jpg",alt:"Team member pulling a pallet jack along a yellow-lined safety walkway toward the warehouse floor",cap:"Moving product out to ship"}
       ],
       pipeline:{
         url:"https://massif-envision-portal.vercel.app",
         pass:"massif",
-        desc:"Every Massif line and where it stands, phase by phase, in the pipeline Envision and Massif share."
+        desc:"A look at the future lines Envision and Massif are exploring beyond the Inversion shirt, phase by phase."
       },
       statLabel:"By the Numbers",
       stats:[
-        {num:"60,000",label:"Units a year in production",ctx:"Annual volume across the two Inversion lightweight tees now in full production."},
-        {num:"6",label:"Product families",ctx:"Inversion, PCU Level 2, Advanced Combat Shirt, Flamestretch, Hotjohns, and Cool Knit."},
-        {num:"8",label:"Program phases",ctx:"Tech pack through production run live, tracked line by line in the shared pipeline."}
+        {num:"60,000",label:"Inversion shirts a year",ctx:"Annual volume across the short and long sleeve Inversion base layer shirts in full production."},
+        {num:"8",label:"Program phases",ctx:"Tech pack through production run live, run with Massif from raw material to finished shirt."},
+        {num:"3",label:"Steps our workforce touches",ctx:"Envision makes the shirt, helps fulfill it, and helps sell it at the Base Supply Center shelf."}
       ],
       calloutLabel:"Capabilities Behind It",
       callouts:[
-        {tag:"Textiles",title:"Flame-Resistant Cut and Sew",link:"textile",desc:"Massif lines run on the same textile operation behind Envision's military apparel: CNC cutting from partner-supplied digital patterns, industrial sewing, and full BOM and routing control.",specs:[["Cutting","Gerber Paragon CNC"],["Cuts","Men's + women's"]]},
-        {tag:"Innovation Lab",title:"Pattern Engineering and First Article",desc:"Each style is pattern-engineered and carried through sample approval and first article validation before it ramps, so what reaches volume is what Massif approved.",specs:[["Pathway","Tech pack to production"],["Gate","First article"]]},
-        {tag:"Quality",title:"One Standard, Sample to Volume",desc:"Production runs under Envision's ISO 9001:2015 quality systems, with every line's status visible to both teams in the shared program pipeline.",specs:[["QMS","ISO 9001:2015"],["Visibility","Shared pipeline"]]}
+        {tag:"Textiles",title:"Made in Dallas",link:"textile",desc:"The shirt is pattern-engineered, cleared through first article validation, then CNC cut from partner-supplied digital patterns and sewn on the same textile floor behind Envision's military apparel.",specs:[["Cutting","Gerber Paragon CNC"],["Gate","First article"]]},
+        {tag:"Fulfillment",title:"Fulfilled by Envision",link:"fulfillment",desc:"Finished shirts move from the Dallas floor through fulfillment and on toward retail, so the hand-off from production to the customer stays inside one operation.",specs:[["Origin","Dallas Campus"],["Destination","Retail shelf"]]},
+        {tag:"Retail",title:"Sold at Base Supply Centers",desc:"Massif products are sold at Envision's Base Supply Centers, which are operated by Envision and staffed by people who are blind or have low vision, closing the loop from raw material to customer.",specs:[["Channel","Base Supply Centers"],["Loop","Make, fulfill, sell"]]}
       ],
       img:"Massif flame-resistant base layer shirt on display with Massif base layer boxes and a tape measure",
       imgSrc:"images/massif-program-banner.jpg", imgPos:"center 55%", imgZoom:0.62
@@ -5603,6 +5626,8 @@
     var svg = function(paths){
       return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths+'</svg>';
     };
+    if (/retail|storefront|base supply/.test(k))
+      return svg('<path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M5 12v9h14v-9"/><path d="M10 21v-5h4v5"/>');
     if (/contact|call|center|headset|phone|support/.test(k))
       return svg('<path d="M3 18v-5a9 9 0 0 1 18 0v5"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>');
     if (/textile|sew|cut|cnc|fabric|apparel|garment|material|reflect|safety/.test(k))
@@ -5769,6 +5794,14 @@
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
     var statsBlock = stats ? '<div class="m-block"><h3 class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</h3><div class="m-stats">'+stats+'</div></div>' : '';
     var pipelineBlock = pipelineBlockHTML(key, d);
+    // gallery: [{src, alt, cap}] renders a photo strip under the Overview.
+    var galleryBlock = (d.gallery && d.gallery.length)
+      ? '<div class="m-block"><h3 class="m-sec-label">'+(d.galleryLabel||'On the Floor')+'</h3><ul class="m-gallery">'+
+          d.gallery.map(function(g){
+            return '<li><figure><img src="'+g.src+'" alt="'+escAttr(g.alt)+'" loading="lazy" decoding="async">'+
+              (g.cap ? '<figcaption>'+g.cap+'</figcaption>' : '')+'</figure></li>';
+          }).join("")+'</ul></div>'
+      : '';
     var calloutsBlock = callouts ? '<div class="m-block"><h3 class="m-sec-label">'+(d.calloutLabel||'Details')+'</h3><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
@@ -5787,9 +5820,10 @@
     var overviewBlock = d.video
       ? '<div class="m-block m-block--video">'+
           '<div class="m-overview-main"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>'+
-          '<button type="button" class="m-video-card" data-video="'+d.video+'" data-video-label="'+escAttr(vidLabel)+'" aria-label="'+escAttr(vidLabel)+'">'+
+          '<button type="button" class="m-video-card" data-video="'+d.video+'" data-video-label="'+escAttr(vidLabel)+'"'+
+            (d.videoFramePoster ? ' data-video-poster="'+d.videoFramePoster+'"' : '')+' aria-label="'+escAttr(vidLabel)+'">'+
             '<span class="m-video-poster"'+
-              (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;)"' : '')+'>'+
+              ((d.videoPoster||d.imgSrc) ? ' style="background-image:url(&quot;'+(d.videoPoster||d.imgSrc)+'&quot;)"' : '')+'>'+
               '<span class="m-video-play" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>'+
             '</span>'+
             '<span class="m-video-card-cap">'+vidLabel+'</span>'+
@@ -5809,6 +5843,7 @@
         '<div class="m-creds">'+creds+'</div>'+
       '</div>'+
       overviewBlock+
+      galleryBlock+
       pipelineBlock+
       statsBlock+
       calloutsBlock+
@@ -7435,7 +7470,8 @@
     }, true);
   })();
 
-  /* In-app video player. A project's video card (a [data-video] YouTube id)
+  /* In-app video player. A project's video card (a [data-video] YouTube id,
+     or a path to a video file in the deck such as images/massif/*.mp4)
      opens this overlay, which injects an autoplaying embed; closing removes the
      iframe so playback stops and nothing keeps running behind the deck. */
   (function(){
@@ -7460,14 +7496,28 @@
       if (!id) return;
       var label = trigger.getAttribute("data-video-label") || "Video player";
       modal.setAttribute("aria-label", label);
-      var iframe = document.createElement("iframe");
-      iframe.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) +
-        "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
-      iframe.title = label;
-      iframe.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
-      iframe.setAttribute("allowfullscreen", "");
+      var player;
+      if (/\.(mp4|webm|mov)$/i.test(id)){
+        // A video file shipped with the deck: native player with controls.
+        player = document.createElement("video");
+        player.src = id;
+        player.controls = true;
+        player.autoplay = true;
+        player.playsInline = true;
+        player.setAttribute("playsinline", "");
+        var poster = trigger.getAttribute("data-video-poster");
+        if (poster) player.poster = poster;
+        player.setAttribute("aria-label", label);
+      } else {
+        player = document.createElement("iframe");
+        player.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) +
+          "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
+        player.title = label;
+        player.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+        player.setAttribute("allowfullscreen", "");
+      }
       frame.innerHTML = "";
-      frame.appendChild(iframe);
+      frame.appendChild(player);
       returnFocus = trigger;
       dismissPeers();
       backdrop.classList.add("is-open");
