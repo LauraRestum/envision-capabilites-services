@@ -121,6 +121,16 @@ a new tab. For more than one video on a card, use
 "watch"-framed. Strip share-tracking params (`?si=`, `?igsh=`) from pasted
 links before adding them.
 
+### Project video card and photo strip
+
+A `PROJECTS` entry's own `video` (not a callout's) opens the in-app player
+(`#vidModal`). It takes a YouTube ID or a path to a video file shipped with the
+deck (`images/<project>/*.mp4`, H.264, sized for web). `videoPoster` overrides
+the card image, and `videoFramePoster` sets the player's own poster frame.
+`gallery:[{src, alt, cap}]` renders an "On the Floor" photo strip under the
+Overview; every photo needs real alt text. Keep originals out of the repo root:
+resize into `images/<project>/` and remove the raw upload.
+
 ### Project pipeline link — a second password
 
 A project can carry `pipeline:{url, pass, desc}` (Massif does). It renders a

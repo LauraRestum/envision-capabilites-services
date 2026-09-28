@@ -630,7 +630,15 @@
     border:1px solid var(--bsc-bd);border-radius:10px;overflow:hidden;
     background:#000;
   }
-  .vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vid-frame iframe,
+  .vid-frame video{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vid-frame video{object-fit:contain;background:#000}
+  /* Project photo strip ("On the Floor"): real photos of the work, in the
+     order the product moves through the building. */
+  .m-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0;padding:0;list-style:none}
+  .m-gallery figure{margin:0}
+  .m-gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:1px solid var(--bsc-bd)}
+  .m-gallery figcaption{font-size:.8rem;line-height:1.35;margin-top:6px;opacity:.85}
   .vid-close{
     position:fixed;top:clamp(12px,2.5vw,28px);right:clamp(12px,2.5vw,28px);z-index:6;
     width:42px;height:42px;border-radius:50%;
@@ -5340,7 +5348,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 116 · 2026-09-28";
+  var BUILD_REV = "rev 117 · 2026-09-28";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -5357,9 +5365,9 @@
       /* Scoped to the one active line, the Inversion base layer shirt, and
          told as a raw-material-to-retail-shelf story. Other Massif styles are
          named only as SKUs being looked at, not as work under way.
-         video: when the teaser is on YouTube, add its video ID here (e.g.
-         video:"AbC123", videoLabel:"Watch the Massif teaser") and the
-         Overview gets the play card like Oncor and Texas Lions.
+         video: the teaser, slowed to half speed from the original upload and
+         served from the deck; the card uses the packing-station photo as its
+         poster. gallery: floor photos in the order the shirt moves.
          pipeline: a second, project-level password in front of the link to
          the shared pipeline site (see pipelineBlockHTML). */
       label:"Envision in Action",
@@ -5378,6 +5386,17 @@
         "<strong>Raw material to retail shelf.</strong> Material arrives in Dallas and moves through eight program phases, worked side by side with Massif: tech pack, sample approval, quote, pattern engineering, material delivery, first article validation, ramp up, and production run live. The finished shirt moves through fulfillment and onto retail shelves, including Envision's Base Supply Centers, where Massif products are sold.",
         "<strong>Why it matters.</strong> The Base Supply Center that stocks the shirt anchors another Envision workforce of people who are blind or have low vision on the installation it serves. From raw material to the customer, Envision is involved at almost every step of the chain.",
         "<strong>Looking ahead.</strong> Envision and Massif are also looking at additional SKUs to produce in Dallas, including Inversion midweight crews and bottoms, the PCU Level 2 pullover and pant, and the Advanced Quarter Zip Combat Shirt."
+      ],
+      video:"images/massif/massif-teaser.mp4",
+      videoLabel:"Watch the Massif teaser",
+      videoPoster:"images/massif/packing-station-massif-cartons.jpg",
+      videoFramePoster:"images/massif/massif-teaser-poster.jpg",
+      gallery:[
+        {src:"images/massif/cutting-room-spreader-table.jpg",alt:"Operator loading marker paper on a long spreader table in the Dallas cutting room",cap:"Spreading in the cutting room"},
+        {src:"images/massif/cutting-room-gerber-paragon.jpg",alt:"Operator at the controls of a Gerber Paragon CNC cutter with a roll of fabric on the table",cap:"CNC cutting on the Gerber Paragon"},
+        {src:"images/massif/packing-station-massif-cartons.jpg",alt:"Team member in a safety vest packing Massif base layer cartons at a fulfillment station",cap:"Packing Massif cartons"},
+        {src:"images/massif/warehouse-racking-forklift-aisle.jpg",alt:"Warehouse aisle with stocked pallet racking and a reach forklift",cap:"Staged in the warehouse"},
+        {src:"images/massif/warehouse-pallet-jack-walkway.jpg",alt:"Team member pulling a pallet jack along a yellow-lined safety walkway toward the warehouse floor",cap:"Moving product out to ship"}
       ],
       pipeline:{
         url:"https://massif-envision-portal.vercel.app",
@@ -5775,6 +5794,14 @@
     var locChip = d.location ? '&nbsp;'+locChipModalHTML(d.location) : '';
     var statsBlock = stats ? '<div class="m-block"><h3 class="m-sec-label">'+(d.statLabel||'By the Numbers')+'</h3><div class="m-stats">'+stats+'</div></div>' : '';
     var pipelineBlock = pipelineBlockHTML(key, d);
+    // gallery: [{src, alt, cap}] renders a photo strip under the Overview.
+    var galleryBlock = (d.gallery && d.gallery.length)
+      ? '<div class="m-block"><h3 class="m-sec-label">'+(d.galleryLabel||'On the Floor')+'</h3><ul class="m-gallery">'+
+          d.gallery.map(function(g){
+            return '<li><figure><img src="'+g.src+'" alt="'+escAttr(g.alt)+'" loading="lazy" decoding="async">'+
+              (g.cap ? '<figcaption>'+g.cap+'</figcaption>' : '')+'</figure></li>';
+          }).join("")+'</ul></div>'
+      : '';
     var calloutsBlock = callouts ? '<div class="m-block"><h3 class="m-sec-label">'+(d.calloutLabel||'Details')+'</h3><div class="m-callouts">'+callouts+'</div></div>' : '';
     var backBar = fromList ? '<button class="inaction-back" type="button" data-inaction-back><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</button>' : '';
 
@@ -5793,9 +5820,10 @@
     var overviewBlock = d.video
       ? '<div class="m-block m-block--video">'+
           '<div class="m-overview-main"><h3 class="m-sec-label">Overview</h3>'+overview+'</div>'+
-          '<button type="button" class="m-video-card" data-video="'+d.video+'" data-video-label="'+escAttr(vidLabel)+'" aria-label="'+escAttr(vidLabel)+'">'+
+          '<button type="button" class="m-video-card" data-video="'+d.video+'" data-video-label="'+escAttr(vidLabel)+'"'+
+            (d.videoFramePoster ? ' data-video-poster="'+d.videoFramePoster+'"' : '')+' aria-label="'+escAttr(vidLabel)+'">'+
             '<span class="m-video-poster"'+
-              (d.imgSrc ? ' style="background-image:url(&quot;'+d.imgSrc+'&quot;)"' : '')+'>'+
+              ((d.videoPoster||d.imgSrc) ? ' style="background-image:url(&quot;'+(d.videoPoster||d.imgSrc)+'&quot;)"' : '')+'>'+
               '<span class="m-video-play" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>'+
             '</span>'+
             '<span class="m-video-card-cap">'+vidLabel+'</span>'+
@@ -5815,6 +5843,7 @@
         '<div class="m-creds">'+creds+'</div>'+
       '</div>'+
       overviewBlock+
+      galleryBlock+
       pipelineBlock+
       statsBlock+
       calloutsBlock+
@@ -7441,7 +7470,8 @@
     }, true);
   })();
 
-  /* In-app video player. A project's video card (a [data-video] YouTube id)
+  /* In-app video player. A project's video card (a [data-video] YouTube id,
+     or a path to a video file in the deck such as images/massif/*.mp4)
      opens this overlay, which injects an autoplaying embed; closing removes the
      iframe so playback stops and nothing keeps running behind the deck. */
   (function(){
@@ -7466,14 +7496,28 @@
       if (!id) return;
       var label = trigger.getAttribute("data-video-label") || "Video player";
       modal.setAttribute("aria-label", label);
-      var iframe = document.createElement("iframe");
-      iframe.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) +
-        "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
-      iframe.title = label;
-      iframe.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
-      iframe.setAttribute("allowfullscreen", "");
+      var player;
+      if (/\.(mp4|webm|mov)$/i.test(id)){
+        // A video file shipped with the deck: native player with controls.
+        player = document.createElement("video");
+        player.src = id;
+        player.controls = true;
+        player.autoplay = true;
+        player.playsInline = true;
+        player.setAttribute("playsinline", "");
+        var poster = trigger.getAttribute("data-video-poster");
+        if (poster) player.poster = poster;
+        player.setAttribute("aria-label", label);
+      } else {
+        player = document.createElement("iframe");
+        player.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) +
+          "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
+        player.title = label;
+        player.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+        player.setAttribute("allowfullscreen", "");
+      }
       frame.innerHTML = "";
-      frame.appendChild(iframe);
+      frame.appendChild(player);
       returnFocus = trigger;
       dismissPeers();
       backdrop.classList.add("is-open");
