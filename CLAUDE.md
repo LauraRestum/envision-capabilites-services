@@ -135,9 +135,13 @@ progress line. List photos in the order the product moves through the building,
 and name the equipment in `machine` using the same names as the Innovation
 slide's tooling chips. A stop that isn't a machine (a store shelf, say) uses
 `place` instead, which renders with a storefront icon. Once the rail scrolls into view it
-auto-drifts left (`initFloorDrift()`), loops back at the end, pauses on hover
+waits a 3-second beat, then auto-drifts left (`initFloorDrift()`), loops back at the end, pauses on hover
 or focus, and stops for good on any hands-on use; it carries a visible pause
-button (WCAG 2.2.2) and never runs under reduced motion. `galleryLabel` / `gallerySub` override the heading and
+button (WCAG 2.2.2) and never runs under reduced motion. As it moves, the stop in
+the lead position glows (`.is-lit`) and its stage pill pulses when the stage
+changes; the focal point slides from the first slot to the last so every card,
+including the final few, takes a turn. On phones the arrows hide but the pause
+button stays. `galleryLabel` / `gallerySub` override the heading and
 the line under it. Every photo needs real alt text. Keep originals out of the
 repo root: resize into `images/<project>/` and remove the raw upload.
 
