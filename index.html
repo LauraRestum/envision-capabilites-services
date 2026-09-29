@@ -651,6 +651,11 @@
   .m-floor-btn:hover:not(:disabled){border-color:var(--green);color:var(--green)}
   .m-floor-btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   .m-floor-btn:disabled{opacity:.35;cursor:default}
+  .m-floor-btn[hidden]{display:none}
+  .m-floor-btn[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
+  /* While auto-drift is live (even paused), snapping stays off so it never
+     fights the slow scroll or jumps on pause; hands-on use restores it. */
+  .m-floor-track.is-drifting{scroll-snap-type:none;scroll-behavior:auto}
   .m-floor-stages{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;padding:0;list-style:none}
   .m-floor-pill{
     font:inherit;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
@@ -5408,7 +5413,7 @@
   /* Bump on every release. Shown in tiny type at the bottom of the
      In Action modal and logged to the console, so any device can be
      checked for a stale page at a glance. */
-  var BUILD_REV = "rev 124 · 2026-09-28";
+  var BUILD_REV = "rev 125 · 2026-09-28";
   try{ console.log("Envision deck build:", BUILD_REV); }catch(e){}
   /* Logos inlined as data URIs so the covers render even when image
      requests are blocked or cached badly on the visitor's side. */
@@ -5462,7 +5467,7 @@
         {stage:"Fulfillment",src:"images/massif/packing-station-massif-cartons.jpg",alt:"Team member in a safety vest kitting and packing Massif base layer cartons at a fulfillment station",cap:"Kitting and packing Massif cartons",machine:"Kitting and packing station"},
         {stage:"Shipping",src:"images/massif/warehouse-pallet-jack-walkway.jpg",alt:"Team member pulling a pallet jack along a yellow-lined safety walkway toward the warehouse floor",cap:"Moving product to the warehouse",machine:"Pallet jack on a marked safety walkway"},
         {stage:"Shipping",src:"images/massif/warehouse-racking-forklift-aisle.jpg",alt:"Warehouse aisle with stocked pallet racking and a reach forklift",cap:"Staged in the warehouse, ready to ship",machine:"Reach forklift and pallet racking"},
-        {stage:"Retail",src:"images/massif/base-supply-center-aisle.jpg",alt:"Uniformed service member walking a Base Supply Center aisle beside an Envision team member and her guide dog, past shelves of base layers and apparel",cap:"On the shelf and into customers' hands",place:"Sold through Massif's retail channels and at Envision's Base Supply Centers, which serve military, government, and tax-exempt buyers and are staffed by people who are blind or have low vision"}
+        {stage:"Retail",src:"images/massif/base-supply-center-aisle.jpg",alt:"Uniformed service member walking a Base Supply Center aisle beside an Envision team member and her guide dog, past shelves of base layers and apparel",cap:"On the shelf and into customers' hands",place:"Sold through Massif's retail channels and at Envision's Base Supply Centers, reaching warfighters and government buyers, in stores staffed by people who are blind or have low vision"}
       ],
       pipeline:{
         url:"https://massif-envision-portal.vercel.app",
@@ -5853,7 +5858,10 @@
     return '<div class="m-block m-floor" data-floor>'+
       '<div class="m-floor-head"><div><h3 class="m-sec-label">'+(d.galleryLabel||'On the Floor')+'</h3>'+
         '<p class="m-floor-sub">'+(d.gallerySub||(g.length+' stops on the floor'))+'</p></div>'+
-        '<div class="m-floor-nav"><button type="button" class="m-floor-btn" data-floor-dir="-1" aria-label="Previous photos">'+arrow(-1)+'</button>'+
+        '<div class="m-floor-nav"><button type="button" class="m-floor-btn" data-floor-auto aria-pressed="false" aria-label="Pause auto-scroll" hidden>'+
+          '<svg aria-hidden="true" focusable="false" class="i-pause" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'+
+          '<svg aria-hidden="true" focusable="false" class="i-play" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="display:none"><path d="M8 5v14l11-7z"/></svg></button>'+
+        '<button type="button" class="m-floor-btn" data-floor-dir="-1" aria-label="Previous photos">'+arrow(-1)+'</button>'+
         '<button type="button" class="m-floor-btn" data-floor-dir="1" aria-label="Next photos">'+arrow(1)+'</button></div></div>'+
       pills+
       '<div class="m-floor-rail" aria-hidden="true"><span class="m-floor-progress"></span></div>'+
@@ -5909,6 +5917,110 @@
     track.addEventListener("scroll", sync, {passive:true});
     window.addEventListener("resize", sync);
     sync();
+    initFloorDrift(rail, track);
+  }
+
+  // Auto-drift: once the rail scrolls into view, the cards glide left on
+  // their own, loop back to the start at the end, and pause on hover or
+  // focus. Any hands-on use (arrows, pills, swipe, wheel, keys) stops it
+  // for good, and the pause button covers WCAG 2.2.2. Never runs under
+  // reduced motion, from the OS or the accessibility panel.
+  function initFloorDrift(rail, track){
+    var btn = rail.querySelector("[data-floor-auto]");
+    var reduce = (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+      document.documentElement.getAttribute("data-env-motion") === "reduce";
+    if (reduce || !btn || !("IntersectionObserver" in window)) return;
+    if (track.scrollWidth - track.clientWidth < 8) return;
+    btn.hidden = false;
+    var SPEED = 38;                 // px per second
+    var inView = false, hovering = false, focused = false, paused = false, stopped = false, touching = false;
+    var raf = 0, last = 0, pos = track.scrollLeft, holdUntil = 0, returning = false, atEnd = false;
+
+    function setPaused(v){
+      paused = v;
+      btn.setAttribute("aria-pressed", v ? "true" : "false");
+      btn.setAttribute("aria-label", v ? "Play auto-scroll" : "Pause auto-scroll");
+      btn.querySelector(".i-pause").style.display = v ? "none" : "";
+      btn.querySelector(".i-play").style.display = v ? "" : "none";
+      tick.kick();
+    }
+    function stopForGood(){
+      if (stopped) return;
+      stopped = true;
+      track.classList.remove("is-drifting");
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      btn.hidden = true;
+      io.disconnect();
+    }
+    function running(){ return inView && !hovering && !focused && !paused && !stopped && !touching; }
+    function tick(now){
+      raf = 0;
+      if (!document.body.contains(track)){ io.disconnect(); return; }
+      if (!running()){ last = 0; return; }
+      var max = track.scrollWidth - track.clientWidth;
+      if (now < holdUntil){ last = now; raf = requestAnimationFrame(tick); return; }
+      if (atEnd){
+        // Held at the last card: glide back to the start.
+        atEnd = false; returning = true;
+        track.scrollTo({left: 0, behavior: "smooth"});
+        raf = requestAnimationFrame(tick); return;
+      }
+      if (returning){
+        // Glided back to the start: hold a beat, then drift again.
+        if (track.scrollLeft <= 2){ returning = false; pos = 0; holdUntil = now + 1200; }
+        raf = requestAnimationFrame(tick); return;
+      }
+      track.classList.add("is-drifting");
+      if (last){ pos += SPEED * Math.min(now - last, 64) / 1000; }
+      last = now;
+      if (pos >= max){
+        pos = max; track.scrollLeft = max;
+        atEnd = true; holdUntil = now + 2200;
+        raf = requestAnimationFrame(tick); return;
+      }
+      track.scrollLeft = Math.round(pos);
+      raf = requestAnimationFrame(tick);
+    }
+    tick.kick = function(){
+      if (!raf && running()){ pos = track.scrollLeft; last = 0; raf = requestAnimationFrame(tick); }
+    };
+
+    var io = new IntersectionObserver(function(entries){
+      inView = entries[0].isIntersecting;
+      tick.kick();
+    }, {threshold: 0.5});
+    io.observe(track);
+
+    btn.addEventListener("click", function(){ setPaused(!paused); });
+    rail.addEventListener("pointerenter", function(e){ if (e.pointerType === "mouse"){ hovering = true; } });
+    rail.addEventListener("pointerleave", function(e){ if (e.pointerType === "mouse"){ hovering = false; tick.kick(); } });
+    rail.addEventListener("focusin", function(e){ if (e.target !== btn){ focused = true; } });
+    rail.addEventListener("focusout", function(){ focused = false; tick.kick(); });
+    // Hands-on use takes over for good.
+    Array.prototype.forEach.call(rail.querySelectorAll("[data-floor-dir],[data-floor-stage]"), function(b){
+      b.addEventListener("click", stopForGood);
+    });
+    // Only sideways intent counts: a vertical page scroll that starts on the
+    // rail (common on phones) must not kill the drift.
+    track.addEventListener("wheel", function(e){
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) stopForGood();
+    }, {passive:true});
+    track.addEventListener("keydown", stopForGood);
+    track.addEventListener("pointerdown", function(e){ if (e.pointerType === "mouse") stopForGood(); });
+    var t0 = null;
+    track.addEventListener("touchstart", function(e){
+      var t = e.touches[0]; t0 = {x: t.clientX, y: t.clientY};
+      touching = true;
+    }, {passive:true});
+    track.addEventListener("touchmove", function(e){
+      if (!t0) return;
+      var t = e.touches[0], dx = Math.abs(t.clientX - t0.x), dy = Math.abs(t.clientY - t0.y);
+      if (dx > 10 && dx > dy){ t0 = null; stopForGood(); }
+    }, {passive:true});
+    function touchEnd(){ t0 = null; touching = false; tick.kick(); }
+    track.addEventListener("touchend", touchEnd, {passive:true});
+    track.addEventListener("touchcancel", touchEnd, {passive:true});
   }
 
   function renderProject(key, fromList){
