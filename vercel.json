@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/allyantbraille", "destination": "https://envision-print-allyant-portal.vercel.app/allyantbraille" },
+    { "source": "/allyantbraille/:path*", "destination": "https://envision-print-allyant-portal.vercel.app/allyantbraille/:path*" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
