@@ -214,6 +214,9 @@
   html[data-env-theme="light"] .about { background: #ffffff; }
   html[data-env-theme="hc"] .about { background: #000; border: 1px solid #fff; }
   .about p { font-size: 1.1rem; }
+  section.block.dark + section.block.dark { padding-top: 0; }
+  .cost ul { padding-left: 1.2rem; font-size: 1.1rem; }
+  .cost li + li { margin-top: 0.5rem; }
   @media (max-width: 960px) { .pillars ul { grid-template-columns: 1fr; } .pillars li + li { border-left: 0; border-top: 1px solid var(--border-soft); } .route { grid-template-columns: 1fr; } .about { padding: 1.75rem; } }
 
 
@@ -388,6 +391,18 @@
     </div>
   </section>
 
+  <section class="block dark" id="about" aria-labelledby="aboutTitle">
+    <div class="wrap about">
+      <div>
+        <p class="eyebrow">Who we are</p>
+        <h2 id="aboutTitle">One team to help you move forward</h2>
+      </div>
+      <div>
+        <p>The AbilityOne Program creates jobs for people who are blind or have significant disabilities. Envision is one of the participating nonprofit agencies, supporting jobs for people who are blind or have low vision through 16 Base Supply Centers and EnvisionXpress.com.</p>
+      </div>
+    </div>
+  </section>
+
   <section class="block dark" id="steps" aria-labelledby="stepsTitle">
     <div class="wrap">
       <p class="eyebrow">How to order</p>
@@ -488,14 +503,20 @@
     </div>
   </section>
 
-  <section class="block dark" aria-labelledby="aboutTitle">
-    <div class="wrap about">
+  <section class="block dark" id="cost" aria-labelledby="costTitle">
+    <div class="wrap about cost">
       <div>
-        <p class="eyebrow">Who we are</p>
-        <h2 id="aboutTitle">One team to help you move forward</h2>
+        <p class="eyebrow">Cost</p>
+        <h2 id="costTitle">What about cost?</h2>
       </div>
       <div>
-        <p>The AbilityOne Program creates employment for people who are blind or have significant disabilities. Envision is a participating nonprofit agency that supports jobs and training for people who are blind or have low vision, with 16 Base Supply Centers and an online store serving federal customers.</p>
+        <ul>
+          <li>Online orders show the total delivered cost, shipping included, before you buy.</li>
+          <li>For larger or recurring orders, a quote can combine quantities and apply volume pricing.</li>
+          <li>Shipping uses negotiated GSA rates.</li>
+        </ul>
+        <!-- DRAFT: delete this note once Sebastian confirms "negotiated GSA rates" and "volume pricing" in writing. -->
+        <div class="draft-note" role="note"><strong>Draft placeholder</strong>Waiting on Sebastian to confirm the wording &ldquo;negotiated GSA rates&rdquo; and that &ldquo;volume pricing&rdquo; can be stated in writing.</div>
       </div>
     </div>
   </section>
