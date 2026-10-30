@@ -120,6 +120,8 @@
   html[data-env-theme="light"] .hero-bg { background: linear-gradient(135deg, #e8eef6 0%, #dbe5f2 60%, #f4f7fb 100%); }
   html[data-env-theme="hc"] .hero-bg { background: #000; }
   .hero-content { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+  .hero-seal { display: block; width: 88px; height: 88px; margin: 0 auto 1.5rem; }
+  @media (max-width: 560px) { .hero-seal { width: 72px; height: 72px; margin-bottom: 1.1rem; } }
   .eyebrow { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green-text); margin-bottom: 1.25rem; }
   h1 { font-size: clamp(2.2rem, 4.4vw, 3.4rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
   h1 em { font-style: normal; color: var(--green-text); }
@@ -357,6 +359,7 @@
     </svg>
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="hero-content">
+      <img class="hero-seal" src="/state/dos-seal.png" width="88" height="88" alt="Seal of the U.S. Department of State">
       <p class="eyebrow">Envision Base Supply Centers for the Department of State</p>
       <h1 id="pageTitle">Ordering supplies <em>for your post</em></h1>
       <p class="hero-sub">A quick reference for Desk Officers and overseas posts. Find required supplies, get help matching products, and confirm a delivery route before you order. Envision brings AbilityOne products and everyday supplies together with customer support for sourcing and shipping.</p>
