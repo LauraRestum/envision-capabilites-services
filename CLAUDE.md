@@ -165,3 +165,29 @@ To take a finished program off the board, set `hidden:true` on its `PROJECTS`
 entry. It stays in the data (and keeps its deep link) but no longer renders on
 the In Action grid — that is the supported way to hide a project that is over,
 instead of deleting it or letting stale timeline copy linger.
+
+## Department of State page (`/state`)
+
+`state/` is a standalone page with its own styles, shared by direct link only
+(noindex, not in the deck or any nav). Its logo and PDF are linked relatively,
+so `vercel.json` rewrites the root-level copies of those two paths into
+`state/`; keep those rewrites if the files are renamed.
+
+- Section order: requirement (with "Already working with another provider?"),
+  Who we are, two steps (find it, ship it), two ways to order (ending in the
+  "What about cost?" callout), contact. In the dark theme the bands alternate
+  light, dark, light, dark, light; keep that when moving sections.
+- Name the agency "Department of State" in visible copy ("State despatch
+  facility" stays as is). No links to abilityone.gov.
+- Pending approvals are marked by `<!-- DRAFT:` comments and `.draft-note`
+  boxes. Before production, both searches must return nothing, in the page and
+  in the PDF source.
+- The PDF is built from `sources/state-guide/guide.html`
+  (`node sources/state-guide/build.js`), never edited directly. Change the page
+  and the PDF together. `build.js standalone <out.pdf>` makes the version that
+  points to EnvisionXpress.com and the phone number instead of `/state`.
+  `/sources` is kept out of the deploy by `.vercelignore`.
+- Auto refresh: the last script block re-fetches the page every 5 minutes and
+  on tab focus. A changed page reloads quietly if the tab is in the
+  background; a reader gets the `#updatePill` notice with a Refresh button
+  instead, and the reload happens the next time they leave or return.

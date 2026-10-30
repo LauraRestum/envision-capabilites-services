@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AbilityOne Purchasing and Delivery Guide for Department of State Posts</title>
+<!--
+  Print source for state/Envision-State-Department-Ordering-Guide.pdf.
+  Rebuild with: node sources/state-guide/build.js
+  The footer and QR code switch on ?variant=state (points to workwithenvision.com/state)
+  or ?variant=standalone (EnvisionXpress.com and the customer service number).
+-->
+<style>
+  @font-face { font-family: Montserrat; font-weight: 400; src: url(../../fonts/montserrat-400.woff2) format("woff2"); }
+  @font-face { font-family: Montserrat; font-weight: 500; src: url(../../fonts/montserrat-500.woff2) format("woff2"); }
+  @font-face { font-family: Montserrat; font-weight: 600; src: url(../../fonts/montserrat-600.woff2) format("woff2"); }
+  @font-face { font-family: Montserrat; font-weight: 700; src: url(../../fonts/montserrat-700.woff2) format("woff2"); }
+  @font-face { font-family: Montserrat; font-weight: 800; src: url(../../fonts/montserrat-800.woff2) format("woff2"); }
+  @page { size: letter; margin: 0; }
+  :root { --blue: #003087; --navy: #001852; --green: #78BE21; --green-ink: #3f6e0d; --panel: #edf2f9; --rule: #c9d3e3; --warn: #6b5500; --warn-bg: #fff6cc; --text: #14213d; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 8.5in; height: 11in; }
+  body { font-family: Montserrat, sans-serif; font-weight: 500; color: var(--text); font-size: 7.9pt; line-height: 1.36; display: flex; flex-direction: column; }
+  a { color: var(--blue); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .sep { color: var(--navy); margin: 0 0.35em; }
+
+  header { display: flex; align-items: center; justify-content: space-between; padding: 0.2in 0.5in 0.08in; border-bottom: 3px solid var(--green); }
+  header img { width: 1.45in; height: auto; }
+  header .titles { text-align: right; }
+  .eyebrow { font-size: 7.4pt; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green-ink); }
+  h1 { font-size: 19pt; font-weight: 800; color: var(--navy); line-height: 1.15; }
+  h1 em { font-style: normal; color: var(--green-ink); }
+
+  main { padding: 0.08in 0.5in 0.07in; flex: 1; display: flex; flex-direction: column; gap: 0.04in; }
+  .intro { font-size: 8.4pt; }
+  .intro p + p { margin-top: 0.02in; }
+  .share { font-weight: 700; color: var(--green-ink); margin-top: 0.03in; }
+  h2 { font-size: 10.2pt; font-weight: 800; color: var(--blue); margin-bottom: 0.05in; }
+  h3 { font-size: 8.5pt; font-weight: 700; color: var(--navy); margin-bottom: 0.03in; }
+  p + p { margin-top: 0.05in; }
+
+
+  .callout { display: grid; grid-template-columns: 1.75fr 1fr; background: var(--panel); }
+  .callout > div { padding: 0.07in 0.13in; }
+  .callout > div:first-child { background: #fff; border-left: 3px solid var(--green); border-right: 1px solid var(--rule); }
+  .callout .authority { margin-top: 0.05in; }
+
+  .about { display: grid; grid-template-columns: 1fr 2.6fr; gap: 0.2in; align-items: center; background: var(--navy); color: #fff; padding: 0.07in 0.14in; border-left: 3px solid var(--green); }
+  .about h2 { color: #fff; margin: 0; }
+  .about .eyebrow { color: var(--green); }
+
+  .steps { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.25in; row-gap: 0.05in; }
+  .step { border-top: 2px solid var(--blue); padding-top: 0.04in; }
+  .step.wide { grid-column: 1 / -1; }
+  .num { display: inline-block; background: var(--blue); color: #fff; font-weight: 800; font-size: 7.6pt; width: 0.17in; height: 0.17in; line-height: 0.17in; text-align: center; margin-right: 0.06in; vertical-align: 1px; }
+  .step .links { margin-top: 0.04in; }
+  .routes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.16in; margin-top: 0.04in; }
+  .route { background: var(--panel); padding: 0.05in 0.12in; }
+  .route h4 { font-size: 7.2pt; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-ink); margin-bottom: 0.03in; }
+  ul { padding-left: 0.17in; }
+  li + li { margin-top: 0.02in; }
+  .carriers { margin-top: 0.04in; }
+
+  .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 0.16in; }
+  .way { background: var(--panel); border-top: 3px solid var(--blue); padding: 0.06in 0.13in; }
+  .way.team { border-top-color: var(--green); }
+  .best { font-weight: 700; color: var(--green-ink); }
+
+  .cost { border-left: 3px solid var(--green); background: var(--panel); padding: 0.06in 0.13in; align-self: stretch; }
+  .cost ul { font-weight: 600; color: var(--navy); }
+
+  .bottom { display: grid; grid-template-columns: 1.25fr 1fr auto; gap: 0.18in; align-items: start; border-top: 1px solid var(--rule); padding-top: 0.06in; margin-top: auto; }
+  .contact-lines { display: flex; flex-direction: column; gap: 0.03in; font-size: 8.4pt; }
+  .qr { display: flex; align-items: center; gap: 0.1in; }
+  .qr img { width: 0.75in; height: 0.75in; }
+  .qr { flex-direction: column; text-align: center; gap: 0.04in; }
+  .qr p { width: 0.95in; font-size: 7.6pt; font-weight: 700; color: var(--navy); line-height: 1.3; }
+
+  footer { background: var(--navy); color: #fff; padding: 0.08in 0.5in; display: flex; justify-content: space-between; align-items: center; font-size: 8pt; }
+  footer a { color: #fff; }
+  footer .green { color: var(--green); font-weight: 700; }
+  footer .updated { font-weight: 600; }
+  footer p + p { margin-top: 0; }
+</style>
+</head>
+<body>
+<header>
+  <img src="../../state/envision-bsc-logo.png" alt="Envision Base Supply Center">
+  <div class="titles">
+    <p class="eyebrow">Envision Base Supply Centers | Department of State</p>
+    <h1>Ordering supplies <em>for your post</em></h1>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <p>A quick reference for Desk Officers and overseas posts: find required supplies, confirm their status, and choose a delivery route before you order.</p>
+    <p class="share">Share this guide with your post&rsquo;s procurement and shipping teams.</p>
+  </div>
+
+  <section>
+    <h2>The mandatory source requirement, in plain language</h2>
+    <div class="callout">
+      <div>
+        <p>For supplies, follow the RFO FAR 8.103 source priorities: agency inventory, other agencies&rsquo; excess, Federal Prison Industries, then AbilityOne Procurement List items. When a requirement is covered by the Procurement List, buy through the required AbilityOne source unless an authorized purchase exception applies. A government purchase card or small purchase does not bypass this requirement. Commercial products that are essentially the same as a listed item are also covered.</p>
+        <p class="authority">Authority: <a href="https://www.acquisition.gov/far-overhaul/far-part-deviation-guide/far-overhaul-part-8">RFO FAR 8.103 and 8.202</a></p>
+      </div>
+      <div>
+        <h3>Already working with another provider?</h3>
+        <p>Envision is one compliant source for AbilityOne products. If your post already buys from another Base Supply Center or authorized AbilityOne source, keep using it. If you don&rsquo;t have one, we&rsquo;re here to help.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div>
+      <p class="eyebrow">Who we are</p>
+      <h2>One team to help you move forward</h2>
+    </div>
+    <p>The AbilityOne Program creates jobs for people who are blind or have significant disabilities. Envision is one of the participating nonprofit agencies, supporting jobs for people who are blind or have low vision through 16 Base Supply Centers and EnvisionXpress.com.</p>
+  </section>
+
+  <section>
+    <h2>How to order: find it, then ship it</h2>
+    <div class="steps">
+      <div class="step wide">
+        <h3><span class="num">1</span>Find it</h3>
+        <p>Shop your Department of State approved catalog on EnvisionXpress.com. Search by NSN, part number, or keyword, or filter to the AbilityOne assortment. The compliance check is already built in: products labeled AbilityOne are Procurement List items, and everything else in the catalog is a commercial product that is not essentially the same as one. Put what you need in one cart and order with confidence.</p>
+        <p class="links"><a href="https://www.envisionxpress.com/">Shop EnvisionXpress.com</a><span class="sep">|</span><a href="https://www.envisionxpress.com/abilityone/">Browse AbilityOne products</a><span class="sep">|</span>Don&rsquo;t see what you need? <a href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a> and our team will help you find it.</p>
+      </div>
+      <div class="step wide">
+        <h3><span class="num">2</span>Choose your delivery route</h3>
+        <div class="routes">
+          <div class="route">
+            <h4>To post</h4>
+            <ul>
+              <li>For APO/FPO, look for the Ships APO badge. If an item doesn&rsquo;t have it, contact customer support to have it added or to find an approved replacement.</li>
+              <li>Enter PSC, Unit, or Box as the street address. Choose AA, AE, or AP and use the assigned ZIP.</li>
+              <li>For DPO or direct international delivery, ask Envision to confirm eligibility and routing before ordering.</li>
+            </ul>
+          </div>
+          <div class="route">
+            <h4>To a State despatch facility</h4>
+            <ul>
+              <li>Ask your post&rsquo;s shipping team for the approved U.S. despatch address, post identifier, marking instructions, and any receiving requirements.</li>
+              <li>Share these with Envision before ordering so the team can confirm the shipment to that facility.</li>
+              <li>Coordinate onward movement with State.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="carriers"><strong>Carriers:</strong> FedEx International (preferred, typically about one week, with enhanced tracking) or USPS (typically two to three weeks), both at negotiated GSA rates. Confirm restrictions and timing for your route: <a href="https://www.envisionxpress.com/shipping-faq/">APO/FPO shipping FAQ</a><span class="sep">|</span><a href="https://www.envisionxpress.com/shipping-policy/">Shipping policy</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two ways to order</h2>
+    <div class="ways">
+      <div class="way">
+        <h3>Order online with pricing up front</h3>
+        <p><span class="best">Best for routine and single-item purchases.</span> Select from your Department of State approved catalog on <a href="https://www.envisionxpress.com/">EnvisionXpress.com</a>. Shipping is calculated at checkout, so you see the total delivered cost before you order.</p>
+      </div>
+      <div class="way team">
+        <h3>Work with our customer service team</h3>
+        <p><span class="best">Best for larger, recurring, or special orders.</span> <a href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a> and we&rsquo;ll consolidate quantities, apply volume pricing, coordinate shipments, and set up scheduled or recurring deliveries. Include your post name, items or NSNs, quantities, needed-by date, and delivery route.</p>
+        <p>For larger or regional needs, our team can look at options like consolidating orders and shipping to a central location for distribution, to find the most practical price for where you need it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bottom">
+    <div class="cost">
+      <h2>What about cost?</h2>
+      <div>
+        <ul>
+          <li>Online orders show the total delivered cost, shipping included, before you buy.</li>
+          <li>For larger or recurring orders, a quote can combine quantities and apply volume pricing.</li>
+          <li>Shipping uses negotiated GSA rates.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h2>Contact customer service</h2>
+      <p class="contact-lines"><a href="tel:+18008610406">800-861-0406</a><a href="mailto:customerservice@envisionxpress.com">customerservice@envisionxpress.com</a><a href="https://www.envisionxpress.com/contact-us/">Contact Envision online</a></p>
+    </div>
+    <div class="qr" data-variant="state">
+      <img src="qr-state.svg" alt="QR code linking to workwithenvision.com/state">
+      <p>Scan for the interactive guide</p>
+    </div>
+    <div class="qr" data-variant="standalone">
+      <img src="qr-envisionxpress.svg" alt="QR code linking to EnvisionXpress.com">
+      <p>Scan to shop EnvisionXpress.com</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p data-variant="state">Interactive version: <a class="green" href="https://workwithenvision.com/state">workwithenvision.com/state</a><span class="sep" style="color:#fff">|</span><a href="https://www.envisionxpress.com/">EnvisionXpress.com</a></p>
+  <p data-variant="standalone">Order online: <a class="green" href="https://www.envisionxpress.com/">EnvisionXpress.com</a><span class="sep" style="color:#fff">|</span>Customer service: <a href="tel:+18008610406">800-861-0406</a></p>
+  <p class="updated">Updated November 2026</p>
+</footer>
+
+<script>
+  var v = new URLSearchParams(location.search).get('variant') || 'state';
+  document.querySelectorAll('[data-variant]').forEach(function (el) {
+    if (el.getAttribute('data-variant') !== v) el.remove();
+  });
+</script>
+</body>
+</html>

@@ -145,14 +145,15 @@
   .callout > div { background: var(--surface-strong); padding: 2.25rem; }
   .callout .authority { margin-top: 1.25rem; font-size: 0.95rem; }
   .callout .authority a { font-weight: 600; }
+  .callout.cost { grid-template-columns: 1fr; }
+  .cost ul { padding-left: 1.2rem; margin-top: 0.6rem; }
+  .cost li + li { margin-top: 0.45rem; }
   .sep { color: var(--text-muted); margin: 0 0.5rem; }
 
   /* Draft placeholders: delete before launch */
-  .draft-note { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px dashed var(--warn); background: var(--warn-bg); color: var(--text-main); font-size: 0.9rem; border-radius: 2px; }
-  .draft-note strong { color: var(--warn); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem; display: block; margin-bottom: 0.2rem; }
 
   /* Steps */
-  .steps { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--border-soft); margin-top: 2.5rem; counter-reset: step; }
+  .steps { list-style: none; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 2px; background: var(--border-soft); margin-top: 2.5rem; counter-reset: step; }
   .step { background: var(--bg-body); padding: 2.25rem; position: relative; }
   section.dark .step { background: var(--bg-alt); }
   .step.wide { grid-column: 1 / -1; }
@@ -160,6 +161,7 @@
   .step-links { margin-top: 1.1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
   .step-links a { font-weight: 600; }
   .routes { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+  .steps .routes { grid-template-columns: 1fr; }
   .route { border: 1px solid var(--border-soft); padding: 1.6rem; background: var(--surface-card); border-radius: 2px; }
   .route ul { padding-left: 1.2rem; }
   .route li + li { margin-top: 0.5rem; }
@@ -214,6 +216,9 @@
   html[data-env-theme="light"] .about { background: #ffffff; }
   html[data-env-theme="hc"] .about { background: #000; border: 1px solid #fff; }
   .about p { font-size: 1.1rem; }
+  .about--photo { grid-template-columns: 1fr 1fr; align-items: center; }
+  .about--photo h2 { margin-bottom: 1.25rem; }
+  .about-photo { display: block; width: 100%; height: auto; border-radius: 2px; }
   @media (max-width: 960px) { .pillars ul { grid-template-columns: 1fr; } .pillars li + li { border-left: 0; border-top: 1px solid var(--border-soft); } .route { grid-template-columns: 1fr; } .about { padding: 1.75rem; } }
 
 
@@ -233,6 +238,7 @@
   .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.25rem; }
   .way { background: #ffffff; border: 1px solid var(--border-soft); border-top: 4px solid var(--blue); padding: 2.25rem; display: flex; flex-direction: column; border-radius: 2px; }
   .way.team { border-top-color: var(--green); }
+  section.dark .way { background: var(--bg-alt); }
   html[data-env-theme="hc"] .way { background:#000; }
   .way .best { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-text); margin-bottom: 0.5rem; }
   .way ul { padding-left: 1.2rem; margin: 1rem 0 1.5rem; }
@@ -293,6 +299,13 @@
     section.block { padding: 3.5rem 0; }
     .hero-actions a { width: 100%; }
   }
+  /* ---------- Update notice (auto refresh) ---------- */
+  .update-pill { position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 150; display: flex; align-items: center; gap: 1rem; max-width: calc(100% - 2rem); padding: 0.75rem 0.75rem 0.75rem 1.25rem; background: var(--surface-strong); color: var(--text-main); border: 1px solid var(--border-soft); border-left: 3px solid var(--green); box-shadow: 0 8px 24px rgba(0,0,0,0.25); font-size: 0.95rem; font-weight: 600; border-radius: 2px; }
+  .update-pill[hidden] { display: none; }
+  .update-pill span { flex: 1; min-width: 0; }
+  @media (max-width: 560px) { .update-pill { left: 1rem; right: 1rem; transform: none; max-width: none; } }
+  .update-pill .btn-primary { padding: 0.55rem 1rem; font-size: 0.72rem; white-space: nowrap; }
+  @media print { .update-pill { display: none !important; } }
   @media print { .site-header, .skip-link, .a11y-overlay, .hero-actions, .a11y-trigger { display: none !important; } }
 </style>
 </head>
@@ -372,50 +385,48 @@
         <div>
           <p>For supplies, follow the RFO FAR 8.103 source priorities: agency inventory, other agencies&rsquo; excess, Federal Prison Industries, then AbilityOne Procurement List items. When a requirement is covered by the Procurement List, buy through the required AbilityOne source unless an authorized purchase exception applies. A government purchase card or small purchase does not bypass this requirement. Commercial products that are essentially the same as a listed item are also covered.</p>
           <p class="authority">Authority:
-            <a href="https://www.acquisition.gov/far-overhaul/far-part-deviation-guide/far-overhaul-part-8">RFO FAR 8.103 and 8.202</a><span class="sep" aria-hidden="true">|</span>
-            <a href="https://www.abilityone.gov/procurement_list/product_buy.html">AbilityOne buying and ETS guidance</a>
+            <a href="https://www.acquisition.gov/far-overhaul/far-part-deviation-guide/far-overhaul-part-8">RFO FAR 8.103 and 8.202</a>
           </p>
-          <!-- DRAFT: delete this note once Justin approves the paragraph above. -->
-          <div class="draft-note" role="note"><strong>Draft placeholder</strong>Waiting on Justin to confirm the FAR citation and wording. Do not edit this paragraph; replace it with the approved text.</div>
         </div>
         <div>
           <h3>Already working with another provider?</h3>
           <p>Envision is one compliant source for AbilityOne products. If your post already buys from another Base Supply Center or authorized AbilityOne source, keep using it. If you don&rsquo;t have one, we&rsquo;re here to help.</p>
-          <!-- DRAFT: delete this note once Sebastian confirms the wording. -->
-          <div class="draft-note" role="note"><strong>Draft placeholder</strong>Proposed wording. Waiting on Sebastian to confirm or swap in the approved language.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="block dark" id="steps" aria-labelledby="stepsTitle">
+  <section class="block dark" id="about" aria-labelledby="aboutTitle">
+    <div class="wrap about about--photo">
+      <div>
+        <p class="eyebrow">Who we are</p>
+        <h2 id="aboutTitle">One team to help you move forward</h2>
+        <p>The AbilityOne Program creates jobs for people who are blind or have significant disabilities. Envision is one of the participating nonprofit agencies, supporting jobs for people who are blind or have low vision through 16 Base Supply Centers and EnvisionXpress.com.</p>
+      </div>
+      <img class="about-photo" src="/images/massif/base-supply-center-aisle.jpg" width="1536" height="1024" loading="lazy" alt="An Air Force service member and an Envision employee with a guide dog walk down an aisle of uniform items at a Base Supply Center.">
+    </div>
+  </section>
+
+  <section class="block section-light" id="steps" aria-labelledby="stepsTitle">
     <div class="wrap">
       <p class="eyebrow">How to order</p>
-      <h2 id="stepsTitle">Three steps from requirement to delivery</h2>
+      <h2 id="stepsTitle">How to order: find it, then ship it</h2>
       <p class="lede">Find what your post needs, confirm its status, and choose a delivery route before you check out.</p>
 
       <ol class="steps">
         <li class="step">
           <span class="step-num" aria-hidden="true">1</span>
           <h3><span class="visually-hidden">Step 1: </span>Find it</h3>
-          <p>Select products from the State Department&rsquo;s approved catalog. Search by NSN, part number, or keyword, and use the AbilityOne assortment as a starting point.</p>
+          <p>Shop your Department of State approved catalog on EnvisionXpress.com. Search by NSN, part number, or keyword, or filter to the AbilityOne assortment. The compliance check is already built in: products labeled AbilityOne are Procurement List items, and everything else in the catalog is a commercial product that is not essentially the same as one. Put what you need in one cart and order with confidence.</p>
           <div class="step-links">
             <a href="https://www.envisionxpress.com/">Shop EnvisionXpress.com</a>
             <a href="https://www.envisionxpress.com/abilityone/">Browse AbilityOne products</a>
           </div>
+          <p class="tip">Don&rsquo;t see what you need? <a href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a> and our team will help you find it.</p>
         </li>
-        <li class="step">
+        <li class="step" id="shipping">
           <span class="step-num" aria-hidden="true">2</span>
-          <h3><span class="visually-hidden">Step 2: </span>Check it</h3>
-          <p>Confirm the exact item and applicable Procurement List coverage using the official list. Envision also sells commercial products, so website availability alone does not establish mandatory source status.</p>
-          <div class="step-links">
-            <a href="https://www.abilityone.gov/procurement_list/">Open the official AbilityOne Procurement List</a>
-          </div>
-          <p class="tip">On the Procurement List site, select Search Products or download the Products List.</p>
-        </li>
-        <li class="step wide" id="shipping">
-          <span class="step-num" aria-hidden="true">3</span>
-          <h3><span class="visually-hidden">Step 3: </span>Choose the delivery route before checkout</h3>
+          <h3><span class="visually-hidden">Step 2: </span>Choose your delivery route</h3>
           <p>Confirm product restrictions, freight charges, and timing for your route.</p>
           <div class="routes">
             <div class="route">
@@ -456,7 +467,7 @@
   </section>
 
 
-  <section class="block section-light" id="ways" aria-labelledby="waysTitle">
+  <section class="block dark" id="ways" aria-labelledby="waysTitle">
     <div class="wrap">
       <p class="eyebrow">Two ways to order</p>
       <h2 id="waysTitle">Order online, or let our team build the order with you</h2>
@@ -465,7 +476,7 @@
         <div class="way">
           <p class="best">Best for routine and single-item purchases</p>
           <h3>Order online with pricing up front</h3>
-          <p>Select products from the State Department&rsquo;s approved catalog on EnvisionXpress.com. Shipping costs are calculated automatically and shown at checkout, so you see the total delivered cost before you place the order, with no separate quote needed.</p>
+          <p>Select products from your Department of State approved catalog on EnvisionXpress.com. Shipping costs are calculated automatically and shown at checkout, so you see the total delivered cost before you place the order, with no separate quote needed.</p>
           <ul>
             <li>Approved catalog for State users</li>
             <li>Total delivered cost shown at checkout</li>
@@ -476,6 +487,7 @@
           <p class="best">Best for larger, recurring, or special orders</p>
           <h3>Work with our customer service team</h3>
           <p>For larger orders, recurring requirements, or products outside the standard catalog, our team builds a custom quote designed to make purchasing and shipping more efficient.</p>
+          <p>For larger or regional needs, our team can look at options like consolidating orders and shipping to a central location for distribution, to find the most practical price for where you need it.</p>
           <ul>
             <li>Consolidated quantities and volume pricing</li>
             <li>Coordinated shipments to help reduce overall procurement costs</li>
@@ -485,17 +497,15 @@
         </div>
       </div>
       <p class="tip">For faster help with a quote, include your post name, items or NSNs, quantities, needed-by date, and proposed delivery route.</p>
-    </div>
-  </section>
-
-  <section class="block dark" aria-labelledby="aboutTitle">
-    <div class="wrap about">
-      <div>
-        <p class="eyebrow">Who we are</p>
-        <h2 id="aboutTitle">One team to help you move forward</h2>
-      </div>
-      <div>
-        <p>The AbilityOne Program creates employment for people who are blind or have significant disabilities. Envision is a participating nonprofit agency that supports jobs and training for people who are blind or have low vision, with 16 Base Supply Centers and an online store serving federal customers.</p>
+      <div class="callout cost">
+        <div>
+          <h3>What about cost?</h3>
+          <ul>
+            <li>Online orders show the total delivered cost, shipping included, before you buy.</li>
+            <li>For larger or recurring orders, a quote can combine quantities and apply volume pricing.</li>
+            <li>Shipping uses negotiated GSA rates.</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -509,8 +519,6 @@
         <div><span class="label">Email</span><a href="mailto:customerservice@envisionxpress.com">customerservice@envisionxpress.com</a></div>
         <div><span class="label">Online</span><a href="https://www.envisionxpress.com/contact-us/">Contact Envision</a></div>
       </div>
-      <!-- DRAFT: add the named Department of State contact if Sebastian provides one, or delete this note. -->
-      <div class="draft-note" role="note"><strong>Draft placeholder</strong>Named Department of State point of contact, if there is one.</div>
     </div>
   </section>
 
@@ -610,6 +618,46 @@
   }
   trigger.addEventListener('click', open);
   apply();
+})();
+</script>
+<div class="update-pill" id="updatePill" role="status" hidden>
+  <span>This page has been updated.</span>
+  <button class="btn-primary" type="button" id="updateReload">Refresh now</button>
+</div>
+
+<script>
+/* Auto refresh: every 5 minutes (and whenever the tab comes back into view)
+   check whether the published page has changed. If it has and nobody is
+   looking at the tab, reload quietly. If someone is reading it, show a notice
+   with a Refresh button instead of pulling the page out from under them, then
+   reload the next time the tab is left or returned to. */
+(function(){
+  var CHECK_MS = 5 * 60 * 1000;
+  var pill = document.getElementById('updatePill');
+  var btn = document.getElementById('updateReload');
+  var baseline = null, stale = false, busy = false;
+  function hash(t){ var h = 0; for (var i = 0; i < t.length; i++) { h = (h * 31 + t.charCodeAt(i)) | 0; } return h; }
+  function check(){
+    if (busy || stale || !window.fetch) return;
+    busy = true;
+    fetch(location.pathname, { cache: 'no-store', credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.text() : null; })
+      .then(function(t){
+        if (t === null) return;
+        var h = hash(t);
+        if (baseline === null) { baseline = h; return; }
+        if (h !== baseline) { stale = true; if (document.hidden) location.reload(); else pill.hidden = false; }
+      })
+      .catch(function(){})
+      .then(function(){ busy = false; });
+  }
+  btn.addEventListener('click', function(){ location.reload(); });
+  document.addEventListener('visibilitychange', function(){
+    if (stale) { location.reload(); return; }
+    if (!document.hidden) check();
+  });
+  check();
+  setInterval(check, CHECK_MS);
 })();
 </script>
 </body>
