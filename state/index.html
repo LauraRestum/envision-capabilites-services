@@ -250,7 +250,7 @@
   .carriers { margin-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   .carrier { border: 1px solid var(--border-soft); padding: 1.1rem 1.4rem; border-radius: 2px; }
   .carrier strong { display: block; font-size: 1.05rem; }
-  .carrier .tag { display: inline-block; margin-left: 0.5rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #001852; background: var(--green); padding: 0.15rem 0.5rem; border-radius: 2px; vertical-align: 2px; }
+  .carrier .tag, .way .tag { display: inline-block; margin-left: 0.5rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #001852; background: var(--green); padding: 0.15rem 0.5rem; border-radius: 2px; vertical-align: 2px; }
   @media (max-width: 960px) { .ways, .carriers { grid-template-columns: 1fr; } .way { padding: 1.5rem; } }
 
   /* ---------- Accessibility panel ---------- */
@@ -322,9 +322,9 @@
     <nav aria-label="Page sections" id="nav">
       <ul class="nav-links">
         <li><a href="#requirement">The requirement</a></li>
+        <li><a href="#ways">Ways to order</a></li>
         <li><a href="#steps">How to order</a></li>
         <li><a href="#shipping">Shipping</a></li>
-        <li><a href="#ways">Ways to order</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -407,9 +407,53 @@
     </div>
   </section>
 
-  <section class="block section-light" id="steps" aria-labelledby="stepsTitle">
+  <section class="block section-light" id="ways" aria-labelledby="waysTitle">
     <div class="wrap">
-      <p class="eyebrow">How to order</p>
+      <p class="eyebrow">Two ways to order</p>
+      <h2 id="waysTitle">Order online, or let our team build the order with you</h2>
+      <p class="lede">Choose the path that fits the purchase. Both give your post a clear view of cost before anything ships.</p>
+      <div class="ways">
+        <div class="way">
+          <p class="best">Best for routine and single-item purchases</p>
+          <h3>Order online with pricing up front</h3>
+          <p>Select products from your Department of State approved catalog on EnvisionXpress.com. Shipping costs are calculated automatically and shown at checkout, so you see the total delivered cost before you place the order, with no separate quote needed.</p>
+          <ul>
+            <li>Approved catalog for State users</li>
+            <li>Total delivered cost shown at checkout</li>
+          </ul>
+          <p class="tip"><a href="#steps">See the two steps for ordering online</a></p>
+          <a class="btn-primary blue" href="https://www.envisionxpress.com/">Shop EnvisionXpress.com</a>
+        </div>
+        <div class="way team">
+          <p class="best">Best for larger, recurring, or special orders</p>
+          <h3>Work with our customer service team <span class="tag">Recommended</span></h3>
+          <p>For larger orders, recurring requirements, or products outside the standard catalog, our team builds a custom quote designed to make purchasing and shipping more efficient.</p>
+          <p>For larger or regional needs, our team can look at options like consolidating orders and shipping to a central location for distribution, to find the most practical price for where you need it.</p>
+          <ul>
+            <li>Consolidated quantities and volume pricing</li>
+            <li>Coordinated shipments to help reduce overall procurement costs</li>
+            <li>Scheduled or recurring deliveries for predictable needs</li>
+          </ul>
+          <a class="btn-primary" href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a>
+        </div>
+      </div>
+      <p class="tip">For faster help with a quote, include your post name, items or NSNs, quantities, needed-by date, and proposed delivery route.</p>
+      <div class="callout cost">
+        <div>
+          <h3>What about cost?</h3>
+          <ul>
+            <li>Online orders show the total delivered cost, shipping included, before you buy.</li>
+            <li>For larger or recurring orders, a quote can combine quantities and apply volume pricing.</li>
+            <li>Shipping uses negotiated GSA rates.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block dark" id="steps" aria-labelledby="stepsTitle">
+    <div class="wrap">
+      <p class="eyebrow">Option 1: Order online</p>
       <h2 id="stepsTitle">How to order: find it, then ship it</h2>
       <p class="lede">Find what your post needs, then choose a delivery route before you check out.</p>
 
@@ -466,49 +510,6 @@
     </div>
   </section>
 
-
-  <section class="block dark" id="ways" aria-labelledby="waysTitle">
-    <div class="wrap">
-      <p class="eyebrow">Two ways to order</p>
-      <h2 id="waysTitle">Order online, or let our team build the order with you</h2>
-      <p class="lede">Choose the path that fits the purchase. Both give your post a clear view of cost before anything ships.</p>
-      <div class="ways">
-        <div class="way">
-          <p class="best">Best for routine and single-item purchases</p>
-          <h3>Order online with pricing up front</h3>
-          <p>Select products from your Department of State approved catalog on EnvisionXpress.com. Shipping costs are calculated automatically and shown at checkout, so you see the total delivered cost before you place the order, with no separate quote needed.</p>
-          <ul>
-            <li>Approved catalog for State users</li>
-            <li>Total delivered cost shown at checkout</li>
-          </ul>
-          <a class="btn-primary blue" href="https://www.envisionxpress.com/">Shop EnvisionXpress.com</a>
-        </div>
-        <div class="way team">
-          <p class="best">Best for larger, recurring, or special orders</p>
-          <h3>Work with our customer service team</h3>
-          <p>For larger orders, recurring requirements, or products outside the standard catalog, our team builds a custom quote designed to make purchasing and shipping more efficient.</p>
-          <p>For larger or regional needs, our team can look at options like consolidating orders and shipping to a central location for distribution, to find the most practical price for where you need it.</p>
-          <ul>
-            <li>Consolidated quantities and volume pricing</li>
-            <li>Coordinated shipments to help reduce overall procurement costs</li>
-            <li>Scheduled or recurring deliveries for predictable needs</li>
-          </ul>
-          <a class="btn-primary" href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a>
-        </div>
-      </div>
-      <p class="tip">For faster help with a quote, include your post name, items or NSNs, quantities, needed-by date, and proposed delivery route.</p>
-      <div class="callout cost">
-        <div>
-          <h3>What about cost?</h3>
-          <ul>
-            <li>Online orders show the total delivered cost, shipping included, before you buy.</li>
-            <li>For larger or recurring orders, a quote can combine quantities and apply volume pricing.</li>
-            <li>Shipping uses negotiated GSA rates.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <section class="block section-light" id="contact" aria-labelledby="contactTitle">
     <div class="wrap">

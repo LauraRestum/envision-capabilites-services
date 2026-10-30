@@ -174,8 +174,9 @@ so `vercel.json` rewrites the root-level copies of those two paths into
 `state/`; keep those rewrites if the files are renamed.
 
 - Section order: requirement (with "Already working with another provider?"),
-  Who we are, two steps (find it, ship it), two ways to order (ending in the
-  "What about cost?" callout), contact. In the dark theme the bands alternate
+  Who we are, two ways to order (quote card tagged Recommended, ending in the
+  "What about cost?" callout), then the two steps as "Option 1: Order
+  online", then contact. In the dark theme the bands alternate
   light, dark, light, dark, light; keep that when moving sections.
 - Name the agency "Department of State" in visible copy ("State despatch
   facility" stays as is). No links to abilityone.gov.

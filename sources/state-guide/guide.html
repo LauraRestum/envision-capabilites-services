@@ -63,6 +63,7 @@
   .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 0.16in; }
   .way { background: var(--panel); border-top: 3px solid var(--blue); padding: 0.06in 0.13in; }
   .way.team { border-top-color: var(--green); }
+  .tag { display: inline-block; margin-left: 0.06in; padding: 0.01in 0.06in; background: var(--green); color: var(--navy); font-size: 6.6pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; vertical-align: 1px; }
   .best { font-weight: 700; color: var(--green-ink); }
 
   .cost { border-left: 3px solid var(--green); background: var(--panel); padding: 0.06in 0.13in; align-self: stretch; }
@@ -120,7 +121,22 @@
   </section>
 
   <section>
-    <h2>How to order: find it, then ship it</h2>
+    <h2>Two ways to order</h2>
+    <div class="ways">
+      <div class="way">
+        <h3>Order online with pricing up front</h3>
+        <p><span class="best">Best for routine and single-item purchases.</span> Select from your Department of State approved catalog on <a href="https://www.envisionxpress.com/">EnvisionXpress.com</a>. Shipping is calculated at checkout, so you see the total delivered cost before you order.</p>
+      </div>
+      <div class="way team">
+        <h3>Work with our customer service team <span class="tag">Recommended</span></h3>
+        <p><span class="best">Best for larger, recurring, or special orders.</span> <a href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a> and we&rsquo;ll consolidate quantities, apply volume pricing, coordinate shipments, and set up scheduled or recurring deliveries. Include your post name, items or NSNs, quantities, needed-by date, and delivery route.</p>
+        <p>For larger or regional needs, our team can look at options like consolidating orders and shipping to a central location for distribution, to find the most practical price for where you need it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Option 1, ordering online: find it, then ship it</h2>
     <div class="steps">
       <div class="step wide">
         <h3><span class="num">1</span>Find it</h3>
@@ -148,21 +164,6 @@
           </div>
         </div>
         <p class="carriers"><strong>Carriers:</strong> FedEx International (preferred, typically about one week, with enhanced tracking) or USPS (typically two to three weeks), both at negotiated GSA rates. Confirm restrictions and timing for your route: <a href="https://www.envisionxpress.com/shipping-faq/">APO/FPO shipping FAQ</a><span class="sep">|</span><a href="https://www.envisionxpress.com/shipping-policy/">Shipping policy</a></p>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Two ways to order</h2>
-    <div class="ways">
-      <div class="way">
-        <h3>Order online with pricing up front</h3>
-        <p><span class="best">Best for routine and single-item purchases.</span> Select from your Department of State approved catalog on <a href="https://www.envisionxpress.com/">EnvisionXpress.com</a>. Shipping is calculated at checkout, so you see the total delivered cost before you order.</p>
-      </div>
-      <div class="way team">
-        <h3>Work with our customer service team</h3>
-        <p><span class="best">Best for larger, recurring, or special orders.</span> <a href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a> and we&rsquo;ll consolidate quantities, apply volume pricing, coordinate shipments, and set up scheduled or recurring deliveries. Include your post name, items or NSNs, quantities, needed-by date, and delivery route.</p>
-        <p>For larger or regional needs, our team can look at options like consolidating orders and shipping to a central location for distribution, to find the most practical price for where you need it.</p>
       </div>
     </div>
   </section>
