@@ -216,6 +216,9 @@
   html[data-env-theme="light"] .about { background: #ffffff; }
   html[data-env-theme="hc"] .about { background: #000; border: 1px solid #fff; }
   .about p { font-size: 1.1rem; }
+  .about--photo { grid-template-columns: 1fr 1fr; align-items: center; }
+  .about--photo h2 { margin-bottom: 1.25rem; }
+  .about-photo { display: block; width: 100%; height: auto; border-radius: 2px; }
   @media (max-width: 960px) { .pillars ul { grid-template-columns: 1fr; } .pillars li + li { border-left: 0; border-top: 1px solid var(--border-soft); } .route { grid-template-columns: 1fr; } .about { padding: 1.75rem; } }
 
 
@@ -394,14 +397,13 @@
   </section>
 
   <section class="block dark" id="about" aria-labelledby="aboutTitle">
-    <div class="wrap about">
+    <div class="wrap about about--photo">
       <div>
         <p class="eyebrow">Who we are</p>
         <h2 id="aboutTitle">One team to help you move forward</h2>
-      </div>
-      <div>
         <p>The AbilityOne Program creates jobs for people who are blind or have significant disabilities. Envision is one of the participating nonprofit agencies, supporting jobs for people who are blind or have low vision through 16 Base Supply Centers and EnvisionXpress.com.</p>
       </div>
+      <img class="about-photo" src="/images/massif/base-supply-center-aisle.jpg" width="1536" height="1024" loading="lazy" alt="An Air Force service member and an Envision employee with a guide dog walk down an aisle of uniform items at a Base Supply Center.">
     </div>
   </section>
 
