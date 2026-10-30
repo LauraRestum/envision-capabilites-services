@@ -296,6 +296,13 @@
     section.block { padding: 3.5rem 0; }
     .hero-actions a { width: 100%; }
   }
+  /* ---------- Update notice (auto refresh) ---------- */
+  .update-pill { position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 150; display: flex; align-items: center; gap: 1rem; max-width: calc(100% - 2rem); padding: 0.75rem 0.75rem 0.75rem 1.25rem; background: var(--surface-strong); color: var(--text-main); border: 1px solid var(--border-soft); border-left: 3px solid var(--green); box-shadow: 0 8px 24px rgba(0,0,0,0.25); font-size: 0.95rem; font-weight: 600; border-radius: 2px; }
+  .update-pill[hidden] { display: none; }
+  .update-pill span { flex: 1; min-width: 0; }
+  @media (max-width: 560px) { .update-pill { left: 1rem; right: 1rem; transform: none; max-width: none; } }
+  .update-pill .btn-primary { padding: 0.55rem 1rem; font-size: 0.72rem; white-space: nowrap; }
+  @media print { .update-pill { display: none !important; } }
   @media print { .site-header, .skip-link, .a11y-overlay, .hero-actions, .a11y-trigger { display: none !important; } }
 </style>
 </head>
@@ -609,6 +616,46 @@
   }
   trigger.addEventListener('click', open);
   apply();
+})();
+</script>
+<div class="update-pill" id="updatePill" role="status" hidden>
+  <span>This page has been updated.</span>
+  <button class="btn-primary" type="button" id="updateReload">Refresh now</button>
+</div>
+
+<script>
+/* Auto refresh: every 5 minutes (and whenever the tab comes back into view)
+   check whether the published page has changed. If it has and nobody is
+   looking at the tab, reload quietly. If someone is reading it, show a notice
+   with a Refresh button instead of pulling the page out from under them, then
+   reload the next time the tab is left or returned to. */
+(function(){
+  var CHECK_MS = 5 * 60 * 1000;
+  var pill = document.getElementById('updatePill');
+  var btn = document.getElementById('updateReload');
+  var baseline = null, stale = false, busy = false;
+  function hash(t){ var h = 0; for (var i = 0; i < t.length; i++) { h = (h * 31 + t.charCodeAt(i)) | 0; } return h; }
+  function check(){
+    if (busy || stale || !window.fetch) return;
+    busy = true;
+    fetch(location.pathname, { cache: 'no-store', credentials: 'same-origin' })
+      .then(function(r){ return r.ok ? r.text() : null; })
+      .then(function(t){
+        if (t === null) return;
+        var h = hash(t);
+        if (baseline === null) { baseline = h; return; }
+        if (h !== baseline) { stale = true; if (document.hidden) location.reload(); else pill.hidden = false; }
+      })
+      .catch(function(){})
+      .then(function(){ busy = false; });
+  }
+  btn.addEventListener('click', function(){ location.reload(); });
+  document.addEventListener('visibilitychange', function(){
+    if (stale) { location.reload(); return; }
+    if (!document.hidden) check();
+  });
+  check();
+  setInterval(check, CHECK_MS);
 })();
 </script>
 </body>

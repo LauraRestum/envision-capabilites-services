@@ -187,3 +187,7 @@ so `vercel.json` rewrites the root-level copies of those two paths into
   and the PDF together. `build.js standalone <out.pdf>` makes the version that
   points to EnvisionXpress.com and the phone number instead of `/state`.
   `/sources` is kept out of the deploy by `.vercelignore`.
+- Auto refresh: the last script block re-fetches the page every 5 minutes and
+  on tab focus. A changed page reloads quietly if the tab is in the
+  background; a reader gets the `#updatePill` notice with a Refresh button
+  instead, and the reload happens the next time they leave or return.
