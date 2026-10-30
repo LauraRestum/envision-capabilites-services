@@ -4,9 +4,17 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/allyantbraille", "destination": "https://envision-print-allyant-portal.vercel.app/allyantbraille" },
-    { "source": "/allyantbraille/:path*", "destination": "https://envision-print-allyant-portal.vercel.app/allyantbraille/:path*" }
+    { "source": "/allyantbraille/:path*", "destination": "https://envision-print-allyant-portal.vercel.app/allyantbraille/:path*" },
+    { "source": "/envision-bsc-logo.png", "destination": "/state/envision-bsc-logo.png" },
+    { "source": "/Envision-State-Department-Ordering-Guide.pdf", "destination": "/state/Envision-State-Department-Ordering-Guide.pdf" }
   ],
   "headers": [
+    {
+      "source": "/(state|state/.*|envision-bsc-logo\\.png|Envision-State-Department-Ordering-Guide\\.pdf)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
