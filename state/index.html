@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" data-env-theme="dark">
+<head>
+<script>(function(){try{
+  var p = JSON.parse(localStorage.getItem('env-a11y') || '{}');
+  var t = p.theme;
+  if (!['dark','light','hc'].includes(t)) {
+    t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  var r = document.documentElement;
+  r.setAttribute('data-env-theme', t);
+  ['zoom','lines','paras','underline','motion','readable','cursor'].forEach(function(k){
+    if (p[k]) r.setAttribute('data-env-' + k, p[k]);
+  });
+}catch(e){}})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>AbilityOne Purchasing and Delivery Guide for Department of State Posts | Envision</title>
+<meta name="description" content="How Department of State Desk Officers and overseas posts find AbilityOne products, confirm Procurement List coverage, and ship to post or a State despatch facility through Envision Base Supply Centers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ---------- Theme tokens ---------- */
+  :root, html[data-env-theme="dark"] {
+    --blue: #003087; --blue-dark: #001852; --blue-mid: #004bb5;
+    --green: #78BE21; --green-text: #78BE21; --green-dim: rgba(120,190,33,0.15);
+    --bg-body: #000d2e; --bg-alt: #001852; --surface-card: rgba(0,24,82,0.52);
+    --surface-strong: #001852;
+    --text-main: #ffffff; --text-muted: #e6ecfa;
+    --border-soft: rgba(255,255,255,0.12);
+    --warn: #FFCF00; --warn-bg: rgba(255,207,0,0.10);
+    --focus: #78BE21;
+    --btn-text: #001852;
+  }
+  html[data-env-theme="light"] {
+    --blue: #003087; --blue-dark: #002855; --blue-mid: #004bb5;
+    --green: #78BE21; --green-text: #457010; --green-dim: rgba(120,190,33,0.18);
+    --bg-body: #f4f7fb; --bg-alt: #e8eef6; --surface-card: #ffffff;
+    --surface-strong: #ffffff;
+    --text-main: #002855; --text-muted: #1f3a66;
+    --border-soft: rgba(0,40,85,0.16);
+    --warn: #6b5500; --warn-bg: #fff6cc;
+    --focus: #003087;
+    --btn-text: #001852;
+  }
+  html[data-env-theme="hc"] {
+    --blue: #41B6E6; --blue-dark: #000000; --blue-mid: #41B6E6;
+    --green: #78BE21; --green-text: #78BE21; --green-dim: rgba(120,190,33,0.25);
+    --bg-body: #000000; --bg-alt: #000000; --surface-card: #000000;
+    --surface-strong: #000000;
+    --text-main: #ffffff; --text-muted: #ffffff;
+    --border-soft: #ffffff;
+    --warn: #FFCF00; --warn-bg: #000000;
+    --focus: #78BE21;
+    --btn-text: #000000;
+  }
+  html[data-env-theme="hc"] * { backdrop-filter: none !important; text-shadow: none !important; }
+  html[data-env-theme="hc"] a { text-decoration: underline; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  body {
+    font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 1.0625rem; line-height: 1.7;
+    background: var(--bg-body); color: var(--text-main);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+  a { color: var(--green-text); text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ---------- Skip links ---------- */
+  .skip-link {
+    position: absolute; left: 1rem; top: -100px; z-index: 200;
+    background: var(--green); color: #001852; text-decoration: none;
+    padding: 0.7rem 1.4rem; font-weight: 700; font-size: 0.8rem;
+    letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px; transition: top 0.15s;
+  }
+  .skip-link:focus { top: 1rem; }
+
+  /* ---------- Nav ---------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: #ffffff; border-bottom: 4px solid var(--green);
+    --text-main: #002855; --green-text: #457010; --border-soft: rgba(0,40,85,0.25); --focus: #003087;
+    color: #002855;
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 0.75rem 2rem; max-width: 1240px; margin: 0 auto; }
+  .logo-plate { display: inline-flex; align-items: center; }
+  .logo-plate img { height: 64px; width: auto; display: block; }
+  .nav-links { display: flex; gap: 1.75rem; list-style: none; align-items: center; }
+  .nav-links a { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; color: var(--text-main); text-decoration: none; }
+  .nav-links a:hover { color: var(--green-text); }
+  .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+
+  /* ---------- Buttons ---------- */
+  .btn-primary, .btn-ghost {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+    padding: 0.8rem 1.6rem; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em;
+    text-transform: uppercase; border-radius: 2px; text-decoration: none; transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .btn-primary { background: var(--green); color: var(--btn-text); border: 1px solid var(--green); }
+  .btn-primary:hover { box-shadow: 0 0 24px rgba(120,190,33,0.35); }
+  .btn-ghost { background: transparent; color: var(--text-main); border: 1px solid var(--border-soft); }
+  .btn-ghost:hover { border-color: var(--green); }
+  .nav-actions .btn-primary { padding: 0.6rem 1.1rem; font-size: 0.72rem; }
+
+  .a11y-trigger { background: none; border: 1px solid var(--border-soft); color: var(--text-main);
+    font: 600 0.72rem 'Montserrat', sans-serif; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.55rem 1rem; border-radius: 2px; cursor: pointer; min-height: 44px; }
+  .a11y-trigger:hover { border-color: var(--green); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; overflow: hidden; text-align: center; padding: 6rem 0 5rem; border-bottom: 1px solid var(--border-soft); }
+  .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #001852 0%, #003087 55%, #000d2e 100%); }
+  html[data-env-theme="light"] .hero-bg { background: linear-gradient(135deg, #e8eef6 0%, #dbe5f2 60%, #f4f7fb 100%); }
+  html[data-env-theme="hc"] .hero-bg { background: #000; }
+  .hero-content { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+  .eyebrow { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green-text); margin-bottom: 1.25rem; }
+  h1 { font-size: clamp(2.2rem, 4.4vw, 3.4rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+  h1 em { font-style: normal; color: var(--green-text); }
+  .hero-sub { font-weight: 500; font-size: 1.15rem; color: var(--text-muted); line-height: 1.75; max-width: 680px; margin: 0 auto 2.25rem; }
+  .hero-actions { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .hero-content > * { animation: fadeUp 0.6s ease both; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.3s; }
+
+  /* ---------- Sections ---------- */
+  section.block { padding: 5rem 0; }
+  section.block.alt { background: var(--bg-alt); }
+  h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; letter-spacing: -0.015em; line-height: 1.15; margin-bottom: 1rem; }
+  h3 { font-size: 1.2rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.75rem; }
+  h4 { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-text); margin-bottom: 0.75rem; }
+  .lede { color: var(--text-muted); max-width: 720px; font-size: 1.05rem; }
+  p + p { margin-top: 0.9rem; }
+
+  /* Requirement callout */
+  .callout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 2px; background: var(--border-soft); border-left: 3px solid var(--green); margin-top: 2rem; }
+  .callout > div { background: var(--surface-strong); padding: 2.25rem; }
+  .callout .authority { margin-top: 1.25rem; font-size: 0.95rem; }
+  .callout .authority a { font-weight: 600; }
+  .sep { color: var(--text-muted); margin: 0 0.5rem; }
+
+  /* Draft placeholders: delete before launch */
+  .draft-note { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px dashed var(--warn); background: var(--warn-bg); color: var(--text-main); font-size: 0.9rem; border-radius: 2px; }
+  .draft-note strong { color: var(--warn); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem; display: block; margin-bottom: 0.2rem; }
+
+  /* Steps */
+  .steps { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--border-soft); margin-top: 2.5rem; counter-reset: step; }
+  .step { background: var(--bg-body); padding: 2.25rem; position: relative; }
+  section.dark .step { background: var(--bg-alt); }
+  .step.wide { grid-column: 1 / -1; }
+  .step-num { display: inline-flex; align-items: center; justify-content: center; width: 2.4rem; height: 2.4rem; border: 2px solid var(--green); color: var(--green-text); font-weight: 800; font-size: 1rem; border-radius: 2px; margin-bottom: 1.1rem; }
+  .step-links { margin-top: 1.1rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+  .step-links a { font-weight: 600; }
+  .routes { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+  .route { border: 1px solid var(--border-soft); padding: 1.6rem; background: var(--surface-card); border-radius: 2px; }
+  .route ul { padding-left: 1.2rem; }
+  .route li + li { margin-top: 0.5rem; }
+  .ask-band { display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .tip { font-size: 0.95rem; color: var(--text-muted); margin-top: 0.75rem; }
+
+  /* About strip */
+  .about { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: start; }
+
+  /* Contact */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.7fr 1fr; gap: 2px; background: var(--border-soft); margin-top: 2rem; }
+  .contact-grid > div { background: #ffffff; padding: 1.75rem; }
+  .contact-grid .label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-text); margin-bottom: 0.4rem; display: block; }
+  .contact-grid a { font-weight: 700; font-size: 1.05rem; word-break: break-word; }
+
+  /* Footer */
+  footer { padding: 2.5rem 0; border-top: 1px solid var(--border-soft); }
+  .foot-inner { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .foot-inner p { color: var(--text-muted); font-size: 0.9rem; }
+
+
+  /* ---------- Visual upgrades ---------- */
+  .hero { padding: 7rem 0 6rem; }
+  .hero-routes { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.55; }
+  html[data-env-theme="light"] .hero-routes { opacity: 0.35; }
+  html[data-env-theme="hc"] .hero-routes { display: none; }
+  .hero-glow { position: absolute; width: 900px; height: 900px; left: 50%; top: 40%; transform: translate(-50%,-50%); background: radial-gradient(circle, rgba(120,190,33,0.14) 0%, transparent 60%); pointer-events: none; }
+  html[data-env-theme="hc"] .hero-glow { display: none; }
+
+  .pillars { background: var(--surface-strong); border-bottom: 1px solid var(--border-soft); }
+  .pillars ul { list-style: none; display: grid; grid-template-columns: repeat(3,1fr); }
+  .pillars li { display: flex; gap: 1rem; align-items: center; padding: 1.6rem 1.75rem; font-weight: 600; font-size: 0.98rem; line-height: 1.4; }
+  .pillars li + li { border-left: 1px solid var(--border-soft); }
+  .icon { flex-shrink: 0; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--green); border-radius: 2px; color: var(--green-text); }
+  .icon svg { width: 22px; height: 22px; }
+
+  .callout { box-shadow: none; }
+  .callout > div:first-child { background: linear-gradient(140deg, #001852 0%, #002878 100%); }
+  html[data-env-theme="light"] .callout > div:first-child { background: #ffffff; }
+  html[data-env-theme="hc"] .callout > div:first-child { background: #000; }
+  .callout p { font-size: 1.05rem; }
+
+  .step { transition: background 0.2s; overflow: hidden; }
+  .step::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+  .step:hover::before, .step:focus-within::before { transform: scaleX(1); }
+  .step-num { width: auto; height: auto; border: 0; font-size: 3.4rem; line-height: 1; font-weight: 800; color: transparent; -webkit-text-stroke: 1.5px var(--green); margin-bottom: 0.9rem; letter-spacing: -0.03em; }
+  html[data-env-theme="hc"] .step-num, html[data-env-theme="light"] .step-num { color: var(--green-text); -webkit-text-stroke: 0; }
+  .route { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; align-items: start; }
+  .route h4 { margin-top: 0.6rem; }
+
+  .about { padding: 3rem; background: linear-gradient(120deg, #001852 0%, #003087 100%); border-left: 3px solid var(--green); }
+  html[data-env-theme="light"] .about { background: #ffffff; }
+  html[data-env-theme="hc"] .about { background: #000; border: 1px solid #fff; }
+  .about p { font-size: 1.1rem; }
+  @media (max-width: 960px) { .pillars ul { grid-template-columns: 1fr; } .pillars li + li { border-left: 0; border-top: 1px solid var(--border-soft); } .route { grid-template-columns: 1fr; } .about { padding: 1.75rem; } }
+
+
+  /* Light sections: same components, light tokens */
+  .section-light {
+    --text-main: #002855; --text-muted: #1f3a66; --green-text: #457010;
+    --bg-body: #ffffff; --bg-alt: #ffffff; --surface-strong: #ffffff; --surface-card: #ffffff;
+    --border-soft: rgba(0,40,85,0.16); --warn: #6b5500; --warn-bg: #fff6cc; --focus: #003087;
+    background: #f4f7fb; color: var(--text-main);
+  }
+  html[data-env-theme="hc"] .section-light { --text-main:#fff; --text-muted:#fff; --green-text:#78BE21; --bg-body:#000; --bg-alt:#000; --surface-strong:#000; --surface-card:#000; --border-soft:#fff; --warn:#FFCF00; --warn-bg:#000; --focus:#78BE21; background:#000; }
+  .section-light .callout > div:first-child { background: #ffffff; }
+  .section-light .callout > div { box-shadow: none; }
+  .section-light .step-num { color: var(--green-text); -webkit-text-stroke: 0; }
+  section.block.dark { background: var(--bg-body); }
+
+  .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.25rem; }
+  .way { background: #ffffff; border: 1px solid var(--border-soft); border-top: 4px solid var(--blue); padding: 2.25rem; display: flex; flex-direction: column; border-radius: 2px; }
+  .way.team { border-top-color: var(--green); }
+  html[data-env-theme="hc"] .way { background:#000; }
+  .way .best { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-text); margin-bottom: 0.5rem; }
+  .way ul { padding-left: 1.2rem; margin: 1rem 0 1.5rem; }
+  .way li + li { margin-top: 0.45rem; }
+  .way .btn-primary { margin-top: auto; align-self: flex-start; }
+  .way .btn-primary.blue { background: var(--blue); border-color: var(--blue); color: #fff; }
+  html[data-env-theme="hc"] .way .btn-primary.blue { background: var(--green); border-color: var(--green); color:#000; }
+
+  .carriers { margin-top: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .carrier { border: 1px solid var(--border-soft); padding: 1.1rem 1.4rem; border-radius: 2px; }
+  .carrier strong { display: block; font-size: 1.05rem; }
+  .carrier .tag { display: inline-block; margin-left: 0.5rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #001852; background: var(--green); padding: 0.15rem 0.5rem; border-radius: 2px; vertical-align: 2px; }
+  @media (max-width: 960px) { .ways, .carriers { grid-template-columns: 1fr; } .way { padding: 1.5rem; } }
+
+  /* ---------- Accessibility panel ---------- */
+  .a11y-overlay { position: fixed; inset: 0; z-index: 300; background: rgba(0,5,20,0.6); display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+  .a11y-overlay[hidden] { display: none; }
+  .a11y-dialog { background: var(--bg-body); border: 1px solid var(--border-soft); border-radius: 2px; padding: 2rem; width: min(460px, 100%); max-height: 90vh; overflow-y: auto; }
+  .a11y-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+  .a11y-head h2 { font-size: 1.1rem; margin: 0; }
+  .a11y-close { background: none; border: 0; color: var(--text-main); font-size: 1.6rem; min-width: 44px; min-height: 44px; cursor: pointer; }
+  .a11y-group { margin-bottom: 1.1rem; border: 0; }
+  .a11y-label { display: block; font: 700 0.72rem 'Montserrat', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-text); margin-bottom: 0.5rem; }
+  .a11y-group button { background: transparent; border: 1px solid var(--border-soft); color: var(--text-main); font: 600 0.8rem 'Montserrat', sans-serif; padding: 0.55rem 0.9rem; margin: 0 0.4rem 0.4rem 0; border-radius: 2px; min-height: 44px; cursor: pointer; }
+  .a11y-group button[aria-pressed="true"] { background: var(--green); color: #001852; border-color: var(--green); }
+  .a11y-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; }
+  .a11y-reset { background: none; border: 0; color: var(--text-main); text-decoration: underline; font: 600 0.8rem 'Montserrat', sans-serif; cursor: pointer; min-height: 44px; }
+
+  html[data-env-zoom="2"] body { zoom: 1.125; }
+  html[data-env-zoom="3"] body { zoom: 1.25; }
+  html[data-env-zoom="4"] body { zoom: 1.4; }
+  html[data-env-lines="wide"] body { line-height: 1.95; }
+  html[data-env-paras="wide"] p { margin-bottom: 2em; }
+  html[data-env-underline="on"] a { text-decoration: underline !important; }
+  html[data-env-readable="on"] body { font-weight: 500; letter-spacing: 0.012em; word-spacing: 0.08em; line-height: 1.85; }
+  html[data-env-cursor="on"], html[data-env-cursor="on"] * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M6 2l24 14-11 2 6 12-5 3-6-12-8 8z' fill='%23fff' stroke='%23001852' stroke-width='2'/%3E%3C/svg%3E") 4 2, auto !important; }
+
+  /* ---------- Motion safety ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+  html[data-env-motion="reduce"] { scroll-behavior: auto; }
+  html[data-env-motion="reduce"] *, html[data-env-motion="reduce"] *::before, html[data-env-motion="reduce"] *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 960px) {
+    .nav-links { display: none; }
+    .callout, .about, .routes, .contact-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .wrap, .nav-inner { padding-left: 1rem; padding-right: 1rem; }
+    .nav-actions .btn-primary { display: none; }
+    .logo-plate img { height: 38px; }
+    .hero { padding: 4rem 0 3.5rem; }
+    .callout > div, .step, .route { padding: 1.4rem; }
+    section.block { padding: 3.5rem 0; }
+    .hero-actions a { width: 100%; }
+  }
+  @media print { .site-header, .skip-link, .a11y-overlay, .hero-actions, .a11y-trigger { display: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#steps">Skip to ordering steps</a>
+<a class="skip-link" href="#contact">Skip to contact</a>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="#main" class="logo-plate" aria-label="Envision Base Supply Center, back to top">
+      <img src="envision-bsc-logo.png" alt="Envision Base Supply Center" width="661" height="230">
+    </a>
+    <nav aria-label="Page sections" id="nav">
+      <ul class="nav-links">
+        <li><a href="#requirement">The requirement</a></li>
+        <li><a href="#steps">How to order</a></li>
+        <li><a href="#shipping">Shipping</a></li>
+        <li><a href="#ways">Ways to order</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button class="a11y-trigger" id="a11yTrigger" aria-haspopup="dialog">Accessibility</button>
+      <a class="btn-primary" href="https://www.envisionxpress.com/">Shop EnvisionXpress</a>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <section class="hero" aria-labelledby="pageTitle">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <svg class="hero-routes" viewBox="0 0 1400 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#78BE21" stroke-width="1.2" stroke-dasharray="3 7" opacity="0.7">
+        <path d="M120 470 Q 420 120 760 300"/>
+        <path d="M760 300 Q 1020 80 1300 210"/>
+        <path d="M200 160 Q 520 40 760 300"/>
+        <path d="M760 300 Q 980 520 1240 470"/>
+        <path d="M60 300 Q 380 420 760 300"/>
+      </g>
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.07">
+        <circle cx="760" cy="300" r="180"/><circle cx="760" cy="300" r="320"/><circle cx="760" cy="300" r="480"/>
+      </g>
+      <g fill="#78BE21">
+        <circle cx="760" cy="300" r="5"/><circle cx="120" cy="470" r="3.5"/><circle cx="1300" cy="210" r="3.5"/>
+        <circle cx="200" cy="160" r="3.5"/><circle cx="1240" cy="470" r="3.5"/><circle cx="60" cy="300" r="3.5"/>
+      </g>
+    </svg>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Envision Base Supply Centers for the Department of State</p>
+      <h1 id="pageTitle">Ordering supplies <em>for your post</em></h1>
+      <p class="hero-sub">A quick reference for Desk Officers and overseas posts. Find required supplies, get help matching products, and confirm a delivery route before you order. Envision brings AbilityOne products and everyday supplies together with customer support for sourcing and shipping.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="https://www.envisionxpress.com/">Shop EnvisionXpress.com</a>
+        <a class="btn-ghost" href="Envision-State-Department-Ordering-Guide.pdf" download>Download the PDF guide</a>
+        <a class="btn-ghost" href="#contact">Contact customer service</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="pillars" aria-label="What Envision handles for posts">
+    <ul class="wrap" style="padding:0">
+      <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>AbilityOne and everyday supplies in one place</li>
+      <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 16l20-6-20-6 4 6-4 6z"/><path d="M6 10h8"/></svg></span>Shipping to APO/FPO addresses and support for DPO routing</li>
+      <li><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg></span>Delivery to State despatch facilities</li>
+    </ul>
+  </section>
+
+  <section class="block section-light" id="requirement" aria-labelledby="reqTitle">
+    <div class="wrap">
+      <p class="eyebrow">Why this matters</p>
+      <h2 id="reqTitle">The mandatory source requirement, in plain language</h2>
+      <div class="callout">
+        <div>
+          <p>For supplies, follow the RFO FAR 8.103 source priorities: agency inventory, other agencies&rsquo; excess, Federal Prison Industries, then AbilityOne Procurement List items. When a requirement is covered by the Procurement List, buy through the required AbilityOne source unless an authorized purchase exception applies. A government purchase card or small purchase does not bypass this requirement. Commercial products that are essentially the same as a listed item are also covered.</p>
+          <p class="authority">Authority:
+            <a href="https://www.acquisition.gov/far-overhaul/far-part-deviation-guide/far-overhaul-part-8">RFO FAR 8.103 and 8.202</a><span class="sep" aria-hidden="true">|</span>
+            <a href="https://www.abilityone.gov/procurement_list/product_buy.html">AbilityOne buying and ETS guidance</a>
+          </p>
+          <!-- DRAFT: delete this note once Justin approves the paragraph above. -->
+          <div class="draft-note" role="note"><strong>Draft placeholder</strong>Waiting on Justin to confirm the FAR citation and wording. Do not edit this paragraph; replace it with the approved text.</div>
+        </div>
+        <div>
+          <h3>Already working with another provider?</h3>
+          <p>Envision is one compliant source for AbilityOne products. If your post already buys from another Base Supply Center or authorized AbilityOne source, keep using it. If you don&rsquo;t have one, we&rsquo;re here to help.</p>
+          <!-- DRAFT: delete this note once Sebastian confirms the wording. -->
+          <div class="draft-note" role="note"><strong>Draft placeholder</strong>Proposed wording. Waiting on Sebastian to confirm or swap in the approved language.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block dark" id="steps" aria-labelledby="stepsTitle">
+    <div class="wrap">
+      <p class="eyebrow">How to order</p>
+      <h2 id="stepsTitle">Three steps from requirement to delivery</h2>
+      <p class="lede">Find what your post needs, confirm its status, and choose a delivery route before you check out.</p>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num" aria-hidden="true">1</span>
+          <h3><span class="visually-hidden">Step 1: </span>Find it</h3>
+          <p>Select products from the State Department&rsquo;s approved catalog. Search by NSN, part number, or keyword, and use the AbilityOne assortment as a starting point.</p>
+          <div class="step-links">
+            <a href="https://www.envisionxpress.com/">Shop EnvisionXpress.com</a>
+            <a href="https://www.envisionxpress.com/abilityone/">Browse AbilityOne products</a>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num" aria-hidden="true">2</span>
+          <h3><span class="visually-hidden">Step 2: </span>Check it</h3>
+          <p>Confirm the exact item and applicable Procurement List coverage using the official list. Envision also sells commercial products, so website availability alone does not establish mandatory source status.</p>
+          <div class="step-links">
+            <a href="https://www.abilityone.gov/procurement_list/">Open the official AbilityOne Procurement List</a>
+          </div>
+          <p class="tip">On the Procurement List site, select Search Products or download the Products List.</p>
+        </li>
+        <li class="step wide" id="shipping">
+          <span class="step-num" aria-hidden="true">3</span>
+          <h3><span class="visually-hidden">Step 3: </span>Choose the delivery route before checkout</h3>
+          <p>Confirm product restrictions, freight charges, and timing for your route.</p>
+          <div class="routes">
+            <div class="route">
+              <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 16l20-6-20-6 4 6-4 6z"/><path d="M6 10h8"/></svg></span>
+              <div>
+              <h4>To post</h4>
+              <ul>
+                <li>For APO/FPO, look for the Ships APO badge. If an item doesn&rsquo;t have it, contact customer support to have the item added or to find an approved replacement.</li>
+                <li>Enter PSC, Unit, or Box as the street address. Choose AA, AE, or AP and use the assigned ZIP.</li>
+                <li>For DPO or direct international delivery, ask Envision to confirm eligibility and routing before ordering.</li>
+              </ul>
+              </div>
+            </div>
+            <div class="route">
+              <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg></span>
+              <div>
+              <h4>To a State despatch facility</h4>
+              <ul>
+                <li>Ask your post&rsquo;s shipping team for the approved U.S. despatch address, post identifier, marking instructions, and any receiving requirements.</li>
+                <li>Share these with Envision before ordering so the team can confirm the shipment to that facility.</li>
+                <li>Coordinate onward movement with State.</li>
+              </ul>
+              </div>
+            </div>
+          </div>
+          <div class="carriers">
+            <div class="carrier"><strong>FedEx International <span class="tag">Preferred</span></strong>Typically delivers in about one week, with enhanced tracking and shipment visibility.</div>
+            <div class="carrier"><strong>USPS</strong>Typically delivers in two to three weeks.</div>
+          </div>
+          <p class="tip">Both options use negotiated GSA rates. Shipping costs are calculated and shown at checkout.</p>
+          <div class="step-links">
+            <a href="https://www.envisionxpress.com/shipping-faq/">APO/FPO shipping FAQ</a>
+            <a href="https://www.envisionxpress.com/shipping-policy/">Shipping policy</a>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+
+  <section class="block section-light" id="ways" aria-labelledby="waysTitle">
+    <div class="wrap">
+      <p class="eyebrow">Two ways to order</p>
+      <h2 id="waysTitle">Order online, or let our team build the order with you</h2>
+      <p class="lede">Choose the path that fits the purchase. Both give your post a clear view of cost before anything ships.</p>
+      <div class="ways">
+        <div class="way">
+          <p class="best">Best for routine and single-item purchases</p>
+          <h3>Order online with pricing up front</h3>
+          <p>Select products from the State Department&rsquo;s approved catalog on EnvisionXpress.com. Shipping costs are calculated automatically and shown at checkout, so you see the total delivered cost before you place the order, with no separate quote needed.</p>
+          <ul>
+            <li>Approved catalog for State users</li>
+            <li>Total delivered cost shown at checkout</li>
+          </ul>
+          <a class="btn-primary blue" href="https://www.envisionxpress.com/">Shop EnvisionXpress.com</a>
+        </div>
+        <div class="way team">
+          <p class="best">Best for larger, recurring, or special orders</p>
+          <h3>Work with our customer service team</h3>
+          <p>For larger orders, recurring requirements, or products outside the standard catalog, our team builds a custom quote designed to make purchasing and shipping more efficient.</p>
+          <ul>
+            <li>Consolidated quantities and volume pricing</li>
+            <li>Coordinated shipments to help reduce overall procurement costs</li>
+            <li>Scheduled or recurring deliveries for predictable needs</li>
+          </ul>
+          <a class="btn-primary" href="https://www.envisionxpress.com/request-a-quote/">Request a quote</a>
+        </div>
+      </div>
+      <p class="tip">For faster help with a quote, include your post name, items or NSNs, quantities, needed-by date, and proposed delivery route.</p>
+    </div>
+  </section>
+
+  <section class="block dark" aria-labelledby="aboutTitle">
+    <div class="wrap about">
+      <div>
+        <p class="eyebrow">Who we are</p>
+        <h2 id="aboutTitle">One team to help you move forward</h2>
+      </div>
+      <div>
+        <p>The AbilityOne Program creates employment for people who are blind or have significant disabilities. Envision is a participating nonprofit agency that supports jobs and training for people who are blind or have low vision, with 16 Base Supply Centers and an online store serving federal customers.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block section-light" id="contact" aria-labelledby="contactTitle">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h2 id="contactTitle">Talk to our customer service team</h2>
+      <div class="contact-grid">
+        <div><span class="label">Phone</span><a href="tel:+18008610406">800-861-0406</a></div>
+        <div><span class="label">Email</span><a href="mailto:customerservice@envisionxpress.com">customerservice@envisionxpress.com</a></div>
+        <div><span class="label">Online</span><a href="https://www.envisionxpress.com/contact-us/">Contact Envision</a></div>
+      </div>
+      <!-- DRAFT: add the named Department of State contact if Sebastian provides one, or delete this note. -->
+      <div class="draft-note" role="note"><strong>Draft placeholder</strong>Named Department of State point of contact, if there is one.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="site-footer">
+  <div class="wrap foot-inner">
+    <p>Envision Base Supply Centers &middot; <a href="https://www.envisionxpress.com/">EnvisionXpress.com</a></p>
+    <a class="btn-ghost" href="Envision-State-Department-Ordering-Guide.pdf" download>Download the PDF guide</a>
+  </div>
+</footer>
+
+<div class="a11y-overlay" id="a11yOverlay" hidden>
+  <div class="a11y-dialog" role="dialog" aria-modal="true" aria-labelledby="a11yTitle">
+    <div class="a11y-head">
+      <h2 id="a11yTitle">Accessibility options</h2>
+      <button class="a11y-close" data-a11y-close aria-label="Close accessibility options">&times;</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gTheme">
+      <span class="a11y-label" id="gTheme">Theme</span>
+      <button data-set="theme" data-val="dark" aria-pressed="false">Dark</button>
+      <button data-set="theme" data-val="light" aria-pressed="false">Light</button>
+      <button data-set="theme" data-val="hc" aria-pressed="false">High contrast</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gZoom">
+      <span class="a11y-label" id="gZoom">Text size</span>
+      <button data-set="zoom" data-val="1" aria-pressed="false">100%</button>
+      <button data-set="zoom" data-val="2" aria-pressed="false">112%</button>
+      <button data-set="zoom" data-val="3" aria-pressed="false">125%</button>
+      <button data-set="zoom" data-val="4" aria-pressed="false">140%</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gLines">
+      <span class="a11y-label" id="gLines">Line spacing</span>
+      <button data-set="lines" data-val="normal" aria-pressed="false">Normal</button>
+      <button data-set="lines" data-val="wide" aria-pressed="false">Wide</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gParas">
+      <span class="a11y-label" id="gParas">Paragraph spacing</span>
+      <button data-set="paras" data-val="normal" aria-pressed="false">Normal</button>
+      <button data-set="paras" data-val="wide" aria-pressed="false">Wide</button>
+    </div>
+    <div class="a11y-group" role="group" aria-labelledby="gPrefs">
+      <span class="a11y-label" id="gPrefs">Preferences</span>
+      <button data-toggle="underline" aria-pressed="false">Underline links</button>
+      <button data-toggle="motion" data-on="reduce" aria-pressed="false">Reduce motion</button>
+      <button data-toggle="readable" aria-pressed="false">Readable text</button>
+      <button data-toggle="cursor" aria-pressed="false">Large cursor</button>
+    </div>
+    <div class="a11y-foot">
+      <button class="a11y-reset" id="a11yReset">Reset all</button>
+      <button class="btn-primary" data-a11y-close>Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const KEY='env-a11y', root=document.documentElement;
+  const trigger=document.getElementById('a11yTrigger');
+  const overlay=document.getElementById('a11yOverlay');
+  if(!trigger||!overlay) return;
+  const dialog=overlay.querySelector('.a11y-dialog');
+  let prefs={}; try{ prefs=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  if(!prefs.motion && window.matchMedia('(prefers-reduced-motion: reduce)').matches) prefs.motion='reduce';
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(prefs)); }catch(e){} }
+  function apply(){
+    ['theme','zoom','lines','paras','underline','motion','readable','cursor'].forEach(k=>{
+      if(prefs[k]) root.setAttribute('data-env-'+k, prefs[k]); else root.removeAttribute('data-env-'+k);
+    });
+    if(!root.getAttribute('data-env-theme')) root.setAttribute('data-env-theme', window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    overlay.querySelectorAll('[data-set]').forEach(b=>{
+      const cur = b.dataset.set==='theme' ? root.getAttribute('data-env-theme') : prefs[b.dataset.set];
+      b.setAttribute('aria-pressed', String(cur===b.dataset.val));
+    });
+    overlay.querySelectorAll('[data-toggle]').forEach(b=>{
+      const on=b.dataset.on||'on'; b.setAttribute('aria-pressed', String(prefs[b.dataset.toggle]===on));
+    });
+  }
+  overlay.addEventListener('click', e=>{
+    const set=e.target.closest('[data-set]'), tog=e.target.closest('[data-toggle]');
+    if(set){ prefs[set.dataset.set]=set.dataset.val; save(); apply(); }
+    if(tog){ const on=tog.dataset.on||'on', k=tog.dataset.toggle; prefs[k]=(prefs[k]===on)?null:on; if(!prefs[k]) delete prefs[k]; save(); apply(); }
+    if(e.target.closest('[data-a11y-close]') || e.target===overlay) close();
+  });
+  document.getElementById('a11yReset').addEventListener('click', ()=>{ prefs={}; save(); apply(); });
+  let lastFocus=null;
+  const main=document.getElementById('main');
+  function open(){ lastFocus=document.activeElement; overlay.hidden=false; main.inert=true; dialog.querySelector('button').focus(); document.addEventListener('keydown', keys); }
+  function close(){ overlay.hidden=true; main.inert=false; document.removeEventListener('keydown', keys); if(lastFocus) lastFocus.focus(); }
+  function keys(e){
+    if(e.key==='Escape'){ close(); return; }
+    if(e.key!=='Tab') return;
+    const f=[...dialog.querySelectorAll('button:not([disabled])')];
+    const first=f[0], last=f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+  trigger.addEventListener('click', open);
+  apply();
+})();
+</script>
+</body>
+</html>
