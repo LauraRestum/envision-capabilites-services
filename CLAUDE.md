@@ -176,10 +176,13 @@ so `vercel.json` rewrites the root-level copies of those two paths into
 - Section order: requirement (with "Already working with another provider?"),
   Who we are, two ways to order (headed "Your first stop for the usual and
   the unusual"; the special-order card comes first, tagged Recommended, with
-  the "Ordering through DLA?" note; ending in the "What about cost?"
+  the "Backed by federal supply channels" note (DLA distribution partner and
+  GSA Global Supply distributor, no GSA link); ending in the "What about cost?"
   callout), then the two steps as "Ordering online", then contact. The quote
   form is always labeled "Request a special order" in copy and buttons. In the dark theme the bands alternate
   light, dark, light, dark, light; keep that when moving sections.
+- There is no Department of State approved catalog yet. Describe the curated
+  catalog as something built with each post, never as existing.
 - Name the agency "Department of State" in visible copy ("State despatch
   facility" stays as is). No links to abilityone.gov.
 - Pending approvals are marked by `<!-- DRAFT:` comments and `.draft-note`
