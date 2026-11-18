@@ -177,7 +177,8 @@ so `vercel.json` rewrites the root-level copies of those two paths into
   Who we are, two ways to order (headed "Your first stop for the usual and
   the unusual"; the special-order card comes first, tagged Recommended, with
   the "Backed by federal supply channels" note (DLA distribution partner and
-  GSA Global Supply distributor, no GSA link); ending in the "What about cost?"
+  GSA Global Supply distributor, no GSA link, then Sebastian's approved TLS
+  sentence: interagency agreement and funding must be confirmed); ending in the "What about cost?"
   callout), then the two steps as "Ordering online", then contact. The quote
   form is always labeled "Request a special order" in copy and buttons. In the dark theme the bands alternate
   light, dark, light, dark, light; keep that when moving sections.
